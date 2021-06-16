@@ -13,7 +13,7 @@ struct TreeNode {
 /* a post order traverse logic:
  *
  * we start at the root, then we process left branch as far as possible, once we exhaust left branch, we process right branch,
- * then we go up one level, and process parent node, after parent node is donee, we process right branch of grand parent node, 
+ * then we go up one level, and process parent node, after parent node is done, we process right branch of grand parent node, 
  * and so on.
  *
  * So we do it in post order fashion.
@@ -31,6 +31,10 @@ struct TreeNode {
  *      until the top->right is not same as root
  *   -- once we backtrack to parent node enough, we stawrt to branch to right by lookingg at top of rightPendingList and if the top 
  *      has right branch is NULL, we will backtrace rightPendingList as much as possible.
+ *
+ * rightPendingList is to store node that its right branch is pending to be processed
+ * topPendingList is to store node that its left branch has processed, right branch is now in process, but its node is not yet processeda
+ *
  */
 
 void postOrderTraversal(struct TreeNode* root)
