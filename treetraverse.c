@@ -10,13 +10,36 @@ struct TreeNode {
 };
 
 
-void postorderTraversal(struct TreeNode* root)
+/* a post order traverse logic:
+ *
+ * we start at the root, then we process left branch as far as possible, once we exhaust left branch, we process right branch,
+ * then we go up one level, and process parent node, after parent node is donee, we process right branch of grand parent node, 
+ * and so on.
+ *
+ * So we do it in post order fashion.
+ *
+ * How to do it in none-recursive fashion?
+ *
+ * - we start at the root, if root is not NULL, we go in loop
+ * - if root->left is not NULL, we need to process left branch and then backtrack to right branch and the root, so we store
+ *   root in rightPendingList, then assign root to be root->left
+ * - if root->left is NULL, but root->right is not NULL, then let store the root in topPendingList so we want to backtrack to 
+ *   process root, and then we assign right to root
+ * - if we have exhausted left or right branch of a root, then we need to bracktrack, so the backtracking is logic as that
+ *   -- if topPendingList is not empty, and the top of topPendingList right branch is same as root, then we are at the right branch, then
+ *      we print the root->val, and then we bracktrack by assigning top of topPendingList to root, we backtrack top of topPendingList
+ *      until the top->right is not same as root
+ *   -- once we backtrack to parent node enough, we stawrt to branch to right by lookingg at top of rightPendingList and if the top 
+ *      has right branch is NULL, we will backtrace rightPendingList as much as possible.
+ */
+
+void postOrderTraversal(struct TreeNode* root)
 {
-     struct TreeNode *rightPendingList[100] = { NULL };
-     struct TreeNode *topPendingList[100] = { NULL };
+     struct TreeNode *rightPendingList[100];
+     struct TreeNode *topPendingList[100];
      int              rightPendingIndex = 0;
      int              topPendingIndex = 0;
-     int              count = 0;
+     int              count = 0;             // a fail-safe to prevent infinite loop from my miss-coding.
 
      while ( root != NULL 
              && count < 1000 )
