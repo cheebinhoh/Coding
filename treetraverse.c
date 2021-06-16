@@ -20,20 +20,21 @@ struct TreeNode {
  *
  * How to do it in none-recursive fashion?
  *
+ * - we do none-recursive loop way to traverse the tree
  * - we start at the root, if root is not NULL, we go in loop
- * - if root->left is not NULL, we need to process left branch and then backtrack to right branch and the root, so we store
- *   root in rightPendingList, then assign root to be root->left
+ * - if root->left is not NULL, we need to process left branch and then backtrack to right branch and then parent node of the branches, so we store
+ *   root (parent node) in rightPendingList, then assign root to be root->left
  * - if root->left is NULL, but root->right is not NULL, then let store the root in topPendingList so we want to backtrack to 
- *   process root, and then we assign right to root
- * - if we have exhausted left or right branch of a root, then we need to bracktrack, so the backtracking is logic as that
- *   -- if topPendingList is not empty, and the top of topPendingList right branch is same as root, then we are at the right branch, then
- *      we print the root->val, and then we bracktrack by assigning top of topPendingList to root, we backtrack top of topPendingList
- *      until the top->right is not same as root
- *   -- once we backtrack to parent node enough, we stawrt to branch to right by lookingg at top of rightPendingList and if the top 
- *      has right branch is NULL, we will backtrace rightPendingList as much as possible.
+ *   process the node (after processing right branch), and then we assign right branch to root
+ * - if we have exhausted left or right branches of a node (root), then we need to bracktrack, so the backtracking is logic as that
+ *   -- if topPendingList is not empty, and the top (of topPendingList) right branch is same as root, then the root is at the right branch of top of 
+ *      topPendingList, then we print the root->val, and we bracktrack by assigning top of topPendingList to root, so eventually we are backtracking
+ *      from right branch back up to top, until the top->right is not same as root
+ *   -- once we backtrack to parent node enough, we start to process right branch by looking at top of rightPendingList and if the top 
+ *      has right branch is NULL, we will backtrack further on rightPendingList until we exhaust it or a top that its right branch is not NULL.
  *
  * rightPendingList is to store node that its right branch is pending to be processed
- * topPendingList is to store node that its left branch has processed, right branch is now in process, but its node is not yet processeda
+ * topPendingList is to store node that its left branch has processed, right branch is now in process, but its node is not yet processed
  *
  */
 
