@@ -172,7 +172,7 @@ int main( int argc, char * argv[] )
     other->left = other->right = NULL;
     root->right->right->right = other;
 
-    postorderTraversal(root);
+    postOrderTraversal(root);
 
     return 0;
  }
