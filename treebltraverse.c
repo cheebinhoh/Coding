@@ -242,10 +242,10 @@ int main(int argc, char * argv[])
     other->left = other->right = NULL;
     root->right->right->right = other;
 
-    printf("breadth level traverse (recursive) = " );
+    printf("breadth level traverse (recursive) = ");
     breadthLevelTraversal(root);
 
-    printf("breadth level traverse (iterative) = " );
+    printf("breadth level traverse (iterative) = ");
     breadthLevelTraversalIter(root);
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for 
