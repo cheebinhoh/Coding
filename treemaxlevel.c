@@ -17,6 +17,10 @@ struct TreeNode {
 };
 
 
+/* To derive the max level of tree, we can use any of the depth first search, and increase 
+ * the level as we progress to left or right branch, and only return the max level if the 
+ * level we are now in is higher than current max level value.
+ */
 void treeMaxLevelInternal(struct TreeNode *root,
                           int              level,
                           int             *maxLevel)
@@ -49,6 +53,8 @@ void treeMaxLevelInternal(struct TreeNode *root,
 }
 
 
+/* An API front end to return max level of tree
+ */
 int treeMaxLevel(struct TreeNode *root)
 {
     int level = 0;
