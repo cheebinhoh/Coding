@@ -1,18 +1,19 @@
-/*
- * Copyright © 2021 Chee Bin HOH. All rights reserved.
- *
+/* Copyright © 2021 Chee Bin HOH. All rights reserved.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-// Definition for a binary tree node.
+
+/* Definition for a binary tree node.
+ */
 struct TreeNode {
 
      int val;
      struct TreeNode *left;
      struct TreeNode *right;
 };
+
 
 /* a post order traverse logic:
  *
@@ -49,6 +50,8 @@ void postOrderTraversal(struct TreeNode* root)
      int              rightPendingIndex = 0;
      int              topPendingIndex = 0;
      int              count = 0;             // a fail-safe to prevent infinite loop from my miss-coding.
+     int              start = 0;
+
 
      while ( root != NULL 
              && count < 1000 )
@@ -65,20 +68,21 @@ void postOrderTraversal(struct TreeNode* root)
          }
          else 
          {
-             printf( "%d, ", root->val );
+             printf( "%s%d", ( 0 == start ? "" : ", " ),  root->val );
+             start = 1;
 
              while ( topPendingIndex > 0
                      && topPendingList[topPendingIndex - 1]->right == root )
              {
                  root = topPendingList[--topPendingIndex];
-                 printf( "%d, ", root->val );
+                 printf( ", %d", root->val );
              } 
 
              root = NULL;
              while ( rightPendingIndex > 0 
                      && ( ( root = rightPendingList[--rightPendingIndex] )->right ) == NULL )
 	     {
-                 printf( "%d, ", root->val );
+                 printf( ", %d", root->val );
                  root = NULL;
              }
  
@@ -96,12 +100,23 @@ void postOrderTraversal(struct TreeNode* root)
 }
 
 
+/* a in order traversal logic:
+ *
+ * we start at the root, and if there is a left branch, we remember the root in topPendingList for backtracking and then traverse to 
+ * left branch by assigning it as new root.
+ *
+ * if there is no right branch, then we repeatedly backtrack from topPendingList by:
+ * - printing the value of the node we pop out from topPendingList
+ * - exit the backtracking loop if the pop out node has right branch, else keep popping out
+ */
+
 void inOrderTraversal(struct TreeNode *root)
 {
     struct TreeNode *topPendingList[100] = { NULL };
     int              topPendingListIndex = 0;
-    int              count;
- 
+    int              count = 0;
+    int              start = 0; 
+
     while ( NULL != root 
             && count < 1000 )
     {
@@ -114,7 +129,8 @@ void inOrderTraversal(struct TreeNode *root)
         }
         else
         {
-            printf( "%d, ", root->val );
+            printf("%s%d", ( 0 == start ? "" : ", " ),  root->val);
+            start = 1;
 
             if ( NULL != root->right )
             {
@@ -125,7 +141,7 @@ void inOrderTraversal(struct TreeNode *root)
                 do 
                 {
                     root = topPendingList[--topPendingListIndex];
-                    printf( "%d, ", root->val );
+                    printf(", %d", root->val);
      
                     root = root->right;
                 } while ( NULL == root 
@@ -139,33 +155,51 @@ void inOrderTraversal(struct TreeNode *root)
         }
     }
 
-    printf( "\n" );
+    if ( count > 0 )
+    {
+        printf("\n");
+    }
 }
 
+
+/* A pre order traversal logic:
+ *
+ * We start at the root, print the value, traverse the left branch and exhaust left branch as far as possible, then traverse right branch,
+ * then backtrack one level for right back at higher level.
+ *
+ * Before we traverse left branch, we add right branch (if not NULL) to the rightPendingList for backtrack later.
+ */
 void preOrderTraversal(struct TreeNode *root)
 {
-     struct TreeNode *backTrackList[100] = { NULL };
-     int backTrackListIndex = 0;
+     struct TreeNode *rightPendingList[100] = { NULL };
+     int              rightPendingListIndex = 0;
+     int              count = 0;
 
-     while ( root != NULL )
+
+     while ( NULL != root 
+             && count < 1000 )
      {
-          printf( "%d, ", root->val );
+          count++;
+          printf("%s%d", count > 1 ? ", " : "",  root->val);
 
-          if ( root->left != NULL )
+          if ( NULL != root->left )
           {
-              backTrackList[backTrackListIndex++] = root->right;
+              if ( NULL != root->right )
+              {
+                  rightPendingList[rightPendingListIndex++] = root->right;
+              }
 
               root = root->left;
           }
-          else if ( root->right != NULL )
+          else if ( NULL != root->right )
           {
               root = root->right;
           }
           else  
           {
-             if ( backTrackListIndex > 0 )
+             if ( rightPendingListIndex > 0 )
              {
-                root = backTrackList[--backTrackListIndex];
+                root = rightPendingList[--rightPendingListIndex];
              }
              else
              {
@@ -174,68 +208,85 @@ void preOrderTraversal(struct TreeNode *root)
           }
      }
  
-     printf( "\n" );
+     if ( count > 0 )
+     {
+         printf( "\n" );
+     }
 }
 
+/*
+ *               0
+ *               |
+ *      +--------+---------+
+ *      1                  2
+ *      |                  |
+ * +----+----+       //----+----+
+ * 3         4                  5
+ *                              |
+ *                    +---------+---------+
+ *                    6                   8
+ *                    |                   |
+ *              //----+----+          //--+--//
+ *                         7 
+ */
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
     struct TreeNode *root = NULL;
     struct TreeNode *other = NULL;
 
-    root = malloc( sizeof( struct TreeNode) );
+    root = malloc(sizeof( struct TreeNode));
     root->val = 0;
     root->left = root->right = NULL;
 
-    other = malloc( sizeof( struct TreeNode ) );
+    other = malloc(sizeof( struct TreeNode ));
     other->val = 1;
     other->left = other->right = NULL;
     root->left = other;
 
-    other = malloc( sizeof( struct TreeNode ) );
+    other = malloc(sizeof( struct TreeNode ));
     other->val = 3;
     other->left = other->right = NULL;
     root->left->left = other;
  
-    other = malloc( sizeof( struct TreeNode ) );
+    other = malloc(sizeof( struct TreeNode ));
     other->val = 4;
     other->left = other->right = NULL;
     root->left->right = other;
 
-    other = malloc( sizeof( struct TreeNode ) );
+    other = malloc(sizeof( struct TreeNode ));
     other->val = 2;
     other->left = other->right = NULL;
     root->right = other;
 
-    other = malloc( sizeof( struct TreeNode ) );
+    other = malloc(sizeof( struct TreeNode ));
     other->val = 5;
     other->left = other->right = NULL;
     root->right->right = other;
 
-    other = malloc( sizeof( struct TreeNode ) );
+    other = malloc(sizeof( struct TreeNode ));
     other->val = 6;
     other->left = other->right = NULL;
     root->right->right->left = other;
 
-    other = malloc( sizeof( struct TreeNode ) );
+    other = malloc(sizeof( struct TreeNode ));
     other->val = 7;
     other->left = other->right = NULL;
     root->right->right->left->right = other;
 
-    other = malloc( sizeof( struct TreeNode ) );
+    other = malloc(sizeof( struct TreeNode ));
     other->val = 8;
     other->left = other->right = NULL;
     root->right->right->right = other;
 
-    printf( "pre order = " );
-    preOrderTraversal( root );
+    printf("pre order  = ");
+    preOrderTraversal(root);
    
+    printf("post order = ");  
+    postOrderTraversal(root);
 
-    printf( "post order = " );  
-    postOrderTraversal( root );
-
-    printf( "in order = " );
-    inOrderTraversal( root );
+    printf("in order   = ");
+    inOrderTraversal(root);
 
     return 0;
  }
