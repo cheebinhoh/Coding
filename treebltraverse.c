@@ -106,6 +106,67 @@ void breadthLevelTraversal(struct TreeNode *root)
     }
 }
 
+void breadthLevelTraversalIter(struct TreeNode *root)
+{
+    struct TreeNode *currentLevelList[100];
+    struct TreeNode *nextLevelList[100];
+    struct TreeNode *node;
+    int              currentLevelCnt = 0;
+    int              nextLevelCnt = 0;
+    int              index = 0;
+
+    if ( NULL == root )
+    {
+        return;
+    }
+
+    currentLevelList[currentLevelCnt++] = root;
+    while ( index < currentLevelCnt )
+    {
+        if ( 0 == index )
+        {
+            nextLevelCnt = 0;
+        }
+ 
+        node = currentLevelList[index];
+        if ( NULL != node->left )
+        {
+            nextLevelList[nextLevelCnt++] = node->left;
+        }
+ 
+        if ( NULL != node->right )
+        {
+            nextLevelList[nextLevelCnt++] = node->right;
+        }
+
+        printf("%d", node->val);
+
+        index++;
+
+        if ( index >= currentLevelCnt )
+        {
+            if ( nextLevelCnt > 0 )
+            {
+                for ( currentLevelCnt = 0; currentLevelCnt < nextLevelCnt; currentLevelCnt++ )
+                {
+                    currentLevelList[currentLevelCnt] = nextLevelList[currentLevelCnt];    
+                }              
+
+                index = 0;
+
+                printf(", ");
+            }
+        }
+        else 
+        {
+            printf(", ");
+        }
+    }
+
+    printf("\n");
+}
+
+
 /*
  *               0
  *               |
@@ -171,7 +232,11 @@ int main(int argc, char * argv[])
     other->left = other->right = NULL;
     root->right->right->right = other;
 
+    printf("breadth level traverse (recursive) = " );
     breadthLevelTraversal(root);
+
+    printf("breadth level traverse (iterative) = " );
+    breadthLevelTraversalIter(root);
 
     return 0;
  }

@@ -81,7 +81,7 @@ void postOrderTraversal(struct TreeNode* root)
              root = NULL;
              while ( rightPendingIndex > 0 
                      && ( ( root = rightPendingList[--rightPendingIndex] )->right ) == NULL )
-	     {
+             {
                  printf(", %d", root->val);
                  root = NULL;
              }
