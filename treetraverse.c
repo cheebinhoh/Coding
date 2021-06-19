@@ -1,3 +1,8 @@
+/*
+ * Copyright © 2021 Chee Bin HOH. All rights reserved.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,7 +13,6 @@ struct TreeNode {
      struct TreeNode *left;
      struct TreeNode *right;
 };
-
 
 /* a post order traverse logic:
  *
@@ -61,20 +65,20 @@ void postOrderTraversal(struct TreeNode* root)
          }
          else 
          {
-             printf("%d, ", root->val);
+             printf( "%d, ", root->val );
 
              while ( topPendingIndex > 0
                      && topPendingList[topPendingIndex - 1]->right == root )
              {
                  root = topPendingList[--topPendingIndex];
-                 printf("%d, ", root->val);
+                 printf( "%d, ", root->val );
              } 
 
              root = NULL;
              while ( rightPendingIndex > 0 
                      && ( ( root = rightPendingList[--rightPendingIndex] )->right ) == NULL )
 	     {
-                 printf("%d, ", root->val);
+                 printf( "%d, ", root->val );
                  root = NULL;
              }
  
@@ -88,11 +92,57 @@ void postOrderTraversal(struct TreeNode* root)
          count++;
      }
 
-     printf("\n");
+     printf( "\n" );
 }
 
 
-void preorderTraversal(struct TreeNode* root)
+void inOrderTraversal(struct TreeNode *root)
+{
+    struct TreeNode *topPendingList[100] = { NULL };
+    int              topPendingListIndex = 0;
+    int              count;
+ 
+    while ( NULL != root 
+            && count < 50 )
+    {
+        count++;
+
+        if ( NULL != root->left )
+        {
+            topPendingList[topPendingListIndex++] = root;
+            root = root->left;
+        }
+        else
+        {
+            printf( "%d, ", root->val );
+
+            if ( NULL != root->right )
+            {
+                root = root->right;
+            }
+            else if ( topPendingListIndex > 0 ) 
+            { 
+                do 
+                {
+                    root = topPendingList[--topPendingListIndex];
+                    printf( "%d, ", root->val );
+     
+                    root = root->right;
+                } while ( NULL == root 
+                          && topPendingListIndex > 0 );
+                           
+            }
+            else
+            {
+                root = NULL;
+            }
+        }
+    }
+
+    printf( "\n" );
+}
+
+void preOrderTraversal(struct TreeNode *root)
 {
      struct TreeNode *backTrackList[100] = { NULL };
      int backTrackListIndex = 0;
@@ -177,7 +227,15 @@ int main( int argc, char * argv[] )
     other->left = other->right = NULL;
     root->right->right->right = other;
 
-    postOrderTraversal(root);
+    printf( "pre order = " );
+    preOrderTraversal( root );
+   
+
+    printf( "post order = " );  
+    postOrderTraversal( root );
+
+    printf( "in order = " );
+    inOrderTraversal( root );
 
     return 0;
  }
