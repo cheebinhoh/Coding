@@ -103,7 +103,7 @@ void inOrderTraversal(struct TreeNode *root)
     int              count;
  
     while ( NULL != root 
-            && count < 50 )
+            && count < 1000 )
     {
         count++;
 
