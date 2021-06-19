@@ -68,21 +68,21 @@ void postOrderTraversal(struct TreeNode* root)
          }
          else 
          {
-             printf( "%s%d", ( 0 == start ? "" : ", " ),  root->val );
+             printf("%s%d", ( 0 == start ? "" : ", " ),  root->val);
              start = 1;
 
              while ( topPendingIndex > 0
                      && topPendingList[topPendingIndex - 1]->right == root )
              {
                  root = topPendingList[--topPendingIndex];
-                 printf( ", %d", root->val );
+                 printf(", %d", root->val);
              } 
 
              root = NULL;
              while ( rightPendingIndex > 0 
                      && ( ( root = rightPendingList[--rightPendingIndex] )->right ) == NULL )
 	     {
-                 printf( ", %d", root->val );
+                 printf(", %d", root->val);
                  root = NULL;
              }
  
@@ -96,7 +96,10 @@ void postOrderTraversal(struct TreeNode* root)
          count++;
      }
 
-     printf( "\n" );
+     if ( count > 0 )
+     { 
+         printf("\n");
+     }
 }
 
 
@@ -210,7 +213,7 @@ void preOrderTraversal(struct TreeNode *root)
  
      if ( count > 0 )
      {
-         printf( "\n" );
+         printf("\n");
      }
 }
 
