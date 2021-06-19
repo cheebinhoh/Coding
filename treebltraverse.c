@@ -15,6 +15,16 @@ struct TreeNode {
 };
 
 
+/* This is recursive method to do breadth level traversel, the logic is simple:
+ * - we maintain two lists:
+ * - first level is the Nth level nodes of the tree.
+ * - the second level is the N+1th level nodes of the tree.
+ *
+ * we will print first level node values.
+ * we will then copy nodes of 2nd level into 1st level.
+ * we will then gather child nodes of refreshed 1st level nodes into 2nd level.
+ * then we call the same method recursively. :) 
+ */
 void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
                                     int               currentLevelCnt,
                                     struct TreeNode **nextLevelList,
@@ -60,14 +70,16 @@ void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
     }
 }
 
-/*
+
+/* This is API entry to do breadth level traversal, kicker of 
+ * recursive method.
  */
 void breadthLevelTraversal(struct TreeNode *root)
 {
     struct TreeNode *nextLevelList[100];
     struct TreeNode *currentLevelList[100];
-    int nextLevelCnt = 0;
-    int currentLevelCnt = 0;
+    int              nextLevelCnt = 0;
+    int              currentLevelCnt = 0;
 
 
     if ( NULL == root )
