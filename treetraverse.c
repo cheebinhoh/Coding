@@ -150,7 +150,6 @@ void inOrderTraversal(struct TreeNode *root)
                     root = root->right;
                 } while ( NULL == root 
                           && topPendingListIndex > 0 );
-                           
             }
             else
             {
