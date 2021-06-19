@@ -115,10 +115,11 @@ void postOrderTraversal(struct TreeNode* root)
 
 void inOrderTraversal(struct TreeNode *root)
 {
-    struct TreeNode *topPendingList[100] = { NULL };
+    struct TreeNode *topPendingList[100];
     int              topPendingListIndex = 0;
     int              count = 0;
     int              start = 0; 
+
 
     while ( NULL != root 
             && count < 1000 )
@@ -174,7 +175,7 @@ void inOrderTraversal(struct TreeNode *root)
  */
 void preOrderTraversal(struct TreeNode *root)
 {
-     struct TreeNode *rightPendingList[100] = { NULL };
+     struct TreeNode *rightPendingList[100];
      int              rightPendingListIndex = 0;
      int              count = 0;
 
