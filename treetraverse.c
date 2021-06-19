@@ -40,9 +40,7 @@ struct TreeNode {
  *
  * rightPendingList is to store node that its right branch is pending to be processed
  * topPendingList is to store node that its left branch has processed, right branch is now in process, but its node is not yet processed
- *
  */
-
 void postOrderTraversal(struct TreeNode* root)
 {
      struct TreeNode *rightPendingList[100];
@@ -112,7 +110,6 @@ void postOrderTraversal(struct TreeNode* root)
  * - printing the value of the node we pop out from topPendingList
  * - exit the backtracking loop if the pop out node has right branch, else keep popping out
  */
-
 void inOrderTraversal(struct TreeNode *root)
 {
     struct TreeNode *topPendingList[100];
@@ -217,6 +214,7 @@ void preOrderTraversal(struct TreeNode *root)
      }
 }
 
+
 /*
  *               0
  *               |
@@ -232,7 +230,6 @@ void preOrderTraversal(struct TreeNode *root)
  *              //----+----+          //--+--//
  *                         7 
  */
-
 int main(int argc, char * argv[])
 {
     struct TreeNode *root = NULL;
