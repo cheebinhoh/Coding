@@ -100,11 +100,12 @@ void breadthLevelTraversal(struct TreeNode *root)
             nextLevelList[nextLevelCnt++] = root->right;
         }
 
-        breadthLevelTraversal_Internal( currentLevelList, currentLevelCnt, nextLevelList, nextLevelCnt );
+        breadthLevelTraversal_Internal(currentLevelList, currentLevelCnt, nextLevelList, nextLevelCnt);
 
         printf("\n");
     }
 }
+
 
 /* The breadth level traversal, the iterative version, the logic is simple as none-iterative version:
  * - we maintain two list levels, current and next level.
