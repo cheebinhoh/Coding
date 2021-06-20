@@ -1,6 +1,7 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Depth first search, preorder, inorder and postorder, both recursive and iterative way
+ * Find out if there exists a path from root to a leaf that its sum of values of all nodes
+ * equal to the target.
  */
 
 #include <stdio.h>
