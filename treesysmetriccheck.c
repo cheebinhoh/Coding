@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Depth first search, preorder, inorder and postorder, both recursive and iterative way
+ * Check if tree is sysmetric that right branch of root is mirror of left branch.
  */
 
 #include <stdio.h>
