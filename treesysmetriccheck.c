@@ -16,6 +16,9 @@ struct TreeNode {
      struct TreeNode *right;
 };
 
+
+/* This method will linearize the tree into a list either left or right lean.
+ */
 void linearTree(struct TreeNode  *root, 
                 int               left,
                 struct TreeNode **list,
@@ -58,6 +61,10 @@ void linearTree(struct TreeNode  *root,
     }
 }
 
+
+/* This is API front end to derive if a tree is sysmetric, a tree is sysmetric if we linearize
+ * the tree into a list left or right lean, and it has same result.
+ */
 int treeIsSysmetric(struct TreeNode *root)
 {
     if ( NULL == root )
