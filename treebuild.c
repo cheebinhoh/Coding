@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Depth first search, preorder, inorder and postorder, both recursive and iterative way
+ * Build binary tree from inorder and postorder list.
  */
 
 #include <stdio.h>
