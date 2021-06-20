@@ -152,13 +152,15 @@ int treeIsSysmetric(struct TreeNode *root)
  *      1                  1
  *      |                  |
  * +---------+        +---------+
- * 2         3        3         2
+ * 2         3        3*        2
  *
+ * remark *: 3 will be deleted in 2nd sysmetric check below
  */
 int main(int argc, char * argv[])
 {
     struct TreeNode *root = NULL;
     struct TreeNode *other = NULL;
+
 
     root = malloc(sizeof( struct TreeNode ));
     root->val = 0;
