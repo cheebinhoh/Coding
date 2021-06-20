@@ -59,7 +59,7 @@ int treeMaxLevel(struct TreeNode *root)
 {
     int level = 0;
 
-    treeMaxLevelInternal(root, 0, &level);
+    treeMaxLevelInternal(root, level, &level);
 
     return level; 
 }
