@@ -5,16 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-
-/* Definition for a binary tree node.
- */
-struct TreeNode {
-
-     int val;
-     struct TreeNode *left;
-     struct TreeNode *right;
-};
+#include "tree.h"
 
 
 /* To derive the max level of tree, we can use any of the depth first search, and increase 

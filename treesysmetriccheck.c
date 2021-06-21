@@ -5,16 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-
-/* Definition for a binary tree node.
- */
-struct TreeNode {
-
-     int val;
-     struct TreeNode *left;
-     struct TreeNode *right;
-};
+#include "tree.h"
 
 
 /* This method will linearize the tree into a list either left or right lean.

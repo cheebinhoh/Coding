@@ -3,26 +3,26 @@
 all : treepathsum.out treebltraverse.out treemaxlevel.out treesysmetriccheck.out treetraverse.out \
 	treebuild.out treelca.out
 
-treepathsum.out : treepathsum.c
-	gcc -o $@ $^
+treepathsum.out : treepathsum.c tree.h
+	gcc -o $@ treepathsum.c 
 
-treebltraverse.out : treebltraverse.c
-	gcc -o $@ $^
+treebltraverse.out : treebltraverse.c tree.h
+	gcc -o $@ treebltraverse.c
 
-treemaxlevel.out : treemaxlevel.c
-	gcc -o $@ $^
+treemaxlevel.out : treemaxlevel.c tree.h
+	gcc -o $@ treesysmetriccheck.c
 
-treesysmetriccheck.out : treesysmetriccheck.c
-	gcc -o $@ $^
+treesysmetriccheck.out : treesysmetriccheck.c tree.h
+	gcc -o $@ treesysmetriccheck.c
 
-treetraverse.out : treetraverse.c
-	gcc -o $@ $^
+treetraverse.out : treetraverse.c tree.h
+	gcc -o $@ treetraverse.c
 
-treebuild.out : treebuild.c
-	gcc -o $@ $^
+treebuild.out : treebuild.c tree.h
+	gcc -o $@ treebuild.c
 
-treelca.out : treelca.c
-	gcc -o $@ $^
+treelca.out : treelca.c tree.h
+	gcc -o $@ treelca.c
 
 clean:
 	rm -f *.out

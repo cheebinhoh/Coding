@@ -5,16 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-
-/* Definition for a binary tree node.
- */
-struct TreeNode {
-
-     int val;
-     struct TreeNode *left;
-     struct TreeNode *right;
-};
+#include "tree.h"
 
 
 /* a post order traverse logic:
