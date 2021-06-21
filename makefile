@@ -1,6 +1,6 @@
 # all good makefile to help compiling
 
-all : treepathsum.out treebltraverse.out treemaxlevel.out treesysmetriccheck.out treetraverse.out \
+all : treepathsum.out treebltraverse.out treemaxlevel.out treesymmetriccheck.out treetraverse.out \
 	treebuild.out treelca.out
 
 treepathsum.out : treepathsum.c tree.h
@@ -10,10 +10,10 @@ treebltraverse.out : treebltraverse.c tree.h
 	gcc -o $@ treebltraverse.c
 
 treemaxlevel.out : treemaxlevel.c tree.h
-	gcc -o $@ treesysmetriccheck.c
+	gcc -o $@ treesymmetriccheck.c
 
-treesysmetriccheck.out : treesysmetriccheck.c tree.h
-	gcc -o $@ treesysmetriccheck.c
+treesymmetriccheck.out : treesymmetriccheck.c tree.h
+	gcc -o $@ treesymmetriccheck.c
 
 treetraverse.out : treetraverse.c treetraverse-main.c tree.h treetraverse.h
 	gcc -o $@ treetraverse.c treetraverse-main.c
