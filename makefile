@@ -6,7 +6,7 @@ all : treepathsum.out treebltraverse.out treemaxlevel.out treesysmetriccheck.out
 treepathsum.out : treepathsum.c tree.h
 	gcc -o $@ treepathsum.c 
 
-treebltraverse.out : treebltraverse.c tree.h
+treebltraverse.out : treebltraverse.c tree.h 
 	gcc -o $@ treebltraverse.c
 
 treemaxlevel.out : treemaxlevel.c tree.h
@@ -15,14 +15,14 @@ treemaxlevel.out : treemaxlevel.c tree.h
 treesysmetriccheck.out : treesysmetriccheck.c tree.h
 	gcc -o $@ treesysmetriccheck.c
 
-treetraverse.out : treetraverse.c tree.h
-	gcc -o $@ treetraverse.c
+treetraverse.out : treetraverse.c treetraverse-main.c tree.h treetraverse.h
+	gcc -o $@ treetraverse.c treetraverse-main.c
 
-treebuild.out : treebuild.c tree.h
-	gcc -o $@ treebuild.c
+treebuild.out : treebuild.c treetraverse.c tree.h treetraverse.h
+	gcc -o $@ treebuild.c treetraverse.c
 
 treelca.out : treelca.c tree.h
 	gcc -o $@ treelca.c
 
 clean:
-	rm -f *.out
+	rm -f *.out *.o

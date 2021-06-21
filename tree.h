@@ -1,7 +1,10 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  */
 
+#ifndef TREE_H_HAS_INCLUDED
 
+#define TREE_H_HAS_INCLUDED
+ 
 /* Definition for a binary tree node.
  */
 struct TreeNode {
@@ -11,4 +14,4 @@ struct TreeNode {
      struct TreeNode *right;
 };
 
-
+#endif
