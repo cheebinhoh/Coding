@@ -1,7 +1,8 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Depth first search, preorder, inorder and postorder, both recursive and iterative way
+ * Depth first search, preorder, inorder and postorder in iterative way.
  */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,31 +10,36 @@
 #include "treetraverse.h"
 
 
-/* a post order traverse logic:
+/* A post order traverse in iterative way:
  *
- * we start at the root, then we process left branch as far as possible, once we exhaust left branch, we process right branch,
- * then we go up one level, and process parent node, after parent node is done, we process right branch of grand parent node, 
- * and so on.
+ * If we are at a node, we will process left child node (if any), and then process right child node (if any), and then the node that owns 
+ * the left and right child nodes. When we are in a child node, we will apply same processing ordering (left, right and node itself). 
  *
- * So we do it in post order fashion.
+ * It is a depth first approach starting at the left branch, so we will further deeper on the left and then to right branch, and apply the same
+ * left, right and node ordering, then go up one level to another right branch and apply the same left, right and node ordering.
  *
  * How to do it in none-recursive fashion?
  *
- * - we do none-recursive loop way to traverse the tree
- * - we start at the root, if root is not NULL, we go in loop
+ * - we do none-recursive loop to traverse the tree.
+ * - we start at the root, if root is not NULL, we continue the loop.
  * - if root->left is not NULL, we need to process left branch and then backtrack to right branch and then parent node of the branches, so we store
- *   root (parent node) in rightPendingList, then assign root to be root->left
- * - if root->left is NULL, but root->right is not NULL, then let store the root in topPendingList so we want to backtrack to 
- *   process the node (after processing right branch), and then we assign right branch to root
+ *   root (parent node) in rightPendingList (the name indicates that right branch is pending to be processed), and then assign root->left to be 
+ *   new root and continue the loop. 
+ * - if root->left is NULL, but root->right is not NULL, then we need to process the right node and then back to the root later, let store the
+ *   root in topPendingList so we want to backtrack to it after we exhaust the right branch, we assign root->right to be new root and continue the loop.
  * - if we have exhausted left or right branches of a node (root), then we need to bracktrack, so the backtracking is logic as that
- *   -- if topPendingList is not empty, and the top (of topPendingList) right branch is same as root, then the root is at the right branch of top of 
- *      topPendingList, then we print the root->val, and we bracktrack by assigning top of topPendingList to root, so eventually we are backtracking
- *      from right branch back up to top, until the top->right is not same as root
- *   -- once we backtrack to parent node enough, we start to process right branch by looking at top of rightPendingList and if the top 
- *      has right branch is NULL, we will backtrack further on rightPendingList until we exhaust it or a top that its right branch is not NULL.
+ *   -- if topPendingList is not empty, and we peek at the top (of topPendingList), and if the top's right branch is equal to the root now, then we are 
+ *      at the right branch of top, then we pop out top from topPendingList, and assigning it to the root, and continue the loop, eventually we are
+ *      backtracking from right branch backward to higher branch of the tree.
  *
- * rightPendingList is to store node that its right branch is pending to be processed
- * topPendingList is to store node that its left branch has processed, right branch is now in process, but its node is not yet processed
+ *      we will continue that backtracking from right branch up the tree until we are reach a top from topPendingList that it right branch is not
+ *      equal to root.
+ *
+ *   -- once we backtrack enough from right branch either by exhausting the topPendingList, or reach top of the topPendingList that its right branch
+ *      is not equal to root, then we will process rightPendingList if its node has right branch.
+ *
+ * rightPendingList is to store node that its right branch is pending to be processed.
+ * topPendingList is to store node that its left branch has processed, right branch is now in process, but its node is not yet processed.
  */
 void postOrderTraversal(struct TreeNode* root)
 {
@@ -95,14 +101,14 @@ void postOrderTraversal(struct TreeNode* root)
 }
 
 
-/* a in order traversal logic:
+/* An in order traversal logic:
  *
- * we start at the root, and if there is a left branch, we remember the root in topPendingList for backtracking and then traverse to 
- * left branch by assigning it as new root.
+ * We process left branch of a node, the node and then right branch, we traverse tree in depth first approach, so if there is left branch, 
+ * we will proceed further left as far as possible, then the node (in bottom) and then right branch, when we are in right branch, we will
+ * repeat above.
  *
- * if there is no right branch, then we repeatedly backtrack from topPendingList by:
- * - printing the value of the node we pop out from topPendingList
- * - exit the backtracking loop if the pop out node has right branch, else keep popping out
+ * It is simple than postorder logic that we only need a topPendingList that stores a list of node that we want to process after processing
+ * the left branch.
  */
 void inOrderTraversal(struct TreeNode *root)
 {
@@ -155,13 +161,14 @@ void inOrderTraversal(struct TreeNode *root)
     }
 }
 
-
 /* A pre order traversal logic:
  *
- * We start at the root, print the value, traverse the left branch and exhaust left branch as far as possible, then traverse right branch,
- * then backtrack one level for right back at higher level.
+ * We process the node, the left branch, and then right branch, we traverse tree in depth first approach, so if there is left branch,
+ * we will proceed further left as far as possible, and then right branch, when we are in right branch, in each next level, we will repeat
+ * above.
  *
- * Before we traverse left branch, we add right branch (if not NULL) to the rightPendingList for backtrack later.
+ * It is simple than postorder logic that we only need a rightPendingList that stores a list of right branch node that we want to process 
+ * after processing the left branch.
  */
 void preOrderTraversal(struct TreeNode *root)
 {
