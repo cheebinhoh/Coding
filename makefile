@@ -10,7 +10,7 @@ treebltraverse.out : treebltraverse.c tree.h
 	gcc -o $@ treebltraverse.c
 
 treemaxlevel.out : treemaxlevel.c tree.h
-	gcc -o $@ treesymmetriccheck.c
+	gcc -o $@ treemaxlevel.c
 
 treesymmetriccheck.out : treesymmetriccheck.c tree.h
 	gcc -o $@ treesymmetriccheck.c

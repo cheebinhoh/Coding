@@ -23,6 +23,11 @@ struct TreeNode * findParent(struct TreeNode *root,
         return NULL;
     }
 
+    if ( root == node )
+    {
+        return node;
+    }
+
     if ( root->left == node 
          || root->right == node )
     {
@@ -94,7 +99,7 @@ struct TreeNode * buildTree(int inorder[],
                 pos++;
             }
 
-            if ( pos > i )
+            if ( pos >= i )
             {
                 prev->right = new;
                 prev = new;
@@ -123,8 +128,12 @@ struct TreeNode * buildTree(int inorder[],
 int main(int argc, char * argv[])
 {
     struct TreeNode *root = NULL;
-    int              inorder[]   = { 9, 3, 15, 20, 7 };
-    int              postorder[] = { 9, 15, 7, 20, 3 };
+    int              inorder[]    = { 9, 3, 15, 20, 7 };
+    int              postorder[]  = { 9, 15, 7, 20, 3 };
+    int              inorder2[]   = { 2, 1 };
+    int              postorder2[] = { 2, 1 };
+    int              inorder3[]   = { 1, 2 };
+    int              postorder3[] = { 2, 1 };
 
 
     root = buildTree(inorder, postorder, sizeof(inorder) / sizeof(inorder[0]));
@@ -134,6 +143,23 @@ int main(int argc, char * argv[])
 
     printf("post order  = ");
     postOrderTraversal(root);   
+
+    root = buildTree(inorder2, postorder2, sizeof(inorder2) / sizeof(inorder2[0]));
+
+    printf("in order2   = ");
+    inOrderTraversal(root);
+
+    printf("post order2 = ");
+    postOrderTraversal(root);
+
+    root = buildTree(inorder3, postorder3, sizeof(inorder3) / sizeof(inorder3[0]));
+
+    printf("in order3   = ");
+    inOrderTraversal(root);
+
+    printf("post order3 = ");
+    postOrderTraversal(root);
+
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
 
