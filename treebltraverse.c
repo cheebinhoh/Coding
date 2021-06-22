@@ -63,40 +63,6 @@ void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
 }
 
 
-/* This is API entry to do breadth level traversal, kicker of 
- * recursive method.
- */
-void breadthLevelTraversal(struct TreeNode *root)
-{
-    struct TreeNode *nextLevelList[100];
-    struct TreeNode *currentLevelList[100];
-    int              nextLevelCnt = 0;
-    int              currentLevelCnt = 0;
-
-
-    if ( NULL == root )
-    {
-        return;
-    }
-    else
-    {
-        currentLevelList[currentLevelCnt++] = root;
-        
-        if ( NULL != root->left )
-        {
-            nextLevelList[nextLevelCnt++] = root->left;
-        }
-
-        if ( NULL != root->right )
-        {
-            nextLevelList[nextLevelCnt++] = root->right;
-        }
-
-        breadthLevelTraversal_Internal(currentLevelList, currentLevelCnt, nextLevelList, nextLevelCnt);
-
-        printf("\n");
-    }
-}
 
 
 /* The breadth level traversal, the iterative version, the logic is simple as none-iterative version:
@@ -165,6 +131,42 @@ void breadthLevelTraversalIter(struct TreeNode *root)
     }
 
     printf("\n");
+}
+
+
+/* This is API entry to do breadth level traversal, kicker of 
+ * recursive method.
+ */
+void breadthLevelTraversal(struct TreeNode *root)
+{
+    struct TreeNode *nextLevelList[100];
+    struct TreeNode *currentLevelList[100];
+    int              nextLevelCnt = 0;
+    int              currentLevelCnt = 0;
+
+
+    if ( NULL == root )
+    {
+        return;
+    }
+    else
+    {
+        currentLevelList[currentLevelCnt++] = root;
+        
+        if ( NULL != root->left )
+        {
+            nextLevelList[nextLevelCnt++] = root->left;
+        }
+
+        if ( NULL != root->right )
+        {
+            nextLevelList[nextLevelCnt++] = root->right;
+        }
+
+        breadthLevelTraversal_Internal(currentLevelList, currentLevelCnt, nextLevelList, nextLevelCnt);
+
+        printf("\n");
+    }
 }
 
 

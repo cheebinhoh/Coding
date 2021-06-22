@@ -29,7 +29,7 @@ int btreePathSumInternal(struct TreeNode *root,
 {  
     if ( NULL == root )
     {
-        return sum == targetSum;
+        return 0; // when tree is empty, there is no path, a path must be at least a node in minimum
     }
     else
     {
@@ -141,7 +141,9 @@ int main(int argc, char * argv[])
 
     printf("target sum (15) is %d\n", btreePathSum(root, 15));
     printf("target sum (6) is %d\n", btreePathSum(root, 6));
-    
+    printf("target sum (5) is %d\n", btreePathSum(root, 5));
+    printf("target sum (7) is %d\n", btreePathSum(root, 7));
+
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
 

@@ -21,8 +21,8 @@ treetraverse.out : treetraverse.c treetraverse-main.c tree.h treetraverse.h
 treebuild.out : treebuild.c treetraverse.c tree.h treetraverse.h
 	gcc -o $@ treebuild.c treetraverse.c
 
-treelca.out : treelca.c tree.h
-	gcc -o $@ treelca.c
+treelca.out : treelca.c treetraverse.c tree.h treetraverse.h
+	gcc -o $@ treelca.c treetraverse.c
 
 clean:
 	rm -f *.out *.o
