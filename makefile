@@ -26,3 +26,4 @@ treelca.out : treelca.c treetraverse.c tree.h treetraverse.h
 
 clean:
 	rm -f *.out *.o
+
