@@ -133,10 +133,11 @@ struct TreeNode * ntree2btree(struct NTreeNode *root)
 }
 
 
-/* The logic to convert a generic tree into a binary tree is that:
+/* The logic to convert a generic sorted tree into a binary tree is that:
  *
  * - right sibling of the current node is added as right branch node of the current node.
  * - child of the current node is added as left branch nodes of the current node.
+ * - repeat above two steps for each node recursively.
  *
  *
  *                  1
