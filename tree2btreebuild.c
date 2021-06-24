@@ -31,6 +31,14 @@ void printNTreeInSingleLevel(struct NTreeNode **list,
     }
 }
 
+/* The following page describes how to convert a generic tree
+ * to a binary tree. 
+ *
+ * Note that the code below is not exact pseudocode from the page, what borrow from
+ * the page is how the generic tree is map to a binary tree in tree diagram.
+ *
+ * https://www.brainkart.com/article/Common-operations-of-binary-trees_10088/
+ */
 
 void printNTreeInMultiLevel(struct NTreeNode *list[],
                             int               listCnt,
