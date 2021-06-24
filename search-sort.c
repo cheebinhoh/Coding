@@ -115,26 +115,6 @@ void shellSort( int list[], int size )
 	}
     }    
 
-
-    /*
-    for ( gap = size / 2; gap > 0; gap = gap / 2 )
-    {
-	for ( j = 0; j + gap < size; j++ )
-	{
-	    for ( i = j; i + gap < size; i += gap )
-	    {
-		if ( list[i] > list[i + gap] )
-		{
-	            count++;
-	            tmp = list[i];
-		    list[i] = list[i + gap];
-	  	    list[i + gap] = tmp;
-		}
-	    }               
-	}
-    }
-    */
-
     printf( "total swap = %d\n", count );
 }
 
