@@ -11,6 +11,7 @@ void quickSort( int list[], int size );
 
 int isSorted( int list[], int size );
 
+
 int main(int argc, char *argv[])
 {
     //             0  1  2  3  4  5
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
     int index;
  
     printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list ) ) );
-    shellSort( list, ARRAY_COUNT( list ) );
+    shellSort(list, ARRAY_COUNT( list ));
     for ( index = 0; index < ARRAY_COUNT( list ); index++ )
     {
         printf("%d ", list[index]);
@@ -26,16 +27,17 @@ int main(int argc, char *argv[])
 
     printf("\n"); 
 
-    printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list ) ) );
+    printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list ) ));
 
     return 0;
 }
 
 
-int isSorted( int list[], int size )
+int isSorted(int list[], int size)
 {
     int result = 1;
     int i;
+
 
     for ( i = 1; i < size - 1; i++ )
     {	
@@ -59,11 +61,12 @@ int isSorted( int list[], int size )
  *   all elements to its right is more than it. 
  * - then we recursively invoke quick sort on left and right elements of the pivot.
  */
-void quickSort( int list[], int size )
+void quickSort(int list[], int size)
 {
     int pivot = size - 1;
-    int i = 0;
+    int i     = 0;
     int tmp;
+
 
     while ( i < pivot )
     {
@@ -88,25 +91,32 @@ void quickSort( int list[], int size )
 
     if ( pivot > 1 )
     {
-	quickSort( list, pivot )  ;
+	quickSort(list, pivot)  ;
     }
 
     if ( size - pivot - 1 > 1 )
     {
-        quickSort( &list[pivot + 1], size - pivot - 1 );
+        quickSort(&list[pivot + 1], size - pivot - 1);
     }
 }
 
 
 /* Shell sort
+ *
+ * Shell sort is like bubble sort and compare a pair of elements and sort them
+ * into proper ordering, however instead of compare adjacent elements, shell sort
+ * will start off with a pair of elements separated apart by bigger gap, and then
+ * repeatedly decrease the gap and then eventually sort adjcent pair, bubble reduces
+ * the # of swap that happened.
  */
-void shellSort( int list[], int size )
+void shellSort(int list[], int size)
 {
     int gap;
     int j;
     int i;
     int tmp;
     int count = 0;
+
 
     for ( gap = size / 2; gap > 0; gap = gap / 2 )
     {
@@ -121,7 +131,7 @@ void shellSort( int list[], int size )
 	}
     }    
 
-    printf( "total swap = %d\n", count );
+    printf("total swap = %d\n", count);
 }
 
 
@@ -130,12 +140,13 @@ void shellSort( int list[], int size )
  * loop through each item via i
  * compare all elements before i and insert i in proper position
  */
-void insertionSort( int list[], int size )
+void insertionSort(int list[], int size)
 {
     int i;
     int j;
     int tmp;
     int count = 0;
+
 
     for ( i = 1; i < size; i++ )
     {
@@ -149,16 +160,17 @@ void insertionSort( int list[], int size )
         }
     }
 
-    printf( "total swap = %d\n", count );
+    printf("total swap = %d\n", count);
 }
 
 
 /* Bubbles sort
  */
-void bubbleSort( int list[], int size )
+void bubbleSort(int list[], int size)
 {
     int i, j;
     int tmp;
+
 
     for ( i = 0; i < size - 1; i++ )
     {
@@ -177,11 +189,12 @@ void bubbleSort( int list[], int size )
 
 /* Binary search
  */
-int binarySearch( int list[], int size, int value )
+int binarySearch(int list[], int size, int value)
 {
-    int head = 0;
-    int tail = size - 1;
+    int head   = 0;
+    int tail   = size - 1;
     int middle = ( head + tail ) / 2;
+
 
     while ( head <= tail
             && list[middle] != value )
