@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "tree.h"
+#include "btree.h"
 
 
 /* This method will linearize the tree into a list either left or right lean.

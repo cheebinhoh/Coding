@@ -3,7 +3,7 @@
  * Depth first search, preorder, inorder and postorder, both recursive and iterative way
  */
 
-#include "tree.h"
+#include "btree.h"
 
 #ifndef TREETRAVERSE_H_HAS_INCLUDED
 

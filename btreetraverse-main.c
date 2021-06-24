@@ -1,59 +1,12 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find the tree maximum level.
+ * Depth first search, preorder, inorder and postorder, both recursive and iterative way
  */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "tree.h"
-
-
-/* To derive the max level of tree, we can use any of the depth first search, and increase 
- * the level as we progress to left or right branch, and only return the max level if the 
- * level we are now in is higher than current max level value.
- */
-void treeMaxLevelInternal(struct TreeNode *root,
-                          int              level,
-                          int             *maxLevel)
-{
-    if ( NULL == root )
-    {
-        return;
-    }
-    else
-    { 
-        level++;
-
-	if ( level > *maxLevel )
-        {
-            *maxLevel = level;
-        }
-
-        if ( NULL != root->left )
-        {
-            treeMaxLevelInternal(root->left, level, maxLevel);
-        }       
-
-        if ( NULL != root->right )
-        {
-           treeMaxLevelInternal(root->right, level, maxLevel);
-        }
-
-        return;
-    }
-}
-
-
-/* An API front end to return max level of tree
- */
-int treeMaxLevel(struct TreeNode *root)
-{
-    int level = 0;
-
-    treeMaxLevelInternal(root, level, &level);
-
-    return level; 
-}
+#include "btree.h"
+#include "btreetraverse.h"
 
 
 /*
@@ -120,11 +73,19 @@ int main(int argc, char * argv[])
     other->left = other->right = NULL;
     root->right->right->right = other;
 
+    printf("pre order  = ");
+    preOrderTraversal(root);
+   
+    printf("post order = ");  
+    postOrderTraversal(root);
+
+    printf("in order   = ");
+    inOrderTraversal(root);
+
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
 
-    printf("Max tree level = %d\n", treeMaxLevel(root));
-
     return 0;
  }
+
 

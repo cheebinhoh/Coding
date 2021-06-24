@@ -6,8 +6,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "tree.h"
-#include "treetraverse.h"
+#include "btree.h"
+#include "btreetraverse.h"
 
 
 /* A post order traverse in iterative way:

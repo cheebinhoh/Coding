@@ -5,8 +5,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "tree.h"
-#include "treetraverse.h"
+#include "btree.h"
+#include "btreetraverse.h"
 
 
 /* Find a parent node from a tree for a node

@@ -1,28 +1,28 @@
 # all good makefile to help compiling
 
-all : treepathsum.out treebltraverse.out treemaxlevel.out treesymmetriccheck.out treetraverse.out \
-	treebuild.out treelca.out
+all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck.out btreetraverse.out \
+	btreebuild.out btreelca.out
 
-treepathsum.out : treepathsum.c tree.h
-	gcc -o $@ treepathsum.c 
+btreepathsum.out : btreepathsum.c 
+	gcc -o $@ btreepathsum.c 
 
-treebltraverse.out : treebltraverse.c tree.h 
-	gcc -o $@ treebltraverse.c
+btreebltraverse.out : btreebltraverse.c btree.h 
+	gcc -o $@ btreebltraverse.c
 
-treemaxlevel.out : treemaxlevel.c tree.h
-	gcc -o $@ treemaxlevel.c
+btreemaxlevel.out : btreemaxlevel.c btree.h
+	gcc -o $@ btreemaxlevel.c
 
-treesymmetriccheck.out : treesymmetriccheck.c tree.h
-	gcc -o $@ treesymmetriccheck.c
+btreesymmetriccheck.out : btreesymmetriccheck.c btree.h
+	gcc -o $@ btreesymmetriccheck.c
 
-treetraverse.out : treetraverse.c treetraverse-main.c tree.h treetraverse.h
-	gcc -o $@ treetraverse.c treetraverse-main.c
+btreetraverse.out : btreetraverse.c btreetraverse-main.c btree.h btreetraverse.h
+	gcc -o $@ btreetraverse.c btreetraverse-main.c
 
-treebuild.out : treebuild.c treetraverse.c tree.h treetraverse.h
-	gcc -o $@ treebuild.c treetraverse.c
+btreebuild.out : btreebuild.c btreetraverse.c btree.h btreetraverse.h
+	gcc -o $@ btreebuild.c btreetraverse.c
 
-treelca.out : treelca.c treetraverse.c tree.h treetraverse.h
-	gcc -o $@ treelca.c treetraverse.c
+btreelca.out : btreelca.c btreetraverse.c btree.h btreetraverse.h
+	gcc -o $@ btreelca.c btreetraverse.c
 
 clean:
 	rm -f *.out *.o
