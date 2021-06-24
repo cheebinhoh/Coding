@@ -50,7 +50,10 @@ int isSorted( int list[], int size )
     return result;
 }
 
-/* The algorithm is that:
+
+/* Quick sort
+ *
+ * The algorithm is that:
  * - the right most element is picked as a pivot.
  * - then we move the pivot in the right position that all elements to the left are less than it, and 
  *   all elements to its right is more than it. 
@@ -94,6 +97,9 @@ void quickSort( int list[], int size )
     }
 }
 
+
+/* Shell sort
+ */
 void shellSort( int list[], int size )
 {
     int gap;
@@ -119,7 +125,9 @@ void shellSort( int list[], int size )
 }
 
 
-/* loop through each item via i
+/* Insertion sort
+ *
+ * loop through each item via i
  * compare all elements before i and insert i in proper position
  */
 void insertionSort( int list[], int size )
@@ -144,6 +152,9 @@ void insertionSort( int list[], int size )
     printf( "total swap = %d\n", count );
 }
 
+
+/* Bubbles sort
+ */
 void bubbleSort( int list[], int size )
 {
     int i, j;
@@ -163,6 +174,9 @@ void bubbleSort( int list[], int size )
     }
 }
 
+
+/* Binary search
+ */
 int binarySearch( int list[], int size, int value )
 {
     int head = 0;
