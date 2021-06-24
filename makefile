@@ -1,7 +1,7 @@
 # all good makefile to help compiling
 
 all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck.out btreetraverse.out \
-	btreebuild.out btreelca.out tree2btreebuild.out
+	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out
 
 btreepathsum.out : btreepathsum.c 
 	gcc -o $@ btreepathsum.c 
@@ -26,6 +26,9 @@ btreelca.out : btreelca.c btreetraverse.c btree.h btreetraverse.h
 
 tree2btreebuild.out : tree2btreebuild.c btreetraverse.c btree.h btreetraverse.h
 	gcc -o $@ tree2btreebuild.c btreetraverse.c
+
+search-sort.out : search-sort.c 
+	gcc -o $@ search-sort.c 
 
 clean:
 	rm -f *.out *.o
