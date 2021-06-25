@@ -3,13 +3,12 @@
 #define ARRAY_COUNT(array)  ( sizeof((array)) / sizeof((array)[0]) )
 
 
-int binarySearch( int list[], int size, int value );
-void bubbleSort( int list[], int size );
-void insertionSort( int list[], int size );
-void shellSort( int list[], int size );
-void quickSort( int list[], int size );
-
-int isSorted( int list[], int size );
+void bubbleSort(int list[], int size);
+void insertionSort(int list[], int size);
+void shellSort(int list[], int size);
+void quickSort(int list[], int size);
+int binarySearch(int list[], int size, int value);
+int isSorted(int list[], int size);
 
 
 int main(int argc, char *argv[])
@@ -168,7 +167,8 @@ void insertionSort(int list[], int size)
  */
 void bubbleSort(int list[], int size)
 {
-    int i, j;
+    int i;
+    int j;
     int tmp;
 
 
