@@ -9,7 +9,7 @@
  */
 struct TreeNode {
 
-     int val;
+     int              val;
      struct TreeNode *left;
      struct TreeNode *right;
 };
