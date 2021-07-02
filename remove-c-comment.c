@@ -1,3 +1,8 @@
+/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+ *
+ * A simple hand-craft token scanner that will remove C styles of comment, // or /* ... */
+ */
+
 #include <stdio.h>
 
 
