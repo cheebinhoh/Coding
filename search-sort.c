@@ -62,8 +62,14 @@ int isSorted(int list[], int size)
  *
  * The algorithm is that:
  * - the right most element is picked as a pivot.
- * - then we move the pivot in the right position that all elements to the left are less than it, and 
- *   all elements to its right is more than it. 
+ * - then we compare pivot element to the left indexed element (start from the left).
+ * --- if the left element is smaller than the pivot element (from right), we increase the index of left element by 1.
+ * --- if the left element is larger than the pivot element, we move the left element to the pivot element to the left indexed
+ *     element position, we move the pivot element into the left position of the pivot element, and we reloate original 
+ *     left indexed element to the right of the new pivot position
+ * --- we repeat above as long as left index is smaller than pivot position
+ * - once we stop that, we know that everything to the left of the pivot will be smaller, and everything to the right will be
+ *   larger than pivot element.
  * - then we recursively invoke quick sort on left and right elements of the pivot.
  */
 void quickSort(int list[], int size)
