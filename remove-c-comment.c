@@ -1,6 +1,9 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * A simple hand-craft token scanner that will remove C styles of comment, // or /* ... */
+ * A simple hand-craft token scanner that will remove C styles of comment, interestingly
+ * C style does not allow nested forwardslash asteriak comment, so do this scanner, 
+ * I shall add nested support sometimes later. :)
+ *
  */
 
 #include <stdio.h>
@@ -12,7 +15,7 @@
 
 /* simple program to remove comments from C
  */ 
-main()
+int main(int argc, char *argv[])
 {
     int c;  // single line
     int isInComment = NO;
