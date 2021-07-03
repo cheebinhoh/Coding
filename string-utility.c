@@ -179,7 +179,7 @@ void squeeze1(char s[], char c)
                 j++;
 
             i--; // repeat this new position check
-        }	
+        }    
     }
 }
 
