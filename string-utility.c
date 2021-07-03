@@ -1,4 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
+ *
+ * Some common C string utlities.
  */
 
 #include <stdio.h>
