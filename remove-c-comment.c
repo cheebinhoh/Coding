@@ -33,32 +33,32 @@ int main(int argc, char *argv[])
             {
                 if ( '*' == prevC )
                 {
-		    isInComment = NO;
-		    prevC = '\0';
+                    isInComment = NO;
+                    prevC = '\0';
                 }
                 else 
-		{
-		    prevC = c;
-		}
+                {
+                    prevC = c;
+                }
             }
-	    else if ( '\n' == c 
-	              && isCommentSingleLine )
-	    {
-		isInComment = NO;
-		isCommentSingleLine = NO;
-		putchar(c);
-		prevC = '\0';
-	    }
+            else if ( '\n' == c 
+                      && isCommentSingleLine )
+            {
+                isInComment = NO;
+                isCommentSingleLine = NO;
+                putchar(c);
+                prevC = '\0';
+            }
             else
             {
-		prevC = c;
-	    }
+                prevC = c;
+            }
         }
         else // if ( isInComment ) 
         {
             if ( isInQuote )
             {
-	        if ( '\\' == c )
+                if ( '\\' == c )
                 {
                     isPrevBackSlash = YES;
                 }
@@ -72,11 +72,11 @@ int main(int argc, char *argv[])
                         }
                     }
                    
-		    isPrevBackSlash = NO;
+                   isPrevBackSlash = NO;
                 }
 
                 putchar(c);
-	    }
+            }
             else if ( '\'' == c )
             {
                 isInQuote = YES;
@@ -85,22 +85,22 @@ int main(int argc, char *argv[])
             }
             else if ( '/' == c ) /* ... */
             {
-		if ( '/' == prevC ) //
-		{
-		    isInComment = YES;
-		    isCommentSingleLine = YES;
-		}
-		else 
-		{
+                if ( '/' == prevC ) //
+                {
+                    isInComment = YES;
+                    isCommentSingleLine = YES;
+                }
+                else 
+                {
                     prevC = c;                    
-		}
+                }
             }
             else if ( '*' == c )
             {
                 if ( '/' == prevC )
                 {
                     isInComment = YES;
-	            isCommentSingleLine = NO;
+                    isCommentSingleLine = NO;
                 }
             
                 prevC = '\0';
