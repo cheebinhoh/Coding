@@ -49,7 +49,7 @@ int isSorted(int list[], int size)
         if ( list[i - 1] > list[i] )
         {
             result = 0;
-	
+
             break;
         }
     }
