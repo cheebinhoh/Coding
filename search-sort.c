@@ -45,13 +45,13 @@ int isSorted(int list[], int size)
 
 
     for ( i = 1; i < size - 1; i++ )
-    {	
-	if ( list[i - 1] > list[i] )
-	{
-	    result = 0;
-		
-	    break;
-	}
+    {
+        if ( list[i - 1] > list[i] )
+        {
+            result = 0;
+	
+            break;
+        }
     }
 
     return result;
@@ -82,27 +82,27 @@ void quickSort(int list[], int size)
     while ( i < pivot )
     {
         if ( list[i] <= list[pivot] )
-	{
-	    i++;
-	}
-	else
-	{
-	    // pivot is moved to position pivot - 1
+        {
+            i++;
+        }
+        else
+        {
+            // pivot is moved to position pivot - 1
             // original item at position pivot - 1 is moved to the position ith
             // original item at position ith is moved to the original pivot position
 
-	    tmp = list[i];
+            tmp = list[i];
             list[i] = list[pivot - 1];
             list[pivot - 1] = list[pivot];
             list[pivot] = tmp;   
 
-	    pivot--;
-	}
+            pivot--;
+        }
     }
 
     if ( pivot > 1 )
     {
-	quickSort(list, pivot)  ;
+        quickSort(list, pivot)  ;
     }
 
     if ( size - pivot - 1 > 1 )
@@ -134,12 +134,12 @@ void shellSort(int list[], int size)
         for ( j = gap; j < size; j++ )
         {
             for ( i = j - gap; i >= 0 && list[i] > list[i + gap]; i = i - gap )
-	    {
+            {
                 tmp = list[i];
                 list[i] = list[i + gap];
                 list[i + gap] = tmp;
-	    }
-	}
+            }
+        }
     }    
 
     printf("total swap = %d\n", count);
@@ -165,7 +165,7 @@ void insertionSort(int list[], int size)
         
         for ( j = i - 1; j >= 0 && list[j] > tmp; j-- )
         {
-	  count++;
+            count++;
           list[j + 1] = list[j];
           list[j] = tmp;
         }
@@ -186,15 +186,15 @@ void bubbleSort(int list[], int size)
 
     for ( i = 0; i < size - 1; i++ )
     {
-	for ( j = 0; j < size - 1 - i; j++ )
+        for ( j = 0; j < size - 1 - i; j++ )
         {
-	     if ( list[j] > list[j + 1] )
-	     {
-                 tmp = list[j];
-		 list[j] = list[j + 1];
-		 list[j + 1] = tmp;
-	     }   
-	}
+            if ( list[j] > list[j + 1] )
+            {
+                tmp = list[j];
+                list[j] = list[j + 1];
+                list[j + 1] = tmp;
+            }   
+        }
     }
 }
 
