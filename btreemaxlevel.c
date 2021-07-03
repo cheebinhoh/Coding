@@ -24,7 +24,7 @@ void treeMaxLevelInternal(struct TreeNode *root,
     { 
         level++;
 
-	if ( level > *maxLevel )
+        if ( level > *maxLevel )
         {
             *maxLevel = level;
         }

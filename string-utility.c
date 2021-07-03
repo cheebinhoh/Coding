@@ -161,10 +161,9 @@ void toupperString(char s[])
 /* This is a left to right version that we rip off a character from
  * a string.
  *
- * It is an ineffecient version, the better versino is to do it
- * from right to left, so that when substring has to move one character
- * to the left, the right substring does not include any character
- * that we do not want
+ * This is an inefficient version as whenever we find a character to
+ * be removed, we move all characters to its right one position up,
+ * those characters might include one that we do not want.
  */
 void squeeze1(char s[], char c)
 {
@@ -184,6 +183,11 @@ void squeeze1(char s[], char c)
     }
 }
 
+/* This ia an efficient version that we remove character
+ * from the right, so when we move character one position to
+ * the left, we know that characters on the right has no
+ * characters that we do not want.
+ */
 void squeeze2(char s[], char c)
 {
     int i;
