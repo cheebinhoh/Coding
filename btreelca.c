@@ -53,9 +53,9 @@ struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
     {
         if ( val1 == val2
              && val2 == root->val )
-	{
+        {
             return root;
-	}
+        }
         else
         {
             if ( NULL == root->left 
