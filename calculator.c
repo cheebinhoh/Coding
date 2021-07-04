@@ -82,26 +82,25 @@ int performBinaryOperation(int opr1, int opr2, char op)
             break;
 
         case '/':
-           value = opr1 / opr2;
-           break;
+            value = opr1 / opr2;
+            break;
 
         case '+':
-           value = opr1 + opr2;
-           break;
+            value = opr1 + opr2;
+            break;
 
         case '-':
-           value = opr1 - opr2;
-           break;
+            value = opr1 - opr2;
+            break;
     }
 
     return value;
 }
 
-
-int evaluate(int   number[], 
-             int  *numberIndex,
-             char  op[], 
-             int  *opIndex)
+int evaluateBinaryExpr(int   number[], 
+                       int  *numberIndex,
+                       char  op[], 
+                       int  *opIndex)
 {
     int prevOp;
     int result;
@@ -132,21 +131,18 @@ int evaluate(int   number[],
 }
 
 
-int main(int argc, char *argv[])
+int evaluate(char s[])
 {
-    char  s[] = "( ( 2 + 3 ) * ( 2 + 1 ) ) * 4";
     char *p = s;
     char *tmpP;
     int   numberIndex = 0;
-    int   opIndex = 0;   
+    int   opIndex = 0;
     int   precedenceIndex = 0;
     int   number[100];
     char  op[100];
-    int   precedence[100];
-    int   total = 0;
-    int   newNumber;
+    int   precedence[100];   
     char  newOp;
-
+    int   newNumber;
 
     while ( *p != '\0' )
     {
@@ -168,7 +164,7 @@ int main(int argc, char *argv[])
 
                 while ( loopCnt >= 2 )
                 {
-                    evaluate(number, &numberIndex, op, &opIndex);
+                    evaluateBinaryExpr(number, &numberIndex, op, &opIndex);
                     loopCnt--;
                 }   
             }
@@ -194,7 +190,7 @@ int main(int argc, char *argv[])
                      && ( precedenceIndex <= 0
                           || ( numberIndex - precedence[precedenceIndex - 1] ) >= 2 ) )
                 {
-                    evaluate(number, &numberIndex, op, &opIndex);
+                    evaluateBinaryExpr(number, &numberIndex, op, &opIndex);
                 }       
             }
 
@@ -204,14 +200,20 @@ int main(int argc, char *argv[])
 
     while ( opIndex > 0 )
     {
-        evaluate(number, &numberIndex, op, &opIndex);
+        evaluateBinaryExpr(number, &numberIndex, op, &opIndex);
     }
 
+    return numberIndex <= 0 ? 0 : number[numberIndex - 1];
+}
 
-    if ( numberIndex > 0 )
-    {
-         printf("calculation of %s = %d\n", s, number[--numberIndex]);
-    }
+
+int main(int argc, char *argv[])
+{
+    char s1[]  = "1 + 2 * 3";
+    char s2[] = "( ( 2 + 3 ) * ( 2 + 1 ) ) * 4";
+
+    printf("calculation of %s = %d\n", s1, evaluate(s1));
+    printf("calculation of %s = %d\n", s2, evaluate(s2));
 
     return 0;
 }
