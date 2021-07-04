@@ -99,13 +99,15 @@ int performBinaryOperation(int opr1, int opr2, char op)
 
 int main(int argc, char *argv[])
 {
-    char  s[] = "2 + 4 * 2";
+    char  s[] = "(2 * ( 4 + 3 + 2 ) ) * 2";
     char *p = s;
     char *tmpP;
     int   numberIndex = 0;
     int   opIndex = 0;   
+    int   precedenceIndex = 0;
     int   number[100];
     char  op[100];
+    int   precedence[100];
     int   total = 0;
     int   newNumber;
     char  newOp;
@@ -115,7 +117,49 @@ int main(int argc, char *argv[])
         p = skipWhitespace(p);
     
         tmpP = p;
-        if ( ( p = getNumber(p, &newNumber) ) != tmpP )
+        if ( '(' == *p )
+        {
+            precedence[precedenceIndex++] = numberIndex;
+            p++;
+        }
+        else if ( ')' == *p )
+        {
+            int startNumberIndex = precedence[--precedenceIndex]; 
+
+            if ( opIndex > 0 )
+            {
+                if ( ( numberIndex - startNumberIndex + 1 ) >= 2 )
+                {
+                    int prevOp;
+                    int result;
+                    int opr1;
+                    int opr2;
+ 
+                    prevOp = op[--opIndex];
+                    switch ( prevOp )
+                    {
+                        case '+' :
+                        case '-' :
+                            opr1 = number[--numberIndex];
+                            opr2 = number[--numberIndex];
+                            result = performBinaryOperation(opr1, opr2, prevOp);
+                            break;
+
+                        case '*' :
+                        case '/' :
+                            opr1 = number[--numberIndex];
+                            opr2 = number[--numberIndex];
+                            result = performBinaryOperation(opr1, opr2, prevOp);
+                            break;
+                    }
+
+                    number[numberIndex++] = result;
+                }   
+            }
+
+            p++;
+        }
+        else if ( ( p = getNumber(p, &newNumber) ) != tmpP )
         {
             number[numberIndex++] = newNumber;
         } 
@@ -130,7 +174,9 @@ int main(int argc, char *argv[])
                 int opr2;
                 int result;
 
-                if ( prevOpPos <= newOpPos )
+                if ( prevOpPos <= newOpPos
+                     && ( precedenceIndex <= 0
+                          || ( numberIndex - precedence[precedenceIndex - 1] ) >= 2 ) )
                 {
                     opIndex--;
 
@@ -159,55 +205,38 @@ int main(int argc, char *argv[])
         }
     }
 
+    if ( opIndex > 0 )
     {
-        int index;
-
-        for ( index = 0; index < opIndex; index++ )
-        {
-            printf("%c ", op[index]);
-        }
-
-        printf("\n");
-    
-        for ( index = 0; index < numberIndex; index++ )
-        {
-            printf("%d ", number[index]);
-        }
-    
-        printf("\n");
-    }    
-
-
-    while ( opIndex > 0 )
-    {
-        char currOp = op[--opIndex];
+        int prevOp;
+        int result;
         int opr1;
         int opr2;
-        int result;
 
-        switch ( currOp )
+        prevOp = op[--opIndex];
+        switch ( prevOp )
         {
             case '+' :
             case '-' :
                 opr1 = number[--numberIndex];
                 opr2 = number[--numberIndex];
-                result = performBinaryOperation(opr1, opr2, currOp);
+                result = performBinaryOperation(opr1, opr2, prevOp);
                 break;
 
-            case '*' :
-            case '/' :
+           case '*' :
+           case '/' :
                 opr1 = number[--numberIndex];
                 opr2 = number[--numberIndex];
-                result = performBinaryOperation(opr1, opr2, currOp);
+                result = performBinaryOperation(opr1, opr2, prevOp);
                 break;
         }
 
         number[numberIndex++] = result;
     }
 
+
     if ( numberIndex > 0 )
     {
-         printf("result = %d\n", number[--numberIndex]);
+         printf("calculation of %s = %d\n", s, number[--numberIndex]);
     }
 
     return 0;
