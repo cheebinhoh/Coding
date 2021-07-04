@@ -12,6 +12,7 @@ char * getNumber(char s[], int *retValue)
     char *p = s;
     int  value = 0;
 
+
     while ( isdigit(*p) )
     {
         value = value * 10 + ( *p - '0' );
@@ -26,6 +27,7 @@ char * getNumber(char s[], int *retValue)
 char * getOperator(char s[], char *op)
 {
     char *p = s;
+
 
     if ( '+' == *p 
          || '-' == *p
@@ -43,6 +45,7 @@ char * skipWhitespace(char s[])
 {
     char *p = s;
 
+
     while ( isspace(*p) )
         p++;
        
@@ -52,6 +55,7 @@ char * skipWhitespace(char s[])
 int getPrecedence(char op)
 {
     int pos = 0;
+
 
     switch ( op ) 
     {
@@ -74,6 +78,7 @@ int getPrecedence(char op)
 int performBinaryOperation(int opr1, int opr2, char op)
 {
     int value;
+
 
     switch ( op )
     {
@@ -106,6 +111,7 @@ int evaluateBinaryExpr(int   number[],
     int result;
     int opr1;
     int opr2;
+
 
     prevOp = op[--(*opIndex)];
     switch ( prevOp )
@@ -143,6 +149,7 @@ int evaluate(char s[])
     int   precedence[100];   
     char  newOp;
     int   newNumber;
+
 
     while ( *p != '\0' )
     {
@@ -211,9 +218,12 @@ int main(int argc, char *argv[])
 {
     char s1[]  = "1 + 2 * 3";
     char s2[] = "( ( 2 + 3 ) * ( 2 + 1 ) ) * 4";
+    char s3[]  = "( 2 ) * 3";
+
 
     printf("calculation of %s = %d\n", s1, evaluate(s1));
     printf("calculation of %s = %d\n", s2, evaluate(s2));
+    printf("calculation of %s = %d\n", s3, evaluate(s3));
 
     return 0;
 }
