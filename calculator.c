@@ -136,7 +136,6 @@ int evaluateBinaryExpr(int   number[],
     return result;
 }
 
-
 int evaluate(char s[])
 {
     char *p = s;
