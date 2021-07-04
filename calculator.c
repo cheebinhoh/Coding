@@ -97,6 +97,41 @@ int performBinaryOperation(int opr1, int opr2, char op)
     return value;
 }
 
+
+int evaluate(int   number[], 
+             int  *numberIndex,
+             char  op[], 
+             int  *opIndex)
+{
+    int prevOp;
+    int result;
+    int opr1;
+    int opr2;
+
+    prevOp = op[--(*opIndex)];
+    switch ( prevOp )
+    {
+         case '+' :
+         case '-' :
+             opr1 = number[--(*numberIndex)];
+             opr2 = number[--(*numberIndex)];
+             result = performBinaryOperation(opr1, opr2, prevOp);
+             break;
+
+        case '*' :
+        case '/' :
+             opr1 = number[--(*numberIndex)];
+             opr2 = number[--(*numberIndex)];
+             result = performBinaryOperation(opr1, opr2, prevOp);
+             break;
+    }
+
+    number[(*numberIndex)++] = result;
+ 
+    return result;
+}
+
+
 int main(int argc, char *argv[])
 {
     char  s[] = "( ( 2 + 3 ) * ( 2 + 1 ) ) * 4";
@@ -133,30 +168,7 @@ int main(int argc, char *argv[])
 
                 while ( loopCnt >= 2 )
                 {
-                    int prevOp;
-                    int result;
-                    int opr1;
-                    int opr2;
- 
-                    prevOp = op[--opIndex];
-                    switch ( prevOp )
-                    {
-                        case '+' :
-                        case '-' :
-                            opr1 = number[--numberIndex];
-                            opr2 = number[--numberIndex];
-                            result = performBinaryOperation(opr1, opr2, prevOp);
-                            break;
-
-                        case '*' :
-                        case '/' :
-                            opr1 = number[--numberIndex];
-                            opr2 = number[--numberIndex];
-                            result = performBinaryOperation(opr1, opr2, prevOp);
-                            break;
-                    }
-
-                    number[numberIndex++] = result;
+                    evaluate(number, &numberIndex, op, &opIndex);
                     loopCnt--;
                 }   
             }
@@ -182,26 +194,7 @@ int main(int argc, char *argv[])
                      && ( precedenceIndex <= 0
                           || ( numberIndex - precedence[precedenceIndex - 1] ) >= 2 ) )
                 {
-                    opIndex--;
-
-                    switch ( prevOp )
-                    {
-                        case '+' :
-                        case '-' :
-                            opr1 = number[--numberIndex];            
-                            opr2 = number[--numberIndex];
-                            result = performBinaryOperation(opr1, opr2, prevOp);
-                            break;
-
-                        case '*' :
-                        case '/' :
-                            opr1 = number[--numberIndex];
-                            opr2 = number[--numberIndex];        
-                            result = performBinaryOperation(opr1, opr2, prevOp);
-                            break;    
-                    }
-
-                    number[numberIndex++] = result;
+                    evaluate(number, &numberIndex, op, &opIndex);
                 }       
             }
 
@@ -211,30 +204,7 @@ int main(int argc, char *argv[])
 
     while ( opIndex > 0 )
     {
-        int prevOp;
-        int result;
-        int opr1;
-        int opr2;
-
-        prevOp = op[--opIndex];
-        switch ( prevOp )
-        {
-            case '+' :
-            case '-' :
-                opr1 = number[--numberIndex];
-                opr2 = number[--numberIndex];
-                result = performBinaryOperation(opr1, opr2, prevOp);
-                break;
-
-           case '*' :
-           case '/' :
-                opr1 = number[--numberIndex];
-                opr2 = number[--numberIndex];
-                result = performBinaryOperation(opr1, opr2, prevOp);
-                break;
-        }
-
-        number[numberIndex++] = result;
+        evaluate(number, &numberIndex, op, &opIndex);
     }
 
 
