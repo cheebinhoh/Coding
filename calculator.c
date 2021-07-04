@@ -99,7 +99,7 @@ int performBinaryOperation(int opr1, int opr2, char op)
 
 int main(int argc, char *argv[])
 {
-    char  s[] = "(2 * ( 4 + 3 + 2 ) ) * 2";
+    char  s[] = "( ( 2 + 3 ) * ( 2 + 1 ) ) * 4";
     char *p = s;
     char *tmpP;
     int   numberIndex = 0;
@@ -111,6 +111,7 @@ int main(int argc, char *argv[])
     int   total = 0;
     int   newNumber;
     char  newOp;
+
 
     while ( *p != '\0' )
     {
@@ -128,7 +129,9 @@ int main(int argc, char *argv[])
 
             if ( opIndex > 0 )
             {
-                if ( ( numberIndex - startNumberIndex + 1 ) >= 2 )
+                int loopCnt = numberIndex - startNumberIndex;
+
+                while ( loopCnt >= 2 )
                 {
                     int prevOp;
                     int result;
@@ -154,6 +157,7 @@ int main(int argc, char *argv[])
                     }
 
                     number[numberIndex++] = result;
+                    loopCnt--;
                 }   
             }
 
@@ -205,7 +209,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    if ( opIndex > 0 )
+    while ( opIndex > 0 )
     {
         int prevOp;
         int result;
