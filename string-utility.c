@@ -34,10 +34,10 @@ int main(int argc, char *argv[])
 double atof(char s[])
 {
     double value = 0.0;
-    int power = 1;
-    int fractionValue = 0;
-    int sign = 1;
-    int i;
+    int    power = 1;
+    int    fractionValue = 0;
+    int    sign = 1;
+    int    i;
 
 
     for ( i = 0; isspace(s[i]); i++ )
