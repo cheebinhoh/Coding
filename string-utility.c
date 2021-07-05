@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     char s[] = "C++ is elegant and beautiful";
     char c   = '+';
 
+
     printf("Original string is \"%s\"\n", s);
     squeeze2(s, c);
     printf("Squenze + out, result is \"%s\"\n", s);
@@ -35,8 +36,8 @@ double atof(char s[])
     double value = 0.0;
     int power = 1;
     int fractionValue = 0;
-    int i;
     int sign = 1;
+    int i;
 
 
     for ( i = 0; isspace(s[i]); i++ )
@@ -170,6 +171,7 @@ void toupperString(char s[])
 void squeeze1(char s[], char c)
 {
     int i;
+
 
     for ( i = 0; '\0' != s[i]; i++ )
     {
