@@ -237,9 +237,9 @@ int evaluate(char s[])
 
 int main(int argc, char *argv[])
 {
-    char s1[]  = "1 + 2 * 3";
+    char s1[] = "1 + 2 * 3";
     char s2[] = "( ( 2 + 3 ) * ( 2 + 1 ) ) * 4";
-    char s3[]  = "( 2 ) * 3";
+    char s3[] = "( 2 ) * 3";
 
 
     printf("calculation of %s = %d\n", s1, evaluate(s1));
