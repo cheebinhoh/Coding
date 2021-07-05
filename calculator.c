@@ -2,6 +2,8 @@
  *
  * A simple calculator that evaluates integer expression with support of 4 binary operators
  * +, -, * and /, and also parethense to override default precedence.
+ *
+ * It does not do syntax and semantic check.
  */
 
 
@@ -104,15 +106,6 @@ int performBinaryOperation(int opr1, int opr2, char op)
     return value;
 }
 
-/* it does support negative number, in order to support negative number, we need to:
- * - add a struct to hold operator as token that we can add more semantic meaning than
- *   holding a character ('-' will be the same in prefix negative and binary minus)
- *
- * - the operator token will also maintain position that the token start, so when we 
- *   parse number, we can check if the "-" is immediately before the number
- *
- * - then the rest is evaluating it.
- */ 
 int evaluateBinaryExpr(int   number[], 
                        int  *numberIndex,
                        char  op[], 
@@ -147,6 +140,19 @@ int evaluateBinaryExpr(int   number[],
     return result;
 }
 
+/* To support negative number, there are two ways:
+ * 
+ * 1.
+ * - add a struct to hold operator as token that we can add more semantic meaning than
+ *   holding a character ('-' will be the same in prefix negative and binary minus)
+ *
+ * - the operator token will also maintain position that the token start, so when we 
+ *   parse number, we can check if the "-" is immediately before the number
+ *
+ * 2.
+ * - a more hack way that when we get "-" token, we evaluate next character if it is 
+ *   a number or another "-"
+ */ 
 int evaluate(char s[])
 {
     char *tmpP;
