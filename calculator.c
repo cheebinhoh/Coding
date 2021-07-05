@@ -1,7 +1,9 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * A simple calculator
+ * A simple calculator that evaluates integer expression with support of 4 binary operators
+ * +, -, * and /, and also parethense to override default precedence.
  */
+
 
 #include <stdio.h>
 #include <ctype.h>
@@ -9,8 +11,8 @@
 
 char * getNumber(char s[], int *retValue)
 {
-    char *p = s;
-    int  value = 0;
+    char *p     = s;
+    int   value = 0;
 
 
     while ( isdigit(*p) )
@@ -59,12 +61,12 @@ int getPrecedence(char op)
 
     switch ( op ) 
     {
-        case '+' :
-        case '-' :
+        case '+':
+        case '-':
             pos = 2;
             break;
 
-        case '*' :
+        case '*':
             pos = 1;
             break;
 
@@ -87,7 +89,7 @@ int performBinaryOperation(int opr1, int opr2, char op)
             break;
 
         case '/':
-            value = opr1 / opr2;
+            value = opr1 / opr2; // let native exception kick in if opr2 is zero
             break;
 
         case '+':
@@ -102,6 +104,15 @@ int performBinaryOperation(int opr1, int opr2, char op)
     return value;
 }
 
+/* it does support negative number, in order to support negative number, we need to:
+ * - add a struct to hold operator as token that we can add more semantic meaning than
+ *   holding a character ('-' will be the same in prefix negative and binary minus)
+ *
+ * - the operator token will also maintain position that the token start, so when we 
+ *   parse number, we can check if the "-" is immediately before the number
+ *
+ * - then the rest is evaluating it.
+ */ 
 int evaluateBinaryExpr(int   number[], 
                        int  *numberIndex,
                        char  op[], 
@@ -116,15 +127,15 @@ int evaluateBinaryExpr(int   number[],
     prevOp = op[--(*opIndex)];
     switch ( prevOp )
     {
-         case '+' :
-         case '-' :
+         case '+':
+         case '-':
              opr1 = number[--(*numberIndex)];
              opr2 = number[--(*numberIndex)];
              result = performBinaryOperation(opr1, opr2, prevOp);
              break;
 
-        case '*' :
-        case '/' :
+        case '*':
+        case '/':
              opr1 = number[--(*numberIndex)];
              opr2 = number[--(*numberIndex)];
              result = performBinaryOperation(opr1, opr2, prevOp);
@@ -138,17 +149,22 @@ int evaluateBinaryExpr(int   number[],
 
 int evaluate(char s[])
 {
-    char *p = s;
     char *tmpP;
-    int   numberIndex = 0;
-    int   opIndex = 0;
-    int   precedenceIndex = 0;
+    char *p;
+    int   numberIndex;
+    int   opIndex;
+    int   precedenceIndex;
     int   number[100];
     char  op[100];
     int   precedence[100];   
     char  newOp;
     int   newNumber;
 
+    
+    p = s;
+    numberIndex = 0;
+    opIndex = 0;
+    precedenceIndex = 0;
 
     while ( *p != '\0' )
     {
