@@ -1,7 +1,7 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
  * A simple calculator that evaluates integer expression with support of 4 binary operators
- * +, -, * and /, and also parethense to override default precedence.
+ * +, -, *, / and negative operator '-', and also parethense to override default precedence.
  *
  * It does not do syntax and semantic check.
  */
@@ -10,6 +10,12 @@
 #include <stdio.h>
 #include <ctype.h>
 
+struct OpToken
+{
+    char op;
+    int  opStartPos;
+    int  opEndPos;
+};
 
 char * getNumber(char s[], int *retValue)
 {
@@ -106,10 +112,10 @@ int performBinaryOperation(int opr1, int opr2, char op)
     return value;
 }
 
-int evaluateBinaryExpr(int   number[], 
-                       int  *numberIndex,
-                       char  op[], 
-                       int  *opIndex)
+int evaluateBinaryExpr(int             number[], 
+                       int            *numberIndex,
+                       struct OpToken  op[], 
+                       int            *opIndex)
 {
     int prevOp;
     int result;
@@ -117,7 +123,7 @@ int evaluateBinaryExpr(int   number[],
     int opr2;
 
 
-    prevOp = op[--(*opIndex)];
+    prevOp = op[--(*opIndex)].op;
     switch ( prevOp )
     {
          case '+':
@@ -140,31 +146,18 @@ int evaluateBinaryExpr(int   number[],
     return result;
 }
 
-/* To support negative number, there are two ways:
- * 
- * 1.
- * - add a struct to hold operator as token that we can add more semantic meaning than
- *   holding a character ('-' will be the same in prefix negative and binary minus)
- *
- * - the operator token will also maintain position that the token start, so when we 
- *   parse number, we can check if the "-" is immediately before the number
- *
- * 2.
- * - a more hack way that when we get "-" token, we evaluate next character if it is 
- *   a number or another "-"
- */ 
 int evaluate(char s[])
 {
-    char *tmpP;
-    char *p;
-    int   numberIndex;
-    int   opIndex;
-    int   precedenceIndex;
-    int   number[100];
-    char  op[100];
-    int   precedence[100];   
-    char  newOp;
-    int   newNumber;
+    char           *tmpP;
+    char           *p;
+    int             numberIndex;
+    int             opIndex;
+    int             precedenceIndex;
+    int             number[100];
+    struct OpToken  op[100];
+    int             precedence[100];   
+    char            newOp;
+    int             newNumber;
 
     
     p = s;
@@ -201,13 +194,31 @@ int evaluate(char s[])
         }
         else if ( ( p = getNumber(p, &newNumber) ) != tmpP )
         {
+            if ( opIndex > 0 )
+            {
+                struct OpToken top;
+
+                top = op[opIndex - 1];
+                if ( '-' == top.op 
+                     && top.opEndPos == (tmpP - s) )
+                {
+                    newNumber = -newNumber;
+                    opIndex--;
+                }
+            }
+
             number[numberIndex++] = newNumber;
         } 
         else if ( ( p = getOperator(p, &newOp) ) != tmpP )
         {
-            if ( opIndex > 0 )
+            if ( '-' == newOp
+                 && isdigit(*p) )
             {
-                int prevOp = op[opIndex - 1];
+                // do nothing as lookahead indicates that the negative sign (-) is prefix to a digit
+            }
+            else if ( opIndex > 0 )
+            {
+                int prevOp = op[opIndex - 1].op;
                 int prevOpPos = getPrecedence(prevOp);
                 int newOpPos = getPrecedence(newOp);
                 int opr1;
@@ -222,7 +233,10 @@ int evaluate(char s[])
                 }       
             }
 
-            op[opIndex++] = newOp;
+            op[opIndex].opStartPos = tmpP - s;
+            op[opIndex].opEndPos = op[opIndex].opStartPos + 1; // all operator are one character long now.
+            op[opIndex].op = newOp;
+            opIndex++;
         }
     }
 
@@ -240,11 +254,14 @@ int main(int argc, char *argv[])
     char s1[] = "1 + 2 * 3";
     char s2[] = "( ( 2 + 3 ) * ( 2 + 1 ) ) * 4";
     char s3[] = "( 2 ) * 3";
-
+    char s4[] = "3 + -2";
+    char s5[] = "( 3 + ( -1 ) ) * 3";
 
     printf("calculation of %s = %d\n", s1, evaluate(s1));
     printf("calculation of %s = %d\n", s2, evaluate(s2));
     printf("calculation of %s = %d\n", s3, evaluate(s3));
+    printf("calculation of %s = %d\n", s4, evaluate(s4));
+    printf("calculation of %s = %d\n", s5, evaluate(s5));
 
     return 0;
 }
