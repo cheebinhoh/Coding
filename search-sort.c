@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
     int list[] = { 5, 4, 3, 1, 2 };
     int index;
  
+
     printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list ) ) );
     shellSort(list, ARRAY_COUNT( list ));
     for ( index = 0; index < ARRAY_COUNT( list ); index++ )
