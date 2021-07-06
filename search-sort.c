@@ -19,7 +19,7 @@ int isSorted(int list[], int size);
 
 int main(int argc, char *argv[])
 {
-    //             0  1  2  3  4  5
+    //             0  1  2  3  4  
     int list[] = { 5, 4, 3, 1, 2 };
     int index;
  
