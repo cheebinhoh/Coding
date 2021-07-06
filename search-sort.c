@@ -166,7 +166,7 @@ void insertionSort(int list[], int size)
         
         for ( j = i - 1; j >= 0 && list[j] > tmp; j-- )
         {
-            count++;
+          count++;
           list[j + 1] = list[j];
           list[j] = tmp;
         }
