@@ -1,7 +1,7 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
  * A simple calculator that evaluates integer expression with support of 4 binary operators
- * +, -, *, / and negative operator '-', and also parethense to override default precedence.
+ * +, -, *, / and negative unary operator '-', and also parethense to override default precedence.
  *
  * It does not do syntax and semantic check.
  */
@@ -19,47 +19,40 @@ struct OpToken
 
 char * getNumber(char s[], int *retValue)
 {
-    char *p     = s;
-    int   value = 0;
+    int value = 0;
 
 
-    while ( isdigit(*p) )
+    while ( isdigit(*s) )
     {
-        value = value * 10 + ( *p - '0' );
-        p++;
+        value = value * 10 + ( *s - '0' );
+        s++;
     }    
 
     *retValue = value;
 
-    return p;
+    return s;
 }
 
 char * getOperator(char s[], char *op)
 {
-    char *p = s;
-
-
-    if ( '+' == *p 
-         || '-' == *p
-         || '*' == *p
-         || '/' == *p )
+    if ( '+' == *s 
+         || '-' == *s
+         || '*' == *s
+         || '/' == *s )
     {
-        *op = *p;
-        p++;
+        *op = *s;
+        s++;
     }
 
-    return p;
+    return s;
 }
 
 char * skipWhitespace(char s[])
 {
-    char *p = s;
-
-
-    while ( isspace(*p) )
-        p++;
+    while ( isspace(*s) )
+        s++;
        
-    return p;
+    return s;
 }
 
 int getPrecedence(char op)
