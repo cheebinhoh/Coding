@@ -12,19 +12,19 @@ int main(int argc, char *argv[])
 
     while ( ( c = getchar() ) != EOF )  
     {
- 	if ( ' ' == c )
-	{
-	    if ( ! prevIsBlank ) 
-	    {
-		putchar(c);
-		prevIsBlank = 1;
-	    }
-	}
-	else
-	{
-	    prevIsBlank = 0;
+        if ( ' ' == c )
+        {
+            if ( ! prevIsBlank ) 
+            {
+                putchar(c);
+                prevIsBlank = 1;
+            }
+        }
+        else
+        {
+            prevIsBlank = 0;
  
-	    putchar(c);
+            putchar(c);
 	} 
     }  
 
