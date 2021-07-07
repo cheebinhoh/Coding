@@ -136,6 +136,7 @@ void shellSort(int list[], int size)
         {
             for ( i = j - gap; i >= 0 && list[i] > list[i + gap]; i = i - gap )
             {
+                count++;
                 tmp = list[i];
                 list[i] = list[i + gap];
                 list[i + gap] = tmp;
@@ -183,6 +184,7 @@ void bubbleSort(int list[], int size)
     int i;
     int j;
     int tmp;
+    int count;
 
 
     for ( i = 0; i < size - 1; i++ )
@@ -191,12 +193,15 @@ void bubbleSort(int list[], int size)
         {
             if ( list[j] > list[j + 1] )
             {
+                count++;
                 tmp = list[j];
                 list[j] = list[j + 1];
                 list[j + 1] = tmp;
             }   
         }
     }
+
+    printf("total swap = %d\n", count);
 }
 
 
