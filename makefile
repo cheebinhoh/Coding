@@ -2,7 +2,7 @@
 
 all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck.out btreetraverse.out \
 	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out remove-c-comment.out \
- 	string-utility.out calculator.out
+ 	string-utility.out calculator.out shrink-space.out
 
 btreepathsum.out : btreepathsum.c 
 	gcc -o $@ btreepathsum.c 
@@ -39,6 +39,9 @@ string-utility.out : string-utility.c
 
 calculator.out : calculator.c
 	gcc -o $@ calculator.c
+
+shrink-space.out : shrink-space.c
+	gcc -o $@ shrink-space.c
 
 clean:
 	rm -f *.out *.o
