@@ -217,3 +217,29 @@ void squeeze2(char s[], char c)
     }  
 }
 
+void reverse(char s[])
+{
+    char *lastp;
+    char *p;
+    char  tmpc;
+
+    lastp = s;
+    p = s;
+    while ( *p != '\0' )
+    {
+        lastp = p;
+        p++;
+    }
+
+    p = s;
+    while ( p != lastp )
+    {
+        tmpc = *p;
+        *p = *lastp;
+        *lastp = tmpc;
+
+        p++;
+        lastp--;
+    }
+}
+
