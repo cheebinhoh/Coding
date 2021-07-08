@@ -60,7 +60,7 @@ double atof(char s[])
         while ( isdigit( s[i] ) )
         {
             power = power * 10;
-            fractionValue = fractionValue * 10 + ( s[i] - '0' ); 
+            fractionValue = fractionValue * 10 + ( s[i] - '0' );
             i++;
         }
 
@@ -121,7 +121,7 @@ int strindex(char s[], char t[])
         if ( s[i] == t[j] )
         {
             j++;
-        }    
+        }
         else
         {
             j = 0;
@@ -135,7 +135,7 @@ int strindex(char s[], char t[])
 int atoi(char s[])
 {
     int value = 0;
-    int i; 
+    int i;
 
 
     for ( i = 0; s[i] != '\0'; i++ )
@@ -153,11 +153,11 @@ void toupperString(char s[])
     {
         if ( s[i] >= 'a' && s[i] <= 'z' )
         {
-            s[i] = 'A' + ( s[i] - 'a' ); 
+            s[i] = 'A' + ( s[i] - 'a' );
         }
 
         i++;
-    }   
+    }
 }
 
 
@@ -183,7 +183,7 @@ void squeeze1(char s[], char c)
                 j++;
 
             i--; // repeat this new position check
-        }    
+        }
     }
 }
 
@@ -214,7 +214,7 @@ void squeeze2(char s[], char c)
             while ( ( s[j] = s[j + 1] ) != '\0' )
                 j++;
         }
-    }  
+    }
 }
 
 void reverse(char s[])

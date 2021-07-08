@@ -27,7 +27,7 @@ struct TreeNode * findNode(struct TreeNode *root,
         node = findNode(root->left, val);
         if ( NULL != node )
         {
-            return node;     
+            return node;
         }
 
         node = findNode(root->right, val);
@@ -58,7 +58,7 @@ struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
         }
         else
         {
-            if ( NULL == root->left 
+            if ( NULL == root->left
                  && NULL == root->right )
             {
                 return NULL;
@@ -116,12 +116,12 @@ struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
                 return node;
             }
 
-            node = findLeastCommonAncestorInternal(root->right, val1, val2);          
+            node = findLeastCommonAncestorInternal(root->right, val1, val2);
             if ( NULL != node )
             {
                 return node;
             }
- 
+
             return NULL;
         }
     }
@@ -151,7 +151,7 @@ struct TreeNode * findLeastCommonAncestor(struct TreeNode *root,
  *                    6                   8
  *                    |                   |
  *              //----+----+          //--+--//
- *                         7 
+ *                         7
  */
 int main(int argc, char * argv[])
 {
@@ -171,7 +171,7 @@ int main(int argc, char * argv[])
     other->val = 3;
     other->left = other->right = NULL;
     root->left->left = other;
- 
+
     other = malloc(sizeof( struct TreeNode ));
     other->val = 4;
     other->left = other->right = NULL;
@@ -202,7 +202,7 @@ int main(int argc, char * argv[])
     other->left = other->right = NULL;
     root->right->right->right = other;
 
-   
+
     other = findLeastCommonAncestor(root, 1, 2);
     if ( NULL != other )
     {

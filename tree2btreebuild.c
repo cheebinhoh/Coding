@@ -103,7 +103,7 @@ struct TreeNode * ntree2btreeInternal(struct TreeNode  *broot,
         {
             broot = node;
         }
-        else 
+        else
         {
             if ( NULL == prev )
             {
@@ -113,7 +113,7 @@ struct TreeNode * ntree2btreeInternal(struct TreeNode  *broot,
             {
                 prev->right = node;
             }
-                
+
             prev = node;
         }
 
@@ -142,11 +142,11 @@ struct TreeNode * ntree2btree(struct NTreeNode *root)
  *
  *                  1
  *                  |
- *         +--------+--------+ 
+ *         +--------+--------+
  *         10       20       30
  *         |
  *  +------+-----+
- *  100    101   102 
+ *  100    101   102
  *
  *
  *  binary tree:
@@ -174,7 +174,7 @@ int main(int argc, char * argv[])
     int               n;
     struct  TreeNode *broot;
 
-    
+
     root = malloc(sizeof(struct NTreeNode));
     root->val = 1;
     root->numberOfChild = 0;
@@ -194,7 +194,7 @@ int main(int argc, char * argv[])
     other->val = 30;
     other->numberOfChild = 0;
     root->child[n++] = other;
-    
+
     root->numberOfChild = n;
 
     n = 0;

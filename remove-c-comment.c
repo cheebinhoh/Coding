@@ -1,7 +1,7 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
  * A simple hand-craft scanner (not a token) that will remove C styles of comment, interestingly
- * C style does not allow nested forwardslash asteriak comment, so do this scanner, 
+ * C style does not allow nested forwardslash asteriak comment, so do this scanner,
  * I shall add nested support sometimes later. :)
  *
  */
@@ -14,7 +14,7 @@
 
 
 /* simple program to remove comments from C
- */ 
+ */
 int main(int argc, char *argv[])
 {
     int c;  // single line
@@ -36,12 +36,12 @@ int main(int argc, char *argv[])
                     isInComment = NO;
                     prevC = '\0';
                 }
-                else 
+                else
                 {
                     prevC = c;
                 }
             }
-            else if ( '\n' == c 
+            else if ( '\n' == c
                       && isCommentSingleLine )
             {
                 isInComment = NO;
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
                 prevC = c;
             }
         }
-        else // if ( isInComment ) 
+        else // if ( isInComment )
         {
             if ( isInQuote )
             {
@@ -62,16 +62,16 @@ int main(int argc, char *argv[])
                 {
                     isPrevBackSlash = YES;
                 }
-                else 
+                else
                 {
                     if ( '\'' == c )
                     {
-                        if ( ! isPrevBackSlash ) 
+                        if ( ! isPrevBackSlash )
                         {
                             isInQuote = NO;
                         }
                     }
-                   
+
                    isPrevBackSlash = NO;
                 }
 
@@ -90,9 +90,9 @@ int main(int argc, char *argv[])
                     isInComment = YES;
                     isCommentSingleLine = YES;
                 }
-                else 
+                else
                 {
-                    prevC = c;                    
+                    prevC = c;
                 }
             }
             else if ( '*' == c )
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
                     isInComment = YES;
                     isCommentSingleLine = NO;
                 }
-            
+
                 prevC = '\0';
             }
             else
@@ -115,6 +115,6 @@ int main(int argc, char *argv[])
 
                 putchar(c);
             }
-        } // if ( isInComment ) ... else 
+        } // if ( isInComment ) ... else
     } // while ( ( c = getchar() ) != EOF )
 }

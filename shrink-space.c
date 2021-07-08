@@ -11,11 +11,11 @@ int main(int argc, char *argv[])
     int prevIsBlank = 0;
 
 
-    while ( ( c = getchar() ) != EOF )  
+    while ( ( c = getchar() ) != EOF )
     {
         if ( ' ' == c )
         {
-            if ( ! prevIsBlank ) 
+            if ( ! prevIsBlank )
             {
                 putchar(c);
                 prevIsBlank = 1;
@@ -24,10 +24,10 @@ int main(int argc, char *argv[])
         else
         {
             prevIsBlank = 0;
- 
+
             putchar(c);
-	} 
-    }  
+	}
+    }
 
     return 0;
 }

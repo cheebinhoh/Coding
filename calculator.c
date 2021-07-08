@@ -26,7 +26,7 @@ char * getNumber(char s[], int *retValue)
     {
         value = value * 10 + ( *s - '0' );
         s++;
-    }    
+    }
 
     *retValue = value;
 
@@ -35,7 +35,7 @@ char * getNumber(char s[], int *retValue)
 
 char * getOperator(char s[], char *op)
 {
-    if ( '+' == *s 
+    if ( '+' == *s
          || '-' == *s
          || '*' == *s
          || '/' == *s )
@@ -51,7 +51,7 @@ char * skipWhitespace(char s[])
 {
     while ( isspace(*s) )
         s++;
-       
+
     return s;
 }
 
@@ -60,7 +60,7 @@ int getPrecedence(char op)
     int pos = 0;
 
 
-    switch ( op ) 
+    switch ( op )
     {
         case '+':
         case '-':
@@ -105,9 +105,9 @@ int performBinaryOperation(int opr1, int opr2, char op)
     return value;
 }
 
-int evaluateBinaryExpr(int             number[], 
+int evaluateBinaryExpr(int             number[],
                        int            *numberIndex,
-                       struct OpToken  op[], 
+                       struct OpToken  op[],
                        int            *opIndex)
 {
     int prevOp;
@@ -135,7 +135,7 @@ int evaluateBinaryExpr(int             number[],
     }
 
     number[(*numberIndex)++] = result;
- 
+
     return result;
 }
 
@@ -148,11 +148,11 @@ int evaluate(char s[])
     int             precedenceIndex;
     int             number[100];
     struct OpToken  op[100];
-    int             precedence[100];   
+    int             precedence[100];
     char            newOp;
     int             newNumber;
 
-    
+
     p = s;
     numberIndex = 0;
     opIndex = 0;
@@ -161,7 +161,7 @@ int evaluate(char s[])
     while ( *p != '\0' )
     {
         p = skipWhitespace(p);
-    
+
         tmpP = p;
         if ( '(' == *p )
         {
@@ -170,7 +170,7 @@ int evaluate(char s[])
         }
         else if ( ')' == *p )
         {
-            int startNumberIndex = precedence[--precedenceIndex]; 
+            int startNumberIndex = precedence[--precedenceIndex];
 
             if ( opIndex > 0 )
             {
@@ -180,7 +180,7 @@ int evaluate(char s[])
                 {
                     evaluateBinaryExpr(number, &numberIndex, op, &opIndex);
                     loopCnt--;
-                }   
+                }
             }
 
             p++;
@@ -192,7 +192,7 @@ int evaluate(char s[])
                 struct OpToken top;
 
                 top = op[opIndex - 1];
-                if ( '-' == top.op 
+                if ( '-' == top.op
                      && top.opEndPos == (tmpP - s) )
                 {
                     newNumber = -newNumber;
@@ -201,7 +201,7 @@ int evaluate(char s[])
             }
 
             number[numberIndex++] = newNumber;
-        } 
+        }
         else if ( ( p = getOperator(p, &newOp) ) != tmpP )
         {
             if ( '-' == newOp
@@ -223,7 +223,7 @@ int evaluate(char s[])
                           || ( numberIndex - precedence[precedenceIndex - 1] ) >= 2 ) )
                 {
                     evaluateBinaryExpr(number, &numberIndex, op, &opIndex);
-                }       
+                }
             }
 
             op[opIndex].opStartPos = tmpP - s;

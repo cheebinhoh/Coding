@@ -17,7 +17,7 @@ struct TreeNode * findParent(struct TreeNode *root,
     struct TreeNode *parent = NULL;
 
 
-    if ( NULL == root 
+    if ( NULL == root
          || NULL == node )
     {
         return NULL;
@@ -28,7 +28,7 @@ struct TreeNode * findParent(struct TreeNode *root,
         return node;
     }
 
-    if ( root->left == node 
+    if ( root->left == node
          || root->right == node )
     {
         return root;
@@ -37,7 +37,7 @@ struct TreeNode * findParent(struct TreeNode *root,
     if ( NULL != root->left )
     {
         parent = findParent(root->left, node);
-    }   
+    }
 
     if ( NULL == parent)
     {
@@ -52,17 +52,17 @@ struct TreeNode * findParent(struct TreeNode *root,
 
 
 /* The logic is simple:
- * - we can build a binary tree from post order list much easily as a reverse postorder tree resemble the 
+ * - we can build a binary tree from post order list much easily as a reverse postorder tree resemble the
  *   top-down fashion of the tree with right branch lean. so a binary tree postorder is left-lean, a reverse
  *   of it is right branch lean.
  *
  * - if a post order node value appears on right position of the in order list, then the value is part of the
  *   right branch of previous node.
  *
- * - if a post order node value appears on left positio of the in order list, then the value is part of the 
+ * - if a post order node value appears on left positio of the in order list, then the value is part of the
  *   left branch of _parent_ node of previous node.
- */ 
-struct TreeNode * buildTree(int inorder[], 
+ */
+struct TreeNode * buildTree(int inorder[],
                             int postorder[],
                             int cnt)
 {
@@ -107,7 +107,7 @@ struct TreeNode * buildTree(int inorder[],
             else
             {
                 prev = findParent(root, prev);
-                prev->left = new;              
+                prev->left = new;
             }
         }
     }
@@ -139,10 +139,10 @@ int main(int argc, char * argv[])
     root = buildTree(inorder, postorder, sizeof(inorder) / sizeof(inorder[0]));
 
     printf("in order    = ");
-    inOrderTraversal(root);      
+    inOrderTraversal(root);
 
     printf("post order  = ");
-    postOrderTraversal(root);   
+    postOrderTraversal(root);
 
     root = buildTree(inorder2, postorder2, sizeof(inorder2) / sizeof(inorder2[0]));
 

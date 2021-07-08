@@ -8,8 +8,8 @@
 #include "btree.h"
 
 
-/* To derive the max level of tree, we can use any of the depth first search, and increase 
- * the level as we progress to left or right branch, and only return the max level if the 
+/* To derive the max level of tree, we can use any of the depth first search, and increase
+ * the level as we progress to left or right branch, and only return the max level if the
  * level we are now in is higher than current max level value.
  */
 void treeMaxLevelInternal(struct TreeNode *root,
@@ -21,7 +21,7 @@ void treeMaxLevelInternal(struct TreeNode *root,
         return;
     }
     else
-    { 
+    {
         level++;
 
         if ( level > *maxLevel )
@@ -32,7 +32,7 @@ void treeMaxLevelInternal(struct TreeNode *root,
         if ( NULL != root->left )
         {
             treeMaxLevelInternal(root->left, level, maxLevel);
-        }       
+        }
 
         if ( NULL != root->right )
         {
@@ -52,7 +52,7 @@ int treeMaxLevel(struct TreeNode *root)
 
     treeMaxLevelInternal(root, level, &level);
 
-    return level; 
+    return level;
 }
 
 
@@ -69,7 +69,7 @@ int treeMaxLevel(struct TreeNode *root)
  *                    6                   8
  *                    |                   |
  *              //----+----+          //--+--//
- *                         7 
+ *                         7
  */
 int main(int argc, char * argv[])
 {
@@ -89,7 +89,7 @@ int main(int argc, char * argv[])
     other->val = 3;
     other->left = other->right = NULL;
     root->left->left = other;
- 
+
     other = malloc(sizeof( struct TreeNode ));
     other->val = 4;
     other->left = other->right = NULL;

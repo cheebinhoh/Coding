@@ -19,10 +19,10 @@ int isSorted(int list[], int size);
 
 int main(int argc, char *argv[])
 {
-    //             0  1  2  3  4  
+    //             0  1  2  3  4
     int list[] = { 5, 4, 3, 1, 2 };
     int index;
- 
+
 
     printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list ) ) );
     shellSort(list, ARRAY_COUNT( list ));
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         printf("%d ", list[index]);
     }
 
-    printf("\n"); 
+    printf("\n");
 
     printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list ) ));
 
@@ -66,7 +66,7 @@ int isSorted(int list[], int size)
  * - then we compare pivot element to the left indexed element (start from the left).
  * --- if the left element is smaller than the pivot element (from right), we increase the index of left element by 1.
  * --- if the left element is larger than the pivot element, we move the left element to the pivot element to the left indexed
- *     element position, we move the pivot element into the left position of the pivot element, and we reloate original 
+ *     element position, we move the pivot element into the left position of the pivot element, and we reloate original
  *     left indexed element to the right of the new pivot position
  * --- we repeat above as long as left index is smaller than pivot position
  * - once we stop that, we know that everything to the left of the pivot will be smaller, and everything to the right will be
@@ -95,7 +95,7 @@ void quickSort(int list[], int size)
             tmp = list[i];
             list[i] = list[pivot - 1];
             list[pivot - 1] = list[pivot];
-            list[pivot] = tmp;   
+            list[pivot] = tmp;
 
             pivot--;
         }
@@ -142,7 +142,7 @@ void shellSort(int list[], int size)
                 list[i + gap] = tmp;
             }
         }
-    }    
+    }
 
     printf("total swap = %d\n", count);
 }
@@ -164,7 +164,7 @@ void insertionSort(int list[], int size)
     for ( i = 1; i < size; i++ )
     {
         tmp = list[i];
-        
+
         for ( j = i - 1; j >= 0 && list[j] > tmp; j-- )
         {
             count++;
@@ -197,7 +197,7 @@ void bubbleSort(int list[], int size)
                 tmp = list[j];
                 list[j] = list[j + 1];
                 list[j + 1] = tmp;
-            }   
+            }
         }
     }
 
@@ -225,7 +225,7 @@ int binarySearch(int list[], int size, int value)
        {
           head = middle + 1;
        }
- 
+
        middle = ( head + tail ) / 2;
     }
 

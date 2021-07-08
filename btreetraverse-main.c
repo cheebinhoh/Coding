@@ -22,7 +22,7 @@
  *                    6                   8
  *                    |                   |
  *              //----+----+          //--+--//
- *                         7 
+ *                         7
  */
 int main(int argc, char * argv[])
 {
@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
     other->val = 3;
     other->left = other->right = NULL;
     root->left->left = other;
- 
+
     other = malloc(sizeof( struct TreeNode ));
     other->val = 4;
     other->left = other->right = NULL;
@@ -75,8 +75,8 @@ int main(int argc, char * argv[])
 
     printf("pre order  = ");
     preOrderTraversal(root);
-   
-    printf("post order = ");  
+
+    printf("post order = ");
     postOrderTraversal(root);
 
     printf("in order   = ");

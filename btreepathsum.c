@@ -26,7 +26,7 @@ struct TreeNode {
 int btreePathSumInternal(struct TreeNode *root,
                          int              sum,
                          int              targetSum)
-{  
+{
     if ( NULL == root )
     {
         return 0; // when tree is empty, there is no path, a path must be at least a node in minimum
@@ -52,7 +52,7 @@ int btreePathSumInternal(struct TreeNode *root,
                                            sum,
                                            targetSum);
             }
-            else 
+            else
             {
                 ret = sum == targetSum;
             }
@@ -87,7 +87,7 @@ int btreePathSum(struct TreeNode *root,
  *                    6                   8
  *                    |                   |
  *              //----+----+          //--+--//
- *                         7 
+ *                         7
  */
 int main(int argc, char * argv[])
 {
@@ -107,7 +107,7 @@ int main(int argc, char * argv[])
     other->val = 3;
     other->left = other->right = NULL;
     root->left->left = other;
- 
+
     other = malloc(sizeof( struct TreeNode ));
     other->val = 4;
     other->left = other->right = NULL;

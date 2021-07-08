@@ -1,5 +1,5 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
- * 
+ *
  * Breadth first search, both recursive and iterative way
  */
 
@@ -15,7 +15,7 @@
  * we will print first level node values.
  * we will then copy nodes of 2nd level into 1st level.
  * we will then gather child nodes of refreshed 1st level nodes into 2nd level.
- * then we call the same method recursively. :) 
+ * then we call the same method recursively. :)
  */
 void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
                                     int               currentLevelCnt,
@@ -35,7 +35,7 @@ void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
         {
             currentLevelList[i] = nextLevelList[i];
         }
-  
+
         currentLevelCnt = i;
         nextLevelCnt = 0;
         for ( i = 0; i < currentLevelCnt; i++ )
@@ -94,13 +94,13 @@ void breadthLevelTraversalIter(struct TreeNode *root)
         {
             nextLevelCnt = 0;
         }
- 
+
         node = currentLevelList[index];
         if ( NULL != node->left )
         {
             nextLevelList[nextLevelCnt++] = node->left;
         }
- 
+
         if ( NULL != node->right )
         {
             nextLevelList[nextLevelCnt++] = node->right;
@@ -116,15 +116,15 @@ void breadthLevelTraversalIter(struct TreeNode *root)
             {
                 for ( currentLevelCnt = 0; currentLevelCnt < nextLevelCnt; currentLevelCnt++ )
                 {
-                    currentLevelList[currentLevelCnt] = nextLevelList[currentLevelCnt];    
-                }              
+                    currentLevelList[currentLevelCnt] = nextLevelList[currentLevelCnt];
+                }
 
                 index = 0;
 
                 printf(", ");
             }
         }
-        else 
+        else
         {
             printf(", ");
         }
@@ -134,7 +134,7 @@ void breadthLevelTraversalIter(struct TreeNode *root)
 }
 
 
-/* This is API entry to do breadth level traversal, kicker of 
+/* This is API entry to do breadth level traversal, kicker of
  * recursive method.
  */
 void breadthLevelTraversal(struct TreeNode *root)
@@ -152,7 +152,7 @@ void breadthLevelTraversal(struct TreeNode *root)
     else
     {
         currentLevelList[currentLevelCnt++] = root;
-        
+
         if ( NULL != root->left )
         {
             nextLevelList[nextLevelCnt++] = root->left;
@@ -183,7 +183,7 @@ void breadthLevelTraversal(struct TreeNode *root)
  *                    6                   8
  *                    |                   |
  *              //----+----+          //--+--//
- *                         7 
+ *                         7
  */
 int main(int argc, char * argv[])
 {
@@ -203,7 +203,7 @@ int main(int argc, char * argv[])
     other->val = 3;
     other->left = other->right = NULL;
     root->left->left = other;
- 
+
     other = malloc(sizeof( struct TreeNode ));
     other->val = 4;
     other->left = other->right = NULL;
@@ -240,7 +240,7 @@ int main(int argc, char * argv[])
     printf("breadth level traverse (iterative) = ");
     breadthLevelTraversalIter(root);
 
-    // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for 
+    // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
 
     return 0;

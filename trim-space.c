@@ -1,13 +1,13 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * It trims trailing space or tab 
+ * It trims trailing space or tab
  */
 
 #include <stdio.h>
 #include <ctype.h>
 
 
-struct Token 
+struct Token
 {
    char  ch;
    long  count;
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     int j;
     int tokenIndex = 0;
     struct Token tokenList[100];
-    
+
 
     while ( ( c = getchar() ) != EOF )
     {
