@@ -1,16 +1,18 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * It shrinks consecutive spaces into one space.
+ * It trims trailing space or tab 
  */
 
 #include <stdio.h>
 #include <ctype.h>
+
 
 struct Token 
 {
    char  ch;
    long  count;
 };
+
 
 int main(int argc, char *argv[])
 {

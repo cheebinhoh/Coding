@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     int c;
     int prevIsBlank = 0;
 
+
     while ( ( c = getchar() ) != EOF )  
     {
         if ( ' ' == c )
