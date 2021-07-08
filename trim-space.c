@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * It trims trailing space or tab
+ * It trims trailing space or tab at the end of line or file.
  */
 
 #include <stdio.h>
