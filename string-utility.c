@@ -242,4 +242,3 @@ void reverse(char s[])
         lastp--;
     }
 }
-

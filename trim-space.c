@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     int i;
     int j;
     int tokenIndex = 0;
+    int numOfNewLine = 0;
     struct Token tokenList[100];
 
 
@@ -29,8 +30,13 @@ int main(int argc, char *argv[])
        {
            if ( '\n' == c )
            {
+               if ( numOfNewLine <= 0 )
+               {
+                   putchar(c);
+               }
+
                tokenIndex = 0;
-               putchar(c);
+               numOfNewLine++;
            }
            else
            {
@@ -49,6 +55,12 @@ int main(int argc, char *argv[])
        }
        else
        {
+           while ( numOfNewLine > 1 )
+           {
+               putchar('\n');
+               numOfNewLine--;
+           }
+
            for ( i = 0; i < tokenIndex; i++ )
            {
                for ( j = 0; j < tokenList[i].count; j++ )
@@ -58,10 +70,10 @@ int main(int argc, char *argv[])
            }
 
            tokenIndex = 0;
+           numOfNewLine = 0;
            putchar(c);
        }
     }
 
     return 0;
 }
-

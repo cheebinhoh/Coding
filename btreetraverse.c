@@ -214,5 +214,3 @@ void preOrderTraversal(struct TreeNode *root)
          printf("\n");
      }
 }
-
-
