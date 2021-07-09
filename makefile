@@ -2,7 +2,7 @@
 
 all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck.out btreetraverse.out \
 	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out remove-c-comment.out \
- 	string-utility.out calculator.out shrink-space.out trim-space.out
+ 	string-utility.out calculator.out shrink-space.out trim-space.out replace-tab-with-space.out
 
 btreepathsum.out : btreepathsum.c 
 	gcc -o $@ btreepathsum.c 
@@ -45,6 +45,9 @@ shrink-space.out : shrink-space.c
 
 trim-space.out : trim-space.c
 	gcc -o $@ trim-space.c 
+
+replace-tab-with-space.out : replace-tab-with-space.c 
+	gcc -o $@ replace-tab-with-space.c 
 
 clean:
 	rm -f *.out *.o
