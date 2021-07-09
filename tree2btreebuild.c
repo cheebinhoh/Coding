@@ -54,7 +54,7 @@ void printNTreeInMultiLevel(struct NTreeNode *list[],
             {
                 // WARNING: we do not check malloc and realloc return, in production code, we need!
                 // it is also an inefficient allocation, we should have allocated N slot where N is increased in related
-                // to number of child
+                // to number of child.
 
                 if ( NULL == nextLevelList )
                 {
