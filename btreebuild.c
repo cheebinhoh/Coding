@@ -127,7 +127,7 @@ struct TreeNode * buildTree(int inorder[],
  */
 int main(int argc, char * argv[])
 {
-    struct TreeNode *root = NULL;
+    struct TreeNode *root         = NULL;
     int              inorder[]    = { 9, 3, 15, 20, 7 };
     int              postorder[]  = { 9, 15, 7, 20, 3 };
     int              inorder2[]   = { 2, 1 };
