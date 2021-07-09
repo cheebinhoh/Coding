@@ -91,7 +91,7 @@ int btreePathSum(struct TreeNode *root,
  */
 int main(int argc, char * argv[])
 {
-    struct TreeNode *root = NULL;
+    struct TreeNode *root  = NULL;
     struct TreeNode *other = NULL;
 
     root = malloc(sizeof( struct TreeNode));
