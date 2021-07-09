@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            if (! isspace(c ) )
+            if ( ! isspace(c ) )
             {
                startWithNoneSpace = 1;
             }
