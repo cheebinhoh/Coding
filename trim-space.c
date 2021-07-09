@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     int c;
     int i;
     int j;
-    int tokenIndex = 0;
+    int tokenIndex   = 0;
     int numOfNewLine = 0;
     struct Token tokenList[100];
 
