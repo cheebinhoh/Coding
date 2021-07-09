@@ -17,6 +17,7 @@
 int   space2Tab = 8;
 char *programName = NULL;
 
+
 void printHelp(void)
 {
      fprintf(stderr, "%s [-h] [-t space]\n", programName);
