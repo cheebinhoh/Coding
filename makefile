@@ -49,6 +49,7 @@ trim-space.out : trim-space.c
 replace-tab-with-space.out : replace-tab-with-space.c 
 	gcc -o $@ replace-tab-with-space.c 
 
+
 clean:
 	rm -f *.out *.o
 
