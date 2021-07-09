@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
             prevIsBlank = 0;
 
             putchar(c);
-	}
+        }
     }
 
     return 0;

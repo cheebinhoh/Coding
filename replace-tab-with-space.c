@@ -1,6 +1,10 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * ??
+ * Replace tab with space, and we can potentially do this in awk than
+ * a C program.
+ *
+ * We assume a tab is equivalent to 8 spaces, but it is not always the
+ * case.
  */
 
 #include <stdio.h>
@@ -21,7 +25,7 @@ int main(int argc, char *argv[])
             int i;
 
             for ( i = 0; i < space2Tab; i++ )
-	    {        
+            {        
                 putchar(' ');
             }
         }
