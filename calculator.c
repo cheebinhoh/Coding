@@ -153,9 +153,9 @@ int evaluate(char s[])
     int             newNumber;
 
 
-    p = s;
-    numberIndex = 0;
-    opIndex = 0;
+    p               = s;
+    numberIndex     = 0;
+    opIndex         = 0;
     precedenceIndex = 0;
 
     while ( *p != '\0' )
