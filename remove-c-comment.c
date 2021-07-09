@@ -18,11 +18,11 @@
 int main(int argc, char *argv[])
 {
     int c;  // single line
-    int isInComment = NO;
+    int isInComment         = NO;
     int isCommentSingleLine = NO;
-    int isInQuote = NO;
-    int isPrevBackSlash = NO;
-    int prevC = '\0';
+    int isInQuote           = NO;
+    int isPrevBackSlash     = NO;
+    int prevC               = '\0';
 
 
     while ( ( c = getchar() ) != EOF )
