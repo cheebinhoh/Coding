@@ -23,7 +23,7 @@ void printHelp(void)
      fprintf(stderr, "%s [-h] [-t space]\n", programName);
      fprintf(stderr, "\n");
      fprintf(stderr, " -h       : print this help message\n");
-     fprintf(stderr, " -t space : number of space per tab [default is 8 and must be 1 or above]\n"); 
+     fprintf(stderr, " -t space : number of space per tab [default is 8 and must be 1 or above]\n");
 }
 
 int main(int argc, char *argv[])
@@ -36,10 +36,10 @@ int main(int argc, char *argv[])
 
     while ( ( c = getopt(argc, argv, "ht:") ) != -1 )
     {
-        switch ( c ) 
+        switch ( c )
         {
             case 't':
-                space2Tab = strtol(optarg, NULL, 0); 
+                space2Tab = strtol(optarg, NULL, 0);
                 break;
 
             case '?':
@@ -57,13 +57,13 @@ int main(int argc, char *argv[])
 
     while ( ( c = getchar() ) != EOF )
     {
-        if ( '\t' == c 
+        if ( '\t' == c
              && !startWithNoneSpace )
         {
             int i;
 
             for ( i = 0; i < space2Tab; i++ )
-            {        
+            {
                 putchar(' ');
             }
         }
