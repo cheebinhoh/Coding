@@ -174,7 +174,7 @@ void preOrderTraversal(struct TreeNode *root)
 {
      struct TreeNode *rightPendingList[100];
      int              rightPendingListIndex = 0;
-     int              count = 0;
+     int              count                 = 0;
 
 
      while ( NULL != root
