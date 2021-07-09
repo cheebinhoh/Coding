@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Depth first search, preorder, inorder and postorder, both recursive and iterative way
+ * Depth first search, preorder, inorder and postorder, both recursive and iterative way.
  */
 
 #include <stdio.h>
@@ -28,6 +28,7 @@ int main(int argc, char * argv[])
 {
     struct TreeNode *root = NULL;
     struct TreeNode *other = NULL;
+
 
     root = malloc(sizeof( struct TreeNode));
     root->val = 0;
