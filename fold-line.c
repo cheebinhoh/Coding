@@ -21,7 +21,7 @@ void printHelp(void)
      fprintf(stderr, "%s [-h] [-m line]\n", programName);
      fprintf(stderr, "\n");
      fprintf(stderr, " -h      : print this help message\n");
-     fprintf(stderr, " -t line : number of character per line [default is 80]\n");
+     fprintf(stderr, " -m line : number of character per line [default is 80]\n");
 }
 
 int main(int argc, char *argv[])
