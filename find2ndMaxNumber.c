@@ -16,7 +16,7 @@ int main(int argc, char *argvp[])
 
     maxArray[0] = array[0];
     maxArray[1] = maxArray[0];
- 
+
     for ( i = 0; i < ARRAY_COUNT(array); i++ )
     {
         if ( array[i] > maxArray[0] )
@@ -24,7 +24,7 @@ int main(int argc, char *argvp[])
             maxArray[1] = maxArray[0];
             maxArray[0] = array[i];
         }
-    } 
+    }
 
     if ( maxArray[0] > maxArray[1] )
     {
