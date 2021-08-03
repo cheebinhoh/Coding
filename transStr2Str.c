@@ -122,7 +122,8 @@ int main(int argc, char *argv[])
     char str3[]   = "EACBD";
     char str4[]   = "ABECD";
     char str5[]   = "ACEBD";
-    char str6[]   = "ABXCD";
+    char str6[]   = "ABCDE";
+    char str7[]   = "DEABC";
     char target[] = "EABCD";
     int  moveCnt = 0;
 
@@ -156,6 +157,10 @@ int main(int argc, char *argv[])
     printf("string6 = %s\n", str6);
     moveCnt = transform(str6, target);
     printf("after %d move, string6 = %s\n", moveCnt, str6);
+
+    printf("string7 = %s\n", str7);
+    moveCnt = transform(str7, target);
+    printf("after %d move, string7 = %s\n", moveCnt, str7);
 
     return 0;
 }
