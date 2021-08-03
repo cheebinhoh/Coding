@@ -66,10 +66,11 @@ int transform(char source[], char target[])
            i = 0;
    
            move++;
-        }
+        } // if ( source[i] == target[i] ) ... else
 
         count++;
-    }
+    } //  while ( source[i] != '\0'
+      //          && count < 5000 )
 
     return move;
 }
