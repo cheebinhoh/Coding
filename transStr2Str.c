@@ -84,6 +84,8 @@ int transform(char source[], char target[])
            int pos;
            int tmp;
 
+           // we want to move the furthest source[j] that its counterpart on target is
+           // on left side of the source[j].
            while ( source[j] != '\0' )
            {
                pos = distanceFromPivot(target + i, source[j]) + i;
