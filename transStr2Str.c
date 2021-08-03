@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 
+
 int distanceFromPivot(char string[], char pivot)
 {
     int i = 0;
