@@ -50,24 +50,14 @@ int transform(char source[], char target[])
             }
 
             while ( source[j] != '\0' 
-                    && target[i] != '\0' )
+                    && target[i] != '\0' 
+                    && source[j] == target[i] )
             {
-                if ( source[j] == target[i] )
-                {
-                    matchLen++;
-                    j++;
-                    i++;
-                } 
-                else
-                {
-                    break; 
-                }
+                j++;
+                i++;
             }
 
-            if ( targetDistance < sourceDistance )
-            {
-            }
-            else 
+            if ( targetDistance >= sourceDistance )
             {
                 j = j - 1;
             }
