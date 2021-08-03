@@ -32,7 +32,7 @@ int transform(char source[], char target[])
     // we assume that they are transformable
     i = 0;
     while ( source[i] != '\0'
-            && count < 10 )
+            && count < 5000 )
     {
         if ( source[i] == target[i] )
         {
@@ -74,16 +74,22 @@ int transform(char source[], char target[])
 
 int main(int argc, char *argv[])
 {
-    char str1[] = "EACBD";
-    char str2[] = "EABCD";
+    char str1[]   = "EACBD";
+    char str2[]   = "CABED";
+    char str3[]   = "EACBD";
+    char target[] = "EABCD";
     int  moveCnt = 0;
 
 
-    printf("target string = %s\n\n", str2);
+    printf("target string = %s\n\n", target);
 
     printf("string1 = %s\n", str1);
-    moveCnt = transform(str1, str2);
+    moveCnt = transform(str1, target);
     printf("after %d move, string1 = %s\n", moveCnt, str1);
+
+    printf("string2 = %s\n", str2);
+    moveCnt = transform(str2, target);
+    printf("after %d move, string2 = %s\n", moveCnt, str2);
 
     return 0;
 }
