@@ -65,4 +65,3 @@ transStr2Str.out : transStr2Str.c
 clean:
 	rm -f *.out *.o
 
-

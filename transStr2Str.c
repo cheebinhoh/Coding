@@ -15,7 +15,7 @@ int distanceFromPivot(char string[], char pivot)
     {
         i++;
     }
- 
+
     return i;
 }
 
@@ -35,7 +35,7 @@ int transform(char source[], char target[])
         {
             i++;
         }
-        else 
+        else
         {
             int tmp;
             int matchLen = 0;
@@ -49,8 +49,8 @@ int transform(char source[], char target[])
                 i = i + targetDistance;
             }
 
-            while ( source[j] != '\0' 
-                    && target[i] != '\0' 
+            while ( source[j] != '\0'
+                    && target[i] != '\0'
                     && source[j] == target[i] )
             {
                 j++;
