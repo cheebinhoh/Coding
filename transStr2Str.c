@@ -4,6 +4,8 @@
  * The only operation allowed is to put any character from A and insert it at front. 
  * Find if it’s possible to convert the string. If yes, then output minimum no. of 
  * operations required for transformation.
+ *
+ * This is work in progress, I got the logic right, but it is not in minimum move yet.
  */
 
 #include <stdio.h>
@@ -25,11 +27,12 @@ int transform(char source[], char target[])
 {
     int i;
     int move = 0;
-
+    int count = 0;
 
     // we assume that they are transformable
     i = 0;
-    while ( source[i] != '\0' )
+    while ( source[i] != '\0'
+            && count < 10 )
     {
         if ( source[i] == target[i] )
         {
@@ -37,43 +40,33 @@ int transform(char source[], char target[])
         }
         else
         {
-            int tmp;
-            int sourceDistance = distanceFromPivot( source, target[i] );
-            int targetDistance = distanceFromPivot( target, source[i] );
-            int j = i + 1;
+           int j = i;
+           int pos;
+           int tmp;
 
-            if ( targetDistance < sourceDistance )
-            {
-                j = i;
-                i = i + targetDistance;
-            }
+           while ( source[j] != '\0' )
+           {
+               pos = distanceFromPivot( target + i, source[j]) + i;
+               if ( pos < j)
+                   break;
 
-            while ( source[j] != '\0'
-                    && target[i] != '\0'
-                    && source[j] == target[i] )
-            {
-                j++;
-                i++;
-            }
+               j++;
+           }
+ 
+           tmp = source[j];
+           while ( j > 0 )
+           {
+               source[j] = source[j - 1];
+               j--;
+           }
 
-            if ( targetDistance >= sourceDistance )
-            {
-                j = j - 1;
-            }
-
-            tmp = source[j];
-            while ( j >= 1 )
-            {
-                source[j] = source[j - 1];
-                j--;
-            }
-
-            source[0] = tmp;
-
-            i = 0;
-
-            move++;
+           source[0] = tmp;
+           i = 0;
+   
+           move++;
         }
+
+        count++;
     }
 
     return move;
@@ -83,7 +76,6 @@ int main(int argc, char *argv[])
 {
     char str1[] = "EACBD";
     char str2[] = "EABCD";
-    char str3[] = "EABCD";
     int  moveCnt = 0;
 
 
@@ -92,10 +84,6 @@ int main(int argc, char *argv[])
     printf("string1 = %s\n", str1);
     moveCnt = transform(str1, str2);
     printf("after %d move, string1 = %s\n", moveCnt, str1);
-
-    printf("string3 = %s\n", str3);
-    moveCnt = transform(str3, str2);
-    printf("after %d move, string1 = %s\n", moveCnt, str3);
 
     return 0;
 }
