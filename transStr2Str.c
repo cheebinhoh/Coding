@@ -1,8 +1,8 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Given two strings A and B, the task is to convert A to B if possible. 
- * The only operation allowed is to put any character from A and insert it at front. 
- * Find if it’s possible to convert the string. If yes, then output minimum no. of 
+ * Given two strings A and B, the task is to convert A to B if possible.
+ * The only operation allowed is to put any character from A and insert it at front.
+ * Find if it’s possible to convert the string. If yes, then output minimum no. of
  * operations required for transformation.
  */
 
@@ -28,14 +28,14 @@ int isTransformable(char source[], char target[])
     int sH[256] = { 0 };
     int tH[256] = { 0 };
 
-    while ( source[i] != '\0' ) 
+    while ( source[i] != '\0' )
     {
         sH[source[i]]++;
 
         i++;
     }
 
-    while ( target[j] != '\0' ) 
+    while ( target[j] != '\0' )
     {
         tH[target[j]]++;
 
@@ -96,7 +96,7 @@ int transform(char source[], char target[])
 
                j++;
            }
- 
+
            j   = pivot;
            tmp = source[j];
            while ( j > 0 )
@@ -107,7 +107,7 @@ int transform(char source[], char target[])
 
            source[0] = tmp;
            i = 0;
-   
+
            move++;
         } // if ( source[i] == target[i] ) ... else
     } //  while ( source[i] != '\0' )
