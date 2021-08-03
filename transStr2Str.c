@@ -83,6 +83,10 @@ int main(int argc, char *argv[])
 
     printf("target string = %s\n\n", target);
 
+    // we do not do printf(...., str1, transform(str1, target), str1 );
+    // because comma separator on function arguments are not sequencing point, there
+    // is no guarantee that 1st str1 is passed to printf before it is transformed by method transform
+
     printf("string1 = %s\n", str1);
     moveCnt = transform(str1, target);
     printf("after %d move, string1 = %s\n", moveCnt, str1);
