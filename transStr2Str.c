@@ -4,8 +4,6 @@
  * The only operation allowed is to put any character from A and insert it at front. 
  * Find if it’s possible to convert the string. If yes, then output minimum no. of 
  * operations required for transformation.
- *
- * This is work in progress, I got the logic right, but it is not in minimum move yet.
  */
 
 #include <stdio.h>
@@ -40,7 +38,8 @@ int transform(char source[], char target[])
         }
         else
         {
-           int j = i;
+           int j     = i;
+           int pivot = 0;
            int pos;
            int tmp;
 
@@ -48,11 +47,14 @@ int transform(char source[], char target[])
            {
                pos = distanceFromPivot( target + i, source[j]) + i;
                if ( pos < j)
-                   break;
+               {
+                   pivot = j;
+               }
 
                j++;
            }
  
+           j = pivot;
            tmp = source[j];
            while ( j > 0 )
            {
