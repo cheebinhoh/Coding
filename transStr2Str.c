@@ -86,7 +86,7 @@ int transform(char source[], char target[])
 
            while ( source[j] != '\0' )
            {
-               pos = distanceFromPivot( target + i, source[j]) + i;
+               pos = distanceFromPivot(target + i, source[j]) + i;
                if ( pos < j)
                {
                    pivot = j;
@@ -119,7 +119,8 @@ int main(int argc, char *argv[])
     char str2[]   = "CABED";
     char str3[]   = "EACBD";
     char str4[]   = "ABECD";
-    char str5[]   = "ABXCD";
+    char str5[]   = "ACEBD";
+    char str6[]   = "ABXCD";
     char target[] = "EABCD";
     int  moveCnt = 0;
 
@@ -149,6 +150,10 @@ int main(int argc, char *argv[])
     printf("string5 = %s\n", str5);
     moveCnt = transform(str5, target);
     printf("after %d move, string5 = %s\n", moveCnt, str5);
+
+    printf("string6 = %s\n", str6);
+    moveCnt = transform(str6, target);
+    printf("after %d move, string6 = %s\n", moveCnt, str6);
 
     return 0;
 }
