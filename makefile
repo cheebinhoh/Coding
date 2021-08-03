@@ -3,7 +3,7 @@
 all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck.out btreetraverse.out \
 	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out remove-c-comment.out \
  	string-utility.out calculator.out shrink-space.out trim-space.out replace-tab-with-space.out \
-	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out
+	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out transStr2Str.out
 
 btreepathsum.out : btreepathsum.c 
 	gcc -o $@ btreepathsum.c 
@@ -58,6 +58,9 @@ fold-line.out : fold-line.c
 
 find2ndMaxNumber.out : find2ndMaxNumber.c
 	gcc -o $@ find2ndMaxNumber.c
+
+transStr2Str.out : transStr2Str.c
+	gcc -o $@ transStr2Str.c
 
 clean:
 	rm -f *.out *.o
