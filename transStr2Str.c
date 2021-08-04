@@ -225,6 +225,7 @@ int main(int argc, char *argv[])
     char str12[]   = "ECEH";
     char target3[] = "CHEE";
     char str13[]   = "Crprogamming";
+    char str14[]   = "Cproggrammin";
     char target4[] = "Cprogramming";
     int  moveCnt = 0;
     int  c;
@@ -313,6 +314,10 @@ int main(int argc, char *argv[])
     printf("Transofmr string13 = %s to %s\n", str13, target4);
     moveCnt = transform(str13, target4);
     printf("after %d move, string13 = %s\n\n", moveCnt, str13);
+
+    printf("Transofmr string14 = %s to %s\n", str14, target4);
+    moveCnt = transform(str14, target4);
+    printf("after %d move, string14 = %s\n\n", moveCnt, str14);
 
     return 0;
 }
