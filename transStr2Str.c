@@ -38,22 +38,29 @@ int distanceFromPivot(char string[], char pivot, int numPivot)
     {
         if ( string[i] == pivot )
         {
-           int hasOther = 0;
-           int j        = i + 1;
-
-           while ( string[j] != '\0' )
-           {
-               if ( string[j] == pivot )
-               {
-                   hasOther = 1;
-               }
-
-               j++;
-           }
-
-           if ( ( ! hasOther ) || numPivot > 0 )
+           if ( numPivot > 0 )
            {
                break;
+           }
+           else
+           {
+               int hasOther = 0;
+               int j        = i + 1;
+
+               while ( string[j] != '\0' )
+               {
+                   if ( string[j] == pivot )
+                   {
+                       hasOther = 1;
+                   }
+
+                   j++;
+               }
+
+               if ( ! hasOther  )
+               {
+                   break;
+               }
            }
         }
 
