@@ -13,6 +13,7 @@ int distanceFromPivot(char string[], char pivot)
 {
     int i = 0;
 
+
     while ( string[i] != '\0'
             && string[i] != pivot )
     {
@@ -28,6 +29,7 @@ int isTransformable(char source[], char target[])
     int j = 0;
     int sH[256] = { 0 };
     int tH[256] = { 0 };
+
 
     while ( source[i] != '\0' )
     {
@@ -63,9 +65,8 @@ int transform(char source[], char target[])
 {
     int i;
     int move  = 0;
-    int count = 0;
 
-    // we assume that they are transformable
+
     if ( ! isTransformable(source, target) )
     {
         return -1;
