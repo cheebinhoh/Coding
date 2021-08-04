@@ -29,18 +29,34 @@ char *programName = NULL;
  * if string is "abbc", and pivot is "b", then it is 2 as that is
  * further character "b" on "abbc" string.
  */
-int distanceFromPivot(char string[], char pivot)
+int distanceFromPivot(char string[], char pivot, int numPivot)
 {
     int i = 0;
 
 
-    while ( string[i] != '\0'
-            && ( string[i] != pivot
-                 || ( string[i + 1] != '\0'
-                      && string[i + 1] == pivot )
-               )
-          )
+    while ( string[i] != '\0' )
     {
+        if ( string[i] == pivot )
+        {
+           int hasOther = 0;
+           int j        = i + 1;
+
+           while ( string[j] != '\0' )
+           {
+               if ( string[j] == pivot )
+               {
+                   hasOther = 1;
+               }
+
+               j++;
+           }
+
+           if ( ( ! hasOther ) || numPivot > 0 )
+           {
+               break;
+           }
+        }
+
         i++;
     }
 
@@ -99,7 +115,7 @@ int transform(char source[], char target[])
 
     i = 0;
     while ( source[i] != '\0'
-            && count < 5000  // to prevent infinite loop
+            && count < 50000  // to prevent infinite loop
           )
     {
         if ( source[i] == target[i] )
@@ -109,18 +125,43 @@ int transform(char source[], char target[])
         else
         {
            int j     = i;
-           int pivot = 0;
+           int pivot = i + 1;
            int pos;
            int tmp;
+           int gap = 0;
+           int numPivot = 0;
+           int k;
 
            // we want to move the furthest source[j] that its counterpart on target is
            // on left side of the source[j].
            while ( source[j] != '\0' )
            {
-               pos = distanceFromPivot(target + i, source[j]) + i;
+               k = i;
+               numPivot = 0;
+               while ( k < j )
+               {
+                   if ( target[k] == source[j] )
+                   {
+                       numPivot++;
+                   }
+
+                   if ( source[k] == source[j] )
+                   {
+                       numPivot--;
+                   }
+
+                   k++;
+               }
+
+               pos = distanceFromPivot(target + i, source[j], numPivot ) + i;
+
                if ( pos < j)
                {
-                   pivot = j;
+                   if ( ( j - pos ) >= gap )
+                   {
+                       gap = j - pos;
+                       pivot = j;
+                   }
                }
 
                j++;
@@ -183,6 +224,8 @@ int main(int argc, char *argv[])
     char str11[]   = "HEEC";
     char str12[]   = "ECEH";
     char target3[] = "CHEE";
+    char str13[]   = "Crprogamming";
+    char target4[] = "Cprogramming";
     int  moveCnt = 0;
     int  c;
 
@@ -263,6 +306,13 @@ int main(int argc, char *argv[])
     printf("Transofmr string12 = %s to %s\n", str12, target3);
     moveCnt = transform(str12, target3);
     printf("after %d move, string12 = %s\n\n", moveCnt, str12);
+
+    printf("\n");
+    printf("target string = %s\n\n", target4);
+
+    printf("Transofmr string13 = %s to %s\n", str13, target4);
+    moveCnt = transform(str13, target4);
+    printf("after %d move, string13 = %s\n\n", moveCnt, str13);
 
     return 0;
 }
