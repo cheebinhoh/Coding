@@ -169,7 +169,7 @@ int transform(char source[], char target[])
 
            if ( debug )
            {
-               printf("---- Move %d, pick %c (%d) and insert at the front, %s => ", move + 1, source[pivot], pivot, source);
+               printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ", move + 1, source[pivot], pivot, source);
            }
 
            j   = pivot;
