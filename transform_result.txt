@@ -56,9 +56,14 @@ target string = CHEE
 
 Transofmr string10 = HCEE to CHEE
 ---- Move 1, pick C and insert at the front, HCEE => CHEE
-after 1 move, string8 = CHEE
+after 1 move, string10 = CHEE
 
 Transofmr string11 = HEEC to CHEE
 ---- Move 1, pick C and insert at the front, HEEC => CHEE
-after 1 move, string9 = CHEE
+after 1 move, string11 = CHEE
+
+Transofmr string12 = ECEH to CHEE
+---- Move 1, pick H and insert at the front, ECEH => HECE
+---- Move 2, pick C and insert at the front, HECE => CHEE
+after 2 move, string12 = CHEE
 
