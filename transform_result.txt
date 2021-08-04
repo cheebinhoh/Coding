@@ -52,3 +52,13 @@ Transofmr string9 = HHO to HOH
 ---- Move 2, pick H and insert at the front, OHH => HOH
 after 2 move, string9 = HOH
 
+target string = CHEE
+
+Transofmr string10 = HCEE to CHEE
+---- Move 1, pick C and insert at the front, HCEE => CHEE
+after 1 move, string8 = CHEE
+
+Transofmr string11 = HEEC to CHEE
+---- Move 1, pick C and insert at the front, HEEC => CHEE
+after 1 move, string9 = CHEE
+

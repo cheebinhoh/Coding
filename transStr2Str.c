@@ -21,7 +21,11 @@ int distanceFromPivot(char string[], char pivot)
 
 
     while ( string[i] != '\0'
-            && string[i] != pivot )
+            && ( string[i] != pivot
+                 || ( string[i + 1] != '\0'
+                      && string[i + 1] == pivot )
+               ) 
+          )
     {
         i++;
     }
@@ -71,6 +75,7 @@ int transform(char source[], char target[])
 {
     int i;
     int move  = 0;
+    int count = 0;
 
 
     if ( ! isTransformable(source, target) )
@@ -79,7 +84,9 @@ int transform(char source[], char target[])
     }
 
     i = 0;
-    while ( source[i] != '\0' )
+    while ( source[i] != '\0' 
+            && count < 5000  // to prevent infinite loop
+          )
     {
         if ( source[i] == target[i] )
         {
@@ -129,6 +136,8 @@ int transform(char source[], char target[])
 
            move++;
         } // if ( source[i] == target[i] ) ... else
+ 
+        count++;
     } //  while ( source[i] != '\0' )
 
     return move;
@@ -156,6 +165,9 @@ int main(int argc, char *argv[])
     char str8[]    = "OHH";
     char str9[]    = "HHO";
     char target2[] = "HOH";
+    char str10[]   = "HCEE";
+    char str11[]   = "HEEC";
+    char target3[] = "CHEE";
     int  moveCnt = 0;
     int  c;
 
@@ -220,6 +232,16 @@ int main(int argc, char *argv[])
     printf("Transofmr string9 = %s to %s\n", str9, target2);
     moveCnt = transform(str9, target2);
     printf("after %d move, string9 = %s\n\n", moveCnt, str9);
+
+    printf("target string = %s\n\n", target3);
+
+    printf("Transofmr string10 = %s to %s\n", str10, target3);
+    moveCnt = transform(str10, target3);
+    printf("after %d move, string8 = %s\n\n", moveCnt, str10);
+
+    printf("Transofmr string11 = %s to %s\n", str11, target3);
+    moveCnt = transform(str11, target3);
+    printf("after %d move, string9 = %s\n\n", moveCnt, str11);
 
     return 0;
 }
