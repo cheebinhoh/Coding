@@ -8,7 +8,7 @@
  * The problem is posted by a friend according to the following link
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
- * I found it interesting enough that I would like to solve it (without looking at any 
+ * I found it interesting enough that I would like to solve it (without looking at any
  * answer :)).
  */
 
@@ -72,7 +72,7 @@ int distanceFromPivot(char string[], char pivot, int numPivotPrior)
 }
 
 /* It returns 1 if source can be translated into target, else 0.
- */ 
+ */
 int isTransformable(char source[], char target[])
 {
     int i = 0;
@@ -125,7 +125,7 @@ int transform(char source[], char target[])
 
     i = 0;
     while ( source[i] != '\0'
-            && count < 50000 ) 
+            && count < 50000 )
     {
         if ( source[i] == target[i] )
         {
