@@ -65,3 +65,7 @@ transStr2Str.out : transStr2Str.c
 clean:
 	rm -f *.out *.o
 
+test:
+	make all
+	@echo
+	./transStr2Str.out -d > ./transform_result.txt 

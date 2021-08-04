@@ -4,6 +4,12 @@
  * The only operation allowed is to put any character from A and insert it at front.
  * Find if it’s possible to convert the string. If yes, then output minimum no. of
  * operations required for transformation.
+ *
+ * The problem is posted by a friend according to the following link
+ * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
+ *
+ * I found it interesting enough that I would like to solve it without looking at the
+ * answer and perfect it.
  */
 
 #include <stdio.h>
@@ -15,6 +21,14 @@ int   debug = 0;
 char *programName = NULL;
 
 
+/* This method will return further distance of pivot character from
+ * the start of the string.
+ *
+ * E.g. if the string is "abc", and pivot is "b", then answer is 1
+ *
+ * if string is "abbc", and pivot is "b", then it is 2 as that is
+ * further character "b" on "abbc" string.
+ */
 int distanceFromPivot(char string[], char pivot)
 {
     int i = 0;
