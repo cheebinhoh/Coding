@@ -8,8 +8,8 @@
  * The problem is posted by a friend according to the following link
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
- * I found it interesting enough that I would like to solve it without looking at the
- * answer and perfect it.
+ * I found it interesting enough that I would like to solve it (without looking at any 
+ * answer :)).
  */
 
 #include <stdio.h>
@@ -27,9 +27,10 @@ char *programName = NULL;
  * E.g. if the string is "abc", and pivot is "b", then answer is 1
  *
  * if string is "abbc", and pivot is "b", then it is 2 as that is
- * further character "b" on "abbc" string.
+ * further character "b" on "abbc" string if numPivotPrior is 0, else
+ * it is 1.
  */
-int distanceFromPivot(char string[], char pivot, int numPivot)
+int distanceFromPivot(char string[], char pivot, int numPivotPrior)
 {
     int i = 0;
 
@@ -38,7 +39,7 @@ int distanceFromPivot(char string[], char pivot, int numPivot)
     {
         if ( string[i] == pivot )
         {
-           if ( numPivot > 0 )
+           if ( numPivotPrior > 0 )
            {
                break;
            }
@@ -70,6 +71,8 @@ int distanceFromPivot(char string[], char pivot, int numPivot)
     return i;
 }
 
+/* It returns 1 if source can be translated into target, else 0.
+ */ 
 int isTransformable(char source[], char target[])
 {
     int i = 0;
@@ -122,8 +125,7 @@ int transform(char source[], char target[])
 
     i = 0;
     while ( source[i] != '\0'
-            && count < 50000  // to prevent infinite loop
-          )
+            && count < 50000 ) 
     {
         if ( source[i] == target[i] )
         {
@@ -133,34 +135,34 @@ int transform(char source[], char target[])
         {
            int j     = i;
            int pivot = i + 1;
-           int pos;
+           int gap   = 0;
            int tmp;
-           int gap = 0;
-           int numPivot = 0;
+           int pos;
            int k;
+           int numPivotPrior;
 
            // we want to move the furthest source[j] that its counterpart on target is
            // on left side of the source[j].
            while ( source[j] != '\0' )
            {
                k = i;
-               numPivot = 0;
+               numPivotPrior = 0;
                while ( k < j )
                {
                    if ( target[k] == source[j] )
                    {
-                       numPivot++;
+                       numPivotPrior++;
                    }
 
                    if ( source[k] == source[j] )
                    {
-                       numPivot--;
+                       numPivotPrior--;
                    }
 
                    k++;
                }
 
-               pos = distanceFromPivot(target + i, source[j], numPivot ) + i;
+               pos = distanceFromPivot(target + i, source[j], numPivotPrior) + i;
 
                if ( pos < j)
                {
@@ -179,8 +181,8 @@ int transform(char source[], char target[])
                printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ", move + 1, source[pivot], pivot, source);
            }
 
-           j   = pivot;
            tmp = source[j];
+           j   = pivot;
            while ( j > 0 )
            {
                source[j] = source[j - 1];
@@ -194,7 +196,6 @@ int transform(char source[], char target[])
            {
                printf("%s\n", source);
            }
-
 
            move++;
         } // if ( source[i] == target[i] ) ... else
@@ -212,7 +213,6 @@ void printHelp(void)
      fprintf(stderr, " -d : debug mode to demonstate the move\n");
      fprintf(stderr, " -h : print this help message\n");
 }
-
 
 int main(int argc, char *argv[])
 {
