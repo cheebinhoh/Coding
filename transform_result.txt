@@ -24,10 +24,10 @@ Transofmr string4 = ABECD to EABCD
 after 1 move, string4 = EABCD
 
 Transofmr string5 = ACEBD to EABCD
----- Move 1, pick B (3) and insert at the front, ACEBD => BACED
----- Move 2, pick E (3) and insert at the front, BACED => EBACD
----- Move 3, pick A (2) and insert at the front, EBACD => AEBCD
----- Move 4, pick E (1) and insert at the front, AEBCD => EABCD
+---- Move 1, pick E (2) and insert at the front, ACEBD => EACBD
+---- Move 2, pick B (3) and insert at the front, EACBD => BEACD
+---- Move 3, pick A (2) and insert at the front, BEACD => ABECD
+---- Move 4, pick E (2) and insert at the front, ABECD => EABCD
 after 4 move, string5 = EABCD
 
 Transofmr string6 = ABCDE to EABCD
@@ -45,12 +45,12 @@ after 4 move, string7 = EABCD
 target string = HOH
 
 Transofmr string8 = OHH to HOH
----- Move 1, pick H (2) and insert at the front, OHH => HOH
+---- Move 1, pick H (1) and insert at the front, OHH => HOH
 after 1 move, string8 = HOH
 
 Transofmr string9 = HHO to HOH
 ---- Move 1, pick O (2) and insert at the front, HHO => OHH
----- Move 2, pick H (2) and insert at the front, OHH => HOH
+---- Move 2, pick H (1) and insert at the front, OHH => HOH
 after 2 move, string9 = HOH
 
 
@@ -68,4 +68,17 @@ Transofmr string12 = ECEH to CHEE
 ---- Move 1, pick H (3) and insert at the front, ECEH => HECE
 ---- Move 2, pick C (2) and insert at the front, HECE => CHEE
 after 2 move, string12 = CHEE
+
+
+target string = Cprogramming
+
+Transofmr string13 = Crprogamming to Cprogramming
+---- Move 1, pick g (5) and insert at the front, Crprogamming => gCrproamming
+---- Move 2, pick o (5) and insert at the front, gCrproamming => ogCrpramming
+---- Move 3, pick p (4) and insert at the front, ogCrpramming => pogCrramming
+---- Move 4, pick C (3) and insert at the front, pogCrramming => Cpogrramming
+---- Move 5, pick r (4) and insert at the front, Cpogrramming => rCpogramming
+---- Move 6, pick p (2) and insert at the front, rCpogramming => prCogramming
+---- Move 7, pick C (2) and insert at the front, prCogramming => Cprogramming
+after 7 move, string13 = Cprogramming
 
