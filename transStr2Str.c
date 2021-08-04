@@ -24,7 +24,7 @@ int distanceFromPivot(char string[], char pivot)
             && ( string[i] != pivot
                  || ( string[i + 1] != '\0'
                       && string[i + 1] == pivot )
-               ) 
+               )
           )
     {
         i++;
@@ -84,7 +84,7 @@ int transform(char source[], char target[])
     }
 
     i = 0;
-    while ( source[i] != '\0' 
+    while ( source[i] != '\0'
             && count < 5000  // to prevent infinite loop
           )
     {
@@ -136,7 +136,7 @@ int transform(char source[], char target[])
 
            move++;
         } // if ( source[i] == target[i] ) ... else
- 
+
         count++;
     } //  while ( source[i] != '\0' )
 
