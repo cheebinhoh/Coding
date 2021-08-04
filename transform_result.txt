@@ -1,69 +1,71 @@
 target string = EABCD
 
 Transofmr string1 = EACBD to EABCD
----- Move 1, pick B and insert at the front, EACBD => BEACD
----- Move 2, pick A and insert at the front, BEACD => ABECD
----- Move 3, pick E and insert at the front, ABECD => EABCD
+---- Move 1, pick B (3) and insert at the front, EACBD => BEACD
+---- Move 2, pick A (2) and insert at the front, BEACD => ABECD
+---- Move 3, pick E (2) and insert at the front, ABECD => EABCD
 after 3 move, string1 = EABCD
 
 Transofmr string2 = CABED to EABCD
----- Move 1, pick E and insert at the front, CABED => ECABD
----- Move 2, pick B and insert at the front, ECABD => BECAD
----- Move 3, pick A and insert at the front, BECAD => ABECD
----- Move 4, pick E and insert at the front, ABECD => EABCD
+---- Move 1, pick E (3) and insert at the front, CABED => ECABD
+---- Move 2, pick B (3) and insert at the front, ECABD => BECAD
+---- Move 3, pick A (3) and insert at the front, BECAD => ABECD
+---- Move 4, pick E (2) and insert at the front, ABECD => EABCD
 after 4 move, string2 = EABCD
 
 Transofmr string3 = EACBD to EABCD
----- Move 1, pick B and insert at the front, EACBD => BEACD
----- Move 2, pick A and insert at the front, BEACD => ABECD
----- Move 3, pick E and insert at the front, ABECD => EABCD
+---- Move 1, pick B (3) and insert at the front, EACBD => BEACD
+---- Move 2, pick A (2) and insert at the front, BEACD => ABECD
+---- Move 3, pick E (2) and insert at the front, ABECD => EABCD
 after 3 move, string3 = EABCD
 
 Transofmr string4 = ABECD to EABCD
----- Move 1, pick E and insert at the front, ABECD => EABCD
+---- Move 1, pick E (2) and insert at the front, ABECD => EABCD
 after 1 move, string4 = EABCD
 
 Transofmr string5 = ACEBD to EABCD
----- Move 1, pick B and insert at the front, ACEBD => BACED
----- Move 2, pick E and insert at the front, BACED => EBACD
----- Move 3, pick A and insert at the front, EBACD => AEBCD
----- Move 4, pick E and insert at the front, AEBCD => EABCD
+---- Move 1, pick B (3) and insert at the front, ACEBD => BACED
+---- Move 2, pick E (3) and insert at the front, BACED => EBACD
+---- Move 3, pick A (2) and insert at the front, EBACD => AEBCD
+---- Move 4, pick E (1) and insert at the front, AEBCD => EABCD
 after 4 move, string5 = EABCD
 
 Transofmr string6 = ABCDE to EABCD
----- Move 1, pick E and insert at the front, ABCDE => EABCD
+---- Move 1, pick E (4) and insert at the front, ABCDE => EABCD
 after 1 move, string6 = EABCD
 
 Transofmr string7 = DEABC to EABCD
----- Move 1, pick C and insert at the front, DEABC => CDEAB
----- Move 2, pick B and insert at the front, CDEAB => BCDEA
----- Move 3, pick A and insert at the front, BCDEA => ABCDE
----- Move 4, pick E and insert at the front, ABCDE => EABCD
+---- Move 1, pick C (4) and insert at the front, DEABC => CDEAB
+---- Move 2, pick B (4) and insert at the front, CDEAB => BCDEA
+---- Move 3, pick A (4) and insert at the front, BCDEA => ABCDE
+---- Move 4, pick E (4) and insert at the front, ABCDE => EABCD
 after 4 move, string7 = EABCD
+
 
 target string = HOH
 
 Transofmr string8 = OHH to HOH
----- Move 1, pick H and insert at the front, OHH => HOH
+---- Move 1, pick H (2) and insert at the front, OHH => HOH
 after 1 move, string8 = HOH
 
 Transofmr string9 = HHO to HOH
----- Move 1, pick O and insert at the front, HHO => OHH
----- Move 2, pick H and insert at the front, OHH => HOH
+---- Move 1, pick O (2) and insert at the front, HHO => OHH
+---- Move 2, pick H (2) and insert at the front, OHH => HOH
 after 2 move, string9 = HOH
+
 
 target string = CHEE
 
 Transofmr string10 = HCEE to CHEE
----- Move 1, pick C and insert at the front, HCEE => CHEE
+---- Move 1, pick C (1) and insert at the front, HCEE => CHEE
 after 1 move, string10 = CHEE
 
 Transofmr string11 = HEEC to CHEE
----- Move 1, pick C and insert at the front, HEEC => CHEE
+---- Move 1, pick C (3) and insert at the front, HEEC => CHEE
 after 1 move, string11 = CHEE
 
 Transofmr string12 = ECEH to CHEE
----- Move 1, pick H and insert at the front, ECEH => HECE
----- Move 2, pick C and insert at the front, HECE => CHEE
+---- Move 1, pick H (3) and insert at the front, ECEH => HECE
+---- Move 2, pick C (2) and insert at the front, HECE => CHEE
 after 2 move, string12 = CHEE
 

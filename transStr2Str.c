@@ -128,7 +128,7 @@ int transform(char source[], char target[])
 
            if ( debug )
            {
-               printf("---- Move %d, pick %c and insert at the front, %s => ", move + 1, source[pivot], source);
+               printf("---- Move %d, pick %c (%d) and insert at the front, %s => ", move + 1, source[pivot], pivot, source);
            }
 
            j   = pivot;
@@ -238,6 +238,7 @@ int main(int argc, char *argv[])
     moveCnt = transform(str7, target);
     printf("after %d move, string7 = %s\n\n", moveCnt, str7);
 
+    printf("\n");
     printf("target string = %s\n\n", target2);
 
     printf("Transofmr string8 = %s to %s\n", str8, target2);
@@ -248,6 +249,7 @@ int main(int argc, char *argv[])
     moveCnt = transform(str9, target2);
     printf("after %d move, string9 = %s\n\n", moveCnt, str9);
 
+    printf("\n");
     printf("target string = %s\n\n", target3);
 
     printf("Transofmr string10 = %s to %s\n", str10, target3);
