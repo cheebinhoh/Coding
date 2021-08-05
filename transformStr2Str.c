@@ -215,7 +215,21 @@ void printHelp(void)
      fprintf(stderr, " -h : print this help message\n");
 }
 
-int main(int argc, char *argv[])
+void runTest(char string[], char target[])
+{
+    int moveCnt;
+
+
+    // we do not do printf(...., str1, transform(str1, target), str1 );
+    // because comma separator on function arguments are not sequencing point, there
+    // is no guarantee that 1st str1 is passed to printf before it is transformed by nested method transform
+
+    printf("Transofmr string = %s to %s\n", string, target);
+    moveCnt = transform(string, target);
+    printf("after %d move, string = %s\n\n", moveCnt, string);
+}
+
+void runSampleTest(void)
 {
     char str1[]    = "EACBD";
     char str2[]    = "CABED";
@@ -224,7 +238,7 @@ int main(int argc, char *argv[])
     char str5[]    = "ACEBD";
     char str6[]    = "ABCDE";
     char str7[]    = "DEABC";
-    char target[]  = "EABCD";
+    char target1[] = "EABCD";
     char str8[]    = "OHH";
     char str9[]    = "HHO";
     char target2[] = "HOH";
@@ -235,6 +249,30 @@ int main(int argc, char *argv[])
     char str13[]   = "Crprogamming";
     char str14[]   = "Cproggrammin";
     char target4[] = "Cprogramming";
+
+
+    runTest(str1, target1);
+    runTest(str2, target1);
+    runTest(str3, target1);
+    runTest(str4, target1);
+    runTest(str5, target1);
+    runTest(str6, target1);
+    runTest(str7, target1);
+
+    runTest(str8, target2);
+    runTest(str9, target2);
+
+    runTest(str10, target3);
+    runTest(str11, target3);
+    runTest(str12, target3);
+
+    runTest(str13, target4);
+    runTest(str14, target4);
+}
+
+
+int main(int argc, char *argv[])
+{
     int  moveCnt = 0;
     int  c;
 
@@ -256,76 +294,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("target string = %s\n\n", target);
-
-    // we do not do printf(...., str1, transform(str1, target), str1 );
-    // because comma separator on function arguments are not sequencing point, there
-    // is no guarantee that 1st str1 is passed to printf before it is transformed by nested method transform
-
-    printf("Transofmr string1 = %s to %s\n", str1, target);
-    moveCnt = transform(str1, target);
-    printf("after %d move, string1 = %s\n\n", moveCnt, str1);
-
-    printf("Transofmr string2 = %s to %s\n", str2, target);
-    moveCnt = transform(str2, target);
-    printf("after %d move, string2 = %s\n\n", moveCnt, str2);
-
-    printf("Transofmr string3 = %s to %s\n", str3, target);
-    moveCnt = transform(str3, target);
-    printf("after %d move, string3 = %s\n\n", moveCnt, str3);
-
-    printf("Transofmr string4 = %s to %s\n", str4, target);
-    moveCnt = transform(str4, target);
-    printf("after %d move, string4 = %s\n\n", moveCnt, str4);
-
-    printf("Transofmr string5 = %s to %s\n", str5, target);
-    moveCnt = transform(str5, target);
-    printf("after %d move, string5 = %s\n\n", moveCnt, str5);
-
-    printf("Transofmr string6 = %s to %s\n", str6, target);
-    moveCnt = transform(str6, target);
-    printf("after %d move, string6 = %s\n\n", moveCnt, str6);
-
-    printf("Transofmr string7 = %s to %s\n", str7, target);
-    moveCnt = transform(str7, target);
-    printf("after %d move, string7 = %s\n\n", moveCnt, str7);
-
-    printf("\n");
-    printf("target string = %s\n\n", target2);
-
-    printf("Transofmr string8 = %s to %s\n", str8, target2);
-    moveCnt = transform(str8, target2);
-    printf("after %d move, string8 = %s\n\n", moveCnt, str8);
-
-    printf("Transofmr string9 = %s to %s\n", str9, target2);
-    moveCnt = transform(str9, target2);
-    printf("after %d move, string9 = %s\n\n", moveCnt, str9);
-
-    printf("\n");
-    printf("target string = %s\n\n", target3);
-
-    printf("Transofmr string10 = %s to %s\n", str10, target3);
-    moveCnt = transform(str10, target3);
-    printf("after %d move, string10 = %s\n\n", moveCnt, str10);
-
-    printf("Transofmr string11 = %s to %s\n", str11, target3);
-    moveCnt = transform(str11, target3);
-    printf("after %d move, string11 = %s\n\n", moveCnt, str11);
-
-    printf("Transofmr string12 = %s to %s\n", str12, target3);
-    moveCnt = transform(str12, target3);
-    printf("after %d move, string12 = %s\n\n", moveCnt, str12);
-
-    printf("\n");
-    printf("target string = %s\n\n", target4);
-
-    printf("Transofmr string13 = %s to %s\n", str13, target4);
-    moveCnt = transform(str13, target4);
-    printf("after %d move, string13 = %s\n\n", moveCnt, str13);
-
-    printf("Transofmr string14 = %s to %s\n", str14, target4);
-    moveCnt = transform(str14, target4);
-    printf("after %d move, string14 = %s\n\n", moveCnt, str14);
+    runSampleTest();
 
     return 0;
 }
