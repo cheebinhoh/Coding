@@ -152,9 +152,9 @@ int transform(char source[], char target[])
                k = i;
                numPivotPrior = 0;
 
-               // the use of numPivotPrior is to calculating how many source[j] is needed after position ith 
+               // the use of numPivotPrior is to calculating how many source[j] is needed after position ith
                // and before position jth
-               // 
+               //
                // the result is used to tell distanceFromPivot if it needs to look further than first source[j]
                // in targrt after (i + 1) th position
                while ( k < j )
@@ -188,7 +188,8 @@ int transform(char source[], char target[])
 
            if ( debug )
            {
-               printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ", move + 1, source[pivot], pivot, source);
+               printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ",
+                      move + 1, source[pivot], pivot, source);
            }
 
            tmp = source[pivot];
