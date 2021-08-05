@@ -31,7 +31,7 @@ char *programName = NULL;
  * further character "b" on "abbc" string if numPivotPrior is 0, else
  * it is 1.
  */
-int distanceFromPivot(char string[], char pivot, int numPivotPrior)
+int distanceFromPivot(char string[], char pivot, int numPrecedingPivot)
 {
     int i = 0;
 
@@ -40,7 +40,7 @@ int distanceFromPivot(char string[], char pivot, int numPivotPrior)
     {
         if ( string[i] == pivot )
         {
-           if ( numPivotPrior > 0 )
+           if ( numPrecedingPivot > 0 )
            {
                break;
            }
@@ -48,6 +48,7 @@ int distanceFromPivot(char string[], char pivot, int numPivotPrior)
            {
                int hasOther = 0;
                int j        = i + 1;
+
 
                while ( string[j] != '\0' )
                {
@@ -76,8 +77,8 @@ int distanceFromPivot(char string[], char pivot, int numPivotPrior)
  */
 int isTransformable(char source[], char target[])
 {
-    int i = 0;
-    int j = 0;
+    int i       = 0;
+    int j       = 0;
     int sH[256] = { 0 };
     int tH[256] = { 0 };
 
@@ -126,7 +127,7 @@ int transform(char source[], char target[])
 
     i = 0;
     while ( source[i] != '\0'
-            && count < 50000 )
+            && count < 50000 ) // a cut over to prevent infinite loop due to coding mistake
     {
         if ( source[i] == target[i] )
         {
@@ -134,7 +135,10 @@ int transform(char source[], char target[])
         }
         else
         {
-           int j     = i;
+           // So that source[i] != target[i] and we want to decide which of the character after
+           // ith position in source that we want to move to the front.
+
+           int j     = i + 1;
            int pivot = i + 1;
            int gap   = 0;
            int tmp;
@@ -142,12 +146,17 @@ int transform(char source[], char target[])
            int k;
            int numPivotPrior;
 
-           // we want to move the furthest source[j] that its counterpart on target is
-           // on left side of the source[j].
+
            while ( source[j] != '\0' )
            {
                k = i;
                numPivotPrior = 0;
+
+               // the use of numPivotPrior is to calculating how many source[j] is needed after position ith 
+               // and before position jth
+               // 
+               // the result is used to tell distanceFromPivot if it needs to look further than first source[j]
+               // in targrt after (i + 1) th position
                while ( k < j )
                {
                    if ( target[k] == source[j] )
