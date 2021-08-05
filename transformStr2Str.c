@@ -341,6 +341,7 @@ int main(int argc, char *argv[])
     {
         char *token;
 
+
         token = strtok(sourceArg, ",");
         while ( NULL != token )
         {
