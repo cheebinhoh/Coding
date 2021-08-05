@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
     {
         printHelp();
         exit(1);
-    }     
+    }
 
     if ( NULL == sourceArg
          && NULL != targetArg )
@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
         printHelp();
         exit(1);
     }
-    
+
     if ( NULL == sourceArg )
     {
         runSampleTest();
@@ -338,9 +338,9 @@ int main(int argc, char *argv[])
             source[sizeof( source ) - 1] = '\0';
 
             runTest(source, targetArg);
-           
+
             token = strtok(NULL, ",");
-        }      
+        }
     }
 
     return 0;
