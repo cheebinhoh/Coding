@@ -1,121 +1,67 @@
 target string = EABCD
 
 Transofmr string1 = EACBD to EABCD
----- Move  1, pick B ( 3) and insert at the front, EACBD => BEACD
----- Move  2, pick A ( 2) and insert at the front, BEACD => ABECD
----- Move  3, pick E ( 2) and insert at the front, ABECD => EABCD
-after 3 move, string1 = EABCD
+---- Move  1, pick B ( 3) and insert at the front, EACBD => 
+after 1 move, string1 = 
 
 Transofmr string2 = CABED to EABCD
----- Move  1, pick E ( 3) and insert at the front, CABED => ECABD
----- Move  2, pick B ( 3) and insert at the front, ECABD => BECAD
----- Move  3, pick A ( 3) and insert at the front, BECAD => ABECD
----- Move  4, pick E ( 2) and insert at the front, ABECD => EABCD
-after 4 move, string2 = EABCD
+---- Move  1, pick E ( 3) and insert at the front, CABED => 
+after 1 move, string2 = 
 
 Transofmr string3 = EACBD to EABCD
----- Move  1, pick B ( 3) and insert at the front, EACBD => BEACD
----- Move  2, pick A ( 2) and insert at the front, BEACD => ABECD
----- Move  3, pick E ( 2) and insert at the front, ABECD => EABCD
-after 3 move, string3 = EABCD
+---- Move  1, pick B ( 3) and insert at the front, EACBD => 
+after 1 move, string3 = 
 
 Transofmr string4 = ABECD to EABCD
----- Move  1, pick E ( 2) and insert at the front, ABECD => EABCD
-after 1 move, string4 = EABCD
+---- Move  1, pick E ( 2) and insert at the front, ABECD => 
+after 1 move, string4 = 
 
 Transofmr string5 = ACEBD to EABCD
----- Move  1, pick E ( 2) and insert at the front, ACEBD => EACBD
----- Move  2, pick B ( 3) and insert at the front, EACBD => BEACD
----- Move  3, pick A ( 2) and insert at the front, BEACD => ABECD
----- Move  4, pick E ( 2) and insert at the front, ABECD => EABCD
-after 4 move, string5 = EABCD
+---- Move  1, pick E ( 2) and insert at the front, ACEBD => 
+after 1 move, string5 = 
 
 Transofmr string6 = ABCDE to EABCD
----- Move  1, pick E ( 4) and insert at the front, ABCDE => EABCD
-after 1 move, string6 = EABCD
+---- Move  1, pick E ( 4) and insert at the front, ABCDE => 
+after 1 move, string6 = 
 
 Transofmr string7 = DEABC to EABCD
----- Move  1, pick C ( 4) and insert at the front, DEABC => CDEAB
----- Move  2, pick B ( 4) and insert at the front, CDEAB => BCDEA
----- Move  3, pick A ( 4) and insert at the front, BCDEA => ABCDE
----- Move  4, pick E ( 4) and insert at the front, ABCDE => EABCD
-after 4 move, string7 = EABCD
+---- Move  1, pick C ( 4) and insert at the front, DEABC => 
+after 1 move, string7 = 
 
 
 target string = HOH
 
 Transofmr string8 = OHH to HOH
----- Move  1, pick H ( 1) and insert at the front, OHH => HOH
-after 1 move, string8 = HOH
+---- Move  1, pick H ( 1) and insert at the front, OHH => 
+after 1 move, string8 = 
 
 Transofmr string9 = HHO to HOH
----- Move  1, pick O ( 2) and insert at the front, HHO => OHH
----- Move  2, pick H ( 1) and insert at the front, OHH => HOH
-after 2 move, string9 = HOH
+---- Move  1, pick O ( 2) and insert at the front, HHO => 
+after 1 move, string9 = 
 
 
 target string = CHEE
 
 Transofmr string10 = HCEE to CHEE
----- Move  1, pick C ( 1) and insert at the front, HCEE => CHEE
-after 1 move, string10 = CHEE
+---- Move  1, pick C ( 1) and insert at the front, HCEE => 
+after 1 move, string10 = 
 
 Transofmr string11 = HEEC to CHEE
----- Move  1, pick C ( 3) and insert at the front, HEEC => CHEE
-after 1 move, string11 = CHEE
+---- Move  1, pick C ( 3) and insert at the front, HEEC => 
+after 1 move, string11 = 
 
 Transofmr string12 = ECEH to CHEE
----- Move  1, pick H ( 3) and insert at the front, ECEH => HECE
----- Move  2, pick C ( 2) and insert at the front, HECE => CHEE
-after 2 move, string12 = CHEE
+---- Move  1, pick H ( 3) and insert at the front, ECEH => 
+after 1 move, string12 = 
 
 
 target string = Cprogramming
 
 Transofmr string13 = Crprogamming to Cprogramming
----- Move  1, pick g ( 5) and insert at the front, Crprogamming => gCrproamming
----- Move  2, pick o ( 5) and insert at the front, gCrproamming => ogCrpramming
----- Move  3, pick p ( 4) and insert at the front, ogCrpramming => pogCrramming
----- Move  4, pick C ( 3) and insert at the front, pogCrramming => Cpogrramming
----- Move  5, pick r ( 4) and insert at the front, Cpogrramming => rCpogramming
----- Move  6, pick p ( 2) and insert at the front, rCpogramming => prCogramming
----- Move  7, pick C ( 2) and insert at the front, prCogramming => Cprogramming
-after 7 move, string13 = Cprogramming
+---- Move  1, pick g ( 5) and insert at the front, Crprogamming => 
+after 1 move, string13 = 
 
 Transofmr string14 = Cproggrammin to Cprogramming
----- Move  1, pick m ( 9) and insert at the front, Cproggrammin => mCproggramin
----- Move  2, pick r ( 7) and insert at the front, mCproggramin => rmCproggamin
----- Move  3, pick m ( 9) and insert at the front, rmCproggamin => mrmCproggain
----- Move  4, pick a ( 9) and insert at the front, mrmCproggain => amrmCproggin
----- Move  5, pick g ( 8) and insert at the front, amrmCproggin => gamrmCprogin
----- Move  6, pick o ( 8) and insert at the front, gamrmCprogin => ogamrmCprgin
----- Move  7, pick r ( 8) and insert at the front, ogamrmCprgin => rogamrmCpgin
----- Move  8, pick p ( 8) and insert at the front, rogamrmCpgin => progamrmCgin
----- Move  9, pick C ( 8) and insert at the front, progamrmCgin => Cprogamrmgin
----- Move 10, pick r ( 7) and insert at the front, Cprogamrmgin => rCprogammgin
----- Move 11, pick n (11) and insert at the front, rCprogammgin => nrCprogammgi
----- Move 12, pick i (11) and insert at the front, nrCprogammgi => inrCprogammg
----- Move 13, pick m (10) and insert at the front, inrCprogammg => minrCprogamg
----- Move 14, pick g ( 8) and insert at the front, minrCprogamg => gminrCproamg
----- Move 15, pick o ( 8) and insert at the front, gminrCproamg => ogminrCpramg
----- Move 16, pick r ( 8) and insert at the front, ogminrCpramg => rogminrCpamg
----- Move 17, pick p ( 8) and insert at the front, rogminrCpamg => progminrCamg
----- Move 18, pick C ( 8) and insert at the front, progminrCamg => Cprogminramg
----- Move 19, pick m (10) and insert at the front, Cprogminramg => mCprogminrag
----- Move 20, pick r ( 9) and insert at the front, mCprogminrag => rmCprogminag
----- Move 21, pick a (10) and insert at the front, rmCprogminag => armCprogming
----- Move 22, pick g ( 7) and insert at the front, armCprogming => garmCproming
----- Move 23, pick o ( 7) and insert at the front, garmCproming => ogarmCprming
----- Move 24, pick r ( 7) and insert at the front, ogarmCprming => rogarmCpming
----- Move 25, pick p ( 7) and insert at the front, rogarmCpming => progarmCming
----- Move 26, pick C ( 7) and insert at the front, progarmCming => Cprogarmming
----- Move 27, pick r ( 6) and insert at the front, Cprogarmming => rCprogamming
----- Move 28, pick g ( 5) and insert at the front, rCprogamming => grCproamming
----- Move 29, pick o ( 5) and insert at the front, grCproamming => ogrCpramming
----- Move 30, pick p ( 4) and insert at the front, ogrCpramming => pogrCramming
----- Move 31, pick C ( 4) and insert at the front, pogrCramming => Cpogrramming
----- Move 32, pick r ( 4) and insert at the front, Cpogrramming => rCpogramming
----- Move 33, pick p ( 2) and insert at the front, rCpogramming => prCogramming
----- Move 34, pick C ( 2) and insert at the front, prCogramming => Cprogramming
-after 34 move, string14 = Cprogramming
+---- Move  1, pick m ( 9) and insert at the front, Cproggrammin => 
+after 1 move, string14 = 
 
