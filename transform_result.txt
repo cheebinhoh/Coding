@@ -1,67 +1,53 @@
 target string = EABCD
 
 Transofmr string1 = EACBD to EABCD
----- Move  1, pick B ( 3) and insert at the front, EACBD => 
-after 1 move, string1 = 
+after 3 move, string1 = EABCD
 
 Transofmr string2 = CABED to EABCD
----- Move  1, pick E ( 3) and insert at the front, CABED => 
-after 1 move, string2 = 
+after 4 move, string2 = EABCD
 
 Transofmr string3 = EACBD to EABCD
----- Move  1, pick B ( 3) and insert at the front, EACBD => 
-after 1 move, string3 = 
+after 3 move, string3 = EABCD
 
 Transofmr string4 = ABECD to EABCD
----- Move  1, pick E ( 2) and insert at the front, ABECD => 
-after 1 move, string4 = 
+after 1 move, string4 = EABCD
 
 Transofmr string5 = ACEBD to EABCD
----- Move  1, pick E ( 2) and insert at the front, ACEBD => 
-after 1 move, string5 = 
+after 4 move, string5 = EABCD
 
 Transofmr string6 = ABCDE to EABCD
----- Move  1, pick E ( 4) and insert at the front, ABCDE => 
-after 1 move, string6 = 
+after 1 move, string6 = EABCD
 
 Transofmr string7 = DEABC to EABCD
----- Move  1, pick C ( 4) and insert at the front, DEABC => 
-after 1 move, string7 = 
+after 4 move, string7 = EABCD
 
 
 target string = HOH
 
 Transofmr string8 = OHH to HOH
----- Move  1, pick H ( 1) and insert at the front, OHH => 
-after 1 move, string8 = 
+after 1 move, string8 = HOH
 
 Transofmr string9 = HHO to HOH
----- Move  1, pick O ( 2) and insert at the front, HHO => 
-after 1 move, string9 = 
+after 2 move, string9 = HOH
 
 
 target string = CHEE
 
 Transofmr string10 = HCEE to CHEE
----- Move  1, pick C ( 1) and insert at the front, HCEE => 
-after 1 move, string10 = 
+after 1 move, string10 = CHEE
 
 Transofmr string11 = HEEC to CHEE
----- Move  1, pick C ( 3) and insert at the front, HEEC => 
-after 1 move, string11 = 
+after 1 move, string11 = CHEE
 
 Transofmr string12 = ECEH to CHEE
----- Move  1, pick H ( 3) and insert at the front, ECEH => 
-after 1 move, string12 = 
+after 2 move, string12 = CHEE
 
 
 target string = Cprogramming
 
 Transofmr string13 = Crprogamming to Cprogramming
----- Move  1, pick g ( 5) and insert at the front, Crprogamming => 
-after 1 move, string13 = 
+after 7 move, string13 = Cprogramming
 
 Transofmr string14 = Cproggrammin to Cprogramming
----- Move  1, pick m ( 9) and insert at the front, Cproggrammin => 
-after 1 move, string14 = 
+after 34 move, string14 = Cprogramming
 

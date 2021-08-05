@@ -181,8 +181,9 @@ int transform(char source[], char target[])
                printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ", move + 1, source[pivot], pivot, source);
            }
 
-           tmp = source[j];
+           tmp = source[pivot];
            j   = pivot;
+
            while ( j > 0 )
            {
                source[j] = source[j - 1];
