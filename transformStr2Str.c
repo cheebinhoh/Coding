@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 
 int   debug = 0;
@@ -211,8 +212,12 @@ void printHelp(void)
 {
      fprintf(stderr, "%s [-d] [-h]\n", programName);
      fprintf(stderr, "\n");
-     fprintf(stderr, " -d : debug mode to demonstate the move\n");
-     fprintf(stderr, " -h : print this help message\n");
+     fprintf(stderr, " -d                             : debug mode to demonstate the move\n");
+     fprintf(stderr, " -h                             : print this help message\n");
+     fprintf(stderr, " -s source1,source2,source3,... : list of source strings to be transformed into target\n");
+     fprintf(stderr, " -t target                      : target string\n");
+     fprintf(stderr, "\n");
+     fprintf(stderr, " both -s and -t must be specified together\n");
 }
 
 void runTest(char string[], char target[])
@@ -273,18 +278,28 @@ void runSampleTest(void)
 
 int main(int argc, char *argv[])
 {
-    int  moveCnt = 0;
-    int  c;
+    int   c;
+    char *targetArg = NULL;
+    char *sourceArg = NULL;
+    char  source[1024]; // maximum hardcode
 
 
     programName = argv[0];
 
-    while ( ( c = getopt(argc, argv, "dh") ) != -1 )
+    while ( ( c = getopt(argc, argv, "s:t:dh") ) != -1 )
     {
         switch ( c )
         {
             case 'd':
                 debug = 1;
+                break;
+
+            case 't':
+                targetArg = optarg;
+                break;
+
+            case 's':
+                sourceArg = optarg;
                 break;
 
             case '?':
@@ -294,7 +309,39 @@ int main(int argc, char *argv[])
         }
     }
 
-    runSampleTest();
+    if ( NULL != sourceArg
+         && NULL == targetArg )
+    {
+        printHelp();
+        exit(1);
+    }     
+
+    if ( NULL == sourceArg
+         && NULL != targetArg )
+    {
+        printHelp();
+        exit(1);
+    }
+    
+    if ( NULL == sourceArg )
+    {
+        runSampleTest();
+    }
+    else
+    {
+        char *token;
+
+        token = strtok(sourceArg, ",");
+        while ( NULL != token )
+        {
+            strncpy(source, token, sizeof( source ) - 1);
+            source[sizeof( source ) - 1] = '\0';
+
+            runTest(source, targetArg);
+           
+            token = strtok(NULL, ",");
+        }      
+    }
 
     return 0;
 }
