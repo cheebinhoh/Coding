@@ -227,7 +227,7 @@ void printHelp(void)
      fprintf(stderr, " -s source1,source2,source3,... : list of source strings to be transformed into target\n");
      fprintf(stderr, " -t target                      : target string\n");
      fprintf(stderr, "\n");
-     fprintf(stderr, " both -s and -t must be specified together\n");
+     fprintf(stderr, " if -t is specified, then source will be from -s argument or standard input\n");
 }
 
 void runTest(char string[], char target[])
@@ -326,18 +326,12 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    if ( NULL == sourceArg
-         && NULL != targetArg )
-    {
-        printHelp();
-        exit(1);
-    }
 
-    if ( NULL == sourceArg )
+    if ( NULL == targetArg )
     {
         runSampleTest();
     }
-    else
+    else if ( NULL != sourceArg )
     {
         char *token;
 
@@ -351,6 +345,21 @@ int main(int argc, char *argv[])
             runTest(source, targetArg);
 
             token = strtok(NULL, ",");
+        }
+    }
+    else
+    {
+        while ( NULL != fgets(source, sizeof( source ) - 1, stdin) )
+        {
+            int len = strlen(source);
+
+
+            if ( '\n' == source[len - 1] )
+            {
+                source[len - 1] = '\0';
+            }
+
+            runTest(source, targetArg);
         }
     }
 
