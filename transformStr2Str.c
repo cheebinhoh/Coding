@@ -141,13 +141,14 @@ int transform(char source[], char target[])
            // It will go through all characters after ith position in source and look up same
            // character position in target ith or after that position.
            //
-           // if a character in jth position in source, but it is before jth in target, then it
-           // is potential character to move to the front in source, and we want to move the
-           // the character where its gap in target and current position in source is largest one.
+           // if a character is in jth position in source, but it is before jth in target, then it
+           // is potential character to move to the front in source (as it is too way behind in target
+           // position), and we want to move the the character where its gap in target and current
+           // position in source is largest one.
            //
-           // A few guards is employed to make sure that we do not fall into infinite loop
+           // A few guards are employed to make sure that we do not fall into infinite loop
            // - if same character appears a few time in target, we pick the position in target that
-           //   is furthest position in target string.
+           //   is furthest position in target string to compare it with source character position.
            // - if we are looking for jth character in target, and target expects same character on
            //   position before jth, then we will consider the first same character than the furthest
            //   one in target string, this will avoid infinite loop.
