@@ -137,6 +137,20 @@ int transform(char source[], char target[])
         {
            // So that source[i] != target[i] and we want to decide which of the character after
            // ith position in source that we want to move to the front.
+           //
+           // It will go through all characters after ith position in source and look up same
+           // character position in target ith or after that position.
+           //
+           // if a character in jth position in source, but it is before jth in target, then it
+           // is potential character to move to the front in source, and we want to move the
+           // the character where its gap in target and current position in source is largest one.
+           //
+           // A few guards is employed to make sure that we do not fall into infinite loop
+           // - if same character appears a few time in target, we pick the position in target that
+           //   is furthest position in target string.
+           // - if we are looking for jth character in target, and target expects same character on
+           //   position before jth, then we will consider the first same character than the furthest
+           //   one in target string, this will avoid infinite loop.
 
            int j     = i + 1;
            int pivot = i + 1;
@@ -152,11 +166,7 @@ int transform(char source[], char target[])
                k = i;
                numPivotPrior = 0;
 
-               // the use of numPivotPrior is to calculating how many source[j] is needed after position ith
-               // and before position jth
-               //
-               // the result is used to tell distanceFromPivot if it needs to look further than first source[j]
-               // in targrt after (i + 1) th position
+
                while ( k < j )
                {
                    if ( target[k] == source[j] )
