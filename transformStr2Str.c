@@ -164,7 +164,7 @@ int transform(char source[], char target[])
 
            while ( source[j] != '\0' )
            {
-               k = i;
+               k             = i;
                numPivotPrior = 0;
 
 
@@ -203,6 +203,7 @@ int transform(char source[], char target[])
                       move + 1, source[pivot], pivot, source);
            }
 
+
            tmp = source[pivot];
            j   = pivot;
 
@@ -214,6 +215,7 @@ int transform(char source[], char target[])
 
            source[0] = tmp;
            i = 0;
+
 
            if ( debug )
            {
