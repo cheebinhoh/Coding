@@ -206,14 +206,20 @@ int transform(char source[], char target[])
 
 
            tmp = source[pivot];
-           j   = pivot;
 
-           while ( j > 0 )
-           {
-               source[j] = source[j - 1];
-               j--;
-           }
 
+           /* ccomment out: in flavor of memmove where large block copy can be efficient
+            *
+            * j   = pivot;
+            *
+            * while ( j > 0 )
+            * {
+            *     source[j] = source[j - 1];
+            *     j--;
+            * }
+            */
+
+           memmove(source + 1, source, pivot);
            source[0] = tmp;
            i = 0;
 
