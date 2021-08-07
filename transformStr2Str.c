@@ -149,9 +149,9 @@ int transform(char source[], char target[])
            // A few guards are employed to make sure that we do not fall into infinite loop
            // - if same character appears a few time in target, we pick the position in target that
            //   is furthest position in target string to compare it with source character position.
-           // - if we are looking for jth character in target, and target expects same character on
-           //   position before jth, then we will consider the first same character than the furthest
-           //   one in target string, this will avoid infinite loop.
+           // - if we are looking for jth character (of source) in target, and target expects same character
+           //   on position after ith (position that mismatch logic is triggered) but before jth, then we
+           //   not look for character furthest position in target, but first encountered character position.
 
            int j     = i + 1;
            int pivot = i + 1;
@@ -233,12 +233,12 @@ void printHelp(void)
 {
      fprintf(stderr, "%s [-d] [-h]\n", programName);
      fprintf(stderr, "\n");
-     fprintf(stderr, " -d                             : debug mode to demonstate the move\n");
+     fprintf(stderr, " -d                             : debug mode to demonstate each step of the moves\n");
      fprintf(stderr, " -h                             : print this help message\n");
      fprintf(stderr, " -s source1,source2,source3,... : list of source strings to be transformed into target\n");
      fprintf(stderr, " -t target                      : target string\n");
      fprintf(stderr, "\n");
-     fprintf(stderr, " if -t is specified, then source will be from -s argument or standard input\n");
+     fprintf(stderr, " if -t is specified, then source string will be from -s argument or standard input (if -s is not specified)\n");
 }
 
 void runTest(char string[], char target[])
