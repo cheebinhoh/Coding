@@ -208,7 +208,9 @@ int transform(char source[], char target[])
            tmp = source[pivot];
 
 
-           /* ccomment out: in flavor of memmove where large block copy can be efficient
+           /* ccomment out: in flavor of memmove where large block copy can be efficient as
+            * in some case memmove can be implemented in SIMD (single instruction multiple data)
+            * instruction.
             *
             * j   = pivot;
             *
