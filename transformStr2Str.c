@@ -233,12 +233,12 @@ int transform(char source[], char target[])
 
 void printHelp(void)
 {
-     fprintf(stderr, "%s [-d] [-h]\n", programName);
+     fprintf(stderr, "%s [-d] [-h] [-s source1,source2,..] [-t target]\n", programName);
      fprintf(stderr, "\n");
-     fprintf(stderr, " -d                             : debug mode to demonstate each step of the moves\n");
-     fprintf(stderr, " -h                             : print this help message\n");
-     fprintf(stderr, " -s source1,source2,source3,... : list of source strings to be transformed into target\n");
-     fprintf(stderr, " -t target                      : target string\n");
+     fprintf(stderr, " -d                     : debug mode to demonstate each step of the moves\n");
+     fprintf(stderr, " -h                     : print this help message\n");
+     fprintf(stderr, " -s source1,source2,... : list of source strings to be transformed into target\n");
+     fprintf(stderr, " -t target              : target string\n");
      fprintf(stderr, "\n");
      fprintf(stderr, " if -t is specified, then source string will be from -s argument or standard input (if -s is not specified)\n");
 }
