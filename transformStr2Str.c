@@ -125,8 +125,7 @@ int transform(char source[], char target[])
     }
 
     i = 0;
-    while ( '\0' != source[i]
-            && count < 50000 ) // a cut over to prevent infinite loop due to coding mistake
+    while ( '\0' != source[i] && count < 50000 ) // a cut over to prevent infinite loop due to coding mistake
     {
         if ( source[i] == target[i] )
         {
@@ -196,7 +195,7 @@ int transform(char source[], char target[])
                }
 
                j++;
-           }
+           } //  while ( '\0' != source[j] )
 
            if ( debug )
            {
@@ -232,7 +231,7 @@ int transform(char source[], char target[])
         } // if ( source[i] == target[i] ) ... else
 
         count++;
-    } //  while ( '\0' != source[i] )
+    } //  while ( '\0' != source[i] && count < 50000 )
 
     return move;
 }
