@@ -162,6 +162,8 @@ int transform(char source[], char target[])
            int numPivotPrior;
 
 
+           move++;
+
            while ( source[j] != '\0' )
            {
                k             = i;
@@ -200,7 +202,7 @@ int transform(char source[], char target[])
            if ( debug )
            {
                printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ",
-                      move + 1, source[pivot], pivot, source);
+                      move, source[pivot], pivot, source);
            }
 
 
@@ -221,8 +223,6 @@ int transform(char source[], char target[])
            {
                printf("%s\n", source);
            }
-
-           move++;
         } // if ( source[i] == target[i] ) ... else
 
         count++;
