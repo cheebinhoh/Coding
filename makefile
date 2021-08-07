@@ -68,4 +68,4 @@ clean:
 test:
 	make all
 	@echo
-	./transformStr2Str.out -d > ./transform_result.txt 
+	./transformStr2Str.out -d > ./transformStr2Str_result.txt

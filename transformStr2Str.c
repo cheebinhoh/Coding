@@ -21,10 +21,10 @@ int   debug = 0;
 char *programName = NULL;
 
 
-/* This method will return further distance of pivot character from
+/* This method will return distance of matching pivot character from
  * the start of the string.
  *
- * E.g. if the string is "abc", and pivot is "b", then answer is 1
+ * E.g. if the string is "abc", and pivot is "b", then answer is 1.
  *
  * if string is "abbc", and pivot is "b", then it is 2 as that is
  * further character "b" on "abbc" string if numPivotPrior is 0, else
@@ -35,7 +35,7 @@ int distanceFromPivot(char string[], char pivot, int numPrecedingPivot)
     int i = 0;
 
 
-    while ( string[i] != '\0' )
+    while ( '\0' != string[i] )
     {
         if ( string[i] == pivot )
         {
@@ -49,7 +49,7 @@ int distanceFromPivot(char string[], char pivot, int numPrecedingPivot)
                int j        = i + 1;
 
 
-               while ( string[j] != '\0' )
+               while ( '\0' != string[j] )
                {
                    if ( string[j] == pivot )
                    {
@@ -82,14 +82,14 @@ int isTransformable(char source[], char target[])
     int tH[256] = { 0 };
 
 
-    while ( source[i] != '\0' )
+    while ( '\0' != source[i] )
     {
         sH[source[i]]++;
 
         i++;
     }
 
-    while ( target[j] != '\0' )
+    while ( '\0' != target[j] )
     {
         tH[target[j]]++;
 
@@ -125,7 +125,7 @@ int transform(char source[], char target[])
     }
 
     i = 0;
-    while ( source[i] != '\0'
+    while ( '\0' != source[i]
             && count < 50000 ) // a cut over to prevent infinite loop due to coding mistake
     {
         if ( source[i] == target[i] )
@@ -163,7 +163,7 @@ int transform(char source[], char target[])
 
            move++;
 
-           while ( source[j] != '\0' )
+           while ( '\0' != source[j] )
            {
                k             = i;
                numPivotPrior = 0;
@@ -217,7 +217,6 @@ int transform(char source[], char target[])
            source[0] = tmp;
            i = 0;
 
-
            if ( debug )
            {
                printf("%s\n", source);
@@ -225,7 +224,7 @@ int transform(char source[], char target[])
         } // if ( source[i] == target[i] ) ... else
 
         count++;
-    } //  while ( source[i] != '\0' )
+    } //  while ( '\0' != source[i] )
 
     return move;
 }
@@ -252,7 +251,9 @@ void runTest(char string[], char target[])
     // is no guarantee that 1st str1 is passed to printf before it is transformed by nested method transform
 
     printf("Transofmr string = %s to %s\n", string, target);
+
     moveCnt = transform(string, target);
+
     printf("after %d move, string = %s\n\n", moveCnt, string);
 }
 
@@ -308,7 +309,7 @@ int main(int argc, char *argv[])
 
     programName = argv[0];
 
-    while ( ( c = getopt(argc, argv, "s:t:dh") ) != -1 )
+    while ( -1 != ( c = getopt(argc, argv, "s:t:dh") ) )
     {
         switch ( c )
         {
