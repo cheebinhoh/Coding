@@ -8,8 +8,7 @@
  * The problem is posted by a friend according to the following link
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
- * I found it interesting enough that I would like to solve it (without looking at any
- * answer :)).
+ * I found it interesting enough that I would like to solve it, here is my answer to it.
  */
 
 #include <stdio.h>
