@@ -5,7 +5,7 @@
  * Find if it’s possible to convert the string. If yes, then output minimum no. of
  * operations required for transformation.
  *
- * The problem is posted by a friend according to the following link
+ * A friend shares above program via the following link
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
  * I found it interesting enough that I would like to solve it, here is my answer to it.
