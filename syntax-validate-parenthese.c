@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
 {
     int c;
     int numOfOpenParenthese = 0;
-    int inString = NO;
+    int inString            = NO;
+
 
     while ( ( c = getchar() ) != EOF )
     {
