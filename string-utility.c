@@ -49,7 +49,7 @@ double atof(char s[])
         i++;
     }
 
-    while ( isdigit( s[i] ) )
+    while ( isdigit(s[i]) )
     {
         value = value * 10 + ( s[i] - '0' );
         i++;
@@ -57,10 +57,11 @@ double atof(char s[])
 
     if ( '.' == s[i++] )
     {
-        while ( isdigit( s[i] ) )
+        while ( isdigit(s[i]) )
         {
-            power = power * 10;
+            power         = power * 10;
             fractionValue = fractionValue * 10 + ( s[i] - '0' );
+
             i++;
         }
 
@@ -68,20 +69,22 @@ double atof(char s[])
 
         if ( 'e' == s[i++] )
         {
-            int exponentSign = 1;
+            int exponentSign  = 1;
             int exponentValue = 0;
+
 
             if ( '-' == s[i] )
             {
-                i++;
                 exponentSign = -1;
+
+                i++;
             }
             else if ( '+' == s[i] )
             {
                 i++;
             }
 
-            while ( isdigit( s[i] ) )
+            while ( isdigit(s[i]) )
             {
                 exponentValue = exponentValue * 10 + ( s[i] - '0' );
 
@@ -92,6 +95,7 @@ double atof(char s[])
             while ( exponentValue > 0 )
             {
                 power = power * 10;
+
                 exponentValue--;
             }
 
@@ -179,6 +183,7 @@ void squeeze1(char s[], char c)
         {
             int j = i;
 
+
             while ( ( s[j] = s[j + 1] ) != '\0' )
                 j++;
 
@@ -211,6 +216,7 @@ void squeeze2(char s[], char c)
         {
             j = i;
 
+
             while ( ( s[j] = s[j + 1] ) != '\0' )
                 j++;
         }
@@ -223,9 +229,10 @@ void reverse(char s[])
     char *p;
     char  tmpc;
 
+
     lastp = s;
-    p = s;
-    while ( *p != '\0' )
+    p     = s;
+    while ( '\0' != *p )
     {
         lastp = p;
         p++;
@@ -234,8 +241,8 @@ void reverse(char s[])
     p = s;
     while ( p != lastp )
     {
-        tmpc = *p;
-        *p = *lastp;
+        tmpc   = *p;
+        *p     = *lastp;
         *lastp = tmpc;
 
         p++;
