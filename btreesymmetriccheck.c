@@ -49,7 +49,7 @@ void linearTree(struct TreeNode  *root,
                      list,
                      listCnt);
         }
-    }
+    } /* if ( NULL == root ) ... else */
 }
 
 
@@ -66,7 +66,7 @@ int treeIsSysmetric(struct TreeNode *root)
     {
         struct TreeNode *leftList[100];
         struct TreeNode *rightList[100];
-        int              leftListCnt = 0;
+        int              leftListCnt  = 0;
         int              rightListCnt = 0;
         int              i;
 
@@ -78,6 +78,7 @@ int treeIsSysmetric(struct TreeNode *root)
         for ( i = 0; i < leftListCnt; i++ )
         {
             struct TreeNode *node;
+
 
             node = leftList[i];
             if ( NULL == node )
@@ -96,6 +97,7 @@ int treeIsSysmetric(struct TreeNode *root)
         for ( i = 0; i < rightListCnt; i++ )
         {
             struct TreeNode *node;
+
 
             node = rightList[i];
             if ( NULL == node )
@@ -134,7 +136,7 @@ int treeIsSysmetric(struct TreeNode *root)
 
             return 1;
         }
-    }
+    } /* if ( NULL == root ) ... else */
 }
 
 
