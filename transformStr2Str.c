@@ -369,7 +369,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        while ( NULL != fgets(source, sizeof( source ) - 1, stdin) )
+        while ( fgets(source, sizeof( source ) - 1, stdin) != NULL )
         {
             int len = strlen(source);
 
