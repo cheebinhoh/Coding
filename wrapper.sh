@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 PATH=$PATH:.
 
 programName=`basename $0 | sed -e 's/\...$//g'`.out
