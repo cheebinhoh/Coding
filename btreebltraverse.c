@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "btree.h"
 
+
 /* This is recursive method to do breadth level traversel, the logic is simple:
  * - we maintain two lists:
  * - first level is the Nth level nodes of the tree.
@@ -25,6 +26,7 @@ void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
     if ( currentLevelCnt > 0 )
     {
         int i;
+
 
         for ( i = 0; i < currentLevelCnt; i++ )
         {
@@ -141,7 +143,7 @@ void breadthLevelTraversal(struct TreeNode *root)
 {
     struct TreeNode *nextLevelList[100];
     struct TreeNode *currentLevelList[100];
-    int              nextLevelCnt = 0;
+    int              nextLevelCnt    = 0;
     int              currentLevelCnt = 0;
 
 
@@ -189,6 +191,7 @@ int main(int argc, char * argv[])
 {
     struct TreeNode *root  = NULL;
     struct TreeNode *other = NULL;
+
 
     root = malloc(sizeof( struct TreeNode));
     root->val = 0;
