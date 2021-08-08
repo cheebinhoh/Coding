@@ -7,6 +7,7 @@
 
 #define ARRAY_COUNT(array)  ( sizeof((array)) / sizeof((array)[0]) )
 
+
 int main(int argc, char *argvp[])
 {
     int array[] = { 3, 8, 1, 5, 9, 2, 6, 4, 7 };
