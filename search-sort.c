@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     int index;
 
 
-    printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list ) ) );
+    printf("-- is sorted = %d\n", isSorted(list, ARRAY_COUNT( list )));
     shellSort(list, ARRAY_COUNT( list ));
     for ( index = 0; index < ARRAY_COUNT( list ); index++ )
     {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     printf("\n");
 
-    printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list ) ));
+    printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list )));
 
     return 0;
 }
@@ -92,10 +92,10 @@ void quickSort(int list[], int size)
             // original item at position pivot - 1 is moved to the position ith
             // original item at position ith is moved to the original pivot position
 
-            tmp = list[i];
-            list[i] = list[pivot - 1];
+            tmp             = list[i];
+            list[i]         = list[pivot - 1];
             list[pivot - 1] = list[pivot];
-            list[pivot] = tmp;
+            list[pivot]     = tmp;
 
             pivot--;
         }
@@ -136,10 +136,11 @@ void shellSort(int list[], int size)
         {
             for ( i = j - gap; i >= 0 && list[i] > list[i + gap]; i = i - gap )
             {
-                count++;
-                tmp = list[i];
-                list[i] = list[i + gap];
+                tmp           = list[i];
+                list[i]       = list[i + gap];
                 list[i + gap] = tmp;
+
+                count++;
             }
         }
     }
@@ -167,9 +168,10 @@ void insertionSort(int list[], int size)
 
         for ( j = i - 1; j >= 0 && list[j] > tmp; j-- )
         {
-            count++;
             list[j + 1] = list[j];
-            list[j] = tmp;
+            list[j]     = tmp;
+ 
+            count++;
         }
     }
 
@@ -193,10 +195,11 @@ void bubbleSort(int list[], int size)
         {
             if ( list[j] > list[j + 1] )
             {
-                count++;
-                tmp = list[j];
-                list[j] = list[j + 1];
+                tmp         = list[j];
+                list[j]     = list[j + 1];
                 list[j + 1] = tmp;
+
+                count++;
             }
         }
     }
