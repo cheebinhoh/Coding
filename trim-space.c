@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
                }
 
                tokenIndex = 0;
+
                numOfNewLine++;
            }
            else
@@ -43,8 +44,9 @@ int main(int argc, char *argv[])
                if ( tokenIndex <= 0
                     || tokenList[tokenIndex - 1].ch != c )
                {
-                   tokenList[tokenIndex].ch = c;
+                   tokenList[tokenIndex].ch    = c;
                    tokenList[tokenIndex].count = 1;
+
                    tokenIndex++;
                }
                else
@@ -58,6 +60,7 @@ int main(int argc, char *argv[])
            while ( numOfNewLine > 1 )
            {
                putchar('\n');
+
                numOfNewLine--;
            }
 
@@ -69,8 +72,9 @@ int main(int argc, char *argv[])
                }
            }
 
-           tokenIndex = 0;
+           tokenIndex   = 0;
            numOfNewLine = 0;
+
            putchar(c);
        }
     }
