@@ -123,8 +123,8 @@ struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
             }
 
             return NULL;
-        }
-    }
+        } /* if ( val1 == val2 && val2 == root->val ) ... else */
+    } /* if ( NULL == root ) ... else */
 
     return NULL;
 }
@@ -157,6 +157,7 @@ int main(int argc, char * argv[])
 {
     struct TreeNode *root  = NULL;
     struct TreeNode *other = NULL;
+
 
     root = malloc(sizeof( struct TreeNode));
     root->val = 0;
@@ -238,7 +239,6 @@ int main(int argc, char * argv[])
     {
         printf("The least common ancestor of 3 and 8 is %d\n", other->val);
     }
-
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
