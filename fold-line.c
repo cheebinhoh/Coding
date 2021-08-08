@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     int   bufferUsed             = 0;
     char  buffer[BUFFERSIZE + 1] = { '\0' };
 
+
     programName = basename(argv[0]);
 
     while ( ( c = getopt(argc, argv, "m:") ) != -1 )
@@ -59,6 +60,7 @@ int main(int argc, char *argv[])
         else
         {
             char *cptr = &buffer[bufferUsed - 1];
+
 
             while ( ' ' != *cptr
                     && cptr != buffer )
@@ -104,8 +106,8 @@ int main(int argc, char *argv[])
 
             buffer[bufferUsed++] = c;
             buffer[bufferUsed] = '\0';
-        }
-    }
+        } /* if ( bufferUsed < maxline ) ... else */
+    } /* while ( ( c = getchar() ) != EOF ) */
 
     if ( bufferUsed > 0 )
     {
