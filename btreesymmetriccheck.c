@@ -70,6 +70,7 @@ int treeIsSysmetric(struct TreeNode *root)
         int              rightListCnt = 0;
         int              i;
 
+
         linearTree(root, 1, leftList, &leftListCnt);
         linearTree(root, 0, rightList, &rightListCnt);
 
