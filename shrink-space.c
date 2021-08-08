@@ -19,14 +19,15 @@ int main(int argc, char *argv[])
             if ( ! prevIsBlank )
             {
                 putchar(c);
+
                 prevIsBlank = 1;
             }
         }
         else
         {
-            prevIsBlank = 0;
-
             putchar(c);
+
+            prevIsBlank = 0;
         }
     }
 
