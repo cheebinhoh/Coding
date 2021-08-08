@@ -23,6 +23,7 @@ void printNTreeInSingleLevel(struct NTreeNode **list,
 {
     int n;
 
+
     printf("level %d = ", level);
 
     for ( n = 0; n < listCnt; n++ )
@@ -96,7 +97,7 @@ struct TreeNode * ntree2btreeInternal(struct TreeNode  *broot,
 
     for ( n = 0; n < listCnt; n++ )
     {
-        node = malloc(sizeof( struct TreeNode ) );
+        node      = malloc(sizeof( struct TreeNode ) );
         node->val = list[n]->val;
 
         if ( NULL == broot )
