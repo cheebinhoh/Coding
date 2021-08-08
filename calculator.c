@@ -158,7 +158,7 @@ int evaluate(char s[])
     opIndex         = 0;
     precedenceIndex = 0;
 
-    while ( *p != '\0' )
+    while ( '\0' != *p )
     {
         p = skipWhitespace(p);
 
@@ -176,6 +176,7 @@ int evaluate(char s[])
             {
                 int loopCnt = numberIndex - startNumberIndex;
 
+
                 while ( loopCnt >= 2 )
                 {
                     evaluateBinaryExpr(number, &numberIndex, op, &opIndex);
@@ -190,6 +191,7 @@ int evaluate(char s[])
             if ( opIndex > 0 )
             {
                 struct OpToken top;
+
 
                 top = op[opIndex - 1];
                 if ( '-' == top.op
@@ -211,12 +213,13 @@ int evaluate(char s[])
             }
             else if ( opIndex > 0 )
             {
-                int prevOp = op[opIndex - 1].op;
+                int prevOp    = op[opIndex - 1].op;
                 int prevOpPos = getPrecedence(prevOp);
-                int newOpPos = getPrecedence(newOp);
+                int newOpPos  = getPrecedence(newOp);
                 int opr1;
                 int opr2;
                 int result;
+
 
                 if ( prevOpPos <= newOpPos
                      && ( precedenceIndex <= 0
@@ -249,6 +252,7 @@ int main(int argc, char *argv[])
     char s3[] = "( 2 ) * 3";
     char s4[] = "3 + -2";
     char s5[] = "( 3 + ( -1 ) ) * 3";
+
 
     printf("calculation of %s = %d\n", s1, evaluate(s1));
     printf("calculation of %s = %d\n", s2, evaluate(s2));
