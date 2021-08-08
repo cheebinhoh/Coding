@@ -35,6 +35,7 @@ int btreePathSumInternal(struct TreeNode *root,
     {
         int ret = 0;
 
+
         sum += root->val;
 
         if ( NULL != root->left )
