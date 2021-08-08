@@ -46,9 +46,9 @@ void postOrderTraversal(struct TreeNode* root)
      struct TreeNode *rightPendingList[100];
      struct TreeNode *topPendingList[100];
      int              rightPendingIndex = 0;
-     int              topPendingIndex = 0;
-     int              count = 0;             // a fail-safe to prevent infinite loop while I program it
-     int              start = 0;
+     int              topPendingIndex   = 0;
+     int              count             = 0; // a fail-safe to prevent infinite loop while I program it
+     int              start             = 0;
 
 
      while ( NULL != root
@@ -114,8 +114,8 @@ void inOrderTraversal(struct TreeNode *root)
 {
     struct TreeNode *topPendingList[100];
     int              topPendingListIndex = 0;
-    int              count = 0;
-    int              start = 0;
+    int              count               = 0;
+    int              start               = 0;
 
 
     while ( NULL != root
