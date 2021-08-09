@@ -8,7 +8,10 @@
  * A friend shares above program via the following link
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
- * I found it interesting enough that I would like to solve it, here is my answer to it.
+ * I found it interesting enough that I would like to solve it, here is my answer to it,
+ * unfornately, my answer does not give the minimum move in all cases as it is only looking
+ * at one character at source and its matching character in target than consider a group of characters
+ * at a time.
  */
 
 #include <stdio.h>
@@ -137,23 +140,20 @@ int transform(char source[], char target[])
            // ith position in source that we want to move to the front.
            //
            // It will go through all characters after ith position in source and look up same
-           // character position in target ith or after that position.
+           // character position in target ith position or after that.
            //
-           // if a character is in jth position in source, but it is before jth in target, then it
-           // is potential character to move to the front in source (as it is too way behind in target
-           // position), and we want to move the the character where its gap in target and current
-           // position in source is largest one.
+           // if a character is in jth position in source, but it is in position before jth in target, 
+           // then it is a potential character to move to the front in source (as it is supposed to be
+           // in front position according to target string), and we pick the jth position in source that
+           // the gap between its position in source and position in target is the largest one.
            //
-           // A few guards are employed to make sure that we do not fall into infinite loop
-           // - if same character appears a few time in target, we pick the position in target that
-           //   is furthest position in target string to compare it with source character position.
-           // - if we are looking for jth character (of source) in target, and target expects same character
-           //   on position after ith (position that mismatch logic is triggered) but before jth, then we
-           //   not look for character furthest position in target, but first encountered character position.
+           // A couple of tricks are important:
+           // - if source is "ACBB" and target is "ABCB",
+           // 
 
            int j     = i + 1;
            int pivot = i + 1;
-           int gap   = 0;
+           int gap   = 1;
            int tmp;
            int pos;
            int k;
@@ -284,8 +284,12 @@ void runSampleTest(void)
     char str13[]   = "Crprogamming";
     char str14[]   = "Cproggrammin";
     char target4[] = "Cprogramming";
-
-
+    char str15[]   = "Hlelo";
+    char str16[]   = "Helol";
+    char target5[] = "Hello";
+    char str17[]   = "ACCBB";
+    char target6[] = "ABCBC";
+ 
     runTest(str1, target1);
     runTest(str2, target1);
     runTest(str3, target1);
@@ -303,6 +307,20 @@ void runSampleTest(void)
 
     runTest(str13, target4);
     runTest(str14, target4);
+
+    runTest(str15, target5);
+    runTest(str16, target5);
+
+    /* TODO: unfortunately, minimum moves is 5, but we give 6 moves.
+       target = ABCBC
+
+     ACCBB -> CACBB
+     CACBB -> BCACB
+     BCACB -> CBCAB
+     CBCAB -> BCBCA
+     BCBCA -> ABCBC
+     */
+    runTest(str17, target6);
 }
 
 

@@ -108,3 +108,23 @@ Transofmr string = Cproggrammin to Cprogramming
 ---- Move 34, pick C ( 2) and insert at the front, prCogramming => Cprogramming
 after 34 move, string = Cprogramming
 
+Transofmr string = Hlelo to Hello
+---- Move  1, pick e ( 2) and insert at the front, Hlelo => eHllo
+---- Move  2, pick H ( 1) and insert at the front, eHllo => Hello
+after 2 move, string = Hello
+
+Transofmr string = Helol to Hello
+---- Move  1, pick l ( 4) and insert at the front, Helol => lHelo
+---- Move  2, pick e ( 2) and insert at the front, lHelo => elHlo
+---- Move  3, pick H ( 2) and insert at the front, elHlo => Hello
+after 3 move, string = Hello
+
+Transofmr string = ACCBB to ABCBC
+---- Move  1, pick B ( 4) and insert at the front, ACCBB => BACCB
+---- Move  2, pick B ( 4) and insert at the front, BACCB => BBACC
+---- Move  3, pick A ( 2) and insert at the front, BBACC => ABBCC
+---- Move  4, pick C ( 3) and insert at the front, ABBCC => CABBC
+---- Move  5, pick B ( 2) and insert at the front, CABBC => BCABC
+---- Move  6, pick A ( 2) and insert at the front, BCABC => ABCBC
+after 6 move, string = ABCBC
+
