@@ -89,10 +89,7 @@ int isTransformable(char source[], char target[])
 }
 
 
-void simulateMoveAndScore(char  source[],
-                          char  target[],
-                          int   j,
-                          int  *scoreRet)
+int simulateMoveAndScore(char source[], char target[], int j)
 {
     int m;
     int n;
@@ -150,7 +147,7 @@ void simulateMoveAndScore(char  source[],
     memmove(source, source + 1, j);
     source[j] = tmp;
 
-    *scoreRet = score;
+    return score;
 }
 
 int transform(char source[], char target[])
@@ -183,7 +180,7 @@ int transform(char source[], char target[])
 
             while ( '\0' != source[j] )
             {
-                simulateMoveAndScore(source, target, j, &score);
+                score = simulateMoveAndScore(source, target, j);
 
                 if ( debug && 0 )
                 {
