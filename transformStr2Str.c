@@ -163,7 +163,11 @@ int transform(char source[], char target[])
 
                 source[j] = tmp;
 
-                //printf("--- j = %d, source = %c, score = %d\n", j, source[j], score);
+                if ( debug && 0 ) 
+                {
+                    printf("---- j = %d, source = %c, score = %d, highestScore = %d\n",
+                           j, source[j], score, highestScore);
+                }
 
                 if ( score >= highestScore )
                 {
