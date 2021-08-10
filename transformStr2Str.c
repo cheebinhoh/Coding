@@ -163,6 +163,8 @@ int transform(char source[], char target[])
 
                 source[j] = tmp;
 
+                //printf("--- j = %d, source = %c, score = %d\n", j, source[j], score);
+
                 if ( score >= highestScore )
                 {
                     pivot        = j;
