@@ -21,57 +21,6 @@ int   debug = 0;
 char *programName = NULL;
 
 
-/* This method will return distance of matching pivot character from
- * the start of the string.
- *
- * E.g. if the string is "abc", and pivot is "b", then answer is 1.
- *
- * if string is "abbc", and pivot is "b", then it is 2 as that is
- * further character "b" on "abbc" string if numPivotPrior is 0, else
- * it is 1.
- */
-int distanceFromPivot(char string[], char pivot, int numPrecedingPivot)
-{
-    int i = 0;
-
-
-    while ( '\0' != string[i] )
-    {
-        if ( string[i] == pivot )
-        {
-           if ( numPrecedingPivot > 0 )
-           {
-               break;
-           }
-           else
-           {
-               int hasOther = 0;
-               int j        = i + 1;
-
-
-               while ( '\0' != string[j] )
-               {
-                   if ( string[j] == pivot )
-                   {
-                       hasOther = 1;
-                   }
-
-                   j++;
-               }
-
-               if ( ! hasOther  )
-               {
-                   break;
-               }
-           }
-        }
-
-        i++;
-    }
-
-    return i;
-}
-
 /* It returns 1 if source can be translated into target, else 0.
  */
 int isTransformable(char source[], char target[])
@@ -159,7 +108,14 @@ int transform(char source[], char target[])
 
                 source[0] = tmp;
 
-                // scoring it
+                // Scoring it, the logic is that:
+                // - if source and target characters at m and n are matched, plus 1
+                // - if they are not matched, we fast forward target to find next nth in
+                //   target that matches the source.
+                // ---- if next nth matching source is found, then we reset the score to 0.
+                // ---- if it is not found, we skip the m and n, and compare next set of 
+                //      characters.
+
                 score = 0;
 
                 n = 0;
@@ -169,7 +125,7 @@ int transform(char source[], char target[])
                 {
                     if ( source[m] == target[n] )
                     {
-                        score += 1;
+                        score++;
                         n++;
                         m++;
                     }
@@ -178,7 +134,7 @@ int transform(char source[], char target[])
                         char *c;
 
 
-                        c  = strchr(target + n, source[m]);
+                        c = strchr(target + n, source[m]);
 
                         if ( NULL == c )
                         {
@@ -187,7 +143,7 @@ int transform(char source[], char target[])
                         else
                         {
                             score = 0;
-                            n = c - target;
+                            n     = c - target;
                         }
                     }
                 }
@@ -203,6 +159,7 @@ int transform(char source[], char target[])
 
                 source[j] = tmp;
 
+
                 if ( score >= highestScore )
                 {
                     pivot        = j;
@@ -210,8 +167,8 @@ int transform(char source[], char target[])
                 }
 
                 j++;
-            }
-
+            } /* while ( '\0' != source[j] ) */
+ 
             move++;
 
             if ( debug )
@@ -262,7 +219,7 @@ void runTest(char string[], char target[])
 
     moveCnt = transform(string, target);
 
-    printf("after %d move, string = %s\n\n", moveCnt, string);
+    printf("Total move %2d, string = %s\n\n", moveCnt, string);
 }
 
 void runSampleTest(void)
