@@ -159,7 +159,6 @@ int transform(char source[], char target[])
 
                 source[j] = tmp;
 
-
                 if ( score >= highestScore )
                 {
                     pivot        = j;
