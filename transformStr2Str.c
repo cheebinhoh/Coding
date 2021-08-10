@@ -141,88 +141,91 @@ int transform(char source[], char target[])
 
             while ( '\0' != source[j] )
             {
-            int m;
-            int n;
-            int k;
-            int score;
+                int m;
+                int n;
+                int k;
+                int score;
 
-            tmp = source[j];
 
-            k   = j;
-            while ( k > 0 )
-            {
-               source[k] = source[k - 1];
-            k--;
-            }
+                tmp = source[j];
+
+                k   = j;
+                while ( k > 0 )
+                {
+                    source[k] = source[k - 1];
+                    k--;
+                }
 
                 source[0] = tmp;
 
-            // scoring it
-            score = 0;
+                // scoring it
+                score = 0;
 
-            m = n = 0;
-            while ( '\0' != source[m]
-                   && '\0' != target[n] )
+                m = n = 0;
+                while ( '\0' != source[m]
+                        && '\0' != target[n] )
                 {
-               if ( source[m] == target[n] )
-            {
-               score += 1;
-            n++;
-            m++;
-            }
-            else
-            {
-               char *c;
+                    if ( source[m] == target[n] )
+                    {
+                        score += 1;
+                        n++;
+                        m++;
+                    }
+                    else
+                    {
+                        char *c;
 
-                        c     = strchr(target + n, source[m]);
+
+                        c  = strchr(target + n, source[m]);
 
                         if ( NULL == c )
+                        {
                             m++;
-            else
+                        }
+                        else
+                        {
+                            score = 0;
+                            n = c - target;
+                        }
+                    }
+                }
+
+                // restore original string
+                k = 0;
+                while ( k < j )
+                {
+                    source[k] = source[k + 1];
+                    k++;
+                }
+
+                source[j] = tmp;
+
+                if ( score >= highestScore )
+                {
+                    pivot        = j;
+                   highestScore = score;
+                }
+
+                j++;
+            }
+
+            move++;
+
+            if ( debug )
             {
-               score = 0;
-            n = c - target;
-            }
-            }
+                printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ",
+                       move, source[pivot], pivot, source);
             }
 
-            // restore original string
-            k = 0;
-            while ( k < j )
+            tmp = source[pivot];
+            memmove(source + 1, source, pivot);
+            source[0] = tmp;
+            i = 0;
+
+            if ( debug )
             {
-               source[k] = source[k + 1];
-            k++;
+                printf("%s\n", source);
             }
-
-            source[j] = tmp;
-
-            if ( score >= highestScore )
-            {
-               pivot        = j;
-            highestScore = score;
-            }
-
-
-            j++;
-            }
-
-           move++;
-
-           if ( debug )
-           {
-               printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ",
-                      move, source[pivot], pivot, source);
-           }
-
-           tmp = source[pivot];
-           memmove(source + 1, source, pivot);
-           source[0] = tmp;
-           i = 0;
-
-           if ( debug )
-           {
-               printf("%s\n", source);
-           }
         } // if ( source[i] == target[i] ) ... else
 
         count++;
