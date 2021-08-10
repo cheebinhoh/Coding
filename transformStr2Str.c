@@ -113,7 +113,7 @@ int transform(char source[], char target[])
                 // - if they are not matched, we fast forward target to find next nth in
                 //   target that matches the source.
                 // ---- if next nth matching source is found, then we reset the score to 0.
-                // ---- if it is not found, we skip the m and n, and compare next set of 
+                // ---- if it is not found, we skip the m and n, and compare next set of
                 //      characters.
 
                 score = 0;
@@ -167,7 +167,7 @@ int transform(char source[], char target[])
 
                 j++;
             } /* while ( '\0' != source[j] ) */
- 
+
             move++;
 
             if ( debug )
