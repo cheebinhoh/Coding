@@ -138,6 +138,7 @@ int transform(char source[], char target[])
             int highestScore = 0;
             int j            = i + 1;
 
+
             while ( '\0' != source[j] )
             {
                 int m;
@@ -148,10 +149,11 @@ int transform(char source[], char target[])
 
                 tmp = source[j];
 
-                k   = j;
+                k = j;
                 while ( k > 0 )
                 {
                     source[k] = source[k - 1];
+
                     k--;
                 }
 
@@ -160,7 +162,8 @@ int transform(char source[], char target[])
                 // scoring it
                 score = 0;
 
-                m = n = 0;
+                n = 0;
+                m = 0;
                 while ( '\0' != source[m]
                         && '\0' != target[n] )
                 {
@@ -194,6 +197,7 @@ int transform(char source[], char target[])
                 while ( k < j )
                 {
                     source[k] = source[k + 1];
+
                     k++;
                 }
 
@@ -202,7 +206,7 @@ int transform(char source[], char target[])
                 if ( score >= highestScore )
                 {
                     pivot        = j;
-                   highestScore = score;
+                    highestScore = score;
                 }
 
                 j++;
