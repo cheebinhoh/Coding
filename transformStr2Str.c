@@ -225,7 +225,7 @@ void runTest(char string[], char target[])
 
     moveCnt = transform(string, target);
 
-    printf("Total move %2d, string = %s\n\n", moveCnt, string);
+    printf("Total move = %2d, string = %s\n\n", moveCnt, string);
 }
 
 void runSampleTest(void)
