@@ -310,14 +310,6 @@ void runSampleTest(void)
     runTest(str15, target5);
     runTest(str16, target5);
 
-    /* TODO: unfortunately, minimum moves is 5, but we give 6 moves.
-       target = ABCBC
-     ACCBB -> CACBB
-     CACBB -> BCACB
-     BCACB -> CBCAB
-     CBCAB -> BCBCA
-     BCBCA -> ABCBC
-     */
     runTest(str17, target6);
 }
 
