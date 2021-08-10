@@ -9,9 +9,7 @@
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
  * I found it interesting enough that I would like to solve it, here is my answer to it,
- * unfornately, my answer does not give the minimum move in all cases as it is only looking
- * at one character at source and its matching character in target than consider a group of characters
- * at a time.
+ * unfornately.
  */
 
 #include <stdio.h>
@@ -136,66 +134,79 @@ int transform(char source[], char target[])
         }
         else
         {
-           // So that source[i] != target[i] and we want to decide which of the character after
-           // ith position in source that we want to move to the front.
-           //
-           // It will go through all characters after ith position in source and look up same
-           // character position in target ith position or after that.
-           //
-           // if a character is in jth position in source, but it is in position before jth in target, 
-           // then it is a potential character to move to the front in source (as it is supposed to be
-           // in front position according to target string), and we pick the jth position in source that
-           // the gap between its position in source and position in target is the largest one.
-           //
-           // A couple of tricks are important:
-           // - if source is "ACBB" and target is "ABCB",
-           // 
+            int tmp;
+            int pivot        = i + 1;
+            int highestScore = 0;
+            int j            = i + 1;
 
-           int j     = i + 1;
-           int pivot = i + 1;
-           int gap   = 1;
-           int tmp;
-           int pos;
-           int k;
-           int numPivotPrior;
+            while ( '\0' != source[j] )
+            {
+            int m;
+            int n;
+            int k;
+            int score;
 
+            tmp = source[j];
+
+            k   = j;
+            while ( k > 0 )
+            {
+               source[k] = source[k - 1];
+            k--;
+            }
+
+                source[0] = tmp;
+
+            // scoring it
+            score = 0;
+
+            m = n = 0;
+            while ( '\0' != source[m]
+                   && '\0' != target[n] )
+                {
+               if ( source[m] == target[n] )
+            {
+               score += 1;
+            n++;
+            m++;
+            }
+            else
+            {
+               char *c;
+
+                        c     = strchr(target + n, source[m]);
+
+                        if ( NULL == c )
+                            m++;
+            else
+            {
+               score = 0;
+            n = c - target;
+            }
+            }
+            }
+
+            // restore original string
+            k = 0;
+            while ( k < j )
+            {
+               source[k] = source[k + 1];
+            k++;
+            }
+
+            source[j] = tmp;
+
+            if ( score >= highestScore )
+            {
+               pivot        = j;
+            highestScore = score;
+            }
+
+
+            j++;
+            }
 
            move++;
-
-           while ( '\0' != source[j] )
-           {
-               k             = i;
-               numPivotPrior = 0;
-
-
-               while ( k < j )
-               {
-                   if ( target[k] == source[j] )
-                   {
-                       numPivotPrior++;
-                   }
-
-                   if ( source[k] == source[j] )
-                   {
-                       numPivotPrior--;
-                   }
-
-                   k++;
-               }
-
-               pos = distanceFromPivot(target + i, source[j], numPivotPrior) + i;
-
-               if ( pos < j)
-               {
-                   if ( ( j - pos ) >= gap )
-                   {
-                       gap = j - pos;
-                       pivot = j;
-                   }
-               }
-
-               j++;
-           } //  while ( '\0' != source[j] )
 
            if ( debug )
            {
@@ -203,23 +214,7 @@ int transform(char source[], char target[])
                       move, source[pivot], pivot, source);
            }
 
-
            tmp = source[pivot];
-
-
-           /* ccomment out: in flavor of memmove where large block copy can be efficient as
-            * in some case memmove can be implemented in SIMD (single instruction multiple data)
-            * instruction.
-            *
-            * j   = pivot;
-            *
-            * while ( j > 0 )
-            * {
-            *     source[j] = source[j - 1];
-            *     j--;
-            * }
-            */
-
            memmove(source + 1, source, pivot);
            source[0] = tmp;
            i = 0;
@@ -257,7 +252,7 @@ void runTest(char string[], char target[])
     // because comma separator on function arguments are not sequencing point, there
     // is no guarantee that 1st str1 is passed to printf before it is transformed by nested method transform
 
-    printf("Transofmr string = %s to %s\n", string, target);
+    printf("Transform string = %s to %s\n", string, target);
 
     moveCnt = transform(string, target);
 
@@ -289,7 +284,7 @@ void runSampleTest(void)
     char target5[] = "Hello";
     char str17[]   = "ACCBB";
     char target6[] = "ABCBC";
- 
+
     runTest(str1, target1);
     runTest(str2, target1);
     runTest(str3, target1);
@@ -303,6 +298,7 @@ void runSampleTest(void)
 
     runTest(str10, target3);
     runTest(str11, target3);
+
     runTest(str12, target3);
 
     runTest(str13, target4);
@@ -313,7 +309,6 @@ void runSampleTest(void)
 
     /* TODO: unfortunately, minimum moves is 5, but we give 6 moves.
        target = ABCBC
-
      ACCBB -> CACBB
      CACBB -> BCACB
      BCACB -> CBCAB
@@ -364,7 +359,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-
+    debug = 1;
     if ( NULL == targetArg )
     {
         runSampleTest();

@@ -170,7 +170,7 @@ void insertionSort(int list[], int size)
         {
             list[j + 1] = list[j];
             list[j]     = tmp;
- 
+
             count++;
         }
     }
