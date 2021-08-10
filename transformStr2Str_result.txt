@@ -1,65 +1,65 @@
-Transform string = EACBD to EABCD
+Transform string from EACBD to EABCD
 ---- Move  1, pick B ( 3) and insert at the front, EACBD => BEACD
 ---- Move  2, pick A ( 2) and insert at the front, BEACD => ABECD
 ---- Move  3, pick E ( 2) and insert at the front, ABECD => EABCD
 Total move =  3, string = EABCD
 
-Transform string = CABED to EABCD
+Transform string from CABED to EABCD
 ---- Move  1, pick B ( 2) and insert at the front, CABED => BCAED
 ---- Move  2, pick A ( 2) and insert at the front, BCAED => ABCED
 ---- Move  3, pick E ( 3) and insert at the front, ABCED => EABCD
 Total move =  3, string = EABCD
 
-Transform string = EACBD to EABCD
+Transform string from EACBD to EABCD
 ---- Move  1, pick B ( 3) and insert at the front, EACBD => BEACD
 ---- Move  2, pick A ( 2) and insert at the front, BEACD => ABECD
 ---- Move  3, pick E ( 2) and insert at the front, ABECD => EABCD
 Total move =  3, string = EABCD
 
-Transform string = ABECD to EABCD
+Transform string from ABECD to EABCD
 ---- Move  1, pick E ( 2) and insert at the front, ABECD => EABCD
 Total move =  1, string = EABCD
 
-Transform string = ACEBD to EABCD
+Transform string from ACEBD to EABCD
 ---- Move  1, pick B ( 3) and insert at the front, ACEBD => BACED
 ---- Move  2, pick A ( 1) and insert at the front, BACED => ABCED
 ---- Move  3, pick E ( 3) and insert at the front, ABCED => EABCD
 Total move =  3, string = EABCD
 
-Transform string = ABCDE to EABCD
+Transform string from ABCDE to EABCD
 ---- Move  1, pick E ( 4) and insert at the front, ABCDE => EABCD
 Total move =  1, string = EABCD
 
-Transform string = DEABC to EABCD
+Transform string from DEABC to EABCD
 ---- Move  1, pick C ( 4) and insert at the front, DEABC => CDEAB
 ---- Move  2, pick B ( 4) and insert at the front, CDEAB => BCDEA
 ---- Move  3, pick A ( 4) and insert at the front, BCDEA => ABCDE
 ---- Move  4, pick E ( 4) and insert at the front, ABCDE => EABCD
 Total move =  4, string = EABCD
 
-Transform string = OHH to HOH
+Transform string from OHH to HOH
 ---- Move  1, pick H ( 2) and insert at the front, OHH => HOH
 Total move =  1, string = HOH
 
-Transform string = HHO to HOH
+Transform string from HHO to HOH
 ---- Move  1, pick O ( 2) and insert at the front, HHO => OHH
 ---- Move  2, pick H ( 2) and insert at the front, OHH => HOH
 Total move =  2, string = HOH
 
-Transform string = HCEE to CHEE
+Transform string from HCEE to CHEE
 ---- Move  1, pick C ( 1) and insert at the front, HCEE => CHEE
 Total move =  1, string = CHEE
 
-Transform string = HEEC to CHEE
+Transform string from HEEC to CHEE
 ---- Move  1, pick C ( 3) and insert at the front, HEEC => CHEE
 Total move =  1, string = CHEE
 
-Transform string = ECEH to CHEE
+Transform string from ECEH to CHEE
 ---- Move  1, pick H ( 3) and insert at the front, ECEH => HECE
 ---- Move  2, pick C ( 2) and insert at the front, HECE => CHEE
 Total move =  2, string = CHEE
 
-Transform string = Crprogamming to Cprogramming
+Transform string from Crprogamming to Cprogramming
 ---- Move  1, pick g ( 5) and insert at the front, Crprogamming => gCrproamming
 ---- Move  2, pick o ( 5) and insert at the front, gCrproamming => ogCrpramming
 ---- Move  3, pick r ( 5) and insert at the front, ogCrpramming => rogCrpamming
@@ -67,7 +67,7 @@ Transform string = Crprogamming to Cprogramming
 ---- Move  5, pick C ( 4) and insert at the front, progCramming => Cprogramming
 Total move =  5, string = Cprogramming
 
-Transform string = Cproggrammin to Cprogramming
+Transform string from Cproggrammin to Cprogramming
 ---- Move  1, pick n (11) and insert at the front, Cproggrammin => nCproggrammi
 ---- Move  2, pick i (11) and insert at the front, nCproggrammi => inCproggramm
 ---- Move  3, pick m (11) and insert at the front, inCproggramm => minCproggram
@@ -81,18 +81,18 @@ Transform string = Cproggrammin to Cprogramming
 ---- Move 11, pick C (10) and insert at the front, programminCg => Cprogramming
 Total move = 11, string = Cprogramming
 
-Transform string = Hlelo to Hello
+Transform string from Hlelo to Hello
 ---- Move  1, pick e ( 2) and insert at the front, Hlelo => eHllo
 ---- Move  2, pick H ( 1) and insert at the front, eHllo => Hello
 Total move =  2, string = Hello
 
-Transform string = Helol to Hello
+Transform string from Helol to Hello
 ---- Move  1, pick l ( 4) and insert at the front, Helol => lHelo
 ---- Move  2, pick e ( 2) and insert at the front, lHelo => elHlo
 ---- Move  3, pick H ( 2) and insert at the front, elHlo => Hello
 Total move =  3, string = Hello
 
-Transform string = ACCBB to ABCBC
+Transform string from ACCBB to ABCBC
 ---- Move  1, pick B ( 4) and insert at the front, ACCBB => BACCB
 ---- Move  2, pick C ( 3) and insert at the front, BACCB => CBACB
 ---- Move  3, pick B ( 4) and insert at the front, CBACB => BCBAC

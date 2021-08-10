@@ -221,7 +221,7 @@ void runTest(char string[], char target[])
     // because comma separator on function arguments are not sequencing point, there
     // is no guarantee that 1st str1 is passed to printf before it is transformed by nested method transform
 
-    printf("Transform string = %s to %s\n", string, target);
+    printf("Transform string from %s to %s\n", string, target);
 
     moveCnt = transform(string, target);
 
