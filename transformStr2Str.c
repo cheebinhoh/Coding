@@ -66,6 +66,85 @@ int isTransformable(char source[], char target[])
     return 1;
 }
 
+
+void simulateMoveAndScore(char  source[],
+                          char  target[],
+                          int   j,
+                          int  *scoreRet)
+{
+    int m;
+    int n;
+    int k;
+    int score;
+    int tmp;
+
+
+    tmp = source[j];
+
+    k = j;
+    while ( k > 0 )
+    {
+        source[k] = source[k - 1];
+
+        k--;
+    }
+
+    source[0] = tmp;
+
+    // Scoring it, the logic is that:
+    // - if source and target characters at m and n are matched, plus 1
+    // - if they are not matched, we fast forward target to find next nth in
+    //   target that matches the source.
+    // ---- if next nth matching source is found, then we reset the score to 0.
+    // ---- if it is not found, we skip the m and n, and compare next set of
+    //      characters.
+
+    score = 0;
+
+    n = 0;
+    m = 0;
+    while ( '\0' != source[m]
+            && '\0' != target[n] )
+    {
+        if ( source[m] == target[n] )
+        {
+            score++;
+            n++;
+            m++;
+        }
+        else
+        {
+            char *c;
+
+
+            c = strchr(target + n, source[m]);
+
+            if ( NULL == c )
+            {
+                m++;
+            }
+            else
+            {
+                score = 0;
+                n     = c - target;
+            }
+        }
+    }
+
+    // restore original string
+    k = 0;
+    while ( k < j )
+    {
+        source[k] = source[k + 1];
+
+                    k++;
+    }
+
+    source[j] = tmp;
+
+    *scoreRet = score;
+}
+
 int transform(char source[], char target[])
 {
     int i;
@@ -87,84 +166,18 @@ int transform(char source[], char target[])
         }
         else
         {
-            int tmp;
             int pivot        = i + 1;
             int highestScore = 0;
             int j            = i + 1;
+            int score;
+            int tmp;
 
 
             while ( '\0' != source[j] )
             {
-                int m;
-                int n;
-                int k;
-                int score;
+                simulateMoveAndScore(source, target, j, &score);
 
-
-                tmp = source[j];
-
-                k = j;
-                while ( k > 0 )
-                {
-                    source[k] = source[k - 1];
-
-                    k--;
-                }
-
-                source[0] = tmp;
-
-                // Scoring it, the logic is that:
-                // - if source and target characters at m and n are matched, plus 1
-                // - if they are not matched, we fast forward target to find next nth in
-                //   target that matches the source.
-                // ---- if next nth matching source is found, then we reset the score to 0.
-                // ---- if it is not found, we skip the m and n, and compare next set of
-                //      characters.
-
-                score = 0;
-
-                n = 0;
-                m = 0;
-                while ( '\0' != source[m]
-                        && '\0' != target[n] )
-                {
-                    if ( source[m] == target[n] )
-                    {
-                        score++;
-                        n++;
-                        m++;
-                    }
-                    else
-                    {
-                        char *c;
-
-
-                        c = strchr(target + n, source[m]);
-
-                        if ( NULL == c )
-                        {
-                            m++;
-                        }
-                        else
-                        {
-                            score = 0;
-                            n     = c - target;
-                        }
-                    }
-                }
-
-                // restore original string
-                k = 0;
-                while ( k < j )
-                {
-                    source[k] = source[k + 1];
-
-                    k++;
-                }
-
-                source[j] = tmp;
-
-                if ( debug && 0 )
+                if ( debug )
                 {
                     printf("---- j = %d, source = %c, score = %d, highestScore = %d\n",
                            j, source[j], score, highestScore);
