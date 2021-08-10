@@ -177,10 +177,13 @@ int transform(char source[], char target[])
                        move, source[pivot], pivot, source);
             }
 
+
             tmp = source[pivot];
             memmove(source + 1, source, pivot);
             source[0] = tmp;
+
             i = 0;
+
 
             if ( debug )
             {
