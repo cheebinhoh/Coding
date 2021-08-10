@@ -12,7 +12,8 @@
  *
  * It doees not transform the string in minimum move in all cases, the logic only look one
  * move ahead and find the best move, but sometimes you need to look more than one move
- * ahead to tell your next move is the best.
+ * ahead to tell your next move is the worst chosen, such logic requires brute-force with
+ * backtracking capability.
  */
 
 #include <stdio.h>
@@ -163,7 +164,7 @@ int transform(char source[], char target[])
 
                 source[j] = tmp;
 
-                if ( debug && 0 ) 
+                if ( debug && 0 )
                 {
                     printf("---- j = %d, source = %c, score = %d, highestScore = %d\n",
                            j, source[j], score, highestScore);
