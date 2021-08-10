@@ -11,9 +11,27 @@
  * I found it interesting enough that I would like to solve it, here is my answer to it.
  *
  * It doees not transform the string in minimum move in all cases, the logic only look one
- * move ahead and find the best move, but sometimes you need to look more than one move
- * ahead to tell your next move is the worst chosen, such logic requires brute-force with
- * backtracking capability.
+ * move ahead and find the best score by comparing the move result against target.
+ *
+ * For example, the following takes 5 moves to transform baxxba to abxxab
+ * - abxxba
+ * - xabxba
+ * - xxabba
+ * - bxxaba
+ * - abxxab
+ *
+ * However, this program takes 7 moves:
+ * - abaxxb
+ * - babaxx (*)
+ * - ababxx
+ * - xababx
+ * - xxabab
+ * - bxxaba
+ * - abxxab
+ *
+ * the problem is on 2nd move that it picks last b over any of the two x because it does
+ * not do score calculation more than one step, what is furher move after xabxba and what
+ * are those future move score contribution to the moving x to front.
  */
 
 #include <stdio.h>
@@ -81,14 +99,7 @@ void simulateMoveAndScore(char  source[],
 
     tmp = source[j];
 
-    k = j;
-    while ( k > 0 )
-    {
-        source[k] = source[k - 1];
-
-        k--;
-    }
-
+    memmove(source + 1, source, j);
     source[0] = tmp;
 
     // Scoring it, the logic is that:
@@ -132,14 +143,7 @@ void simulateMoveAndScore(char  source[],
     }
 
     // restore original string
-    k = 0;
-    while ( k < j )
-    {
-        source[k] = source[k + 1];
-
-                    k++;
-    }
-
+    memmove(source, source + 1, j);
     source[j] = tmp;
 
     *scoreRet = score;
@@ -177,7 +181,7 @@ int transform(char source[], char target[])
             {
                 simulateMoveAndScore(source, target, j, &score);
 
-                if ( debug )
+                if ( debug && 0 )
                 {
                     printf("---- j = %d, source = %c, score = %d, highestScore = %d\n",
                            j, source[j], score, highestScore);
