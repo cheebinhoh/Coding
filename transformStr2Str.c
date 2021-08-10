@@ -9,6 +9,10 @@
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
  * I found it interesting enough that I would like to solve it, here is my answer to it.
+ *
+ * It doees not transform the string in minimum move in all cases, the logic only look one
+ * move ahead and find the best move, but sometimes you need to look more than one move
+ * ahead to tell your next move is the best.
  */
 
 #include <stdio.h>
