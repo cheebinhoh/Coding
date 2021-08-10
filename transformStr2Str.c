@@ -30,8 +30,12 @@
  * - abxxab
  *
  * the problem is on 2nd move that it picks last b over any of the two x because it does
- * not do score calculation more than one step, what is furher move after xabxba and what
- * are those future move score contribution to the moving x to front.
+ * not do score calculation more than one step, what is further move after xabxba and what
+ * are those future move score contribute to moving x to front. 
+ *
+ * The viable solution to find minimum move is that every time we calculate the score for 
+ * one move, we also calculate accummulate score of future move that depends on this move, 
+ * a bit like move calculated in chess or Go.
  */
 
 #include <stdio.h>
