@@ -1,17 +1,18 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Given two strings A and B, the task is to convert A to B if possible.
- * The only operation allowed is to put any character from A and insert it at front.
- * Find if it’s possible to convert the string. If yes, then output minimum no. of
- * operations required for transformation.
- *
  * A friend shares above program via the following link
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
+ * Given two strings A and B, the task is to convert A to B if possible.
+ * The only operation allowed is to put any character from A and insert it at front.
+ * Find if it’s possible to convert the string. If yes, then shuffle the string A into B
+ * in minimum move.
+ *
  * I found it interesting enough that I would like to solve it, here is my answer to it.
  *
- * It doees not transform the string in minimum move in all cases, the logic only look one
- * move ahead and find the best score by comparing the move result against target.
+ * Howver, my program doees not transform the string in minimum move in all cases, the logic only
+ * look one move ahead at time and find the best move  among characters to move to front, it does not
+ * do backtracking or consider more than one consecutive moves at a time.
  *
  * For example, the following takes 5 moves to transform baxxba to abxxab
  * - abxxba
@@ -30,9 +31,10 @@
  * - abxxab
  *
  * the cause is on 2nd move that it picks last b over any of the two x because all 3 picks (x, x and b)
- * has the small score, and the logic always pick the last one to avoid infinite loop as we are
- * left to right, if we do not pick the right one when having the same score, we will always shuffle
- * move toward the left.
+ * has the same score, and the logic always pick the highest score characters, if multiple characters
+ * have same highest score, we always pick the right most characters. This is important as we will move
+ * the selected character to the left (front), so always pick the highest score character at the right
+ * most will make sure that we are not stuck in infinite local search.
  */
 
 #include <stdio.h>
@@ -85,30 +87,28 @@ int isTransformable(char source[], char target[])
     return 1;
 }
 
-
-int simulateMoveAndScore(char source[], char target[], int j)
+int simulateMoveAndScore(char source[], char target[], int pivot)
 {
     int m;
     int n;
-    int k;
     int score;
     int tmp;
 
 
-    tmp = source[j];
+    score = 0;
+    tmp   = source[pivot];
 
-    memmove(source + 1, source, j);
+    // move pivot (jth) character to front, construct new string
+    memmove(source + 1, source, pivot);
     source[0] = tmp;
 
     // Scoring it, the logic is that:
     // - if source and target characters at m and n are matched, plus 1
     // - if they are not matched, we fast forward target to find next nth in
     //   target that matches the source.
-    // ---- if next nth matching source is found, then we reset the score to 0.
+    // ---- if next nth matching target is found, then we reset the score to 0.
     // ---- if it is not found, we skip the m and n, and compare next set of
     //      characters.
-
-    score = 0;
 
     n = 0;
     m = 0;
@@ -141,8 +141,8 @@ int simulateMoveAndScore(char source[], char target[], int j)
     }
 
     // restore original string
-    memmove(source, source + 1, j);
-    source[j] = tmp;
+    memmove(source, source + 1, pivot);
+    source[pivot] = tmp;
 
     return score;
 }
@@ -198,8 +198,9 @@ int transform(char source[], char target[])
 
             if ( debug )
             {
-                printf("---- Move %2d, pick %c (%2d) and insert at the front, %s => ",
-                       move, source[pivot], pivot, source);
+                printf("---- Move %2d, pick %c and insert at the front, %.*s[%.c]%s => ",
+                       move, source[pivot], 
+                       pivot, source, source[pivot], source + pivot + 1);
             }
 
 
@@ -243,11 +244,11 @@ void runTest(char string[], char target[])
     // because comma separator on function arguments are not sequencing point, there
     // is no guarantee that 1st str1 is passed to printf before it is transformed by nested method transform
 
-    printf("Transform string from %s to %s\n", string, target);
+    printf("---- Transform %s => %s\n", string, target);
 
     moveCnt = transform(string, target);
 
-    printf("Total move = %2d, string = %s\n\n", moveCnt, string);
+    printf("---- Total move = %2d, string = %s\n\n", moveCnt, string);
 }
 
 void runSampleTest(void)
