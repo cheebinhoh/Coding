@@ -13,6 +13,7 @@ void squeeze1(char s[], char c);
 void squeeze2(char s[], char c);
 int strindex(char s[], char t[]);
 double atof(char s[]);
+void reverse(char s[]);
 
 
 int main(int argc, char *argv[])
