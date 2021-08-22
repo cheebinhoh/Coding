@@ -3,7 +3,6 @@
  * This program is built for programming challenge, https://www.aiforsea.com/traffic-management
  *
  * This program provides a simple command-line interface to filter traffic demand dataset.
- *
  */
 
 
