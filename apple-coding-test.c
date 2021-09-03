@@ -89,6 +89,8 @@ void runDeteremineIf3NumberSumToValue(void)
 /*
  * Given a list of intervals, merge all the overlapping intervals to produce a list
  * that has only mutually exclusive intervals.
+ * 
+ * Assumption = it is arranged in ordering of interval start and end.
  */
 int collapseOverlapInterval(int start[], int end[], int size)
 {
