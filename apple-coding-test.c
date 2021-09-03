@@ -12,8 +12,8 @@
  *
  * How do we improve the performance? one way is to keep the array in sorted,
  * so we traverse from start (smaller number), if the current value at j is
- * positive and value of j + k already exceeds sum, thn we skip it all as we
- * are not likely to find a sum of i + j + i that is equal to sum.
+ * positive value and j + k already exceeds sum, thn we skip the remaining as
+ * we are not going to find a sum of i + j + i that is equal to sum.
  */
 int deteremineIf3NumberSumToValue(int array[], int size, int sum)
 {
