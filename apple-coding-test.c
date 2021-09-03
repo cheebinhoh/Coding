@@ -1,20 +1,25 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Given an array of integers and a value, determine if there are any three
- * integers in the array whose sum equals the given value.
+ * Coding test questions from Apple (at least internet claim it :)).
  */
 
 #include <stdio.h>
 
-/* How to improve the performance? if we keep the loop in sorted, then in the
- * 2nd and 3rd level of loop, we can cut off early if the element k added to
- * j and i already exceed sum, we can skip the rest of k.
+/*
+ * Given an array of integers and a value, determine if there are any three
+ * integers in the array whose sum equals the given value.
+ *
+ * How do we improve the performance? one way is to keep the array in sorted,
+ * so we traverse from start (smaller number), if the current value at j is
+ * positive and value of j + k already exceeds sum, thn we skip it all as we
+ * are not likely to find a sum of i + j + i that is equal to sum.
  */
 int deteremineIf3NumberSumToValue(int array[], int size, int sum)
 {
     int i;
     int j;
     int k;
+
 
     for ( i = 0; i < size; i++ )
     {
