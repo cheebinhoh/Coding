@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 
+
 /*
  * Given an array of integers and a value, determine if there are any three
  * integers in the array whose sum equals the given value.
