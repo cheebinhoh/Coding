@@ -95,6 +95,7 @@ int collapseOverlapInterval(int start[], int end[], int size)
     int i;
     int prev;
 
+
     prev = 0;
     i    = 1;
     while ( i < size )
@@ -137,8 +138,8 @@ void printInterval(int start[], int end[], int size)
 
 void runCollapseOverlapInterval(void)
 {
-    int start[] = { 1, 4, 5,  9 };
-    int end[]   = { 3, 6, 8, 11 };
+    int start[] = { 1, 4, 5,  9, 10 };
+    int end[]   = { 3, 6, 8, 12, 11 };
     int size    = sizeof( start ) / sizeof( start[0] );
 
 
