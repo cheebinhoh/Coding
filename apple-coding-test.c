@@ -40,7 +40,7 @@ found:
     return 1;
 }
 
-void runDeteremineIf3NumberSumToValue()
+void runDeteremineIf3NumberSumToValue(void)
 {
     int number[] = { 0, 1, 2, 3, 4, 5 };
     int found;
@@ -86,9 +86,76 @@ void runDeteremineIf3NumberSumToValue()
     }
 }
 
+/*
+ * Given a list of intervals, merge all the overlapping intervals to produce a list
+ * that has only mutually exclusive intervals.
+ */
+int collapseOverlapInterval(int start[], int end[], int size)
+{
+    int i;
+    int prev;
+
+    prev = 0;
+    i    = 1;
+    while ( i < size )
+    {
+        if ( start[i] >= start[prev]
+             && start[i] <= end[prev] )
+        {
+            if ( end[i] > end[prev] )
+            {
+                end[prev] = end[i];
+            }
+        }
+        else
+        {
+            prev++;
+
+            if ( i - prev > 0 )
+            {
+                start[prev] = start[i];
+                end[prev]   = end[i];
+            }
+        }
+
+        i++;
+    }
+
+    return ( 0 == size ) ? 0 : prev + 1;
+}
+
+void printInterval(int start[], int end[], int size)
+{
+    int i;
+
+    for ( i = 0; i < size; i++ )
+    {
+        printf("%d...%d%s", start[i], end[i],
+               ( i + 1 == size ) ? "\n" : ", ");
+    }
+}
+
+void runCollapseOverlapInterval(void)
+{
+    int start[] = { 1, 4, 5,  9 };
+    int end[]   = { 3, 6, 8, 11 };
+    int size    = sizeof( start ) / sizeof( start[0] );
+
+
+    printInterval(start, end, size);
+    size = collapseOverlapInterval(start, end, size);
+    printf("after collapse\n");
+    printInterval(start, end, size);
+}
+
 int main(int argc, char *argv[])
 {
+    printf("run runDeteremineIf3NumberSumToValue:\n");
     runDeteremineIf3NumberSumToValue();
+
+    printf("\n");
+    printf("run runCollapseOverlapInterval:\n");
+    runCollapseOverlapInterval();
 
     return 0;
 }
