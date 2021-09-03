@@ -24,19 +24,10 @@ int deteremineIf3NumberSumToValue(int array[], int size, int sum)
 
     for ( i = 0; i < size; i++ )
     {
-        for ( j = 0; j < size; j++ )
+        for ( j = i + 1; j < size; j++ )
         {
-           if ( j == i )
-               continue;
-
-           for ( k = 0; k < size; k++ )
+           for ( k = j + 1; k < size; k++ )
            {
-               if ( k == j )
-                   continue;
-
-               if ( k == i )
-                   continue;
-
                if ( ( array[i] + array[j] + array[k] ) == sum )
                    goto found;
            }
