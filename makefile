@@ -4,7 +4,7 @@ all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck
 	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out remove-c-comment.out \
  	string-utility.out calculator.out shrink-space.out trim-space.out replace-tab-with-space.out \
 	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out transformStr2Str.out \
-	trafficdemand.out
+	trafficdemand.out apple-coding-test.out
 
 btreepathsum.out : btreepathsum.c 
 	gcc -o $@ btreepathsum.c 
@@ -65,6 +65,9 @@ transformStr2Str.out : transformStr2Str.c
 
 trafficdemand.out : trafficdemand.c
 	gcc -o $@ trafficdemand.c
+
+apple-coding-test.out : apple-coding-test.c
+	gcc -o $@ apple-coding-test.c
 
 clean:
 	rm -f *.out *.o
