@@ -152,6 +152,118 @@ void runCollapseOverlapInterval(void)
     printInterval(start, end, size);
 }
 
+
+/* Search for a given number in a sorted array, with unique elements,
+ * that has been rotated by some arbitrary number. Return -1 if the number
+ * does not exist.
+ */
+int binarySearchOnRotateList(int list[], int size, int rotatedStep, int value)
+{
+    int head   = 0;
+    int tail   = size - 1;
+    int middle = ( head + tail ) / 2;
+    int index;
+
+
+    while ( head <= tail )
+    {
+       index = ( rotatedStep + middle ) % size;
+
+       //printf("debug: middle = %d, index = %d, index data = %d, data = %d\n",
+       //       middle, index, list[index], value);
+
+       if ( list[index] == value )
+       {
+          return index;
+       }
+       else if ( value < list[index] )
+       {
+          tail = middle - 1;
+       }
+       else
+       {
+          head = middle + 1;
+       }
+
+       middle = ( head + tail ) / 2;
+    }
+
+    return -1;
+}
+
+int binarySearch(int list[], int size, int value)
+{
+    int rotatedStep = 0;
+    int prev;
+    int i;
+
+
+    if ( size > 1 )
+    {
+        prev = list[0];
+
+        for ( i = 1; i < size; i++ )
+        {
+            if ( prev > list[i] )
+            {
+                rotatedStep = i;
+                break;
+            }
+
+            prev = list[i];
+        }
+    }
+
+    return binarySearchOnRotateList(list, size, rotatedStep, value);
+}
+
+void runBinarySearchOnRotatedSortedList(void)
+{
+    int array[]        = { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 };
+    int arrayRotated[] = { 15, 17, 19, 1, 3, 5, 7, 9, 11, 13 };
+    int key;
+    int i;
+
+
+    printf("On none-rotated list\n");
+    for ( i = 0; i < sizeof( array ) / sizeof( array[0] ); i++ )
+        printf("%d, ", array[i]);
+
+    printf("\n");
+
+    key = binarySearch(array, sizeof( array ) / sizeof( array[0] ), 3 );
+    printf("data %2d, key = %d\n", 3, key);
+
+    key = binarySearch(array, sizeof( array ) / sizeof( array[0] ), 7 );
+    printf("data %2d, key = %d\n", 7, key);
+
+    key = binarySearch(array, sizeof( array ) / sizeof( array[0] ), 8 );
+    printf("data %2d, key = %d\n", 8, key);
+
+    key = binarySearch(array, sizeof( array ) / sizeof( array[0] ), 17 );
+    printf("data %2d, key = %d\n", 17, key);
+
+
+    printf("\n\n");
+    printf("On rotated list\n");
+    for ( i = 0; i < sizeof( arrayRotated ) / sizeof( arrayRotated[0] ); i++ )
+        printf("%d, ", arrayRotated[i]);
+
+    printf("\n");
+
+    key = binarySearch(arrayRotated, sizeof( arrayRotated ) / sizeof( arrayRotated[0] ), 3 );
+    printf("data %2d, key = %d\n", 3, key);
+
+    key = binarySearch(arrayRotated, sizeof( arrayRotated ) / sizeof( arrayRotated[0] ), 7 );
+    printf("data %2d, key = %d\n", 7, key);
+
+    key = binarySearch(arrayRotated, sizeof( arrayRotated ) / sizeof( arrayRotated[0] ), 8 );
+    printf("data %2d, key = %d\n", 8, key);
+
+    key = binarySearch(arrayRotated, sizeof( arrayRotated ) / sizeof( arrayRotated[0] ), 17 );
+    printf("data %2d, key = %d\n", 17, key);
+}
+
 int main(int argc, char *argv[])
 {
     printf("run runDeteremineIf3NumberSumToValue:\n");
@@ -160,6 +272,10 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("run runCollapseOverlapInterval:\n");
     runCollapseOverlapInterval();
+
+    printf("\n");
+    printf("run runBinarySearchOnRotatedSortedList\n");
+    runBinarySearchOnRotatedSortedList();
 
     return 0;
 }
