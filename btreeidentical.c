@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     other = addTreeNode(other, 7);
     other = addTreeNode(other, 4);
 
+
     printf("1st tree is = ");
     printTreeNodeInOrder(root);
     printf("\n");
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
         printf("Both trees are identical\n");
     else
         printf("Both trees are not identical\n");
+
 
     // I do not care about memory release as it is a test, but we should have freeTree
     other = addTreeNode(NULL, 5);
