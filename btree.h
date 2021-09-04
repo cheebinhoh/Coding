@@ -15,6 +15,14 @@ struct TreeNode {
      struct TreeNode *right;
 };
 
+
+int isTreeIdentical(struct TreeNode *left, struct TreeNode *right);
+struct TreeNode * addTreeNode(struct TreeNode *root, int val);
+struct TreeNode * findTreeNode(struct TreeNode *root, int val);
+struct TreeNode * mirrorSwap(struct TreeNode *root);
+void printTreeNodeInOrder(struct TreeNode *root);
+
+
 #endif
 
 
