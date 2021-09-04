@@ -264,6 +264,66 @@ void runBinarySearchOnRotatedSortedList(void)
     printf("data %2d, key = %d\n", 17, key);
 }
 
+/*
+ * Given a positive integer, target, print all possible combinations of positive integers that
+ * sum up to the target number.
+ *
+ * For example, if we are given input ‘5’, these are the possible sum combinations.
+ *
+ * 4, 1
+ * 3, 2
+ * 3, 1, 1
+ * 2, 3
+ * 2, 2, 1
+ * 2, 1, 1, 1,
+ * 1, 4
+ * 1, 3, 1
+ * 1, 2, 1, 1
+ * 1, 1, 1, 1, 1
+ */
+
+void findAllSumCombinationRecursive(int target, int start, int remaining)
+{
+    int i;
+
+    printf(", %d", remaining);
+
+    i = target - ( start + remaining );
+    while ( i-- > 0 )
+        printf(", %d", 1);
+
+    remaining--;
+    if ( remaining <= 0 )
+        return;
+
+    printf("\n");
+    printf("%d", start);
+    findAllSumCombinationRecursive(target, start, remaining);
+}
+
+void findAllSumCombination(int target)
+{
+    int i;
+
+
+    i = target - 1;
+    while ( i > 0 )
+    {
+        printf("%d", i);
+        findAllSumCombinationRecursive(target, i, target - i);
+        printf("\n");
+
+        i--;
+    }
+}
+
+void runFindAllSumCombination(void)
+{
+    printf("find all sum combination of 5\n");
+    findAllSumCombination(5);
+}
+
+
 int main(int argc, char *argv[])
 {
     printf("run runDeteremineIf3NumberSumToValue:\n");
@@ -276,6 +336,10 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("run runBinarySearchOnRotatedSortedList\n");
     runBinarySearchOnRotatedSortedList();
+
+    printf("\n");
+    printf("run runFindAllSumCombination\n");
+    runFindAllSumCombination();
 
     return 0;
 }
