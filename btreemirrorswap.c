@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Build binary tree from inorder and postorder list.
+ * Given the root node of a binary tree, swap the ‘left’ and ‘right’ children for each node.
  */
 
 #include <stdio.h>
