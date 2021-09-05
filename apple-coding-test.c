@@ -356,6 +356,7 @@ void reverseWords1(char s[])
     char *p;
     char *pEnd;
     char  tmp;
+    int   swpCount;
 
 
     // find the end of the string.
@@ -366,9 +367,11 @@ void reverseWords1(char s[])
     }
 
     // reverse characters in the whole string.
+    swpCount = ( pEnd - s ) / 2;
+
     pEnd--;
     p = s;
-    while ( p != pEnd )
+    while ( swpCount > 0 )
     {
         tmp   = *p;
         *p    = *pEnd;
@@ -376,6 +379,7 @@ void reverseWords1(char s[])
 
         p++;
         pEnd--;
+        swpCount--;
     }
 
     // reverse characters of words in the whole string.
@@ -385,8 +389,6 @@ void reverseWords1(char s[])
         int   isSpace;
         int   nextIsSpace;
         char *pEndWord;
-        int   swpCount;
-
 
         pEnd    = p;
         isSpace = isspace(*pEnd);
@@ -395,11 +397,10 @@ void reverseWords1(char s[])
         {
             nextIsSpace = isspace(*pEnd);
 
-            if ( isSpace != nextIsSpace
-                 || '\0' == *( pEnd + 1 ) )
+            if ( isSpace != nextIsSpace )
             {
-                pEndWord = '\0' == *( pEnd + 1 ) ? pEnd : pEnd - 1;
-                swpCount = (pEndWord - s) - (p - s);
+                pEndWord = pEnd - 1;
+                swpCount = (pEndWord - p + 1) / 2;
 
                 while ( swpCount > 0)
                 {
@@ -418,140 +419,43 @@ void reverseWords1(char s[])
 
             pEnd++;
         }
-    }
-}
 
-/* A much complicated solution.
- *
- *    >> "123 45 67 89 "
- *    >> "123 45 6789  "
- *    >> "89  123 45 67"
- *
- *    -> "89  123 45 67"
- *    -> "89  67 123 45"
- *    -> "89  67 45 123"
- *
- * starting from the end, and move prefixed space after the last word to become
- * postfix space, then move the last word + postfix space in front of the string,
- * then continue the process and look at the new last word and repeat above to
- * move the new last word to 2nd word in front.
- */
-void reverseWords2(char s[])
-{
-    char *p;
-    char *start;
-    char  tmp;
-    int   total;
-    int   wordCnt;
-    int   wordLen;
-    int   prefixSpaceLen;
-    int   i;
-    int   inWord;
+        pEndWord = pEnd - 1;
+        swpCount = (pEndWord - p + 1) / 2;
 
-
-    // count the words
-    p       = s;
-    wordCnt = 0;
-    while ( isspace(*p) )
-        p++;
-
-    if ( '\0' != *p )
-    {
-        wordCnt++;
-        inWord = 1;
-
-
-        while ( '\0' != *p )
+        while ( swpCount > 0)
         {
-            if ( isspace(*p) )
-            {
-                inWord = 0;
-            }
-            else
-            {
-                if ( ! inWord )
-                {
-                    wordCnt++;
-                }
+            tmp       = *p;
+            *p        = *pEndWord;
+            *pEndWord = tmp;
 
-                inWord = 1;
-            }
-
+            pEndWord--;
             p++;
+            swpCount--;
         }
+
     }
-
-   start = s;
-   p--;
-   while ( wordCnt > 1 )
-   {
-       wordLen = 0;
-       while ( ! isspace(*p) )
-       {
-           wordLen++;
-           p--;
-       }
-
-       prefixSpaceLen = 0;
-       while ( isspace(*p) )
-       {
-           prefixSpaceLen++;
-           p--;
-       }
-
-       p++;
-       wordLen += prefixSpaceLen;
-
-       // Sometimes I wouder if we should optimize the calculation of wordLen - 1 by
-       // precalculating it prior to enter the loop but moderm compiler is good in
-       // constant propagation.
-       while ( prefixSpaceLen-- > 0 )
-       {
-           tmp = *p;
-
-           memmove(p, p + 1, wordLen - 1);
-
-           *(p + wordLen - 1) = tmp;
-       }
-
-       p = p + (wordLen - 1);
-       i = 0;
-       while ( i < wordLen )
-       {
-           tmp = *p;
-
-           memmove(start + 1, start, (p - start));
-           *start = tmp;
-
-           i++;
-       }
-
-       start = start + wordLen;
-       wordCnt--;
-   }
 }
-
 
 void runReverseWords(void)
 {
-    char str[]  = "123 45 67  89";
-    char str2[] = "abc xyz";
+    char str[]  = "1 23 45 67  89";
+    char str2[] = " abc xyz ";
 
-
-    printf("String = %s\n", str);
+    printf("String = \"%s\"\n", str);
     reverseWords1(str);
-    printf("Reversing words, result string = %s\n", str);
+    printf("Reversing words, result string = \"%s\"\n", str);
 
-    reverseWords2(str);
-    printf("Reversing words again, result string = %s\n", str);
+    reverseWords1(str);
+    printf("Reversing words again, result string = \"%s\"\n", str);
 
     printf("\n");
-    printf("String = %s\n", str2);
+    printf("String = \"%s\"\n", str2);
     reverseWords1(str2);
-    printf("Reversing words, result string = %s\n", str2);
+    printf("Reversing words, result string = \"%s\"\n", str2);
 
-    reverseWords2(str2);
-    printf("Reversing words again, result string = %s\n", str2);
+    reverseWords1(str2);
+    printf("Reversing words again, result string = \"%s\"\n", str2);
 }
 
 
