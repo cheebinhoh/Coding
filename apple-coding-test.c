@@ -545,9 +545,13 @@ void runReverseWords(void)
     reverseWords2(str);
     printf("Reversing words again, result string = %s\n", str);
 
+    printf("\n");
     printf("String = %s\n", str2);
     reverseWords1(str2);
     printf("Reversing words, result string = %s\n", str2);
+
+    reverseWords2(str2);
+    printf("Reversing words again, result string = %s\n", str2);
 }
 
 
