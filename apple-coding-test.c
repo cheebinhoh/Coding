@@ -1,6 +1,8 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
  * Coding test questions from Apple (at least internet claim it :)).
+ *
+ * https://www.codinginterview.com/apple-interview-questions
  */
 
 #include <stdio.h>
@@ -347,6 +349,11 @@ void runFindAllSumCombination(void)
  *    -> "89  123 45 67"
  *    -> "89  67 123 45"
  *    -> "89  67 45 123"
+ *
+ * starting from the end, and move prefixed space after the last word to become
+ * postfix space, then move the last word + postfix space in front of the string,
+ * then continue the process and look at the new last word and repeat above to 
+ * move the new last word to 2nd word in front.
  */
 
 void reverseWords(char s[])
