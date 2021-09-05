@@ -347,7 +347,7 @@ void runFindAllSumCombination(void)
  * position, 2nd last is moved to 2nd character.
  *
  * The result of it is a string with characters of the each word reversed,
- * then we continue to reverse character of a word.
+ * then we continue to reverse characters of a word.
  *
  * it is much simple solution than reverseWord2.
  */
@@ -395,9 +395,10 @@ void reverseWords1(char s[])
         {
             nextIsSpace = isspace(*pEnd);
 
-            if ( isSpace != nextIsSpace )
+            if ( isSpace != nextIsSpace 
+                 || '\0' == *( pEnd + 1 ) )
             {
-                pEndWord = pEnd - 1;
+                pEndWord = '\0' == *( pEnd + 1 ) ? pEnd : pEnd - 1;
                 swpCount = (pEndWord - s) - (p - s);
 
                 while ( swpCount > 0)
@@ -533,7 +534,8 @@ void reverseWords2(char s[])
 
 void runReverseWords(void)
 {
-    char str[] = "123 45 67  89";
+    char str[]  = "123 45 67  89";
+    char str2[] = "abc xyz";
 
 
     printf("String = %s\n", str);
@@ -542,8 +544,11 @@ void runReverseWords(void)
 
     reverseWords2(str);
     printf("Reversing words again, result string = %s\n", str);
-}
 
+    printf("String = %s\n", str2);
+    reverseWords1(str2);
+    printf("Reversing words, result string = %s\n", str2);
+}
 
 
 int main(int argc, char *argv[])
