@@ -538,6 +538,59 @@ void runAllWayToThrowDiceEqualToSum()
 }
 
 
+/* Test 7:
+ *
+ * You are given a double, x and an integer n, write a function to calculate x raised to the power n.
+ *
+ *   2 ^  5 = 32
+ *   3 ^  4 = 81
+ * 1.5 ^  3 = 3.375
+ *   2 ^ -2 = 0.25
+ */
+
+double power(double value, int power)
+{
+    double result;
+    int    isNegativeExponent;
+    int    isNegativeBase;
+
+
+    isNegativeExponent = 0;
+    isNegativeBase = 0;
+
+    if ( value < 0.0 )
+    {
+        isNegativeBase = 1;
+        value = value * -1.0;
+    }
+
+    if ( power < 0.0 )
+    {
+        isNegativeExponent = 1;
+        power = power * -1;
+    }
+
+    result = value;
+    while ( --power > 0 )
+        result = result * value;
+
+    if  ( isNegativeExponent )
+        result = 1.0 / result;
+
+    if ( isNegativeBase )
+        result = -1.0 * result;
+
+    return result;
+}
+
+void runCalculatePowerOfDoubleValue(void)
+{
+    printf("  2 ^  5 = %lf\n", power(2.0, 5));
+    printf("  3 ^  4 = %lf\n", power(3.0, 4));
+    printf("1.5 ^  3 = %lf\n", power(1.5, 3));
+    printf("  2 ^ -2 = %lf\n", power(2.0, -2));
+}
+
 int main(int argc, char *argv[])
 {
     printf("run runDeteremineIf3NumberSumToValue:\n");
@@ -564,6 +617,8 @@ int main(int argc, char *argv[])
     runAllWayToThrowDiceEqualToSum();
 
     printf("\n");
+    printf("Run runCalculatePowerOfDoubleValue\n");
+    runCalculatePowerOfDoubleValue();
 
     return 0;
 }
