@@ -469,6 +469,7 @@ void runReverseWords(void)
     printf("Reversing words again, result string = \"%s\"\n", str2);
 }
 
+
 /* Test 6:
  *
  * Find total ways to achieve a given sum with `n` throws of dice having `k` faces
