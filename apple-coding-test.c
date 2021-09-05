@@ -17,7 +17,7 @@
  *
  * How do we improve the performance? one way is to keep the array in sorted,
  * so we traverse from start (smaller number), if the current value at j is
- * positive value and j + k already exceeds sum, thn we skip the remaining as
+ * positive value and j + k already exceeds sum, then we can skip the remaining as
  * we are not going to find a sum of i + j + i that is equal to sum.
  */
 int deteremineIf3NumberSumToValue(int array[], int size, int sum)
@@ -352,7 +352,7 @@ void runFindAllSumCombination(void)
  *
  * starting from the end, and move prefixed space after the last word to become
  * postfix space, then move the last word + postfix space in front of the string,
- * then continue the process and look at the new last word and repeat above to 
+ * then continue the process and look at the new last word and repeat above to
  * move the new last word to 2nd word in front.
  */
 
@@ -440,7 +440,7 @@ void reverseWords(char s[])
        {
            tmp = *p;
 
-           memmove(start + 1, start, ( p - start ));
+           memmove(start + 1, start, (p - start));
            *start = tmp;
 
            i++;
@@ -458,7 +458,7 @@ void runReverseWords(void)
 
     printf("String = %s\n", str);
     reverseWords(str);
-    printf("Reverse word, string = %s\n", str);
+    printf("Reversing word, result string = %s\n", str);
 }
 
 
