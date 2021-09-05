@@ -366,6 +366,7 @@ void reverseWords(char s[])
         wordCnt++;
         inWord = 1;
 
+
         while ( '\0' != *p )
         {
             if ( isspace(*p) )
@@ -430,7 +431,7 @@ void reverseWords(char s[])
            i++;
        }
 
-       start += wordLen;
+       start = start + wordLen;
        wordCnt--;
    }
 }
