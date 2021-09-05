@@ -382,7 +382,7 @@ void reverseWords1(char s[])
         swpCount--;
     }
 
-    // reverse consecutive of none-space characters or consecutive sequence 
+    // reverse consecutive of none-space characters or consecutive sequence
     // of space characters in each chunk.
     p = s;
     if ( '\0' != *p )
@@ -469,6 +469,67 @@ void runReverseWords(void)
     printf("Reversing words again, result string = \"%s\"\n", str2);
 }
 
+/* Test 6:
+ *
+ * Find total ways to achieve a given sum with `n` throws of dice having `k` faces
+ */
+
+void printAllWayToThrowDiceEqualToSumRecursive(int sum, int maxThrow, int throwValue[], int throwCnt)
+{
+    int i;
+    int dice;
+    int total;
+
+
+    total = 0;
+    for ( i = 0; i < throwCnt; i++ )
+    {
+        total += throwValue[i];
+    }
+
+    if ( throwCnt >= maxThrow )
+    {
+        if ( total == sum )
+        {
+            for ( i = 0; i < throwCnt; i++ )
+                printf("%d%s", throwValue[i], i + 1 == throwCnt ? "" : ", " );
+
+            printf("\n");
+        }
+
+        return;
+    }
+
+    dice = 1;
+    while ( dice <= 6 )
+    {
+        if ( ( dice + total ) <= sum )
+        {
+            throwValue[throwCnt] = dice;
+            printAllWayToThrowDiceEqualToSumRecursive(sum, maxThrow, throwValue, throwCnt + 1);
+        }
+
+        dice++;
+    }
+}
+
+void printAllWayToThrowDiceEqualToSum(int sum, int maxThrow)
+{
+    int throwValue[100];
+
+    printAllWayToThrowDiceEqualToSumRecursive(sum, maxThrow, throwValue, 0);
+}
+
+void runAllWayToThrowDiceEqualToSum()
+{
+    printf("Number of throws = %d, desired sum = %d\n", 2, 10);
+    printAllWayToThrowDiceEqualToSum(10, 2);
+
+    printf("\n");
+    printf("Number of throws = %d, desired sum = %d\n", 3, 8);
+    printAllWayToThrowDiceEqualToSum(8, 3);
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -490,6 +551,12 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("run reverseWords\n");
     runReverseWords();
+
+    printf("\n");
+    printf("Run runAllWayToThrowDieEqualToSum\n");
+    runAllWayToThrowDiceEqualToSum();
+
+    printf("\n");
 
     return 0;
 }
