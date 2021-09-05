@@ -355,8 +355,7 @@ void runFindAllSumCombination(void)
  * then continue the process and look at the new last word and repeat above to
  * move the new last word to 2nd word in front.
  */
-
-void reverseWords(char s[])
+void reverseWords1(char s[])
 {
     char *p;
     char *start;
@@ -451,14 +450,95 @@ void reverseWords(char s[])
    }
 }
 
+/* This is much simple solution of reversing words in a string, we first
+ * reverse whole string, the result of that last character is moved to 1st
+ * position, 2nd last is moved to 2nd character.
+ *
+ * The result of it is a string with characters of the each word reversed,
+ * then we continue to reverse character of a word.
+ *
+ * it is much simple solution than reverseWord1.
+ */
+void reverseWords2(char s[])
+{
+    char *p;
+    char *pEnd;
+    char  tmp;
+
+
+    // find the end of the string.
+    pEnd = s;
+    while ( '\0' != *pEnd )
+    {
+       pEnd++;
+    }
+
+    // reverse characters in the whole string.
+    pEnd--;
+    p = s;
+    while ( p != pEnd )
+    {
+        tmp   = *p;
+        *p    = *pEnd;
+        *pEnd = tmp;
+
+        p++;
+        pEnd--;
+    }
+
+    // reverse characters of words in the whole string.
+    p = s;
+    if ( '\0' != *p )
+    {
+        int   isSpace;
+        int   nextIsSpace;
+        char *pEndWord;
+        int   swpCount;
+
+
+        pEnd    = p;
+        isSpace = isspace(*pEnd);
+
+        while ( '\0' != *pEnd )
+        {
+            nextIsSpace = isspace(*pEnd);
+
+            if ( isSpace != nextIsSpace )
+            {
+                pEndWord = pEnd - 1;
+                swpCount = (pEndWord - s) - (p - s);
+
+                while ( swpCount > 0)
+                {
+                    tmp       = *p;
+                    *p        = *pEndWord;
+                    *pEndWord = tmp;
+
+                    pEndWord--;
+                    p++;
+                    swpCount--;
+                }
+
+                isSpace = nextIsSpace;
+                p       = pEnd;
+            }
+
+            pEnd++;
+        }
+    }
+}
+
 void runReverseWords(void)
 {
     char str[] = "123 45 67  89";
 
 
     printf("String = %s\n", str);
-    reverseWords(str);
-    printf("Reversing word, result string = %s\n", str);
+    reverseWords1(str);
+    printf("Reversing words, result string = %s\n", str);
+
+    reverseWords2(str);
+    printf("Reversing words again, result string = %s\n", str);
 }
 
 
