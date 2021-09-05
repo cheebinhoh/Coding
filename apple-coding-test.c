@@ -405,17 +405,16 @@ void reverseWords(char s[])
        }
 
        p++;
-       memmove(p, p + prefixSpaceLen, wordLen);
-
-       p += wordLen;
        wordLen += prefixSpaceLen;
+
        while ( prefixSpaceLen-- > 0 )
        {
-           *p = ' ';
-           p++;
+           tmp = *p;
+           memmove(p, p + 1, wordLen - 1);
+           *(p + wordLen - 1) = tmp;
        }
 
-       p--;
+       p += (wordLen - 1);
        i = 0;
        while ( i < wordLen )
        {
