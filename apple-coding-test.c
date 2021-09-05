@@ -347,9 +347,9 @@ void runFindAllSumCombination(void)
  * position, 2nd last is moved to 2nd character.
  *
  * The result of it is a string with characters of the each word reversed,
- * then we continue to reverse characters of a word.
- *
- * it is much simple solution than reverseWord2.
+ * then we continue to reverse characters of a word that is broad defintion
+ * consists of a consecutive sequence of none-space characters or a consecutive
+ * space of space characters. :)
  */
 void reverseWords1(char s[])
 {
@@ -382,13 +382,15 @@ void reverseWords1(char s[])
         swpCount--;
     }
 
-    // reverse characters of words in the whole string.
+    // reverse consecutive of none-space characters or consecutive sequence 
+    // of space characters in each chunk.
     p = s;
     if ( '\0' != *p )
     {
         int   isSpace;
         int   nextIsSpace;
         char *pEndWord;
+
 
         pEnd    = p;
         isSpace = isspace(*pEnd);
@@ -420,10 +422,15 @@ void reverseWords1(char s[])
             pEnd++;
         }
 
-        // There are two way to remove duplicated code (inside "while ( '\0' != *pEnd ) ..."
-        // one is that we generalize the logic but checking for end string, but this is error
-        // prone as the logic inside while is complicated because we include trailing condition
-        // another way is to put the swap letter of word inside another method or macro.
+        // There are two ways to remove duplicated code to reversing letters of a word (inside
+        // above while loop and after while loop).
+        //
+        // one way is that we generalize the logic in while loop above so that if we detect
+        // an '\0' for next pEnd, we also reverse the letters of the word. I think this is a
+        // bad choice as the logic inside the whole loop will become more complicated and error prone.
+        //
+        // the other way is that we put the reversing of letters of a word in a method
+        // or macro for performance reason, I do not do that either as it is just a coding test.
 
         pEndWord = pEnd - 1;
         swpCount = (pEndWord - p + 1) / 2;
@@ -438,14 +445,13 @@ void reverseWords1(char s[])
             p++;
             swpCount--;
         }
-
-    }
+    } // if ( '\0' != *p )
 }
 
 void runReverseWords(void)
 {
-    char str[]  = "1 23 45 67  89";
-    char str2[] = " abc xyz ";
+    char str[]  = "1 23 45 6 789";
+    char str2[] = " abc  xyz ";
 
     printf("String = \"%s\"\n", str);
     reverseWords1(str);
