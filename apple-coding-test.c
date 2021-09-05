@@ -2,7 +2,8 @@
  *
  * Coding test questions from Apple (at least internet claim it :)).
  *
- * https://www.codinginterview.com/apple-interview-questions
+ * https://www.codinginterview.com/apple-interview-questions, I also include
+ * questions that is similar I come across from friend or online.
  */
 
 #include <stdio.h>
@@ -138,11 +139,13 @@ void printInterval(int start[], int end[], int size)
 {
     int i;
 
-    for ( i = 0; i < size; i++ )
+    for ( i = 0; i < size - 1; i++ )
     {
-        printf("%d...%d%s", start[i], end[i],
-               ( i + 1 == size ) ? "\n" : ", ");
+        printf("%d...%d, ", start[i], end[i]);
     }
+
+    if ( size > 0 )
+        printf("%d...%d\n", start[i], end[i]);
 }
 
 void runCollapseOverlapInterval(void)
@@ -176,9 +179,6 @@ int binarySearchOnRotateList(int list[], int size, int rotatedStep, int value)
     while ( head <= tail )
     {
        index = ( rotatedStep + middle ) % size;
-
-       //printf("debug: middle = %d, index = %d, index data = %d, data = %d\n",
-       //       middle, index, list[index], value);
 
        if ( list[index] == value )
        {
@@ -402,7 +402,7 @@ void reverseWords1(char s[])
             if ( isSpace != nextIsSpace )
             {
                 pEndWord = pEnd - 1;
-                swpCount = (pEndWord - p + 1) / 2;
+                swpCount = ( pEndWord - p + 1 ) / 2;
 
                 while ( swpCount > 0)
                 {
@@ -422,18 +422,20 @@ void reverseWords1(char s[])
             pEnd++;
         }
 
-        // There are two ways to remove duplicated code to reversing letters of a word (inside
+        // There are two ways to remove duplicated code of reversing letters of a word (inside
         // above while loop and after while loop).
         //
         // one way is that we generalize the logic in while loop above so that if we detect
         // an '\0' for next pEnd, we also reverse the letters of the word. I think this is a
-        // bad choice as the logic inside the whole loop will become more complicated and error prone.
+        // bad choice as the logic inside the whole loop will become more complicated with trailing
+        // conditions.
         //
-        // the other way is that we put the reversing of letters of a word in a method
-        // or macro for performance reason, I do not do that either as it is just a coding test.
+        // the other way is that we put the logic inside a method or macro (for performance reason),
+        // it will remove duplicated code, but it will also mean that anyone reading the code will
+        // have to context switch to another method. :)
 
         pEndWord = pEnd - 1;
-        swpCount = (pEndWord - p + 1) / 2;
+        swpCount = ( pEndWord - p + 1 ) / 2;
 
         while ( swpCount > 0)
         {
@@ -452,6 +454,7 @@ void runReverseWords(void)
 {
     char str[]  = "1 23 45 6 789";
     char str2[] = " abc  xyz ";
+
 
     printf("String = \"%s\"\n", str);
     reverseWords1(str);
@@ -477,7 +480,6 @@ void runReverseWords(void)
  * Example if throw is 2 and sum value is 10, then we have the following:
  * (6, 4), (4, 6), (5, 5)
  */
-
 void printAllWayToThrowDiceEqualToSumRecursive(int sum, int maxThrow, int throwValue[], int throwCnt)
 {
     int i;
@@ -495,10 +497,10 @@ void printAllWayToThrowDiceEqualToSumRecursive(int sum, int maxThrow, int throwV
     {
         if ( total == sum )
         {
-            for ( i = 0; i < throwCnt; i++ )
-                printf("%d%s", throwValue[i], i + 1 == throwCnt ? "" : ", " );
+            for ( i = 0; i < throwCnt - 1; i++ )
+                printf("%d, ", throwValue[i]);
 
-            printf("\n");
+            printf("%d\n", throwValue[i]);
         }
 
         return;
@@ -510,6 +512,7 @@ void printAllWayToThrowDiceEqualToSumRecursive(int sum, int maxThrow, int throwV
         if ( ( dice + total ) <= sum )
         {
             throwValue[throwCnt] = dice;
+
             printAllWayToThrowDiceEqualToSumRecursive(sum, maxThrow, throwValue, throwCnt + 1);
         }
 
