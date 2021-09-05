@@ -8,7 +8,8 @@
 #include <string.h>
 
 
-/*
+/* Test 1:
+ *
  * Given an array of integers and a value, determine if there are any three
  * integers in the array whose sum equals the given value.
  *
@@ -89,7 +90,8 @@ void runDeteremineIf3NumberSumToValue(void)
 }
 
 
-/*
+/* Test 2:
+ *
  * Given a list of intervals, merge all the overlapping intervals to produce a list
  * that has only mutually exclusive intervals.
  *
@@ -155,7 +157,8 @@ void runCollapseOverlapInterval(void)
 }
 
 
-/*
+/* Test 3:
+ *
  * Search for a given number in a sorted array, with unique elements,
  * that has been rotated by some arbitrary number. Return -1 if the number
  * does not exist.
@@ -201,6 +204,7 @@ int binarySearch(int list[], int size, int value)
     int i;
 
 
+    // find out how much has been rotated.
     if ( size > 1 )
     {
         prev = list[0];
@@ -267,7 +271,9 @@ void runBinarySearchOnRotatedSortedList(void)
     printf("data %2d, key = %d\n", 17, key);
 }
 
-/*
+
+/* Test 4:
+ *
  * Given a positive integer, target, print all possible combinations of positive integers that
  * sum up to the target number.
  *
@@ -327,10 +333,12 @@ void runFindAllSumCombination(void)
     findAllSumCombination(5);
 }
 
-/*
+
+/* Test 5:
+ *
  * Reverse the order of words in a given sentence (an array of characters).
  *
- *    "123 45 67  89" => "89  67 45 123"
+ *    "123 45 67  89" ==> "89  67 45 123"
  *
  *    >> "123 45 67 89 "
  *    >> "123 45 6789  "
@@ -355,7 +363,7 @@ void reverseWords(char s[])
 
 
     // count the words
-    p = s;
+    p       = s;
     wordCnt = 0;
     while ( isspace(*p) )
         p++;
@@ -407,8 +415,9 @@ void reverseWords(char s[])
        p++;
        wordLen += prefixSpaceLen;
 
-       // Sometimes I wouder if we should optimize the calculation of wordLen - 1 by precalculating it
-       // prior to enter the loop but moderm compiler is good in constant propagation.
+       // Sometimes I wouder if we should optimize the calculation of wordLen - 1 by
+       // precalculating it prior to enter the loop but moderm compiler is good in
+       // constant propagation.
        while ( prefixSpaceLen-- > 0 )
        {
            tmp = *p;
