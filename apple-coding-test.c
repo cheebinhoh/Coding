@@ -553,7 +553,7 @@ int main(int argc, char *argv[])
     runReverseWords();
 
     printf("\n");
-    printf("Run runAllWayToThrowDieEqualToSum\n");
+    printf("Run runAllWayToThrowDiceEqualToSum\n");
     runAllWayToThrowDiceEqualToSum();
 
     printf("\n");
