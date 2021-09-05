@@ -4,6 +4,8 @@
  */
 
 #include <stdio.h>
+#include <ctype.h>
+#include <string.h>
 
 
 /*
@@ -153,7 +155,8 @@ void runCollapseOverlapInterval(void)
 }
 
 
-/* Search for a given number in a sorted array, with unique elements,
+/*
+ * Search for a given number in a sorted array, with unique elements,
  * that has been rotated by some arbitrary number. Return -1 if the number
  * does not exist.
  */
@@ -324,6 +327,122 @@ void runFindAllSumCombination(void)
     findAllSumCombination(5);
 }
 
+/*
+ * Reverse the order of words in a given sentence (an array of characters).
+ *
+ *    "123 45 67  89" => "89  67 45 123"
+ * >> "123 45 6789  "
+ * >> " 123 45 6789 "
+ * >> "  123 45 6789"
+ * >> "9  123 45 678"
+ * >> "89  123 45 67"
+ * -> "89  123 45 67"
+
+ * -> "89  67 123 45"
+ * -> "89  67 45 123"
+ */
+
+void reverseWords(char s[])
+{
+    char *p;
+    char *start;
+    char  tmp;
+    int   total;
+    int   wordCnt;
+    int   wordLen;
+    int   prefixSpaceLen;
+    int   i;
+    int   inWord;
+
+
+    // count the words
+    p = s;
+    wordCnt = 0;
+    while ( isspace(*p) )
+        p++;
+
+    if ( '\0' != *p )
+    {
+        wordCnt++;
+        inWord = 1;
+
+        while ( '\0' != *p )
+        {
+            if ( isspace(*p) )
+            {
+                inWord = 0;
+            }
+            else
+            {
+                if ( ! inWord )
+                {
+                    wordCnt++;
+                }
+
+                inWord = 1;
+            }
+
+            p++;
+        }
+    }
+
+   start = s;
+   p--;
+   while ( wordCnt > 1 )
+   {
+       wordLen = 0;
+       while ( ! isspace(*p) )
+       {
+           wordLen++;
+           p--;
+       }
+
+       prefixSpaceLen = 0;
+       while ( isspace(*p) )
+       {
+           prefixSpaceLen++;
+           p--;
+       }
+
+       p++;
+       memmove(p, p + prefixSpaceLen, wordLen);
+
+       p += wordLen;
+       wordLen += prefixSpaceLen;
+       while ( prefixSpaceLen-- > 0 )
+       {
+           *p = ' ';
+           p++;
+       }
+
+       p--;
+       i = 0;
+       while ( i < wordLen )
+       {
+           tmp = *p;
+
+           memmove(start + 1, start, ( p - start ));
+           *start = tmp;
+
+           i++;
+       }
+
+       start += wordLen;
+       wordCnt--;
+   }
+}
+
+void runReverseWords(void)
+{
+    char str[] = "123 45 67  89";
+
+
+    printf("String = %s\n", str);
+    reverseWords(str);
+    printf("Reverse word, string = %s\n", str);
+}
+
+
 
 int main(int argc, char *argv[])
 {
@@ -341,6 +460,10 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("run runFindAllSumCombination\n");
     runFindAllSumCombination();
+
+    printf("\n");
+    printf("run reverseWords\n");
+    runReverseWords();
 
     return 0;
 }
