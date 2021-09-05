@@ -591,6 +591,7 @@ void runCalculatePowerOfDoubleValue(void)
     printf("  2 ^ -2 = %lf\n", power(2.0, -2));
 }
 
+
 int main(int argc, char *argv[])
 {
     printf("run runDeteremineIf3NumberSumToValue:\n");
