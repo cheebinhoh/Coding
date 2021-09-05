@@ -472,6 +472,9 @@ void runReverseWords(void)
 /* Test 6:
  *
  * Find total ways to achieve a given sum with `n` throws of dice having `k` faces
+ *
+ * Example if throw is 2 and sum value is 10, then we have the following:
+ * (6, 4), (4, 6), (5, 5)
  */
 
 void printAllWayToThrowDiceEqualToSumRecursive(int sum, int maxThrow, int throwValue[], int throwCnt)
