@@ -395,7 +395,7 @@ void reverseWords1(char s[])
         {
             nextIsSpace = isspace(*pEnd);
 
-            if ( isSpace != nextIsSpace 
+            if ( isSpace != nextIsSpace
                  || '\0' == *( pEnd + 1 ) )
             {
                 pEndWord = '\0' == *( pEnd + 1 ) ? pEnd : pEnd - 1;
