@@ -407,14 +407,18 @@ void reverseWords(char s[])
        p++;
        wordLen += prefixSpaceLen;
 
+       // Sometimes I wouder if we should optimize the calculation of wordLen - 1 by precalculating it
+       // prior to enter the loop but moderm compiler is good in constant propagation.
        while ( prefixSpaceLen-- > 0 )
        {
            tmp = *p;
+
            memmove(p, p + 1, wordLen - 1);
+
            *(p + wordLen - 1) = tmp;
        }
 
-       p += (wordLen - 1);
+       p = p + (wordLen - 1);
        i = 0;
        while ( i < wordLen )
        {
