@@ -420,6 +420,11 @@ void reverseWords1(char s[])
             pEnd++;
         }
 
+        // There are two way to remove duplicated code (inside "while ( '\0' != *pEnd ) ..."
+        // one is that we generalize the logic but checking for end string, but this is error
+        // prone as the logic inside while is complicated because we include trailing condition
+        // another way is to put the swap letter of word inside another method or macro.
+
         pEndWord = pEnd - 1;
         swpCount = (pEndWord - p + 1) / 2;
 
