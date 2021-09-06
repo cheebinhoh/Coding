@@ -67,16 +67,16 @@ transformStr2Str.out : transformStr2Str.c
 trafficdemand.out : trafficdemand.c
 	gcc -o $@ trafficdemand.c
 
-apple-coding-test.out : apple-coding-test.c
-	gcc -o $@ apple-coding-test.c
+apple-coding-test.out : apple-coding-test.c btree.c btree.h
+	gcc -o $@ apple-coding-test.c btree.c
 
-btreemirrorswap.out : btreemirrorswap.c btree.h btree.c
+btreemirrorswap.out : btreemirrorswap.c btree.h btree.c btree.h
 	gcc -o $@ btreemirrorswap.c btree.c
 
-btreeidentical.out : btreeidentical.c btree.c
+btreeidentical.out : btreeidentical.c btree.c btree.h
 	gcc -o $@ btreeidentical.c btree.c
 
-btreerebalancing.out : btreerebalancing.c btree.c
+btreerebalancing.out : btreerebalancing.c btree.c btree.h
 	gcc -o $@ btreerebalancing.c btree.c
 
 clean:

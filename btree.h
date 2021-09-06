@@ -17,6 +17,7 @@ struct TreeNode {
      struct TreeNode *right;
 };
 
+typedef void (bTreeTraversalCallback)(struct TreeNode *node, int pos, void *data);
 
 int isTreeIdentical(struct TreeNode *left, struct TreeNode *right);
 struct TreeNode * addTreeNode(struct TreeNode *root, int val);
@@ -26,6 +27,8 @@ void printTreeNodeInOrder(struct TreeNode *root);
 void printTreeNodeInTreeTopology(struct TreeNode *root);
 struct TreeNode * treeRebalance(struct TreeNode *root);
 struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val);
+void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
+int findTotalNumberOfTreeNode(struct TreeNode *root);
 
 #endif
 

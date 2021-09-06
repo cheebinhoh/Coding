@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include "btree.h"
 
 
 /* Test 1:
@@ -591,6 +592,66 @@ void runCalculatePowerOfDoubleValue(void)
     printf("  2 ^ -2 = %lf\n", power(2.0, -2));
 }
 
+/* Test 8:
+ *
+ * Given that integers are read from a data stream. Find median of elements
+ * read so for in efficient way. For simplicity assume there are no duplicates.
+ */
+struct medianData
+{
+    int count;
+    int positions[2];
+    int values[2];
+};
+
+void calculateMedian(struct TreeNode *node, int pos, void *data)
+{
+    struct medianData *pData = data;
+    int    i;
+
+
+    for ( i = 0; i < pData->count; i++ )
+    {
+        if ( pos == pData->positions[i] )
+            pData->values[i] = node->val;
+    }
+}
+
+int addIntegerAndReturnMedian(int val)
+{
+    static struct TreeNode *root = NULL;
+    struct medianData       data;
+    int                     count;
+
+
+    root = addTreeNodeAndRebalanceTree(root, val);
+
+    count = findTotalNumberOfTreeNode(root);
+    if ( ( count % 2 ) == 0 )
+    {
+        data.count        = 2;
+        data.positions[0] = ( count / 2 ) - 1;
+        data.positions[1] = data.positions[0] + 1;
+    }
+    else
+    {
+        data.count        = 1;
+        data.positions[0] = count / 2;
+    }
+
+    data.values[0] = data.values[1] = 0;
+    traverseTreeNodeInOrder(root, calculateMedian, &data);
+
+    return ( data.values[0] + data.values[1] ) / data.count;
+}
+
+void runFindMedianOfStreamOfIntegers(void)
+{
+    printf("Median = %2d after adding  5\n", addIntegerAndReturnMedian(5));
+    printf("Median = %2d after adding 15\n", addIntegerAndReturnMedian(15));
+    printf("Median = %2d after adding  1\n", addIntegerAndReturnMedian(1));
+    printf("Median = %2d after adding  3\n", addIntegerAndReturnMedian(3));
+}
 
 int main(int argc, char *argv[])
 {
@@ -620,6 +681,10 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("Run runCalculatePowerOfDoubleValue\n");
     runCalculatePowerOfDoubleValue();
+
+    printf("\n");
+    printf("Run runFindMedianOfStreamOfIntegers\n");
+    runFindMedianOfStreamOfIntegers();
 
     return 0;
 }

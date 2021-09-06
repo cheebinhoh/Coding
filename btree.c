@@ -212,3 +212,48 @@ void printTreeNodeInTreeTopology(struct TreeNode *root)
 {
     printTreeNodeInTreeTopologyRecursive(root, 0);
 }
+
+void traverseTreeNodeInOrderRecursive(struct TreeNode        *root,
+                                      int                    *pos,
+                                      bTreeTraversalCallback  func,
+                                      void                   *data)
+{
+    if ( NULL == root )
+        return;
+
+
+    traverseTreeNodeInOrderRecursive(root->left, pos, func, data);
+
+    func(root, *pos, data);
+    *pos = *pos + 1;
+
+    traverseTreeNodeInOrderRecursive(root->right, pos, func, data);
+}
+
+void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data)
+{
+    int pos;
+
+
+    pos = 0;
+    traverseTreeNodeInOrderRecursive(root, &pos, func, data);
+}
+
+void countTreeNode(struct TreeNode *node, int pos, void *data)
+{
+    int *count;
+
+
+    count = data;
+    *count = *count + 1;
+}
+
+int findTotalNumberOfTreeNode(struct TreeNode *root)
+{
+    int count = 0;
+
+
+    traverseTreeNodeInOrder(root, countTreeNode, &count);
+
+    return count;
+}
