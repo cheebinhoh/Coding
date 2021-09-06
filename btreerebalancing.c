@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
     root = NULL; // I do not care about memory leak for this simple test program
     printf("\n");
-    printf("Self balance binary tree of adding 6, 7, 8, 5, 4, 10, 9\n");
+    printf("Self balancing binary tree of adding 6, 7, 8, 5, 4, 10, 9\n");
     root = addTreeNodeAndRebalanceTree(root, 6);
     root = addTreeNodeAndRebalanceTree(root, 7);
     root = addTreeNodeAndRebalanceTree(root, 8);
