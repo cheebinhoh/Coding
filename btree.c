@@ -244,7 +244,7 @@ void countTreeNode(struct TreeNode *node, int pos, void *data)
     int *count;
 
 
-    count = data;
+    count  = data; 
     *count = *count + 1;
 }
 

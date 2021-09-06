@@ -607,7 +607,7 @@ struct medianData
 void calculateMedian(struct TreeNode *node, int pos, void *data)
 {
     struct medianData *pData = data;
-    int    i;
+    int                i;
 
 
     for ( i = 0; i < pData->count; i++ )
@@ -639,7 +639,8 @@ int addIntegerAndReturnMedian(int val)
         data.positions[0] = count / 2;
     }
 
-    data.values[0] = data.values[1] = 0;
+    data.values[0] = 0;
+    data.values[1] = 0;
     traverseTreeNodeInOrder(root, calculateMedian, &data);
 
     return ( data.values[0] + data.values[1] ) / data.count;
