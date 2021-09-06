@@ -21,7 +21,9 @@ struct TreeNode * addTreeNode(struct TreeNode *root, int val);
 struct TreeNode * findTreeNode(struct TreeNode *root, int val);
 struct TreeNode * mirrorSwap(struct TreeNode *root);
 void printTreeNodeInOrder(struct TreeNode *root);
-
+void printTreeNodeInTreeTopology(struct TreeNode *root);
+struct TreeNode * treeRebalance(struct TreeNode *root);
+struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val);
 
 #endif
 
