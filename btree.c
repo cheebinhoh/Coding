@@ -178,6 +178,7 @@ struct TreeNode * treeRebalance(struct TreeNode *root)
     if ( NULL == root )
         return NULL;
 
+
     treeRebalanceRecursive(&root, root);
 
     return root;

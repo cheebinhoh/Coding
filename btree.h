@@ -1,4 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
+ *
+ * ADT Binary tree (with AVL self-balancing functionality)
  */
 
 #ifndef TREE_H_HAS_INCLUDED
