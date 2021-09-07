@@ -617,7 +617,7 @@ void calculateMedian(struct TreeNode *node, int pos, void *data)
     }
 }
 
-int addIntegerAndReturnMedian(int val)
+double addIntegerAndReturnMedian(int val)
 {
     static struct TreeNode *root = NULL;
     struct medianData       data;
@@ -643,15 +643,15 @@ int addIntegerAndReturnMedian(int val)
     data.values[1] = 0;
     traverseTreeNodeInOrder(root, calculateMedian, &data);
 
-    return ( data.values[0] + data.values[1] ) / data.count;
+    return ( data.values[0] + data.values[1] ) / (double) data.count;
 }
 
 void runFindMedianOfStreamOfIntegers(void)
 {
-    printf("Adding  5, median = %2d\n", addIntegerAndReturnMedian(5));
-    printf("Adding 15, median = %2d\n", addIntegerAndReturnMedian(15));
-    printf("Adding  1, median = %2d\n", addIntegerAndReturnMedian(1));
-    printf("Adding  3, median = %2d\n", addIntegerAndReturnMedian(3));
+    printf("Adding  5, median = %5.2f\n", addIntegerAndReturnMedian(5));
+    printf("Adding 15, median = %5.2f\n", addIntegerAndReturnMedian(15));
+    printf("Adding  1, median = %5.2f\n", addIntegerAndReturnMedian(1));
+    printf("Adding  3, median = %5.2f\n", addIntegerAndReturnMedian(3));
 }
 
 int main(int argc, char *argv[])
