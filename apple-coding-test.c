@@ -664,26 +664,26 @@ void printPermutationsOfString(char s[])
     int  i;
     int  j;
     char tmp;
-    
-    
+
+
     len = strlen(s);
     for ( i = 0; i < len; i++ )
     {
         printf("%s\n", s);
-        
+
         for ( j = 1; j < len - i; j++)
         {
             tmp = s[j];
             s[j] = s[0];
             s[0] = tmp;
-           
+
             printf("%s\n", s);
-           
+
             tmp = s[j];
             s[j] = s[0];
-            s[0] = tmp;   
+            s[0] = tmp;
         }
-        
+
         for ( j = 0; j < len - 1; j++ )
         {
             tmp = s[j];
@@ -696,8 +696,8 @@ void printPermutationsOfString(char s[])
 void runPermutationsOfString(void)
 {
     char s[] = "abc";
-    
-    
+
+
     printf("Print permutations of string \"abc\"\n");
     printPermutationsOfString(s);
     printf("\n");
