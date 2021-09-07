@@ -698,7 +698,9 @@ void runPermutationsOfString(void)
     char s[] = "abc";
     
     
+    printf("Print permutations of string \"abc\"\n");
     printPermutationsOfString(s);
+    printf("\n");
 }
 
 
