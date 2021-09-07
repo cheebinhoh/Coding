@@ -169,10 +169,11 @@ void insertionSort(int list[], int size)
         for ( j = i - 1; j >= 0 && list[j] > tmp; j-- )
         {
             list[j + 1] = list[j];
-            list[j]     = tmp;
 
             count++;
         }
+
+        list[j + 1] = tmp;
     }
 
     printf("total swap = %d\n", count);
