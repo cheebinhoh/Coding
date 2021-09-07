@@ -654,6 +654,54 @@ void runFindMedianOfStreamOfIntegers(void)
     printf("Adding  3, median = %5.2f\n", addIntegerAndReturnMedian(3));
 }
 
+/* Test 9:
+ *
+ * the permutations of string ABC is "ABC ACB BAC BCA CBA CAB"
+ */
+void printPermutationsOfString(char s[])
+{
+    int  len;
+    int  i;
+    int  j;
+    char tmp;
+    
+    
+    len = strlen(s);
+    for ( i = 0; i < len; i++ )
+    {
+        printf("%s\n", s);
+        
+        for ( j = 1; j < len - i; j++)
+        {
+            tmp = s[j];
+            s[j] = s[0];
+            s[0] = tmp;
+           
+            printf("%s\n", s);
+           
+            tmp = s[j];
+            s[j] = s[0];
+            s[0] = tmp;   
+        }
+        
+        for ( j = 0; j < len - 1; j++ )
+        {
+            tmp = s[j];
+            s[j] = s[j + 1];
+            s[j + 1] = tmp;
+        }
+    }
+}
+
+void runPermutationsOfString(void)
+{
+    char s[] = "abc";
+    
+    
+    printPermutationsOfString(s);
+}
+
+
 int main(int argc, char *argv[])
 {
     printf("run runDeteremineIf3NumberSumToValue:\n");
@@ -686,6 +734,10 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("Run runFindMedianOfStreamOfIntegers\n");
     runFindMedianOfStreamOfIntegers();
+
+    printf("\n");
+    printf("Run runPermutationsOfString\n");
+    runPermutationsOfString();
 
     return 0;
 }
