@@ -648,10 +648,10 @@ int addIntegerAndReturnMedian(int val)
 
 void runFindMedianOfStreamOfIntegers(void)
 {
-    printf("Median = %2d after adding  5\n", addIntegerAndReturnMedian(5));
-    printf("Median = %2d after adding 15\n", addIntegerAndReturnMedian(15));
-    printf("Median = %2d after adding  1\n", addIntegerAndReturnMedian(1));
-    printf("Median = %2d after adding  3\n", addIntegerAndReturnMedian(3));
+    printf("Adding  5, median = %2d\n", addIntegerAndReturnMedian(5));
+    printf("Adding 15, median = %2d\n", addIntegerAndReturnMedian(15));
+    printf("Adding  1, median = %2d\n", addIntegerAndReturnMedian(1));
+    printf("Adding  3, median = %2d\n", addIntegerAndReturnMedian(3));
 }
 
 int main(int argc, char *argv[])

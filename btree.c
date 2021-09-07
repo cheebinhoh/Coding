@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Binary tree utility
+ * ADT Binary tree (with AVL self-balancing functionality)
  */
 
 #include <stdio.h>
@@ -16,6 +16,7 @@ int isTreeIdentical(struct TreeNode *left, struct TreeNode *right)
        return left == right;
     }
 
+
     return left->val == right->val
            && isTreeIdentical(left->left, right->left)
            && isTreeIdentical(left->right, right->right);
@@ -28,6 +29,7 @@ struct TreeNode * mirrorSwap(struct TreeNode *root)
 
     if ( NULL == root )
        return NULL;
+
 
     tmp         = root->left;
     root->left  = mirrorSwap(root->right);
@@ -42,6 +44,7 @@ void printTreeNodeInOrder(struct TreeNode *root)
     if ( NULL == root )
         return;
 
+
     printTreeNodeInOrder(root->left);
     printf("%d, ", root->val);
     printTreeNodeInOrder(root->right);
@@ -52,6 +55,7 @@ struct TreeNode * findTreeNode(struct TreeNode *root, int val)
 {
     if ( NULL == root )
         return NULL;
+
 
     if ( val == root->val )
         return root;
@@ -75,7 +79,7 @@ struct TreeNode * addTreeNode(struct TreeNode *root, int val)
 
     if ( NULL == root )
     {
-        node = malloc(sizeof( struct TreeNode )); // I do not care about error as it is just a test
+        node = malloc(sizeof( struct TreeNode )); // I do not care about NULL error as it is just a test
 
         node->val   = val;
         node->left  = NULL;
@@ -244,7 +248,7 @@ void countTreeNode(struct TreeNode *node, int pos, void *data)
     int *count;
 
 
-    count  = data; 
+    count  = data;
     *count = *count + 1;
 }
 

@@ -15,4 +15,3 @@ void inOrderTraversal(struct TreeNode* root);
 void preOrderTraversal(struct TreeNode* root);
 
 #endif
-
