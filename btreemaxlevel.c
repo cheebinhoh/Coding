@@ -77,7 +77,7 @@ int main(int argc, char * argv[])
     struct TreeNode *other = NULL;
 
 
-    root = malloc(sizeof( struct TreeNode));
+    root = malloc(sizeof( struct TreeNode ));
     root->val = 0;
     root->left = root->right = NULL;
 

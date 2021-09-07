@@ -176,22 +176,22 @@ int main(int argc, char * argv[])
     struct  TreeNode *broot;
 
 
-    root = malloc(sizeof(struct NTreeNode));
+    root = malloc(sizeof( struct NTreeNode ));
     root->val = 1;
     root->numberOfChild = 0;
 
     n = 0;
-    other = malloc(sizeof(struct NTreeNode));
+    other = malloc(sizeof( struct NTreeNode ));
     other->val = 10;
     other->numberOfChild = 0;
     root->child[n++] = other;
 
-    other = malloc(sizeof(struct NTreeNode));
+    other = malloc(sizeof( struct NTreeNode ));
     other->val = 20;
     other->numberOfChild = 0;
     root->child[n++] = other;
 
-    other = malloc(sizeof(struct NTreeNode));
+    other = malloc(sizeof( struct NTreeNode ));
     other->val = 30;
     other->numberOfChild = 0;
     root->child[n++] = other;
@@ -199,17 +199,17 @@ int main(int argc, char * argv[])
     root->numberOfChild = n;
 
     n = 0;
-    other = malloc(sizeof(struct NTreeNode));
+    other = malloc(sizeof( struct NTreeNode ));
     other->val = 100;
     other->numberOfChild = 0;
     root->child[0]->child[n++] = other;
 
-    other = malloc(sizeof(struct NTreeNode));
+    other = malloc(sizeof( struct NTreeNode ));
     other->val = 101;
     other->numberOfChild = 0;
     root->child[0]->child[n++] = other;
 
-    other = malloc(sizeof(struct NTreeNode));
+    other = malloc(sizeof( struct NTreeNode ));
     other->val = 102;
     other->numberOfChild = 0;
     root->child[0]->child[n++] = other;
