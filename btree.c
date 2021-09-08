@@ -151,6 +151,25 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     rightLevel = determineMaxDepthLevel(root->right, 0);
     leftLevel = determineMaxDepthLevel(root->left, 0);
 
+    // TODO?
+    // - there are significant amount of similarly duplicate logic, where
+    //   reordering left and right branches have similar logic, but different
+    //   pointer reference (left or right) and relational operator < or >
+    //
+    // - we can remove that "duplicate" by combinining both blocks into one
+    //   generic method that driven by a pass in boolean (left or right)
+    //
+    // - or we can use macro for text substutition
+    //
+    // - or we just left it be where it is now (duplicated), as 1st approach will
+    //   alter the original concise logic by taking into account of extra argument
+    //
+    //   where else 2nd logic will have to hide thing behind a C macro which is kind
+    //   raw and hard to read when cross multiple lines
+    //
+    // In short, I prefer readability of code over saving a few lines, modern compiler
+    // is good in generating code that is condensed in memory and fast in execution.
+
     if ( ( rightLevel - leftLevel ) >= 2 ) // reorder right branch
     {
         newRoot = root->right;
@@ -176,15 +195,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
 
             root->right->left = NULL;
         }
-        else if ( rightLevel > leftLevel )
-        {
-            tmp = newRoot;
-            while ( NULL != tmp->left )
-                tmp = tmp->left;
-
-            tmp->left = root;
-        }
-        else
+        else if ( rightLevel >= leftLevel )
         {
             tmp = newRoot;
             while ( NULL != tmp->left )
@@ -222,15 +233,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
             tmp->left = root->left;
             root->left->right = NULL;
         }
-        else if ( leftLevel > rightLevel )
-        {
-            tmp = newRoot;
-            while ( NULL != tmp->right )
-                tmp = tmp->right;
-
-            tmp->right = root;
-        }
-        else
+        else if ( leftLevel >= rightLevel )
         {
             tmp = newRoot;
             while ( NULL != tmp->right )
