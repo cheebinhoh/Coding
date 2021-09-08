@@ -8,6 +8,9 @@
 #include "btree.h"
 
 
+static int debug = 0;
+
+
 int isTreeIdentical(struct TreeNode *left, struct TreeNode *right)
 {
     if ( NULL == left
@@ -143,38 +146,82 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     rightLevel = determineMaxDepthLevel(root->right, 0);
     leftLevel = determineMaxDepthLevel(root->left, 0);
 
+    newRoot = root;
+
     if ( ( rightLevel - leftLevel ) >= 2 )
     {
         newRoot = root->right;
 
-        if ( NULL != root->right->left )
+        rightLevel = determineMaxDepthLevel(newRoot->right, 0);
+        leftLevel = determineMaxDepthLevel(newRoot->left, 0);
+
+        if ( leftLevel > rightLevel )
         {
-            newRoot = root->right->left;
+            newRoot = newRoot->left;
+            if ( NULL != newRoot->left )
+                newRoot->left->left = root;
+            else
+                newRoot->left = root;
+
+            if ( NULL != newRoot->right )
+                newRoot->right->right = root->right;
+            else
+                newRoot->right = root->right;
+
             root->right->left = NULL;
-            newRoot->right = root->right;
+        }
+        else if ( rightLevel > leftLevel )
+        {
+            if ( NULL != newRoot->left )
+                newRoot->left->left = root;
+            else
+                newRoot->left = root;
+        }
+        else
+        {
+            newRoot->right = root;
         }
 
         root->right = NULL;
-        newRoot->left = root;
-
-        *parent = newRoot;
     }
     else if ( ( leftLevel - rightLevel ) >= 2 )
     {
         newRoot = root->left;
 
-        if ( NULL != root->left->right )
+        rightLevel = determineMaxDepthLevel(newRoot->right, 0);
+        leftLevel = determineMaxDepthLevel(newRoot->left, 0);
+
+        if ( rightLevel > leftLevel )
         {
-            newRoot = root->left->right;
+            newRoot = newRoot->right;
+            if ( NULL != newRoot->right )
+                newRoot->right->right = root;
+            else
+                newRoot->right = root;
+
+            if ( NULL != newRoot->left )
+                newRoot->left->left = root->left;
+            else
+                newRoot->left = root->left;
+
             root->left->right = NULL;
-            newRoot->left = root->left;
+        }
+        else if ( leftLevel > rightLevel )
+        {
+            if ( NULL != newRoot->right )
+                newRoot->right->right = root;
+            else
+                newRoot->right = root;
+        }
+        else
+        {
+            newRoot->left = root;
         }
 
         root->left = NULL;
-        newRoot->right = root;
-
-        *parent = newRoot;
     }
+
+    *parent = newRoot;
 }
 
 struct TreeNode * treeRebalance(struct TreeNode *root)

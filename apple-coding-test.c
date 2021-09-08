@@ -652,6 +652,8 @@ void runFindMedianOfStreamOfIntegers(void)
     printf("Adding 15, median = %5.2f\n", addIntegerAndReturnMedian(15));
     printf("Adding  1, median = %5.2f\n", addIntegerAndReturnMedian(1));
     printf("Adding  3, median = %5.2f\n", addIntegerAndReturnMedian(3));
+    printf("Adding  2, median = %5.2f\n", addIntegerAndReturnMedian(2));
+    printf("Adding  4, median = %5.2f\n", addIntegerAndReturnMedian(4));
 }
 
 /* Test 9:
@@ -737,9 +739,9 @@ int main(int argc, char *argv[])
     printf("Run runFindMedianOfStreamOfIntegers\n");
     runFindMedianOfStreamOfIntegers();
 
-    printf("\n");
-    printf("Run runPermutationsOfString\n");
-    runPermutationsOfString();
+//    printf("\n");
+//    printf("Run runPermutationsOfString\n");
+//    runPermutationsOfString();
 
     return 0;
 }
