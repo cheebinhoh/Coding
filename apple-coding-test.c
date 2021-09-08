@@ -713,7 +713,7 @@ void runPermutationsOfString(void)
 void runAVLSelfbalanceTree(void)
 {
     struct TreeNode *root = NULL;
-
+    extern int debug;
 
     root = addTreeNodeAndRebalanceTree(root, 1);
     root = addTreeNodeAndRebalanceTree(root, 2);
@@ -729,7 +729,6 @@ void runAVLSelfbalanceTree(void)
     root = addTreeNodeAndRebalanceTree(root, 12);
     root = addTreeNodeAndRebalanceTree(root, 13);
     printTreeNodeInTreeTopology(root);
-
 }
 
 
