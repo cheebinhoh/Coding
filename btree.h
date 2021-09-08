@@ -30,5 +30,4 @@ int findTotalNumberOfTreeNode(struct TreeNode *root);
 void printTreeNodeInOrder(struct TreeNode *root);
 void printTreeNodeInTreeTopology(struct TreeNode *root);
 
-
 #endif

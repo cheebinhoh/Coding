@@ -8,9 +8,6 @@
 #include "btree.h"
 
 
-int debug = 0;
-
-
 int isTreeIdentical(struct TreeNode *left, struct TreeNode *right)
 {
     if ( NULL == left
@@ -71,10 +68,6 @@ struct TreeNode * findTreeNode(struct TreeNode *root, int val)
 struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
 {
     root = addTreeNode(root, val);
-
-    if ( val == 12 )
-        debug = 1;
-
 
     return treeRebalance(root);
 }
@@ -332,3 +325,4 @@ int findTotalNumberOfTreeNode(struct TreeNode *root)
 
     return count;
 }
+
