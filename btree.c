@@ -137,7 +137,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     int              rightLevel;
     struct TreeNode *newRoot;
     struct TreeNode *tmp;
-    int extrad = 0;
+
 
     if ( NULL == root )
        return;
@@ -149,7 +149,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
        treeRebalanceRecursive(&(root->right), root->right);
 
     rightLevel = determineMaxDepthLevel(root->right, 0);
-    leftLevel = determineMaxDepthLevel(root->left, 0);
+    leftLevel  = determineMaxDepthLevel(root->left, 0);
 
     // TODO?
     // - there are significant amount of similarly duplicate logic, where
@@ -175,7 +175,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
         newRoot = root->right;
 
         rightLevel = determineMaxDepthLevel(newRoot->right, 0);
-        leftLevel = determineMaxDepthLevel(newRoot->left, 0);
+        leftLevel  = determineMaxDepthLevel(newRoot->left, 0);
 
         if ( leftLevel > rightLevel )
         {
@@ -191,8 +191,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
             while ( NULL != tmp->right )
                 tmp = tmp->right;
 
-            tmp->right = root->right;
-
+            tmp->right        = root->right;
             root->right->left = NULL;
         }
         else if ( rightLevel >= leftLevel )
@@ -205,7 +204,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
         }
 
         root->right = NULL;
-        *parent = newRoot;
+        *parent     = newRoot;
 
         treeRebalanceRecursive(&(newRoot->left), newRoot->left);
     }
@@ -214,7 +213,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
         newRoot = root->left;
 
         rightLevel = determineMaxDepthLevel(newRoot->right, 0);
-        leftLevel = determineMaxDepthLevel(newRoot->left, 0);
+        leftLevel  = determineMaxDepthLevel(newRoot->left, 0);
 
         if ( rightLevel > leftLevel )
         {
@@ -230,7 +229,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
             while ( NULL != tmp->left )
                 tmp = tmp->left;
 
-            tmp->left = root->left;
+            tmp->left         = root->left;
             root->left->right = NULL;
         }
         else if ( leftLevel >= rightLevel )
@@ -243,7 +242,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
         }
 
         root->left = NULL;
-        *parent = newRoot;
+        *parent    = newRoot;
 
         treeRebalanceRecursive(&(newRoot->right), newRoot->right);
     }
