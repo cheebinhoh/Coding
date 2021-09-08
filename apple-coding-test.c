@@ -731,6 +731,79 @@ void runAVLSelfbalanceTree(void)
     printTreeNodeInTreeTopology(root);
 }
 
+/* Test 11:
+ *
+ * The maximum subarray problem is the task of finding the largest possible sum of a
+ * contiguous subarray, within a given one-dimensional array A[1…n] of numbers
+ */
+
+void printMaximumSubarrayNumber(int array[], int size)
+{
+    int i;
+    int j;
+    int start;
+    int end;
+    int val;
+    int largest;
+    int pivotStart;
+    int pivotEnd;
+    int pivotLargest;
+
+
+    if ( size <= 0 )
+        return;
+
+    pivotStart = -1;
+    pivotEnd   = -1;
+
+    for ( i = 0; i < size; i++ )
+    {
+        start   = i;
+        end     = i;
+        val     = array[i];
+        largest =  val;
+
+
+        for ( j = i + 1; j < size; j++ )
+        {
+            val = val + array[j];
+
+            if ( val >= largest )
+            {
+                largest = val;
+                end     = j;
+            }
+        }
+
+        if ( -1 == pivotEnd
+             || largest > pivotLargest )
+        {
+            pivotStart   = start;
+            pivotEnd     = end;
+            pivotLargest = largest;
+        }
+    }
+
+    for ( i = pivotStart; i <= pivotEnd; i++ )
+        printf("%d, ", array[i]);
+
+    printf("\n");
+}
+
+void runMaximumSubarrayNumber(void)
+{
+    int array[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
+    int i;
+
+
+    for ( i = 0; i < ( sizeof( array ) / sizeof( array[0] ) ); i++ )
+        printf("%d, ", array[i]);
+
+    printf("\n\n");
+    printf("Maximum subarray is ");
+    printMaximumSubarrayNumber(array, sizeof( array ) / sizeof( array[0] ) );
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -772,6 +845,10 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("Run runAVLSelfbalanceTree\n");
     runAVLSelfbalanceTree();
+
+    printf("\n");
+    printf("Run runMaximumSubarrayNumber\n");
+    runMaximumSubarrayNumber();
 
     return 0;
 }
