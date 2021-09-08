@@ -146,8 +146,6 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     rightLevel = determineMaxDepthLevel(root->right, 0);
     leftLevel = determineMaxDepthLevel(root->left, 0);
 
-    newRoot = root;
-
     if ( ( rightLevel - leftLevel ) >= 2 )
     {
         newRoot = root->right;
@@ -183,6 +181,9 @@ void treeRebalanceRecursive(struct TreeNode **parent,
         }
 
         root->right = NULL;
+        *parent = newRoot;
+
+        treeRebalanceRecursive(&(newRoot->left), newRoot->left);
     }
     else if ( ( leftLevel - rightLevel ) >= 2 )
     {
@@ -219,9 +220,10 @@ void treeRebalanceRecursive(struct TreeNode **parent,
         }
 
         root->left = NULL;
-    }
+        *parent = newRoot;
 
-    *parent = newRoot;
+        treeRebalanceRecursive(&(newRoot->right), newRoot->right);
+    }
 }
 
 struct TreeNode * treeRebalance(struct TreeNode *root)

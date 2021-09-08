@@ -705,6 +705,33 @@ void runPermutationsOfString(void)
     printf("\n");
 }
 
+/* Test 10:
+ *
+ * AVL self-balancing tree
+ */
+
+void runAVLSelfbalanceTree(void)
+{
+    struct TreeNode *root = NULL;
+
+
+    root = addTreeNodeAndRebalanceTree(root, 1);
+    root = addTreeNodeAndRebalanceTree(root, 2);
+    root = addTreeNodeAndRebalanceTree(root, 3);
+    root = addTreeNodeAndRebalanceTree(root, 4);
+    root = addTreeNodeAndRebalanceTree(root, 5);
+    root = addTreeNodeAndRebalanceTree(root, 6);
+    root = addTreeNodeAndRebalanceTree(root, 7);
+    root = addTreeNodeAndRebalanceTree(root, 8);
+    root = addTreeNodeAndRebalanceTree(root, 9);
+    root = addTreeNodeAndRebalanceTree(root, 10);
+    root = addTreeNodeAndRebalanceTree(root, 11);
+    root = addTreeNodeAndRebalanceTree(root, 12);
+    root = addTreeNodeAndRebalanceTree(root, 13);
+    printTreeNodeInTreeTopology(root);
+
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -739,9 +766,13 @@ int main(int argc, char *argv[])
     printf("Run runFindMedianOfStreamOfIntegers\n");
     runFindMedianOfStreamOfIntegers();
 
-//    printf("\n");
-//    printf("Run runPermutationsOfString\n");
-//    runPermutationsOfString();
+    printf("\n");
+    printf("Run runPermutationsOfString\n");
+    runPermutationsOfString();
+
+    printf("\n");
+    printf("Run runAVLSelfbalanceTree\n");
+    runAVLSelfbalanceTree();
 
     return 0;
 }
