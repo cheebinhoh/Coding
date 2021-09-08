@@ -804,6 +804,79 @@ void runMaximumSubarrayNumber(void)
     printMaximumSubarrayNumber(array, sizeof( array ) / sizeof( array[0] ) );
 }
 
+/* Test 12:
+ *
+ * Find the rotating point of an array that is sorted, but the starting point can be
+ * in middle.
+ */
+
+int findRotatingPointInArray(int array[], int size)
+{
+    int start;
+    int end;
+    int rotatingPoint;
+    int midpoint;
+
+
+    start         = 0;
+    end           = size - 1;
+    rotatingPoint = 0;
+
+    while ( start < end
+            && array[start] > array[end] )
+    {
+        midpoint = ( start + end ) / 2;
+
+        if ( array[start] > array[midpoint] )
+        {
+            end           = midpoint - 1;
+            rotatingPoint = end;
+        }
+        else
+        {
+            start         = midpoint + 1;
+            rotatingPoint = start;
+        }
+    }
+
+    return rotatingPoint;
+}
+
+void findRotatingPointInIntegerArray(void)
+{
+    int array1[] = { 5, 1, 2, 3, 4 };
+    int array2[] = { 4, 5, 6, 1, 2, 3 };
+    int array3[] = { 4, 5, 6, 7, 8, 0, 1, 2, 3 };
+    int i;
+    int start;
+
+
+    for ( i = 0; i < sizeof( array1 ) / sizeof( array1[0] ); i++ )
+        printf("%d, ", array1[i]);
+
+    printf("\n");
+    start = findRotatingPointInArray(array1, sizeof( array1 ) / sizeof( array1[0] ));
+    printf("The rotating point is at index %d and value is %d\n",
+            start, array1[start]);
+
+    printf("\n");
+    for ( i = 0; i < sizeof( array2 ) / sizeof( array2[0] ); i++ )
+        printf("%d, ", array2[i]);
+
+    printf("\n");
+    start = findRotatingPointInArray(array2, sizeof( array2 ) / sizeof( array2[0] ));
+    printf("The rotating point is at index %d and value is %d\n",
+            start, array2[start]);
+
+    printf("\n");
+    for ( i = 0; i < sizeof( array3 ) / sizeof( array3[0] ); i++ )
+        printf("%d, ", array3[i]);
+
+    printf("\n");
+    start = findRotatingPointInArray(array3, sizeof( array3 ) / sizeof( array3[0] ));
+    printf("The rotating point is at index %d and value is %d\n",
+            start, array3[start]);
+}
 
 int main(int argc, char *argv[])
 {
@@ -849,6 +922,11 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("Run runMaximumSubarrayNumber\n");
     runMaximumSubarrayNumber();
+
+    printf("\n");
+    printf("Run findRotatingPointInIntegerArray\n");
+    findRotatingPointInIntegerArray();
+    printf("\n");
 
     return 0;
 }
