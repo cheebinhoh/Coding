@@ -968,6 +968,7 @@ void runCheckIfIsBinarySearchTree(void)
 
 }
 
+
 int main(int argc, char *argv[])
 {
     printf("run runDeteremineIf3NumberSumToValue:\n");
