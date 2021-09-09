@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 #include "btree.h"
 
 
@@ -713,7 +714,6 @@ void runPermutationsOfString(void)
 void runAVLSelfbalanceTree(void)
 {
     struct TreeNode *root = NULL;
-    extern int debug;
 
     root = addTreeNodeAndRebalanceTree(root, 1);
     root = addTreeNodeAndRebalanceTree(root, 2);
@@ -878,6 +878,96 @@ void findRotatingPointInIntegerArray(void)
             start, array3[start]);
 }
 
+/* Test 13:
+ *
+ * Check if a tree is binary search tree.
+ */
+
+struct checkBinarySearchTreeData
+{
+    int isValid;
+    int lastValue;
+    int started;
+};
+
+void checkTreeNodeValueInOrder(struct TreeNode *node, int pos, void *data)
+{
+     struct checkBinarySearchTreeData *pData;
+
+
+     pData = data;
+     if ( ! pData->started )
+          pData->started = 1;
+     else if ( node->val  < pData->lastValue )
+         pData->isValid = 0;
+
+     pData->lastValue = node->val;
+}
+
+
+int isBinarySearchTree(struct TreeNode *root)
+{
+    struct checkBinarySearchTreeData data;
+
+
+    if ( NULL == root )
+        return 1;
+
+    data.lastValue = 0;
+    data.isValid   = 1;
+    data.started   = 0;
+
+    traverseTreeNodeInOrder(root, checkTreeNodeValueInOrder, &data);
+
+    return data.isValid;
+}
+
+void runCheckIfIsBinarySearchTree(void)
+{
+    struct TreeNode *root1 = NULL;
+    struct TreeNode *root2 = NULL;
+
+
+    root1 = addTreeNodeAndRebalanceTree(root1, 1);
+    root1 = addTreeNodeAndRebalanceTree(root1, 2);
+    root1 = addTreeNodeAndRebalanceTree(root1, 3);
+    root1 = addTreeNodeAndRebalanceTree(root1, 4);
+
+    printTreeNodeInTreeTopology(root1);
+    printf("\n");
+
+    if ( isBinarySearchTree(root1) )
+        printf("root1 is a binary search tree\n");
+    else
+        printf("root1 is not a binary search tree\n");
+
+    root2      = malloc( sizeof( struct TreeNode ) );
+    root2->val = 4;
+
+    root2->right        = malloc( sizeof( struct TreeNode ) );
+    root2->right->val   = 5;
+    root2->right->left  = NULL;
+    root2->right->right = NULL;
+
+    root2->left      = malloc( sizeof( struct TreeNode ) );
+    root2->left->val = 2;
+
+    root2->left->left = NULL;
+    root2->left->right = malloc( sizeof( struct TreeNode ) );
+
+    root2->left->right->val   = 6;
+    root2->left->right->left  = NULL;
+    root2->left->right->right = NULL;
+
+    printTreeNodeInTreeTopology(root1);
+    printf("\n");
+    if ( isBinarySearchTree(root2) )
+        printf("root2 is a binary search tree\n");
+    else
+        printf("root2 is not a binary search tree\n");
+
+}
+
 int main(int argc, char *argv[])
 {
     printf("run runDeteremineIf3NumberSumToValue:\n");
@@ -926,6 +1016,11 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("Run findRotatingPointInIntegerArray\n");
     findRotatingPointInIntegerArray();
+
+    printf("\n");
+    printf("Run runCheckIfIsBinarySearchTree\n");
+    runCheckIfIsBinarySearchTree();
+
     printf("\n");
 
     return 0;

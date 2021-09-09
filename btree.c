@@ -325,4 +325,3 @@ int findTotalNumberOfTreeNode(struct TreeNode *root)
 
     return count;
 }
-
