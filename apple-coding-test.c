@@ -160,6 +160,7 @@ void runDeteremineIf3NumberSumToValue(void)
        printf("There are no 3 numbers sum up to %d\n", 22);
     }
 
+    printf("\n");
     printf("Use Binary way of brute force method\n");
     found = deteremineIf3NumberSumToValueInDivAndConquer(number,
                                                          sizeof( number ) / sizeof( number[0] ),
