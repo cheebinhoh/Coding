@@ -922,6 +922,7 @@ int isBinarySearchTree(struct TreeNode *root)
     return data.isValid;
 }
 
+
 void runCheckIfIsBinarySearchTree(void)
 {
     struct TreeNode *root1 = NULL;
@@ -966,6 +967,120 @@ void runCheckIfIsBinarySearchTree(void)
     else
         printf("root2 is not a binary search tree\n");
 
+}
+
+
+/* Test 14:
+ *
+ * Check that two lists are combined into a final list in a 1st come 1st serve ordering
+ */
+int checkIfListAreInOrderOfAnotherList(int list1[], int list1Size,
+                                       int list2[], int list2Size)
+{
+    int i;
+    int j;
+    int last;
+
+
+    last = 0;
+    for ( i = 0; i < list1Size; i++ )
+    {
+        if ( last > i )
+            j = last + 1;
+        else
+            j = i;
+
+        while ( j < list2Size )
+        {
+            if ( list2[j] == list1[i] )
+                break;
+
+            j++;
+        }
+
+        if ( j == list2Size )
+            goto fail;
+
+        last = j;
+    }
+
+    return 1;
+
+fail:
+    return 0;
+}
+
+int checkIfTwoListsAre1stCome1stServe(int list1[], int list1Size,
+                                      int list2[], int list2Size,
+                                      int list3[], int list3Size)
+{
+    return checkIfListAreInOrderOfAnotherList(list1, list1Size, list3, list3Size)
+           && checkIfListAreInOrderOfAnotherList(list2, list2Size, list3, list3Size);
+
+}
+
+void runCheckIfTwoListsAre1stCome1stServe(void)
+{
+    int list1[] = { 17,  8, 24 };
+    int list2[] = { 12, 19,  2 };
+    int list3[] = { 17,  8, 12, 19, 24,  2 };
+    int list4[] = {  1,  3,  5 };
+    int list5[] = {  2,  4,  6 };
+    int list6[] = {  1, 2, 4, 6, 5, 3 };
+    int i;
+    int inOrder;
+
+
+    printf("list1 = ");
+    for ( i = 0; i < sizeof( list1 ) / sizeof( list1[0] ); i++ )
+        printf("%d, ", list1[i]);
+
+    printf("\n");
+    printf("list2 = ");
+    for ( i = 0; i < sizeof( list2 ) / sizeof( list2[0] ); i++ )
+        printf("%d, ", list2[i]);
+
+    printf("\n");
+    printf("list3 = ");
+    for ( i = 0; i < sizeof( list3 ) / sizeof( list3[0] ); i++ )
+        printf("%d, ", list3[i]);
+
+    printf("\n");
+
+    inOrder = checkIfTwoListsAre1stCome1stServe(list1, sizeof( list1 ) / sizeof( list1[0] ),
+                                                list2, sizeof( list2 ) / sizeof( list2[0] ),
+                                                list3, sizeof( list3 ) / sizeof( list3[0] ) );
+
+    if ( inOrder )
+        printf("list1 and list2 are served in order\n");
+    else
+        printf("list1 and list2 are not served in order\n");
+
+    printf("\n");
+    printf("list4 = ");
+    for ( i = 0; i < sizeof( list4 ) / sizeof( list4[0] ); i++ )
+        printf("%d, ", list4[i]);
+
+    printf("\n");
+    printf("list5 = ");
+    for ( i = 0; i < sizeof( list5 ) / sizeof( list5[0] ); i++ )
+        printf("%d, ", list5[i]);
+
+    printf("\n");
+    printf("list3 = ");
+    for ( i = 0; i < sizeof( list6 ) / sizeof( list6[0] ); i++ )
+        printf("%d, ", list6[i]);
+
+    printf("\n");
+
+    inOrder = checkIfTwoListsAre1stCome1stServe(list4, sizeof( list4 ) / sizeof( list4[0] ),
+                                                list5, sizeof( list5 ) / sizeof( list5[0] ),
+                                                list6, sizeof( list6 ) / sizeof( list6[0] ) );
+
+    if ( inOrder )
+        printf("list4 and list5 are served in order\n");
+    else
+        printf("list4 and list5 are not served in order\n");
 }
 
 
@@ -1022,6 +1137,9 @@ int main(int argc, char *argv[])
     printf("Run runCheckIfIsBinarySearchTree\n");
     runCheckIfIsBinarySearchTree();
 
+    printf("\n");
+    printf("Run runCheckIfTwoListsAre1stCome1stServe\n");
+    runCheckIfTwoListsAre1stCome1stServe();
     printf("\n");
 
     return 0;
