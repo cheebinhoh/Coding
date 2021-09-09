@@ -48,12 +48,72 @@ found:
     return 1;
 }
 
+// will this be better? we find a midpoint and sum up midpoint to two elements from right or left
+// pane of values and if sum 
+// 
+// FIXME: check if logic has bug
+int deteremineIf3NumberSumToValueInDivAndConquerRecursive(int array[], int size, int sum, int mid)
+{
+    int i;
+    int j;
+
+
+    if ( mid >= size )
+        return 0;
+
+    if ( mid >= 2 )
+    {
+        for (i = 0; i < mid; i++ )
+        {
+            for ( j = i + 1; j < mid; j++ )
+            {
+               if ( ( array[mid] + array[i] + array[j] ) == sum )
+                   goto found;
+            }
+        }
+    }
+
+    for (i = mid + 1; i < size; i++ )
+    {
+        for ( j = i + 1; j < size; j++ )
+        {
+            if ( ( array[mid] + array[i] + array[j] ) == sum )
+                goto found;
+        }
+    }
+
+    if ( size - mid >= 5
+         && deteremineIf3NumberSumToValueInDivAndConquerRecursive(&array[mid + 1],
+                                                                  size - mid - 1,
+                                                                  sum,
+                                                                  ( size - mid ) / 2 ) )
+        goto found;
+
+    if ( mid > 0
+         &&  deteremineIf3NumberSumToValueInDivAndConquerRecursive(array, size, sum, mid / 2 ) )
+        goto found;
+
+    return 0;
+
+found:
+    return 1;
+}
+
+int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size, int sum)
+{
+    return deteremineIf3NumberSumToValueInDivAndConquerRecursive(array,
+                                                                 size,
+                                                                 sum,
+                                                                 size / 2);
+}
+
 void runDeteremineIf3NumberSumToValue(void)
 {
     int number[] = { 0, 1, 2, 3, 4, 5 };
     int found;
 
 
+    printf("Use brute force method\n");
     found = deteremineIf3NumberSumToValue(number,
                                           sizeof( number ) / sizeof( number[0] ),
                                           6);
@@ -83,6 +143,46 @@ void runDeteremineIf3NumberSumToValue(void)
     found = deteremineIf3NumberSumToValue(number,
                                           sizeof( number ) / sizeof( number[0] ),
                                           22);
+
+    if ( found )
+    {
+       printf("There are 3 numbers sum up to %d\n", 22);
+    }
+    else
+    {
+       printf("There are no 3 numbers sum up to %d\n", 22);
+    }
+
+    printf("Use Binary way of brute force method\n");
+    found = deteremineIf3NumberSumToValueInDivAndConquer(number,
+                                                         sizeof( number ) / sizeof( number[0] ),
+                                                         6);
+
+    if ( found )
+    {
+       printf("There are 3 numbers sum up to %d\n", 6);
+    }
+    else
+    {
+       printf("There are no 3 numbers sum up to %d\n", 6);
+    }
+
+    found = deteremineIf3NumberSumToValueInDivAndConquer(number,
+                                                         sizeof( number ) / sizeof( number[0] ),
+                                                         3);
+
+    if ( found )
+    {
+       printf("There are 3 numbers sum up to %d\n", 3);
+    }
+    else
+    {
+       printf("There are no 3 numbers sum up to %d\n", 3);
+    }
+
+    found = deteremineIf3NumberSumToValueInDivAndConquer(number,
+                                                         sizeof( number ) / sizeof( number[0] ),
+                                                         22);
 
     if ( found )
     {
