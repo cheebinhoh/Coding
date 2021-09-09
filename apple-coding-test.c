@@ -49,8 +49,8 @@ found:
 }
 
 // will this be better? we find a midpoint and sum up midpoint to two elements from right or left
-// pane of values and if sum 
-// 
+// pane of values and if sum
+//
 // FIXME: check if logic has bug
 int deteremineIf3NumberSumToValueInDivAndConquerRecursive(int array[], int size, int sum, int mid)
 {
@@ -63,9 +63,9 @@ int deteremineIf3NumberSumToValueInDivAndConquerRecursive(int array[], int size,
 
     if ( mid >= 2 )
     {
-        for (i = 0; i < mid; i++ )
+        for ( i = mid - 1; i > 0; i-- )
         {
-            for ( j = i + 1; j < mid; j++ )
+            for ( j = i - 1; j >= 0; j-- )
             {
                if ( ( array[mid] + array[i] + array[j] ) == sum )
                    goto found;
@@ -73,7 +73,7 @@ int deteremineIf3NumberSumToValueInDivAndConquerRecursive(int array[], int size,
         }
     }
 
-    for (i = mid + 1; i < size; i++ )
+    for ( i = mid + 1; i < size - 1; i++ )
     {
         for ( j = i + 1; j < size; j++ )
         {
