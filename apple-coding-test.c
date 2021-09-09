@@ -48,10 +48,17 @@ found:
     return 1;
 }
 
-// will this be better? we find a midpoint and sum up midpoint to two elements from right or left
-// pane of values and if sum
+// in the case we have a long list of items, e.g. 5000 and the 3 values added up to the sum are
+// located between 4500 to 5000, then searching from the beginning will be in efficient.
 //
-// FIXME: check if logic has bug
+// in this case, we can make use of binary search approach that we do the following iterations:
+// - 1st = midpoint is at 2500, we try to find two values from 0 - 2499 and another two from 2501 - 5000
+//   to add up to sum.
+// - 2nd = midpoint is at 3751, we try to find two values from 2501 - 3750 and aniother two from 3752 - 5000
+// - 3rd = midpoint is at 4377, and we further divide it into two panes.
+//
+// if we are diving into right pane, we will shorten the array in subcall as we do not awant the subcall
+// left pane to extend toward all the way to 0.
 int deteremineIf3NumberSumToValueInDivAndConquerRecursive(int array[], int size, int sum, int mid)
 {
     int i;
