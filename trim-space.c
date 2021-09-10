@@ -16,11 +16,11 @@ struct Token
 
 int main(int argc, char *argv[])
 {
-    int c;
-    int i;
-    int j;
-    int tokenIndex   = 0;
-    int numOfNewLine = 0;
+    int          c;
+    int          i;
+    int          j;
+    int          tokenIndex   = 0;
+    int          numOfNewLine = 0;
     struct Token tokenList[100];
 
 
@@ -31,9 +31,7 @@ int main(int argc, char *argv[])
            if ( '\n' == c )
            {
                if ( numOfNewLine <= 0 )
-               {
                    putchar(c);
-               }
 
                tokenIndex = 0;
 

@@ -23,13 +23,13 @@ btreetraverse.out : btreetraverse.c btreetraverse-main.c btree.h btreetraverse.h
 	gcc -o $@ btreetraverse.c btreetraverse-main.c
 
 btreebuild.out : btreebuild.c btreetraverse.c btree.h btreetraverse.h
-	gcc -o $@ btreebuild.c btreetraverse.c
+	gcc -o $@ btreebuild.c btreetraverse.c 
 
 btreelca.out : btreelca.c btreetraverse.c btree.h btreetraverse.h
 	gcc -o $@ btreelca.c btreetraverse.c
 
-tree2btreebuild.out : tree2btreebuild.c btreetraverse.c btree.h btreetraverse.h
-	gcc -o $@ tree2btreebuild.c btreetraverse.c
+tree2btreebuild.out : tree2btreebuild.c btreetraverse.c btree.h btree.c btreetraverse.h 
+	gcc -o $@ tree2btreebuild.c btreetraverse.c btree.c
 
 search-sort.out : search-sort.c 
 	gcc -o $@ search-sort.c 

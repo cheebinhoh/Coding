@@ -133,6 +133,30 @@ struct TreeNode * ntree2btree(struct NTreeNode *root)
     return ntree2btreeInternal(broot, &root, 1);
 }
 
+struct TreeNode * ntree2bstreeInternal(struct NTreeNode *root, struct TreeNode *bsroot)
+{
+    int i;
+
+
+    if ( NULL == root )
+        return bsroot;
+
+    bsroot = addTreeNodeAndRebalanceTree(bsroot, root->val);
+    for ( i = 0; i < root->numberOfChild; i++ )
+        bsroot = ntree2bstreeInternal(root->child[i], bsroot);
+
+    return bsroot;
+}
+
+
+struct TreeNode * ntree2bstree(struct NTreeNode *root)
+{
+    struct TreeNode *bsroot = NULL;
+
+
+    return ntree2bstreeInternal(root, bsroot);
+}
+
 
 /* The logic to convert a generic sorted tree into a binary tree is that:
  *
@@ -218,6 +242,13 @@ int main(int argc, char * argv[])
 
     broot = ntree2btree(root);
     inOrderTraversal(broot);
+
+    printTreeNodeInTreeTopology(broot);
+
+    printf("\n");
+    printf("Build a binary search tree\n");
+    broot = ntree2bstree(root);
+    printTreeNodeInTreeTopology(broot);
 
     // printNTree(root);
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for

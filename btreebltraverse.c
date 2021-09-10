@@ -23,11 +23,11 @@ void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
                                     struct TreeNode **nextLevelList,
                                     int               nextLevelCnt )
 {
+    int i;
+
+
     if ( currentLevelCnt <= 0 )
         return;
-
-        int i;
-
 
     for ( i = 0; i < currentLevelCnt; i++ )
     {
@@ -80,14 +80,12 @@ void breadthLevelTraversalIter(struct TreeNode *root)
     struct TreeNode *nextLevelList[100];
     struct TreeNode *node;
     int              currentLevelCnt = 0;
-    int              nextLevelCnt = 0;
-    int              index = 0;
+    int              nextLevelCnt    = 0;
+    int              index           = 0;
 
 
     if ( NULL == root )
-    {
         return;
-    }
 
     currentLevelList[currentLevelCnt++] = root;
     while ( index < currentLevelCnt )
