@@ -10,12 +10,14 @@
 #include <stdio.h>
 #include <ctype.h>
 
+
 struct OpToken
 {
     char op;
     int  opStartPos;
     int  opEndPos;
 };
+
 
 char * getNumber(char s[], int *retValue)
 {
@@ -237,9 +239,7 @@ int evaluate(char s[])
     }
 
     while ( opIndex > 0 )
-    {
         evaluateBinaryExpr(number, &numberIndex, op, &opIndex);
-    }
 
     return numberIndex <= 0 ? 0 : number[numberIndex - 1];
 }

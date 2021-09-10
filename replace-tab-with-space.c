@@ -63,20 +63,14 @@ int main(int argc, char *argv[])
             int i;
 
             for ( i = 0; i < space2Tab; i++ )
-            {
                 putchar(' ');
-            }
         }
         else
         {
             if ( ! isspace(c ) )
-            {
                startWithNoneSpace = 1;
-            }
             else if ( '\n' == c )
-            {
                startWithNoneSpace = 0;
-            }
 
             putchar(c);
         }

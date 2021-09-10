@@ -222,13 +222,9 @@ int binarySearch(int list[], int size, int value)
             && list[middle] != value )
     {
        if ( value < list[middle] )
-       {
           tail = middle - 1;
-       }
        else
-       {
           head = middle + 1;
-       }
 
        middle = ( head + tail ) / 2;
     }

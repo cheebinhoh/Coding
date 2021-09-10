@@ -240,7 +240,7 @@ int main(int argc, char * argv[])
 
     root->child[0]->numberOfChild = n;
 
-    broot = ntree2btree(root); 
+    broot = ntree2btree(root);
     inOrderTraversal(broot);
 
     printTreeNodeInTreeTopology(broot);

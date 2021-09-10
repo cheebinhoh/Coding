@@ -64,17 +64,16 @@ int main(int argc, char *argv[])
 
             while ( ' ' != *cptr
                     && cptr != buffer )
-            {
                 cptr--;
-            }
 
             // the line input so far has no space, so we print everything out.
             if ( buffer == cptr )
             {
-                for ( int n = 0; n < bufferUsed; n++ )
-                {
-                    putchar(buffer[n]);
-                }
+                // I was taught to put variable definition before executable statement in
+                // function block, but there will be time that I do not want to do that
+                // when the variable definition is used so locally.
+                for ( int i = 0; i < bufferUsed; i++ )
+                    putchar(buffer[i]);
 
                 bufferUsed = 0;
                 buffer[bufferUsed] = '\0';
@@ -89,7 +88,7 @@ int main(int argc, char *argv[])
                     iter++;
                 }
 
-                  iter = buffer;
+                iter = buffer;
                 cptr++;
                 while ( cptr != &buffer[bufferUsed] )
                 {
@@ -111,12 +110,13 @@ int main(int argc, char *argv[])
 
     if ( bufferUsed > 0 )
     {
-        int n;
+        int i;
 
-        while ( n < bufferUsed )
+
+        while ( i < bufferUsed )
         {
-            putchar(buffer[n]);
-            n++;
+            putchar(buffer[i]);
+            i++;
         }
     }
 

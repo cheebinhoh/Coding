@@ -28,9 +28,7 @@ int main(int argc, char *argvp[])
     }
 
     if ( maxArray[0] > maxArray[1] )
-    {
         printf("The 2nd maximum number is %d\n", maxArray[1]);
-    }
 
     return 0;
 }
