@@ -58,85 +58,82 @@ void linearTree(struct TreeNode  *root,
  */
 int treeIsSysmetric(struct TreeNode *root)
 {
+    struct TreeNode *leftList[100];
+    struct TreeNode *rightList[100];
+    int              leftListCnt  = 0;
+    int              rightListCnt = 0;
+    int              i;
+
+
     if ( NULL == root )
-    {
         return 1;
-    }
-    else
+
+
+    linearTree(root, 1, leftList, &leftListCnt);
+    linearTree(root, 0, rightList, &rightListCnt);
+
+    printf("left  = " );
+    for ( i = 0; i < leftListCnt; i++ )
     {
-        struct TreeNode *leftList[100];
-        struct TreeNode *rightList[100];
-        int              leftListCnt  = 0;
-        int              rightListCnt = 0;
-        int              i;
+        struct TreeNode *node;
 
 
-        linearTree(root, 1, leftList, &leftListCnt);
-        linearTree(root, 0, rightList, &rightListCnt);
-
-        printf("left  = " );
-        for ( i = 0; i < leftListCnt; i++ )
+        node = leftList[i];
+        if ( NULL == node )
         {
-            struct TreeNode *node;
-
-
-            node = leftList[i];
-            if ( NULL == node )
-            {
-                printf("-%s", i + 1 >= leftListCnt ? "" : ", ");
-            }
-            else
-            {
-                printf("%d, ", node->val);
-            }
-        }
-
-        printf("\n");
-
-        printf("right = ");
-        for ( i = 0; i < rightListCnt; i++ )
-        {
-            struct TreeNode *node;
-
-
-            node = rightList[i];
-            if ( NULL == node )
-            {
-                printf("-%s", i + 1 >= rightListCnt ? "" : ", ");
-            }
-            else
-            {
-                printf("%d, ", node->val);
-            }
-        }
-
-        printf("\n");
-
-        if ( leftListCnt != rightListCnt )
-        {
-            return 0;
+            printf("-%s", i + 1 >= leftListCnt ? "" : ", ");
         }
         else
         {
-            for ( i = 0; i < leftListCnt; i++ )
+            printf("%d, ", node->val);
+        }
+    }
+
+    printf("\n");
+
+    printf("right = ");
+    for ( i = 0; i < rightListCnt; i++ )
+    {
+        struct TreeNode *node;
+
+
+        node = rightList[i];
+        if ( NULL == node )
+        {
+            printf("-%s", i + 1 >= rightListCnt ? "" : ", ");
+        }
+        else
+        {
+           printf("%d, ", node->val);
+        }
+    }
+
+    printf("\n");
+
+    if ( leftListCnt != rightListCnt )
+    {
+        return 0;
+    }
+    else
+    {
+        for ( i = 0; i < leftListCnt; i++ )
+        {
+            if ( NULL != leftList[i]
+                 && NULL != rightList[i] )
             {
-                if ( NULL != leftList[i]
-                     && NULL != rightList[i] )
-                {
-                    if ( leftList[i]->val != rightList[i]->val )
-                    {
-                        return 0;
-                    }
-                }
-                else if ( leftList[i] != rightList[i] )
+                if ( leftList[i]->val != rightList[i]->val )
                 {
                     return 0;
                 }
             }
-
-            return 1;
+            else if ( leftList[i] != rightList[i] )
+            {
+                return 0;
+            }
         }
-    } /* if ( NULL == root ) ... else */
+
+        return 1;
+    }
 }
 
 
