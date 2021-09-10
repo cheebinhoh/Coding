@@ -6,16 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-
-/* Definition for a binary tree node.
- */
-struct TreeNode {
-
-     int val;
-     struct TreeNode *left;
-     struct TreeNode *right;
-};
+#include "btree.h"
 
 
 /* This is internal recursive method that we sum up all value until leaf and then compare the sum
@@ -27,40 +18,37 @@ int btreePathSumInternal(struct TreeNode *root,
                          int              sum,
                          int              targetSum)
 {
+    int ret = 0;
+
+
     if ( NULL == root )
-    {
         return 0; // when tree is empty, there is no path, a path must be at least a node in minimum
-    }
-    else
+
+
+    sum += root->val;
+
+    if ( NULL != root->left )
     {
-        int ret = 0;
+        ret = btreePathSumInternal(root->left,
+                                   sum,
+                                   targetSum);
+    }
 
-
-        sum += root->val;
-
-        if ( NULL != root->left )
+    if ( 0 == ret )
+    {
+        if ( NULL != root->right )
         {
-            ret = btreePathSumInternal(root->left,
+            ret = btreePathSumInternal(root->right,
                                        sum,
                                        targetSum);
         }
-
-        if ( 0 == ret )
+        else
         {
-            if ( NULL != root->right )
-            {
-                ret = btreePathSumInternal(root->right,
-                                           sum,
-                                           targetSum);
-            }
-            else
-            {
-                ret = sum == targetSum;
-            }
+            ret = sum == targetSum;
         }
-
-        return ret;
     }
+
+    return ret;
 }
 
 
@@ -70,6 +58,7 @@ int btreePathSum(struct TreeNode *root,
                  int              targetSum)
 {
     int sum = 0;
+
 
     return btreePathSumInternal(root, sum, targetSum);
 }

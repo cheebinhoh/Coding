@@ -12,28 +12,22 @@
 struct TreeNode * findNode(struct TreeNode *root,
                            int              val)
 {
+    struct TreeNode *node;
+
+
     if ( NULL == root )
-    {
         return NULL;
-    }
-    else if ( val == root->val )
-    {
+
+    if ( val == root->val )
         return root;
-    }
-    else
-    {
-        struct TreeNode *node;
 
-        node = findNode(root->left, val);
-        if ( NULL != node )
-        {
-            return node;
-        }
-
-        node = findNode(root->right, val);
-
+    node = findNode(root->left, val);
+    if ( NULL != node )
         return node;
-    }
+
+    node = findNode(root->right, val);
+
+    return node;
 }
 
 /* Internal recursive method to find the least common ancestor
@@ -46,85 +40,73 @@ struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
 
 
     if ( NULL == root )
-    {
         return NULL;
-    }
-    else
+
+    if ( val1 == val2
+         && val2 == root->val )
+        return root;
+
+    if ( NULL == root->left
+         && NULL == root->right )
+        return NULL;
+
+    if ( NULL == root->left )
     {
-        if ( val1 == val2
-             && val2 == root->val )
+        if ( root->val == val1
+             && findNode(root->right, val2) != NULL )
         {
             return root;
         }
-        else
+
+        if ( root->val == val2
+             && findNode(root->right, val1) != NULL )
         {
-            if ( NULL == root->left
-                 && NULL == root->right )
-            {
-                return NULL;
-            }
+            return root;
+        }
 
-            if ( NULL == root->left )
-            {
-                if ( root->val == val1
-                     && findNode(root->right, val2) != NULL )
-                {
-                   return root;
-                }
+        return findLeastCommonAncestorInternal(root->right, val1, val2);
+    }
 
-                if ( root->val == val2
-                     && findNode(root->right, val1) != NULL )
-                {
-                   return root;
-                }
+    if ( NULL == root->right )
+    {
+        if ( root->val == val1
+             && findNode(root->left, val2) != NULL )
+        {
+            return root;
+        }
 
-                return findLeastCommonAncestorInternal(root->right, val1, val2);
-            }
+        if ( root->val == val2
+             && findNode(root->left, val1) != NULL )
+        {
+            return root;
+        }
 
-            if ( NULL == root->right )
-            {
-                if ( root->val == val1
-                     && findNode(root->left, val2) != NULL )
-                {
-                   return root;
-                }
+        return findLeastCommonAncestorInternal(root->left, val1, val2);
+    }
 
-                if ( root->val == val2
-                     && findNode(root->left, val1) != NULL )
-                {
-                   return root;
-                }
+    if ( findNode(root->left, val1) != NULL
+         && findNode(root->right, val2) != NULL )
+    {
+        return root;
+    }
 
-                return findLeastCommonAncestorInternal(root->left, val1, val2);
-            }
+    if ( findNode(root->left, val2) != NULL
+         && findNode(root->right, val1) != NULL )
+    {
+        return root;
+    }
 
-            if ( findNode(root->left, val1) != NULL
-                 && findNode(root->right, val2) != NULL )
-            {
-                return root;
-            }
+    node = findLeastCommonAncestorInternal(root->left, val1, val2);
+    if ( NULL != node )
+    {
+        return node;
+    }
 
-            if ( findNode(root->left, val2) != NULL
-                 && findNode(root->right, val1) != NULL )
-            {
-                return root;
-            }
-
-            node = findLeastCommonAncestorInternal(root->left, val1, val2);
-            if ( NULL != node )
-            {
-                return node;
-            }
-
-            node = findLeastCommonAncestorInternal(root->right, val1, val2);
-            if ( NULL != node )
-            {
-                return node;
-            }
-
-            return NULL;
-        } /* if ( val1 == val2 && val2 == root->val ) ... else */
-    } /* if ( NULL == root ) ... else */
+    node = findLeastCommonAncestorInternal(root->right, val1, val2);
+    if ( NULL != node )
+    {
+        return node;
+    }
 
     return NULL;
 }

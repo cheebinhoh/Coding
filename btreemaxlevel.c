@@ -17,30 +17,27 @@ void treeMaxLevelInternal(struct TreeNode *root,
                           int             *maxLevel)
 {
     if ( NULL == root )
-    {
         return;
-    }
-    else
+
+
+    level++;
+
+    if ( level > *maxLevel )
     {
-        level++;
-
-        if ( level > *maxLevel )
-        {
-            *maxLevel = level;
-        }
-
-        if ( NULL != root->left )
-        {
-            treeMaxLevelInternal(root->left, level, maxLevel);
-        }
-
-        if ( NULL != root->right )
-        {
-           treeMaxLevelInternal(root->right, level, maxLevel);
-        }
-
-        return;
+        *maxLevel = level;
     }
+
+    if ( NULL != root->left )
+    {
+        treeMaxLevelInternal(root->left, level, maxLevel);
+    }
+
+    if ( NULL != root->right )
+    {
+        treeMaxLevelInternal(root->right, level, maxLevel);
+    }
+
+    return;
 }
 
 
@@ -49,6 +46,7 @@ void treeMaxLevelInternal(struct TreeNode *root,
 int treeMaxLevel(struct TreeNode *root)
 {
     int level = 0;
+
 
     treeMaxLevelInternal(root, level, &level);
 
