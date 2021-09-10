@@ -124,13 +124,9 @@ int strindex(char s[], char t[])
     for ( i = 0, j = 0; s[i] != '\0' && t[j] != '\0'; i++ )
     {
         if ( s[i] == t[j] )
-        {
             j++;
-        }
         else
-        {
             j = 0;
-        }
     }
 
     return t[j] == '\0' ? i - j : -1;
@@ -176,13 +172,14 @@ void toupperString(char s[])
 void squeeze1(char s[], char c)
 {
     int i;
+    int j;
 
 
     for ( i = 0; '\0' != s[i]; i++ )
     {
         if ( c == s[i] )
         {
-            int j = i;
+            j = i;
 
 
             while ( ( s[j] = s[j + 1] ) != '\0' )

@@ -72,16 +72,12 @@ int isTransformable(char source[], char target[])
     }
 
     if ( j != i )
-    {
         return 0;
-    }
 
     for ( i = 0; i < ( sizeof( sH ) / sizeof( sH[0] ) ); i++ )
     {
         if ( sH[i] != tH[i] )
-        {
             return 0;
-        }
     }
 
     return 1;
@@ -89,8 +85,8 @@ int isTransformable(char source[], char target[])
 
 int simulateMoveAndScore(char source[], char target[], int pivot)
 {
-    int m;
-    int n;
+    int i;
+    int j;
     int score;
     int tmp;
 
@@ -103,39 +99,39 @@ int simulateMoveAndScore(char source[], char target[], int pivot)
     source[0] = tmp;
 
     // Scoring it, the logic is that:
-    // - if source and target characters at m and n are matched, plus 1
+    // - if source and target characters at i and j are matched, plus 1
     // - if they are not matched, we fast forward target to find next nth in
     //   target that matches the source.
     // ---- if next nth matching target is found, then we reset the score to 0.
     // ---- if it is not found, we skip the m and n, and compare next set of
     //      characters.
 
-    n = 0;
-    m = 0;
-    while ( '\0' != source[m]
-            && '\0' != target[n] )
+    i = 0;
+    j = 0;
+    while ( '\0' != source[i]
+            && '\0' != target[j] )
     {
-        if ( source[m] == target[n] )
+        if ( source[i] == target[j] )
         {
             score++;
-            n++;
-            m++;
+            i++;
+            j++;
         }
         else
         {
             char *c;
 
 
-            c = strchr(target + n, source[m]);
+            c = strchr(target + j, source[i]);
 
             if ( NULL == c )
             {
-                m++;
+                i++;
             }
             else
             {
                 score = 0;
-                n     = c - target;
+                j     = c - target;
             }
         }
     }
@@ -155,9 +151,7 @@ int transform(char source[], char target[])
 
 
     if ( ! isTransformable(source, target) )
-    {
         return -1;
-    }
 
     i = 0;
     while ( '\0' != source[i] && count < 50000 ) // a cut over to prevent infinite loop due to coding mistake

@@ -36,17 +36,11 @@ int main(int argc, char *argv[])
     }
 
     if ( 0 == numOfOpenParenthese )
-    {
         printf("has valid parenthese\n");
-    }
     else if ( numOfOpenParenthese > 0 )
-    {
         printf("missing close parenthese\n");
-    }
     else
-    {
         printf("missing open parenthese\n");
-    }
 
     return 0;
 }
