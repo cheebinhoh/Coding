@@ -30,9 +30,9 @@ int deteremineIf3NumberSumToValue(int array[], int size, int sum)
     int k;
 
 
-    for ( i = 0; i < size; i++ )
+    for ( i = 0; i < size - 2; i++ )
     {
-        for ( j = i + 1; j < size; j++ )
+        for ( j = i + 1; j < size - 1; j++ )
         {
            for ( k = j + 1; k < size; k++ )
            {
@@ -89,12 +89,25 @@ int deteremineIf3NumberSumToValueInDivAndConquerRecursive(int array[], int size,
         }
     }
 
-    if ( size - mid >= 5
-         && deteremineIf3NumberSumToValueInDivAndConquerRecursive(&array[mid + 1],
-                                                                  size - mid - 1,
-                                                                  sum,
-                                                                  ( size - mid ) / 2 ) )
-        goto found;
+    if ( ( size - mid ) > 5 )
+    {
+        if ( deteremineIf3NumberSumToValueInDivAndConquerRecursive(&array[mid + 1],
+                                                                   size - mid - 1,
+                                                                   sum,
+                                                                   ( size - mid - 1 ) / 2 ) )
+            goto found;
+    }
+    else
+    {
+        for ( i = mid + 1; i < size - 2; i++ )
+        {
+            if ( deteremineIf3NumberSumToValueInDivAndConquerRecursive(&array[i],
+                                                                       size - mid - 1,
+                                                                       sum,
+                                                                       0) )
+                goto found;
+        }
+    }
 
     if ( mid > 0
          &&  deteremineIf3NumberSumToValueInDivAndConquerRecursive(array, size, sum, mid / 2 ) )

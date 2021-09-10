@@ -17,7 +17,9 @@ struct TreeNode {
      struct TreeNode *right;
 };
 
+
 typedef void (bTreeTraversalCallback)(struct TreeNode *node, int pos, void *data);
+
 
 struct TreeNode * addTreeNode(struct TreeNode *root, int val);
 struct TreeNode * findTreeNode(struct TreeNode *root, int val);
