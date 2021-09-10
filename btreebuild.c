@@ -19,20 +19,14 @@ struct TreeNode * findParent(struct TreeNode *root,
 
     if ( NULL == root
          || NULL == node )
-    {
         return NULL;
-    }
 
     if ( root == node )
-    {
         return node;
-    }
 
     if ( root->left == node
          || root->right == node )
-    {
         return root;
-    }
 
     if ( NULL != root->left )
     {

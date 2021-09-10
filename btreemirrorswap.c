@@ -7,6 +7,22 @@
 #include "btree.h"
 
 
+struct TreeNode * mirrorSwap(struct TreeNode *root)
+{
+    struct TreeNode *tmp;
+
+
+    if ( NULL == root )
+       return NULL;
+
+
+    tmp         = root->left;
+    root->left  = mirrorSwap(root->right);
+    root->right = mirrorSwap(tmp);
+
+    return root;
+}
+
 int main(int argc, char *argv[])
 {
     struct TreeNode *root = NULL;

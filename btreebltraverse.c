@@ -146,27 +146,23 @@ void breadthLevelTraversal(struct TreeNode *root)
 
 
     if ( NULL == root )
-    {
         return;
-    }
-    else
+
+    currentLevelList[currentLevelCnt++] = root;
+
+    if ( NULL != root->left )
     {
-        currentLevelList[currentLevelCnt++] = root;
-
-        if ( NULL != root->left )
-        {
-            nextLevelList[nextLevelCnt++] = root->left;
-        }
-
-        if ( NULL != root->right )
-        {
-            nextLevelList[nextLevelCnt++] = root->right;
-        }
-
-        breadthLevelTraversal_Internal(currentLevelList, currentLevelCnt, nextLevelList, nextLevelCnt);
-
-        printf("\n");
+        nextLevelList[nextLevelCnt++] = root->left;
     }
+
+    if ( NULL != root->right )
+    {
+        nextLevelList[nextLevelCnt++] = root->right;
+    }
+
+    breadthLevelTraversal_Internal(currentLevelList, currentLevelCnt, nextLevelList, nextLevelCnt);
+
+    printf("\n");
 }
 
 

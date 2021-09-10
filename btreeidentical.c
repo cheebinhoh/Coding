@@ -8,6 +8,18 @@
 #include "btree.h"
 
 
+int isTreeIdentical(struct TreeNode *left, struct TreeNode *right)
+{
+    if ( NULL == left
+         || NULL == right )
+       return left == right;
+
+    return left->val == right->val
+           && isTreeIdentical(left->left, right->left)
+           && isTreeIdentical(left->right, right->right);
+}
+
+
 int main(int argc, char *argv[])
 {
     struct TreeNode *root  = NULL;
