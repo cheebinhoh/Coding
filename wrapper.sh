@@ -5,7 +5,7 @@ PATH=$PATH:.
 
 programName=`basename $0 | sed -e 's/\...$//g'`.out
 
-make ${programName} >/dev/null || (echo "Error in generating ${pogramName}";  exit 1)
+make ${programName} >/dev/null || (echo "Error in running ${pogramName}";  exit 1)
 
 for f
 do

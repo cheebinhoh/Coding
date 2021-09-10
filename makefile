@@ -1,4 +1,4 @@
-# all good makefile to help compiling
+# old good makefile to help compiling
 
 all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck.out btreetraverse.out \
 	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out remove-c-comment.out \
@@ -79,8 +79,10 @@ btreeidentical.out : btreeidentical.c btree.c btree.h
 btreerebalancing.out : btreerebalancing.c btree.c btree.h
 	gcc -o $@ btreerebalancing.c btree.c
 
+
 clean:
 	rm -f *.out *.o
+
 
 test:
 	make all

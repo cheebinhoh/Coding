@@ -9,8 +9,8 @@
 
 struct Token
 {
-   char  ch;
-   long  count;
+   char ch;
+   long count;
 };
 
 
