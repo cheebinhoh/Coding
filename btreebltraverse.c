@@ -10,7 +10,7 @@
 
 /* This is recursive method to do breadth level traversel, the logic is simple:
  * - we maintain two lists:
- * - first level is the Nth level nodes of the tree.
+ * - first level is the Nth level nodes of the tree that we are visiting now.
  * - the second level is the N+1th level nodes of the tree.
  *
  * we will print first level node values.
@@ -23,45 +23,45 @@ void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
                                     struct TreeNode **nextLevelList,
                                     int               nextLevelCnt )
 {
-    if ( currentLevelCnt > 0 )
-    {
+    if ( currentLevelCnt <= 0 )
+        return;
+
         int i;
 
 
-        for ( i = 0; i < currentLevelCnt; i++ )
-        {
-            printf("%d%s", currentLevelList[i]->val, ( i + 1 < currentLevelCnt ) ? ", " : "");
-        }
-
-        for ( i = 0; i < nextLevelCnt; i++ )
-        {
-            currentLevelList[i] = nextLevelList[i];
-        }
-
-        currentLevelCnt = i;
-        nextLevelCnt = 0;
-        for ( i = 0; i < currentLevelCnt; i++ )
-        {
-            struct TreeNode *node = currentLevelList[i];
-
-            if ( NULL != node->left )
-            {
-                nextLevelList[nextLevelCnt++] = node->left;
-            }
-
-            if ( NULL != node->right )
-            {
-                nextLevelList[nextLevelCnt++] = node->right;
-            }
-        }
-
-        if ( currentLevelCnt > 0 )
-        {
-            printf(", ");
-        }
-
-        breadthLevelTraversal_Internal(currentLevelList, currentLevelCnt, nextLevelList, nextLevelCnt);
+    for ( i = 0; i < currentLevelCnt; i++ )
+    {
+        printf("%d%s", currentLevelList[i]->val, ( i + 1 < currentLevelCnt ) ? ", " : "");
     }
+
+    for ( i = 0; i < nextLevelCnt; i++ )
+    {
+        currentLevelList[i] = nextLevelList[i];
+    }
+
+    currentLevelCnt = i;
+    nextLevelCnt = 0;
+    for ( i = 0; i < currentLevelCnt; i++ )
+    {
+        struct TreeNode *node = currentLevelList[i];
+
+        if ( NULL != node->left )
+        {
+            nextLevelList[nextLevelCnt++] = node->left;
+        }
+
+        if ( NULL != node->right )
+        {
+            nextLevelList[nextLevelCnt++] = node->right;
+        }
+    }
+
+    if ( currentLevelCnt > 0 )
+    {
+        printf(", ");
+    }
+
+    breadthLevelTraversal_Internal(currentLevelList, currentLevelCnt, nextLevelList, nextLevelCnt);
 }
 
 
