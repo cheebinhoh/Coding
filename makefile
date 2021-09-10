@@ -26,7 +26,7 @@ btreebuild.out : btreebuild.c btreetraverse.c btree.h btreetraverse.h
 	gcc -o $@ btreebuild.c btreetraverse.c 
 
 btreelca.out : btreelca.c btreetraverse.c btree.h btreetraverse.h
-	gcc -o $@ btreelca.c btreetraverse.c
+	gcc -o $@ btreelca.c btreetraverse.c 
 
 tree2btreebuild.out : tree2btreebuild.c btreetraverse.c btree.h btree.c btreetraverse.h 
 	gcc -o $@ tree2btreebuild.c btreetraverse.c btree.c
@@ -70,7 +70,7 @@ trafficdemand.out : trafficdemand.c
 apple-coding-test.out : apple-coding-test.c btree.c btree.h
 	gcc -o $@ apple-coding-test.c btree.c
 
-btreemirrorswap.out : btreemirrorswap.c btree.h btree.c btree.h
+btreemirrorswap.out : btreemirrorswap.c btree.c btree.h
 	gcc -o $@ btreemirrorswap.c btree.c
 
 btreeidentical.out : btreeidentical.c btree.c btree.h
