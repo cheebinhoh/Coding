@@ -127,11 +127,30 @@ int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size, int sum)
                                                                  size / 2);
 }
 
+void printIntegerArray(int array[], int size)
+{
+    int i;
+
+
+    for ( i = 0; i < size - 1; i++ )
+       printf("%d, ", array[i]);
+  
+    if ( size >= 1 )
+       printf("%d\n", array[size - 1]);
+}
+
 void runDeteremineIf3NumberSumToValue(void)
 {
     int number[] = { 0, 1, 2, 3, 4, 5 };
     int found;
 
+
+    printf("Test 1 description: given an array of integers and a value, determine if there are any three\n" 
+           "integers in the array whose sum equals the given value.\n");
+    printf("\n");
+    printf("The integer array is ");
+    printIntegerArray(number, sizeof( number ) / sizeof( number[0] ) );
+    printf("\n");
 
     printf("Use brute force method\n");
     found = deteremineIf3NumberSumToValue(number,
@@ -174,7 +193,7 @@ void runDeteremineIf3NumberSumToValue(void)
     }
 
     printf("\n");
-    printf("Use Binary way of brute force method\n");
+    printf("Use Divide & Conquer and Binary way of brute force method\n");
     found = deteremineIf3NumberSumToValueInDivAndConquer(number,
                                                          sizeof( number ) / sizeof( number[0] ),
                                                          6);
@@ -213,6 +232,8 @@ void runDeteremineIf3NumberSumToValue(void)
     {
        printf("There are no 3 numbers sum up to %d\n", 22);
     }
+
+    printf("\n");
 }
 
 
@@ -262,6 +283,7 @@ void printInterval(int start[], int end[], int size)
 {
     int i;
 
+
     for ( i = 0; i < size - 1; i++ )
     {
         printf("%d...%d, ", start[i], end[i]);
@@ -278,9 +300,14 @@ void runCollapseOverlapInterval(void)
     int size    = sizeof( start ) / sizeof( start[0] );
 
 
+    printf("Test 2 description: given a list of intervals, merge all the overlapping intervals to produce a list\n"
+           "that has only mutually exclusive intervals.\n");
+    printf("\n");
+
     printInterval(start, end, size);
     size = collapseOverlapInterval(start, end, size);
-    printf("after collapse\n");
+    printf("after merged\n");
+    printf("\n");
     printInterval(start, end, size);
 }
 
@@ -357,6 +384,10 @@ void runBinarySearchOnRotatedSortedList(void)
     int i;
 
 
+    printf("Test 3 description: earch for a given number in a sorted array, with unique elements,\n"
+           "that has been rotated by some arbitrary number. Return -1 if the number does not exist.\n");
+    printf("\n");
+
     printf("On none-rotated list\n");
     for ( i = 0; i < sizeof( array ) / sizeof( array[0] ); i++ )
         printf("%d, ", array[i]);
@@ -376,7 +407,7 @@ void runBinarySearchOnRotatedSortedList(void)
     printf("data %2d, key = %d\n", 17, key);
 
 
-    printf("\n\n");
+    printf("\n");
     printf("On rotated list\n");
     for ( i = 0; i < sizeof( arrayRotated ) / sizeof( arrayRotated[0] ); i++ )
         printf("%d, ", arrayRotated[i]);
@@ -454,6 +485,10 @@ void findAllSumCombination(int target)
 
 void runFindAllSumCombination(void)
 {
+    printf("Test 4 description: given a positive integer, target, print all possible combinations of\n"
+           "positive integers that sum up to the target number.\n");
+    printf("\n");
+
     printf("find all sum combination of 5\n");
     findAllSumCombination(5);
 }
@@ -579,6 +614,8 @@ void runReverseWords(void)
     char str2[] = " abc  xyz ";
 
 
+    printf("Test 5 description: reverse the order of words in a given sentence (an array of characters).\n");
+    printf("\n");
     printf("String = \"%s\"\n", str);
     reverseWords1(str);
     printf("Reversing words, result string = \"%s\"\n", str);
@@ -652,6 +689,10 @@ void printAllWayToThrowDiceEqualToSum(int sum, int maxThrow)
 
 void runAllWayToThrowDiceEqualToSum()
 {
+    printf("Test 6 description: find total ways to achieve a given sum with `n` throws of dice having `k` faces\n" 
+            "if throw is 2 and sum value is 10, then we have the following: (6, 4), (4, 6), (5, 5).\n");
+
+    printf("\n");
     printf("Number of throws = %d, desired sum = %d\n", 2, 10);
     printAllWayToThrowDiceEqualToSum(10, 2);
 
@@ -708,6 +749,9 @@ double power(double value, int power)
 
 void runCalculatePowerOfDoubleValue(void)
 {
+    printf("Test 7 description: given a double, x and an integer n, write a function to calculate x raised to the power n.\n");
+    printf("\n");
+
     printf("  2 ^  5 = %lf\n", power(2.0, 5));
     printf("  3 ^  4 = %lf\n", power(3.0, 4));
     printf("1.5 ^  3 = %lf\n", power(1.5, 3));
@@ -770,6 +814,10 @@ double addIntegerAndReturnMedian(int val)
 
 void runFindMedianOfStreamOfIntegers(void)
 {
+    printf("Test 8 description: given that integers are read from a data stream. Find median of elements\n"
+           "read so for in efficient way. For simplicity assume there are no duplicates.\n");
+    printf("\n");
+
     printf("Adding  5, median = %5.2f\n", addIntegerAndReturnMedian(5));
     printf("Adding 15, median = %5.2f\n", addIntegerAndReturnMedian(15));
     printf("Adding  1, median = %5.2f\n", addIntegerAndReturnMedian(1));
@@ -819,36 +867,36 @@ void printPermutationsOfString(char s[])
 
 void runPermutationsOfString(void)
 {
-    char s[] = "abc";
+    char s[] = "ABC";
 
 
-    printf("Print permutations of string \"abc\"\n");
+    printf("Test 9 description: the permutations of string ABC is \"ABC ACB BAC BCA CBA CAB\".\n");
+    printf("\n");
     printPermutationsOfString(s);
     printf("\n");
 }
 
-/* Test 10:
- *
- * AVL self-balancing tree
+/* Test 10: implementing AVL (Adelson-Velsky and Landis) self-balancing tree
  */
 
 void runAVLSelfbalanceTree(void)
 {
-    struct TreeNode *root = NULL;
+    int              array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+    struct TreeNode *root    = NULL;
+    int              i;
 
-    root = addTreeNodeAndRebalanceTree(root, 1);
-    root = addTreeNodeAndRebalanceTree(root, 2);
-    root = addTreeNodeAndRebalanceTree(root, 3);
-    root = addTreeNodeAndRebalanceTree(root, 4);
-    root = addTreeNodeAndRebalanceTree(root, 5);
-    root = addTreeNodeAndRebalanceTree(root, 6);
-    root = addTreeNodeAndRebalanceTree(root, 7);
-    root = addTreeNodeAndRebalanceTree(root, 8);
-    root = addTreeNodeAndRebalanceTree(root, 9);
-    root = addTreeNodeAndRebalanceTree(root, 10);
-    root = addTreeNodeAndRebalanceTree(root, 11);
-    root = addTreeNodeAndRebalanceTree(root, 12);
-    root = addTreeNodeAndRebalanceTree(root, 13);
+
+    printf("Test 10 description: implementing AVL (Adelson-Velsky and Landis) self-balancing binary search tree.\n");
+    printf("\n");
+
+    printf("Adding a list of integer arrays in the following order");
+    printIntegerArray( array, sizeof( array ) / sizeof( array[0] ) );
+
+    for ( i = 0; i < sizeof( array ) / sizeof( array[0] ); i++ )
+        root = addTreeNodeAndRebalanceTree( root, array[i] );
+
+    printf("The binary search tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
 }
 
@@ -914,13 +962,16 @@ void printMaximumSubarrayNumber(int array[], int size)
 void runMaximumSubarrayNumber(void)
 {
     int array[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
-    int i;
 
 
-    for ( i = 0; i < ( sizeof( array ) / sizeof( array[0] ) ); i++ )
-        printf("%d, ", array[i]);
+    printf("Test 11 description: finding the largest possible sum of a contiguous subarray, within\n"
+           "a given one-dimensional array A[1…n] of numbers.\n");   
+    printf("\n");
 
-    printf("\n\n");
+    printf("The integer array is ");
+    printIntegerArray( array, sizeof( array ) / sizeof( array[0] ) );
+
+    printf("\n");
     printf("Maximum subarray is ");
     printMaximumSubarrayNumber(array, sizeof( array ) / sizeof( array[0] ) );
 }
@@ -972,28 +1023,25 @@ void findRotatingPointInIntegerArray(void)
     int start;
 
 
-    for ( i = 0; i < sizeof( array1 ) / sizeof( array1[0] ); i++ )
-        printf("%d, ", array1[i]);
-
+    printf("Test 12 description: Find the rotating point of an array that is sorted, but the starting point can be in middle.\n");
     printf("\n");
+
+    printf("The integer array1 is ");
+    printIntegerArray( array1, sizeof( array1 ) / sizeof( array1[0] ) );
     start = findRotatingPointInArray(array1, sizeof( array1 ) / sizeof( array1[0] ));
     printf("The rotating point is at index %d and value is %d\n",
             start, array1[start]);
 
     printf("\n");
-    for ( i = 0; i < sizeof( array2 ) / sizeof( array2[0] ); i++ )
-        printf("%d, ", array2[i]);
-
-    printf("\n");
+    printf("The integer array2 is ");
+    printIntegerArray( array2, sizeof( array2 ) / sizeof( array2[0] ) );
     start = findRotatingPointInArray(array2, sizeof( array2 ) / sizeof( array2[0] ));
     printf("The rotating point is at index %d and value is %d\n",
             start, array2[start]);
-
     printf("\n");
-    for ( i = 0; i < sizeof( array3 ) / sizeof( array3[0] ); i++ )
-        printf("%d, ", array3[i]);
 
-    printf("\n");
+    printf("The integer array3 is ");
+    printIntegerArray( array3, sizeof( array3 ) / sizeof( array3[0] ) );
     start = findRotatingPointInArray(array3, sizeof( array3 ) / sizeof( array3[0] ));
     printf("The rotating point is at index %d and value is %d\n",
             start, array3[start]);
@@ -1001,7 +1049,7 @@ void findRotatingPointInIntegerArray(void)
 
 /* Test 13:
  *
- * Check if a tree is binary search tree.
+ * Check if a binary tree is binary search tree.
  */
 
 struct checkBinarySearchTreeData
@@ -1050,18 +1098,22 @@ void runCheckIfIsBinarySearchTree(void)
     struct TreeNode *root2 = NULL;
 
 
+    printf("Test 13 description: check if a binary tree is binary search tree.\n");
+    printf("\n");
+
     root1 = addTreeNodeAndRebalanceTree(root1, 1);
     root1 = addTreeNodeAndRebalanceTree(root1, 2);
     root1 = addTreeNodeAndRebalanceTree(root1, 3);
     root1 = addTreeNodeAndRebalanceTree(root1, 4);
 
-    printTreeNodeInTreeTopology(root1);
-    printf("\n");
-
     if ( isBinarySearchTree(root1) )
         printf("root1 is a binary search tree\n");
     else
-        printf("root1 is not a binary search tree\n");
+        printf("root1 is not a binary search tree");
+
+    printf("Tree topology:\n");
+    printTreeNodeInTreeTopology(root1);
+
 
     root2      = malloc( sizeof( struct TreeNode ) );
     root2->val = 4;
@@ -1081,13 +1133,13 @@ void runCheckIfIsBinarySearchTree(void)
     root2->left->right->left  = NULL;
     root2->left->right->right = NULL;
 
-    printTreeNodeInTreeTopology(root1);
     printf("\n");
     if ( isBinarySearchTree(root2) )
         printf("root2 is a binary search tree\n");
     else
         printf("root2 is not a binary search tree\n");
-
+     printf("Tree topology:\n");
+    printTreeNodeInTreeTopology(root2);
 }
 
 
@@ -1147,27 +1199,23 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
     int list3[] = { 17,  8, 12, 19, 24,  2 };
     int list4[] = {  1,  3,  5 };
     int list5[] = {  2,  4,  6 };
-    int list6[] = {  1, 2, 4, 6, 5, 3 };
+    int list6[] = {  1,  2,  4, 6, 5, 3 };
     int i;
     int inOrder;
 
-
+   
+    printf("Test 14 description: check that two lists are combined into a final list in a 1st come 1st serve ordering.\n");
+    printf("\n");
     printf("list1 = ");
-    for ( i = 0; i < sizeof( list1 ) / sizeof( list1[0] ); i++ )
-        printf("%d, ", list1[i]);
+    printIntegerArray( list1, sizeof( list1 ) / sizeof( list1[0] ) );
 
-    printf("\n");
     printf("list2 = ");
-    for ( i = 0; i < sizeof( list2 ) / sizeof( list2[0] ); i++ )
-        printf("%d, ", list2[i]);
+    printIntegerArray( list2, sizeof( list2 ) / sizeof( list2[0] ) );
 
-    printf("\n");
     printf("list3 = ");
-    for ( i = 0; i < sizeof( list3 ) / sizeof( list3[0] ); i++ )
-        printf("%d, ", list3[i]);
+    printIntegerArray( list3, sizeof( list3 ) / sizeof( list3[0] ) );
 
     printf("\n");
-
     inOrder = checkIfTwoListsAre1stCome1stServe(list1, sizeof( list1 ) / sizeof( list1[0] ),
                                                 list2, sizeof( list2 ) / sizeof( list2[0] ),
                                                 list3, sizeof( list3 ) / sizeof( list3[0] ) );
@@ -1177,22 +1225,15 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
     else
         printf("list1 and list2 are not served in order\n");
 
-    printf("\n");
+
     printf("list4 = ");
-    for ( i = 0; i < sizeof( list4 ) / sizeof( list4[0] ); i++ )
-        printf("%d, ", list4[i]);
+    printIntegerArray( list4, sizeof( list4 ) / sizeof( list4[0] ) );
 
-    printf("\n");
     printf("list5 = ");
-    for ( i = 0; i < sizeof( list5 ) / sizeof( list5[0] ); i++ )
-        printf("%d, ", list5[i]);
+    printIntegerArray( list5, sizeof( list5 ) / sizeof( list5[0] ) );
 
-    printf("\n");
-    printf("list3 = ");
-    for ( i = 0; i < sizeof( list6 ) / sizeof( list6[0] ); i++ )
-        printf("%d, ", list6[i]);
-
-    printf("\n");
+    printf("list6 = ");
+    printIntegerArray( list6, sizeof( list6 ) / sizeof( list6[0] ) );
 
     inOrder = checkIfTwoListsAre1stCome1stServe(list4, sizeof( list4 ) / sizeof( list4[0] ),
                                                 list5, sizeof( list5 ) / sizeof( list5[0] ),
@@ -1208,7 +1249,6 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
  *
  * Given two strings s1 and s2, find the length of the longest substring common in both the strings.
  */
-
 void printLongestSubstringCommon(char s1[], char s2[])
 {
     char *pivotStr;
@@ -1282,77 +1322,159 @@ void runFindLongestSubstringCommon(void)
     char s4[] = "ppsspt";
 
 
+    printf("Test 15 description: given two strings s1 and s2, find the length of the longest substring common in both the strings.\n");
+    printf("\n");
     printf("The common longest substring of \"%s\" and \"%s\" is ", s1, s2);
     printLongestSubstringCommon(s1, s2);
 
-    printf("\n");
     printf("The common longest substring of \"%s\" and \"%s\" is ", s3, s4);
     printLongestSubstringCommon(s3, s4);
 }
 
 
+/* Test 16:
+ *
+ * Given a sequence, find the length of its Longest Palindromic Subsequence (or LPS).
+ * In a palindromic subsequence, elements read the same backward and forward.
+ */
+int getLongestPalindromicSubsequence(char s[], int start, int end)
+{
+    int matchLen;
+    int leftLen;
+    int rightLen;
+
+
+    if ( start > end )
+        return 0;
+
+    matchLen = 0;
+    while ( end >= start )
+    {
+        if ( end == start )
+        {
+            matchLen += 1;
+
+            break;
+        }
+        else if ( s[start] != s[end] )
+        {
+            leftLen  = getLongestPalindromicSubsequence(s, start + 1, end);           
+            rightLen = getLongestPalindromicSubsequence(s, start, end - 1);
+          
+            if ( leftLen >= rightLen )
+                matchLen += leftLen;
+            else
+                matchLen += rightLen; 
+           
+            break;
+        }
+        else
+        {
+            matchLen += 2;
+
+            start++;
+            end--;
+        }
+    }
+
+    return matchLen;   
+}
+
+void runLongestPalindromicSubsequence(void)
+{
+    char s1[] = "axbba";
+    char s2[] = "abdbca";
+    char s3[] = "cddpd";
+    char s4[] = "pqr";
+    int  len; 
+
+    
+    printf("Test 16 description: given a sequence, find the length of its Longest Palindromic Subsequence (or LPS).\n"
+           "In a palindromic subsequence, elements read the same backward and forward.\n");
+    printf("\n");
+
+    len = strlen(s1);
+    printf("The longest palinidromic subsequence of \"%s\" is %d\n",
+           s1, getLongestPalindromicSubsequence(s1, 0, len - 1 ));
+
+    len = strlen(s2);
+    printf("The longest palinidromic subsequence of \"%s\" is %d\n", 
+           s2, getLongestPalindromicSubsequence(s2, 0, len - 1 ));
+
+    len = strlen(s3);
+    printf("The longest palinidromic subsequence of \"%s\" is %d\n",
+           s3, getLongestPalindromicSubsequence(s3, 0, len - 1 ));
+
+    len = strlen(s4);
+    printf("The longest palinidromic subsequence of \"%s\" is %d\n",
+           s4, getLongestPalindromicSubsequence(s4, 0, len - 1 ));
+}
+
+
+// the starting point...
 int main(int argc, char *argv[])
 {
-    printf("run runDeteremineIf3NumberSumToValue:\n");
     runDeteremineIf3NumberSumToValue();
 
     printf("\n");
-    printf("run runCollapseOverlapInterval:\n");
     runCollapseOverlapInterval();
+    printf("\n");
 
     printf("\n");
-    printf("run runBinarySearchOnRotatedSortedList\n");
     runBinarySearchOnRotatedSortedList();
+    printf("\n");
 
     printf("\n");
-    printf("run runFindAllSumCombination\n");
     runFindAllSumCombination();
+    printf("\n");
 
     printf("\n");
-    printf("run reverseWords\n");
     runReverseWords();
+    printf("\n");
 
     printf("\n");
-    printf("Run runAllWayToThrowDiceEqualToSum\n");
     runAllWayToThrowDiceEqualToSum();
+    printf("\n");
 
     printf("\n");
-    printf("Run runCalculatePowerOfDoubleValue\n");
     runCalculatePowerOfDoubleValue();
+    printf("\n");
 
     printf("\n");
-    printf("Run runFindMedianOfStreamOfIntegers\n");
     runFindMedianOfStreamOfIntegers();
+    printf("\n");
 
     printf("\n");
-    printf("Run runPermutationsOfString\n");
     runPermutationsOfString();
+    printf("\n");
 
     printf("\n");
-    printf("Run runAVLSelfbalanceTree\n");
     runAVLSelfbalanceTree();
+    printf("\n");
 
     printf("\n");
-    printf("Run runMaximumSubarrayNumber\n");
     runMaximumSubarrayNumber();
+    printf("\n");
 
     printf("\n");
-    printf("Run findRotatingPointInIntegerArray\n");
     findRotatingPointInIntegerArray();
+    printf("\n");
 
     printf("\n");
-    printf("Run runCheckIfIsBinarySearchTree\n");
     runCheckIfIsBinarySearchTree();
+    printf("\n");
 
     printf("\n");
-    printf("Run runCheckIfTwoListsAre1stCome1stServe\n");
     runCheckIfTwoListsAre1stCome1stServe();
     printf("\n");
 
     printf("\n");
-    printf("Run runFindLongestSubstringCommon\n");
     runFindLongestSubstringCommon();
     printf("\n");
 
+    printf("\n");
+    runLongestPalindromicSubsequence();
+    printf("\n");
+ 
     return 0;
 }
