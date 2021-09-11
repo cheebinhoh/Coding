@@ -95,9 +95,7 @@ void postOrderTraversal(struct TreeNode* root)
      }
 
      if ( count > 0 )
-     {
          printf("\n");
-     }
 }
 
 
@@ -156,9 +154,7 @@ void inOrderTraversal(struct TreeNode *root)
     }
 
     if ( count > 0 )
-    {
         printf("\n");
-    }
 }
 
 /* A pre order traversal logic:
@@ -186,9 +182,7 @@ void preOrderTraversal(struct TreeNode *root)
           if ( NULL != root->left )
           {
               if ( NULL != root->right )
-              {
                   rightPendingList[rightPendingListIndex++] = root->right;
-              }
 
               root = root->left;
           }
@@ -199,18 +193,12 @@ void preOrderTraversal(struct TreeNode *root)
           else
           {
              if ( rightPendingListIndex > 0 )
-             {
                 root = rightPendingList[--rightPendingListIndex];
-             }
              else
-             {
                 root = NULL;
-             }
           }
      }
 
      if ( count > 0 )
-     {
          printf("\n");
-     }
 }
