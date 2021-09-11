@@ -4,6 +4,12 @@
  *
  * https://www.codinginterview.com/apple-interview-questions, I also include
  * questions that is similar I come across from friend or online.
+ *
+ * All answers are done by me with some assumption sometimes to make it easy for me :)
+ * I do some reading about some topic to refresh my knowledge about certain theory, like
+ * AVL before I start coding it.
+ *
+ * Happy coding!
  */
 
 #include <stdio.h>
