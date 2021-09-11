@@ -155,7 +155,7 @@ void runDeteremineIf3NumberSumToValue(void)
            "integers in the array whose sum equals the given value.\n");
     printf("\n");
     printf("The integer array is ");
-    printIntegerArray(number, sizeof( number ) / sizeof( number[0] ) );
+    printIntegerArray(number, sizeof( number ) / sizeof( number[0] ));
     printf("\n");
 
     printf("Use brute force method\n");
@@ -896,7 +896,7 @@ void runAVLSelfbalanceTree(void)
     printf("\n");
 
     printf("Adding a list of integer arrays in the following order");
-    printIntegerArray( array, sizeof( array ) / sizeof( array[0] ) );
+    printIntegerArray( array, sizeof( array ) / sizeof( array[0] ));
 
     for ( i = 0; i < sizeof( array ) / sizeof( array[0] ); i++ )
         root = addTreeNodeAndRebalanceTree( root, array[i] );
@@ -975,11 +975,11 @@ void runMaximumSubarrayNumber(void)
     printf("\n");
 
     printf("The integer array is ");
-    printIntegerArray( array, sizeof( array ) / sizeof( array[0] ) );
+    printIntegerArray( array, sizeof( array ) / sizeof( array[0] ));
 
     printf("\n");
     printf("Maximum subarray is ");
-    printMaximumSubarrayNumber(array, sizeof( array ) / sizeof( array[0] ) );
+    printMaximumSubarrayNumber(array, sizeof( array ) / sizeof( array[0] ));
 }
 
 /* Test 12:
@@ -1033,21 +1033,21 @@ void findRotatingPointInIntegerArray(void)
     printf("\n");
 
     printf("The integer array1 is ");
-    printIntegerArray( array1, sizeof( array1 ) / sizeof( array1[0] ) );
+    printIntegerArray( array1, sizeof( array1 ) / sizeof( array1[0] ));
     start = findRotatingPointInArray(array1, sizeof( array1 ) / sizeof( array1[0] ));
     printf("The rotating point is at index %d and value is %d\n",
             start, array1[start]);
 
     printf("\n");
     printf("The integer array2 is ");
-    printIntegerArray( array2, sizeof( array2 ) / sizeof( array2[0] ) );
+    printIntegerArray( array2, sizeof( array2 ) / sizeof( array2[0] ));
     start = findRotatingPointInArray(array2, sizeof( array2 ) / sizeof( array2[0] ));
     printf("The rotating point is at index %d and value is %d\n",
             start, array2[start]);
     printf("\n");
 
     printf("The integer array3 is ");
-    printIntegerArray( array3, sizeof( array3 ) / sizeof( array3[0] ) );
+    printIntegerArray( array3, sizeof( array3 ) / sizeof( array3[0] ));
     start = findRotatingPointInArray(array3, sizeof( array3 ) / sizeof( array3[0] ));
     printf("The rotating point is at index %d and value is %d\n",
             start, array3[start]);
@@ -1214,13 +1214,13 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
     printf("Test 14 description: check that two lists are combined into a final list in a 1st come 1st serve ordering.\n");
     printf("\n");
     printf("list1 = ");
-    printIntegerArray( list1, sizeof( list1 ) / sizeof( list1[0] ) );
+    printIntegerArray( list1, sizeof( list1 ) / sizeof( list1[0] )) ;
 
     printf("list2 = ");
-    printIntegerArray( list2, sizeof( list2 ) / sizeof( list2[0] ) );
+    printIntegerArray( list2, sizeof( list2 ) / sizeof( list2[0] ));
 
     printf("list3 = ");
-    printIntegerArray( list3, sizeof( list3 ) / sizeof( list3[0] ) );
+    printIntegerArray( list3, sizeof( list3 ) / sizeof( list3[0] ));
 
     printf("\n");
     inOrder = checkIfTwoListsAre1stCome1stServe(list1, sizeof( list1 ) / sizeof( list1[0] ),
@@ -1234,13 +1234,13 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
 
 
     printf("list4 = ");
-    printIntegerArray( list4, sizeof( list4 ) / sizeof( list4[0] ) );
+    printIntegerArray( list4, sizeof( list4 ) / sizeof( list4[0] ));
 
     printf("list5 = ");
-    printIntegerArray( list5, sizeof( list5 ) / sizeof( list5[0] ) );
+    printIntegerArray( list5, sizeof( list5 ) / sizeof( list5[0] ));
 
     printf("list6 = ");
-    printIntegerArray( list6, sizeof( list6 ) / sizeof( list6[0] ) );
+    printIntegerArray( list6, sizeof( list6 ) / sizeof( list6[0] ));
 
     inOrder = checkIfTwoListsAre1stCome1stServe(list4, sizeof( list4 ) / sizeof( list4[0] ),
                                                 list5, sizeof( list5 ) / sizeof( list5[0] ),

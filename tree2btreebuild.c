@@ -55,7 +55,7 @@ void printNTreeInMultiLevel(struct NTreeNode *list[],
             {
                 // WARNING: we do not check malloc and realloc return, in production code, we need!
                 // it is also an inefficient allocation, we should have allocated N slot where N is increased in related
-                // to number of child.
+                // to number of child rather than 1 node at a time.
 
                 if ( NULL == nextLevelList )
                 {
@@ -64,7 +64,7 @@ void printNTreeInMultiLevel(struct NTreeNode *list[],
                 }
                 else
                 {
-                    nextLevelList = realloc(nextLevelList, sizeof( struct NTreeNode * ) * ( nextLevelListSize + 1 ) );
+                    nextLevelList = realloc(nextLevelList, sizeof( struct NTreeNode * ) * ( nextLevelListSize + 1 ));
                     nextLevelListSize += 1;
                 }
             }
@@ -97,7 +97,7 @@ struct TreeNode * ntree2btreeInternal(struct TreeNode  *broot,
 
     for ( i = 0; i < listCnt; i++ )
     {
-        node      = malloc(sizeof( struct TreeNode ) );
+        node      = malloc(sizeof( struct TreeNode ));
         node->val = list[i]->val;
 
         if ( NULL == broot )
