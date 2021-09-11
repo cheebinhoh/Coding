@@ -1204,6 +1204,92 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
         printf("list4 and list5 are not served in order\n");
 }
 
+/* Test 15:
+ *
+ * Given two strings s1 and s2, find the length of the longest substring common in both the strings.
+ */
+
+void printLongestSubstringCommon(char s1[], char s2[])
+{
+    char *pivotStr;
+    int   pivotStrLen;
+    char *otherStr;
+    int   otherStrLen;
+    int   tmp;
+    int   i;
+    int   j;
+    int   k;
+    int   longest;
+    int   longestStrStart;
+
+
+    pivotStr    = s1;
+    pivotStrLen = strlen(s1);
+    otherStr    = s2;
+    otherStrLen = strlen(s2);
+
+
+    if ( otherStrLen < pivotStrLen )
+    {
+        tmp         = pivotStrLen;
+        pivotStr    = s2;
+        pivotStrLen = otherStrLen;
+
+        otherStr    = s1;
+        otherStrLen = tmp;
+    }
+
+    longestStrStart = 0;
+
+    for ( i = 0; i < pivotStrLen; i++ )
+    {
+        j = 0;
+        while ( j < otherStrLen
+                && otherStr[j] != pivotStr[i] )
+            j++;
+
+        if ( j < otherStrLen )
+        {
+            k = i + 1;
+            j = j + 1;
+
+            while ( j < otherStrLen
+                    && k < pivotStrLen
+                    && pivotStr[k] == otherStr[j] )
+            {
+                k++;
+                j++;
+            }
+
+            tmp = k - i;
+            if ( tmp > longest )
+            {
+                longestStrStart = i;
+                longest         = tmp;
+            }
+        }
+    }
+
+    if ( longest > 0 )
+        printf("%.*s\n", longest, &pivotStr[longestStrStart] );
+}
+
+void runFindLongestSubstringCommon(void)
+{
+    char s1[] = "abdca";
+    char s2[] = "cbda";
+    char s3[] = "passport";
+    char s4[] = "ppsspt";
+
+
+    printf("The common longest substring of \"%s\" and \"%s\" is ", s1, s2);
+    printLongestSubstringCommon(s1, s2);
+
+    printf("\n");
+    printf("The common longest substring of \"%s\" and \"%s\" is ", s3, s4);
+    printLongestSubstringCommon(s3, s4);
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -1261,6 +1347,11 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("Run runCheckIfTwoListsAre1stCome1stServe\n");
     runCheckIfTwoListsAre1stCome1stServe();
+    printf("\n");
+
+    printf("\n");
+    printf("Run runFindLongestSubstringCommon\n");
+    runFindLongestSubstringCommon();
     printf("\n");
 
     return 0;
