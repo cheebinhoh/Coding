@@ -24,28 +24,19 @@ int btreePathSumInternal(struct TreeNode *root,
     if ( NULL == root )
         return 0; // when tree is empty, there is no path, a path must be at least a node in minimum
 
-
     sum += root->val;
 
     if ( NULL != root->left )
-    {
         ret = btreePathSumInternal(root->left,
                                    sum,
                                    targetSum);
-    }
 
     if ( 0 == ret )
     {
         if ( NULL != root->right )
-        {
-            ret = btreePathSumInternal(root->right,
-                                       sum,
-                                       targetSum);
-        }
+            ret = btreePathSumInternal(root->right, sum, targetSum);
         else
-        {
             ret = sum == targetSum;
-        }
     }
 
     return ret;
@@ -86,49 +77,57 @@ int main(int argc, char * argv[])
 
 
     root = malloc(sizeof( struct TreeNode ));
-    root->val = 0;
-    root->left = root->right = NULL;
+    root->val   = 0;
+    root->left  = NULL;
+    root->right = NULL;
 
     other = malloc(sizeof( struct TreeNode ));
-    other->val = 1;
-    other->left = other->right = NULL;
-    root->left = other;
+    other->val   = 1;
+    other->left  =  NULL;
+    other->right = NULL;
+    root->left   = other;
 
     other = malloc(sizeof( struct TreeNode ));
-    other->val = 3;
-    other->left = other->right = NULL;
+    other->val       = 3;
+    other->left      = NULL;
+    other->right     = NULL;
     root->left->left = other;
 
     other = malloc(sizeof( struct TreeNode ));
-    other->val = 4;
-    other->left = other->right = NULL;
+    other->val        = 4;
+    other->left       = NULL;
+    other->right      = NULL;
     root->left->right = other;
 
     other = malloc(sizeof( struct TreeNode ));
-    other->val = 2;
-    other->left = other->right = NULL;
-    root->right = other;
+    other->val   = 2;
+    other->left  = NULL;
+    other->right = NULL;
+    root->right  = other;
 
     other = malloc(sizeof( struct TreeNode ));
-    other->val = 5;
-    other->left = other->right = NULL;
+    other->val         = 5;
+    other->left        = NULL;
+    other->right       = NULL;
     root->right->right = other;
 
     other = malloc(sizeof( struct TreeNode ));
-    other->val = 6;
-    other->left = other->right = NULL;
+    other->val               = 6;
+    other->left              = NULL;
+    other->right             = NULL;
     root->right->right->left = other;
 
     other = malloc(sizeof( struct TreeNode ));
-    other->val = 7;
-    other->left = other->right = NULL;
+    other->val                      = 7;
+    other->left                     = NULL;
+    other->right                    = NULL;
     root->right->right->left->right = other;
 
     other = malloc(sizeof( struct TreeNode ));
-    other->val = 8;
-    other->left = other->right = NULL;
-    root->right->right->right = other;
-
+    other->val                 = 8;
+    other->left                = NULL;
+    other->right               = NULL;
+    root->right->right->right  = other;
 
     printf("target sum (15) is %d\n", btreePathSum(root, 15));
     printf("target sum (6) is %d\n", btreePathSum(root, 6));

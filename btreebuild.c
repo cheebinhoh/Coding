@@ -66,23 +66,27 @@ struct TreeNode * buildTree(int inorder[],
     int              pos;
 
 
-    root = prev = NULL;
+    root = NULL;
+    prev = NULL;
     for ( i = 0; i < cnt / 2; i++ )
     {
         tmp = postorder[cnt - 1 - i];
+
         postorder[cnt - 1 - i] = postorder[i];
-        postorder[i] = tmp;
+        postorder[i]           = tmp;
     }
 
     for ( i = 0; i < cnt; i++ )
     {
         new = malloc(sizeof( struct TreeNode ));
+
         new->left = new->right = NULL;
-        new->val = postorder[i];
+        new->val  = postorder[i];
 
         if ( NULL == root )
         {
-            root = prev = new;
+            root = new;
+            prev = new;
         }
         else
         {
