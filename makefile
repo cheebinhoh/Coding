@@ -87,5 +87,5 @@ clean:
 test: 
 	make all
 	@echo
-	./transformStr2Str.out -d > ./transformStr2Str_result.txt
-	./coding-test.out > coding-test_result.txt 
+	./transformStr2Str.out -d | diff - ./transformStr2Str_result.txt
+	./coding-test.out | diff - ./coding-test_result.txt 

@@ -145,26 +145,18 @@ void treeRebalanceRecursive(struct TreeNode **parent,
             newRoot = newRoot->left;
 
             tmp = newRoot;
-            while ( NULL != tmp->left )
-                tmp = tmp->left;
-
-            tmp->left = root;
-
-            tmp = newRoot;
             while ( NULL != tmp->right )
                 tmp = tmp->right;
 
             tmp->right        = root->right;
             root->right->left = NULL;
         }
-        else if ( rightLevel >= leftLevel )
-        {
-            tmp = newRoot;
-            while ( NULL != tmp->left )
-                tmp = tmp->left;
 
-            tmp->left = root;
-        }
+        tmp = newRoot;
+        while ( NULL != tmp->left )
+            tmp = tmp->left;
+
+        tmp->left = root;
 
         root->right = NULL;
         *parent     = newRoot;
@@ -183,26 +175,18 @@ void treeRebalanceRecursive(struct TreeNode **parent,
             newRoot = newRoot->right;
 
             tmp = newRoot;
-            while ( NULL != tmp->right )
-                tmp = tmp->right;
-
-            tmp->right = root;
-
-            tmp = newRoot;
             while ( NULL != tmp->left )
                 tmp = tmp->left;
 
             tmp->left         = root->left;
             root->left->right = NULL;
         }
-        else if ( leftLevel >= rightLevel )
-        {
-            tmp = newRoot;
-            while ( NULL != tmp->right )
-                tmp = tmp->right;
 
-            tmp->right = root;
-        }
+        tmp = newRoot;
+        while ( NULL != tmp->right )
+            tmp = tmp->right;
+
+        tmp->right = root;
 
         root->left = NULL;
         *parent    = newRoot;
