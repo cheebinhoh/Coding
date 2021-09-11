@@ -57,12 +57,12 @@ void postOrderTraversal(struct TreeNode* root)
          if ( NULL != root->left )
          {
             rightPendingList[rightPendingIndex++] = root;
-            root = root->left;
+            root                                  = root->left;
          }
          else if ( NULL != root->right )
          {
             topPendingList[topPendingIndex++] = root;
-            root = root->right;
+            root                              = root->right;
          }
          else
          {
@@ -87,7 +87,7 @@ void postOrderTraversal(struct TreeNode* root)
              if ( NULL != root )
              {
                  topPendingList[topPendingIndex++] = root;
-                 root = root->right;
+                 root                              = root->right;
              }
          }
 
