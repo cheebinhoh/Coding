@@ -134,7 +134,7 @@ void printIntegerArray(int array[], int size)
 
     for ( i = 0; i < size - 1; i++ )
        printf("%d, ", array[i]);
-  
+
     if ( size >= 1 )
        printf("%d\n", array[size - 1]);
 }
@@ -145,7 +145,7 @@ void runDeteremineIf3NumberSumToValue(void)
     int found;
 
 
-    printf("Test 1 description: given an array of integers and a value, determine if there are any three\n" 
+    printf("Test 1 description: given an array of integers and a value, determine if there are any three\n"
            "integers in the array whose sum equals the given value.\n");
     printf("\n");
     printf("The integer array is ");
@@ -689,7 +689,7 @@ void printAllWayToThrowDiceEqualToSum(int sum, int maxThrow)
 
 void runAllWayToThrowDiceEqualToSum()
 {
-    printf("Test 6 description: find total ways to achieve a given sum with `n` throws of dice having `k` faces\n" 
+    printf("Test 6 description: find total ways to achieve a given sum with `n` throws of dice having `k` faces\n"
             "if throw is 2 and sum value is 10, then we have the following: (6, 4), (4, 6), (5, 5).\n");
 
     printf("\n");
@@ -965,7 +965,7 @@ void runMaximumSubarrayNumber(void)
 
 
     printf("Test 11 description: finding the largest possible sum of a contiguous subarray, within\n"
-           "a given one-dimensional array A[1…n] of numbers.\n");   
+           "a given one-dimensional array A[1…n] of numbers.\n");
     printf("\n");
 
     printf("The integer array is ");
@@ -1203,7 +1203,7 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
     int i;
     int inOrder;
 
-   
+
     printf("Test 14 description: check that two lists are combined into a final list in a 1st come 1st serve ordering.\n");
     printf("\n");
     printf("list1 = ");
@@ -1358,14 +1358,14 @@ int getLongestPalindromicSubsequence(char s[], int start, int end)
         }
         else if ( s[start] != s[end] )
         {
-            leftLen  = getLongestPalindromicSubsequence(s, start + 1, end);           
+            leftLen  = getLongestPalindromicSubsequence(s, start + 1, end);
             rightLen = getLongestPalindromicSubsequence(s, start, end - 1);
-          
+
             if ( leftLen >= rightLen )
                 matchLen += leftLen;
             else
-                matchLen += rightLen; 
-           
+                matchLen += rightLen;
+
             break;
         }
         else
@@ -1377,7 +1377,7 @@ int getLongestPalindromicSubsequence(char s[], int start, int end)
         }
     }
 
-    return matchLen;   
+    return matchLen;
 }
 
 void runLongestPalindromicSubsequence(void)
@@ -1386,9 +1386,9 @@ void runLongestPalindromicSubsequence(void)
     char s2[] = "abdbca";
     char s3[] = "cddpd";
     char s4[] = "pqr";
-    int  len; 
+    int  len;
 
-    
+
     printf("Test 16 description: given a sequence, find the length of its Longest Palindromic Subsequence (or LPS).\n"
            "In a palindromic subsequence, elements read the same backward and forward.\n");
     printf("\n");
@@ -1398,7 +1398,7 @@ void runLongestPalindromicSubsequence(void)
            s1, getLongestPalindromicSubsequence(s1, 0, len - 1 ));
 
     len = strlen(s2);
-    printf("The longest palinidromic subsequence of \"%s\" is %d\n", 
+    printf("The longest palinidromic subsequence of \"%s\" is %d\n",
            s2, getLongestPalindromicSubsequence(s2, 0, len - 1 ));
 
     len = strlen(s3);
@@ -1475,6 +1475,6 @@ int main(int argc, char *argv[])
     printf("\n");
     runLongestPalindromicSubsequence();
     printf("\n");
- 
+
     return 0;
 }
