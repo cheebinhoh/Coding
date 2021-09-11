@@ -84,7 +84,8 @@ clean:
 	rm -f *.out *.o
 
 
-test:
+test: 
 	make all
 	@echo
 	./transformStr2Str.out -d > ./transformStr2Str_result.txt
+	./coding-test.out > coding-test_result.txt 
