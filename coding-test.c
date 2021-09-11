@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Coding test questions from Apple (at least internet claim it :)).
+ * Coding test questions from Apple (at least internet claim it :)) and many others.
  *
  * https://www.codinginterview.com/apple-interview-questions, I also include
  * questions that is similar I come across from friend or online.
