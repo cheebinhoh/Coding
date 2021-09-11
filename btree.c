@@ -121,23 +121,24 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     // - we can remove that "duplicate" by combinining both blocks into one
     //   generic method that driven by a pass in boolean (left or right)
     //
-    // - or we can use macro for text substutition
+    // - or we can use macro for text substutition, including >, <, left and right text.
     //
-    // - or we just left it be where it is now (duplicated), as 1st approach will
-    //   alter the original concise logic by taking into account of extra argument
+    // - or we just left it be where it is now (duplicated), 1st approach will
+    //   alter the original concise logic by taking into account of extra argument, and 
+    //   it will complicate existing logic.
     //
     //   where else 2nd logic will have to hide thing behind a C macro which is kind
-    //   raw and hard to read when cross multiple lines
+    //   raw and hard to read when cross multiple lines, multi macro is hard to read.
     //
     // In short, I prefer readability of code over saving a few lines, modern compiler
-    // is good in generating code that is condensed in memory and fast in execution.
+    // is good in generating effecient code.
 
     if ( ( rightLevel - leftLevel ) >= 2 ) // reorder right branch
     {
-        newRoot = root->right;
-
+        newRoot    = root->right;
         rightLevel = determineMaxDepthLevel(newRoot->right, 0);
         leftLevel  = determineMaxDepthLevel(newRoot->left, 0);
+
 
         if ( leftLevel > rightLevel )
         {
