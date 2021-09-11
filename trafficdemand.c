@@ -163,23 +163,15 @@ main(int argc, char * argv[])
 
     baseProgramName = strrchr(argv[0], '/');
     if ( NULL == baseProgramName )
-    {
         baseProgramName = argv[0];
-    }
     else
-    {
         baseProgramName++;
-    }
 
     for ( i = 0; i < DAYS_IN_YEAR; i++ )
-    {
         day[i] = 1;
-    }
 
     for ( i = 0; i < MININTERVALS_IN_DAY * HOURS_IN_DAY; i++ )
-    {
         hourMinInterval[i] = 1;
-    }
 
     // end of initialization
 
@@ -489,9 +481,7 @@ DemandNode * processDemandNode(DemandNode * list, Demand * dptr, long nrDemand)
 
             newNode->next = list;
             if ( NULL != list )
-            {
                 list->prev = newNode;
-            }
 
             list = newNode;
         }
@@ -537,9 +527,7 @@ long getHashValueOfString(char * s)
 
     result = 0;
     while ( ( c = *s++ )  != '\0' )
-    {
         result = result * HASH_MULTIPLIER + c;
-    }
 
     return result % NUM_HASH_SIZE;
 }
@@ -559,9 +547,7 @@ DemandInGeohash6 * * newDemandInGeohash6(void)
     }
 
     for ( i = 0; i < NUM_HASH_SIZE; i++ )
-    {
         digh6[i] = NULL;
-    }
 
     return digh6;
 }
@@ -602,9 +588,7 @@ DemandInGeohash6 * insertGeohash6(DemandInGeohash6 * * digh6, char * geohash6, i
     for ( hashItem = digh6[hashkey]; hashItem != NULL; hashItem = hashItem->next )
     {
         if ( strcmp(hashItem->geohash6, geohash6) == 0 )
-        {
             break;
-        }
     }
 
     if ( NULL == hashItem
@@ -635,9 +619,7 @@ DemandInGeohash6 * insertDemandInGeohash6(DemandInGeohash6 * * digh6, Demand * d
     hashItem = insertGeohash6(digh6, d->geohash6, createIfNotExist);
 
     if ( NULL != hashItem )
-    {
         hashItem->d = processDemandNode(hashItem->d, d, 1);
-    }
 
     return hashItem;
 }
@@ -646,9 +628,7 @@ DemandInGeohash6 * insertDemandInGeohash6(DemandInGeohash6 * * digh6, Demand * d
 void processDemandInGeohash6(DemandInGeohash6 * * digh6, Demand * d, long nrDemand, int createIfNotExist)
 {
     while ( nrDemand-- > 0 )
-    {
         insertDemandInGeohash6(digh6, d++, createIfNotExist);
-    }
 }
 
 
@@ -698,19 +678,13 @@ DemandInTime * newDemandInTime(void)
     }
 
     for ( i = 0; i < DAYS_IN_YEAR; i++ )
-    {
         dit->day[i] = NULL;
-    }
 
     for ( i = 0; i < HOURS_IN_YEAR; i++ )
-    {
         dit->hour[i] = NULL;
-    }
 
     for ( i = 0; i < MININTERVALS_IN_YEAR; i++ )
-    {
         dit->mininterval[i] = NULL;
-    }
 
     return dit;
 }
@@ -722,19 +696,13 @@ void deleteDemandInTime(DemandInTime * dit)
 
 
     for ( i = 0; i < DAYS_IN_YEAR; i++ )
-    {
         deleteDemandNode(dit->day[i]);
-    }
 
     for ( i = 0; i < HOURS_IN_YEAR; i++ )
-    {
         deleteDemandNode(dit->hour[i]);
-    }
 
     for ( i = 0; i < MININTERVALS_IN_YEAR; i++ )
-    {
         deleteDemandNode(dit->mininterval[i]);
-    }
 
     free(dit);
 }
@@ -845,21 +813,15 @@ Demand * scanDemand(char * cptr, Demand * dptr)
             {
                 case 0:
                     if ( geohash6Len < 6 )
-                    {
                         d.geohash6[geohash6Len++] = c;
-                    }
                     else
-                    {
                         return NULL;
-                    }
 
                     break;
 
                 case 1:
                     if ( !isdigit(c) )
-                    {
                         return NULL;
-                    }
 
                     d.day = d.day * 10 + ( c - '0' );
                     break;
@@ -872,18 +834,12 @@ Demand * scanDemand(char * cptr, Demand * dptr)
                     else
                     {
                         if ( !isdigit(c) )
-                        {
                             return NULL;
-                        }
 
                         if ( inMm )
-                        {
                             d.mm = d.mm * 10 + ( c - '0' );
-                        }
                         else
-                        {
                             d.hh = d.hh * 10 + ( c - '0' );
-                        }
                     }
 
                     break;
@@ -923,16 +879,12 @@ int parseRange(char * s, int * from, int * to)
 
 
     if ( NULL != s )
-    {
         ls = s;
-    }
 
     assert(NULL != ls);
 
     if ( '\0' == *ls )
-    {
         return 0;
-    }
 
     val = 0;
     while ( ( c = *ls ) != '\0'
@@ -945,9 +897,7 @@ int parseRange(char * s, int * from, int * to)
     if ( '\0' != c
          && '.' != c
          && ',' != c )
-    {
         return -1;
-    }
 
     *from = val;
     *to   = val;
@@ -961,9 +911,7 @@ int parseRange(char * s, int * from, int * to)
         ls++;
 
         if ( ( c = *( ls++ ) ) != '.' )
-        {
             return -1;
-        }
 
         val = 0;
         while ( ( c = *ls ) != '\0'
@@ -976,16 +924,12 @@ int parseRange(char * s, int * from, int * to)
         if ( '\0' != c
              && '.' != c
              && ',' != c )
-        {
             return -1;
-        }
 
         *to = val;
 
         if ( ',' == c )
-        {
             ls++;
-        }
     }
 
     return 1;
