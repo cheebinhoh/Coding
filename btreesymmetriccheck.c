@@ -154,48 +154,53 @@ int main(int argc, char * argv[])
     struct TreeNode *other = NULL;
 
 
-    root = malloc(sizeof( struct TreeNode ));
-    root->val = 0;
-    root->left = root->right = NULL;
+    root        = malloc(sizeof( struct TreeNode ));
+    root->val   = 0;
+    root->left  = NULL;
+    root->right = NULL;
 
-    other = malloc(sizeof( struct TreeNode ));
-    other->val = 1;
-    other->left = other->right = NULL;
-
-    root->left = other;
-
-
-    other = malloc(sizeof( struct TreeNode ));
-    other->val = 1;
-    other->left = other->right = NULL;
-
-    root->right = other;
+    other        = malloc(sizeof( struct TreeNode ));
+    other->val   = 1;
+    other->left  = NULL;
+    other->right = NULL;
+    root->left   = other;
 
 
-    other = malloc(sizeof( struct TreeNode ));
-    other->val = 2;
-    other->left = other->right = NULL;
+    other        = malloc(sizeof( struct TreeNode ));
+    other->val   = 1;
+    other->left  = NULL;
+    other->right = NULL;
+    root->right  = other;
+
+
+    other        = malloc(sizeof( struct TreeNode ));
+    other->val   = 2;
+    other->left  = NULL;
+    other->right = NULL;
 
     root->right->right = other;
 
 
-    other = malloc(sizeof( struct TreeNode ));
-    other->val = 2;
-    other->left = other->right = NULL;
+    other        = malloc(sizeof( struct TreeNode ));
+    other->val   = 2;
+    other->left  = NULL;
+    other->right = NULL;
 
     root->left->left = other;
 
 
-    other = malloc(sizeof( struct TreeNode ));
-    other->val = 3;
-    other->left = other->right = NULL;
+    other        = malloc(sizeof( struct TreeNode ));
+    other->val   = 3;
+    other->left  = NULL;
+    other->right = NULL;
 
     root->left->right = other;
 
 
-    other = malloc(sizeof( struct TreeNode ));
-    other->val = 3;
-    other->left = other->right = NULL;
+    other        = malloc(sizeof( struct TreeNode ));
+    other->val   = 3;
+    other->left  = NULL;
+    other->right = NULL;
 
     root->right->left = other;
 

@@ -124,7 +124,7 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     // - or we can use macro for text substutition, including >, <, left and right text.
     //
     // - or we just left it be where it is now (duplicated), 1st approach will
-    //   alter the original concise logic by taking into account of extra argument, and 
+    //   alter the original concise logic by taking into account of extra argument, and
     //   it will complicate existing logic.
     //
     //   where else 2nd logic will have to hide thing behind a C macro which is kind
