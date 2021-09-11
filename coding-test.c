@@ -1144,7 +1144,8 @@ void runCheckIfIsBinarySearchTree(void)
         printf("root2 is a binary search tree\n");
     else
         printf("root2 is not a binary search tree\n");
-     printf("Tree topology:\n");
+
+    printf("Tree topology:\n");
     printTreeNodeInTreeTopology(root2);
 }
 
@@ -1224,7 +1225,7 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
     printf("\n");
     inOrder = checkIfTwoListsAre1stCome1stServe(list1, sizeof( list1 ) / sizeof( list1[0] ),
                                                 list2, sizeof( list2 ) / sizeof( list2[0] ),
-                                                list3, sizeof( list3 ) / sizeof( list3[0] ) );
+                                                list3, sizeof( list3 ) / sizeof( list3[0] ));
 
     if ( inOrder )
         printf("list1 and list2 are served in order\n");
@@ -1243,7 +1244,7 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
 
     inOrder = checkIfTwoListsAre1stCome1stServe(list4, sizeof( list4 ) / sizeof( list4[0] ),
                                                 list5, sizeof( list5 ) / sizeof( list5[0] ),
-                                                list6, sizeof( list6 ) / sizeof( list6[0] ) );
+                                                list6, sizeof( list6 ) / sizeof( list6[0] ));
 
     if ( inOrder )
         printf("list4 and list5 are served in order\n");
@@ -1317,7 +1318,7 @@ void printLongestSubstringCommon(char s1[], char s2[])
     }
 
     if ( longest > 0 )
-        printf("%.*s\n", longest, &pivotStr[longestStrStart] );
+        printf("%.*s\n", longest, &pivotStr[longestStrStart]);
 }
 
 void runFindLongestSubstringCommon(void)
@@ -1366,6 +1367,7 @@ int getLongestPalindromicSubsequence(char s[], int start, int end)
         {
             leftLen  = getLongestPalindromicSubsequence(s, start + 1, end);
             rightLen = getLongestPalindromicSubsequence(s, start, end - 1);
+
 
             if ( leftLen >= rightLen )
                 matchLen += leftLen;
