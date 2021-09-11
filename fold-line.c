@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
             {
                 char *iter = buffer;
 
+
                 while ( iter != cptr )
                 {
                     putchar(*iter);
@@ -110,7 +111,7 @@ int main(int argc, char *argv[])
 
     if ( bufferUsed > 0 )
     {
-        int i;
+        int i = 0;
 
 
         while ( i < bufferUsed )

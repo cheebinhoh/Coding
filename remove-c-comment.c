@@ -16,7 +16,7 @@
  */
 int main(int argc, char *argv[])
 {
-    int c;                         // single line
+    int c;
     int isInComment         = NO;
     int isCommentSingleLine = NO;
     int isInQuote           = NO;

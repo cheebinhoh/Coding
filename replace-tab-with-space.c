@@ -29,6 +29,7 @@ void printHelp(void)
 int main(int argc, char *argv[])
 {
     int c;
+    int i;
     int startWithNoneSpace = 0;
 
 
@@ -60,8 +61,6 @@ int main(int argc, char *argv[])
         if ( '\t' == c
              && !startWithNoneSpace )
         {
-            int i;
-
             for ( i = 0; i < space2Tab; i++ )
                 putchar(' ');
         }
