@@ -1,11 +1,17 @@
 # old good makefile to help compiling
+# 
+# TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
 all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck.out btreetraverse.out \
 	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out remove-c-comment.out \
  	string-utility.out calculator.out shrink-space.out trim-space.out replace-tab-with-space.out \
 	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out transformStr2Str.out \
 	trafficdemand.out coding-test.out btreemirrorswap.out btreeidentical.out \
-        btreerebalancing.out
+        btreerebalancing.out libbtree.a
+
+libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c
+	gcc -c btree.c avlbstree.c
+	ar -rc libbtree.a btree.o avlbstree.o
 
 btreepathsum.out : btreepathsum.c 
 	gcc -o $@ btreepathsum.c 
@@ -67,8 +73,8 @@ transformStr2Str.out : transformStr2Str.c
 trafficdemand.out : trafficdemand.c
 	gcc -o $@ trafficdemand.c
 
-coding-test.out : coding-test.c btree.c btree.h
-	gcc -o $@ coding-test.c btree.c
+coding-test.out : coding-test.c btree.h libbtree.a
+	gcc -o $@ coding-test.c -L. -lbtree
 
 btreemirrorswap.out : btreemirrorswap.c btree.c btree.h
 	gcc -o $@ btreemirrorswap.c btree.c
@@ -76,12 +82,12 @@ btreemirrorswap.out : btreemirrorswap.c btree.c btree.h
 btreeidentical.out : btreeidentical.c btree.c btree.h
 	gcc -o $@ btreeidentical.c btree.c
 
-btreerebalancing.out : btreerebalancing.c btree.c btree.h
-	gcc -o $@ btreerebalancing.c btree.c
+btreerebalancing.out : btreerebalancing.c libbtree.a btree.h
+	gcc -o $@ btreerebalancing.c -L. -lbtree
 
 
 clean:
-	rm -f *.out *.o
+	rm -f *.out *.o lib*.a
 
 
 test: 

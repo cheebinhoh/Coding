@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "btree.h"
-
+#include "avlbstree.h"
 
 /* Test 1:
  *

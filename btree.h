@@ -7,16 +7,8 @@
 
 #define BTREE_H_HAS_INCLUDED
 
-
-/* Definition for a binary tree node.
- */
-struct TreeNode {
-
-     int              val;
-     struct TreeNode *left;
-     struct TreeNode *right;
-};
-
+#include "btree-internal.h"
+#include "avlbstree.h"
 
 typedef void (bTreeTraversalCallback)(struct TreeNode *node, int pos, void *data);
 
@@ -24,10 +16,11 @@ typedef void (bTreeTraversalCallback)(struct TreeNode *node, int pos, void *data
 struct TreeNode * addTreeNode(struct TreeNode *root, int val);
 struct TreeNode * findTreeNode(struct TreeNode *root, int val);
 struct TreeNode * treeRebalance(struct TreeNode *root);
-struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val);
-void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
-int findTotalNumberOfTreeNode(struct TreeNode *root);
+
 void printTreeNodeInOrder(struct TreeNode *root);
 void printTreeNodeInTreeTopology(struct TreeNode *root);
+
+int findTotalNumberOfTreeNode(struct TreeNode *root);
+void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 
 #endif
