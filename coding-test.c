@@ -1418,6 +1418,93 @@ void runLongestPalindromicSubsequence(void)
            s4, getLongestPalindromicSubsequence(s4, 0, len - 1 ));
 }
 
+int getLongestCommonSubsequenceInSubString(char s1[], char s2[])
+{
+    int i;
+    int j;
+    int k;
+    int commonLen;
+
+
+    commonLen = 0;
+    i         = 0;
+    j         = 0;
+    k         = 0;
+    while ( '\0' != s1[i]
+            && '\0' != s2[j] )
+    {
+        k = j;
+        while ( '\0' != s2[k]
+                && s1[i] != s2[k] )
+            k++;
+
+        if ( s2[k] == s1[i] )
+        {
+            j = k + 1;
+            commonLen++;
+        }
+
+        i++;
+    }
+
+    return commonLen;
+}
+
+int getLongestCommonSubsequence(char s1[], char s2[])
+{
+    int   i;
+    int   commonLen;
+    int   longestCommonLen;
+    int   len1;
+    int   len2;
+    char *str1;
+    char *str2;
+
+
+    len1 = strlen(s1);
+    len2 = strlen(s2);
+    if ( len1 > len2 )
+    {
+        str1 = s2;
+        str2 = s1;
+    }
+    else
+    {
+        str1 = s1;
+        str2 = s2;
+    }
+
+    longestCommonLen = 0;
+    i                = 0;
+    while ( '\0' != str1[i] )
+    {
+        commonLen = getLongestCommonSubsequenceInSubString(&str1[i], str2);
+        if ( commonLen > longestCommonLen )
+            longestCommonLen = commonLen;
+
+        i++;
+    }
+
+    return longestCommonLen;
+}
+
+void runLongestCommonSubsequence(void)
+{
+    char s1[] = "abdca";
+    char s2[] = "cbda";
+    char s3[] = "passport";
+    char s4[] = "ppsspt";
+
+
+    printf("Test 17 description: given two strings s1 and s2, find the length of the longest subsequence which"
+           " is common in both the strings\n");
+    printf("\n");
+
+    printf("The longest substring of \"%s\" and \"%s\" is %d\n",
+           s1, s2, getLongestCommonSubsequence(s1, s2));
+    printf("The longest substring of \"%s\" and \"%s\" is %d\n",
+           s3, s4, getLongestCommonSubsequence(s3, s4));
+}
 
 // the starting point...
 int main(int argc, char *argv[])
@@ -1482,6 +1569,10 @@ int main(int argc, char *argv[])
 
     printf("\n");
     runLongestPalindromicSubsequence();
+    printf("\n");
+
+    printf("\n");
+    runLongestCommonSubsequence();
     printf("\n");
 
     return 0;
