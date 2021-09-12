@@ -238,3 +238,9 @@ The longest palinidromic subsequence of "abdbca" is 5
 The longest palinidromic subsequence of "cddpd" is 3
 The longest palinidromic subsequence of "pqr" is 1
 
+
+Test 17 description: given two strings s1 and s2, find the length of the longest subsequence which is common in both the strings
+
+The longest substring of "abdca" and "cbda" is 3
+The longest substring of "passport" and "ppsspt" is 5
+
