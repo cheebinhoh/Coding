@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
     root = addTreeNodeAndRebalanceTree(root, 11);
 
     printTreeNodeInTreeTopology(root);
-
+    
+    printf("\n");
     root = delTreeNodeAndRebalanceTree(root, 5);
     root = delTreeNodeAndRebalanceTree(root, 6);
     printf("After deleing 5 and 6, the tree is\n");
