@@ -138,8 +138,6 @@ struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
     // as it will check the whole tree for re-balanceing, the most effective
     // way is called retracking at the parent node of the deleted node, grandparent node,
     // and so on.
-    //
-    // the following is more a generic coding.
 
     return treeRebalance(root);
 }
