@@ -18,6 +18,8 @@ struct TreeNode * findTreeNode(struct TreeNode *root, int val);
 struct TreeNode * treeRebalance(struct TreeNode *root);
 struct TreeNode * delTreeNode(struct TreeNode *root, int val);
 
+void freeTreeNode(struct TreeNode *root);
+
 void printTreeNodeInOrder(struct TreeNode *root);
 void printTreeNodeInTreeTopology(struct TreeNode *root);
 

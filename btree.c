@@ -25,27 +25,35 @@ void findTreeNodeAndParentRecursive(struct TreeNode   *root,
                                     struct TreeNode ***retParent)
 {
     if ( NULL == root )
-    {
-        if ( NULL != retParent )
-            *retParent = NULL;
-
-        *retNode   = NULL;
-    }
+        goto notfound;
 
     if ( val == root->val )
     {
         *retNode = root;
     }
-    else if ( val < root->val )
+    else if ( val < root->val
+              && NULL != root->left )
     {
-        *retParent = &(root->left);
+        if (NULL != retParent)
+            *retParent = &(root->left);
+
         findTreeNodeAndParentRecursive(root->left, val, retNode, retParent);
     }
-    else
+    else if ( NULL != root->right )
     {
-        *retParent = &(root->right);
+        if (NULL != retParent)
+            *retParent = &(root->right);
+
         findTreeNodeAndParentRecursive(root->right, val, retNode, retParent);
     }
+
+    return;
+
+notfound:
+    if ( NULL != retParent )
+        *retParent = NULL;
+
+    *retNode = NULL;
 }
 
 /* WARNING that caller is responsible to set the dereferenced object if parent
@@ -67,9 +75,9 @@ struct TreeNode * findTreeNode(struct TreeNode *root, int val)
     struct TreeNode *ret = NULL;
 
 
-   findTreeNodeAndParent(root, val, &ret, NULL);
+    findTreeNodeAndParent(root, val, &ret, NULL);
 
-   return ret;
+    return ret;
 }
 
 
@@ -247,4 +255,18 @@ int findTotalNumberOfTreeNode(struct TreeNode *root)
     traverseTreeNodeInOrder(root, countTreeNode, &count);
 
     return count;
+}
+
+void freeTreeNode(struct TreeNode *root)
+{
+    if ( NULL == root )
+        return;
+
+    if ( NULL != root->left )
+        freeTreeNode(root->left);
+
+    if ( NULL != root->right )
+        freeTreeNode(root->right);
+
+    free(root);
 }
