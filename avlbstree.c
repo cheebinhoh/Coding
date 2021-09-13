@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "btree.h"
 #include "btree-internal.h"
 
 
@@ -122,3 +123,9 @@ struct TreeNode * treeRebalance(struct TreeNode *root)
     return root;
 }
 
+struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
+{
+    root = addTreeNode(root, val);
+
+    return treeRebalance(root);
+}

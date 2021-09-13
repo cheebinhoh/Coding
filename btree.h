@@ -14,6 +14,7 @@ typedef void (bTreeTraversalCallback)(struct TreeNode *node, int pos, void *data
 
 
 struct TreeNode * addTreeNode(struct TreeNode *root, int val);
+struct TreeNode * delTreeNode(struct TreeNode *root, int val);
 struct TreeNode * findTreeNode(struct TreeNode *root, int val);
 struct TreeNode * treeRebalance(struct TreeNode *root);
 
