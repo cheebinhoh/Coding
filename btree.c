@@ -19,19 +19,51 @@ void printTreeNodeInOrder(struct TreeNode *root)
     printTreeNodeInOrder(root->right);
 }
 
+void findTreeNodeAndParentRecursive(struct TreeNode   *root,
+                                    int                val,
+                                    struct TreeNode  **retNode,
+                                    struct TreeNode ***retParent)
+{
+    if ( NULL == root )
+    {
+        if ( NULL != retParent )
+            *retParent = NULL;
+
+        *retNode   = NULL;
+    }
+
+    if ( val == root->val )
+    {
+        *retNode = root;
+    }
+    else if ( val < root->val )
+    {
+        *retParent = &(root->left);
+        findTreeNodeAndParentRecursive(root->left, val, retNode, retParent);
+    }
+    else
+    {
+        *retParent = &(root->right);
+        findTreeNodeAndParentRecursive(root->right, val, retNode, retParent);
+    }
+}
+
+void findTreeNodeAndParent(struct TreeNode   *root,
+                           int                val,
+                           struct TreeNode  **node,
+                           struct TreeNode ***parent)
+{
+    findTreeNodeAndParentRecursive(root, val, node, parent);
+}
 
 struct TreeNode * findTreeNode(struct TreeNode *root, int val)
 {
-    if ( NULL == root )
-        return NULL;
+    struct TreeNode *ret = NULL;
 
 
-    if ( val == root->val )
-        return root;
-    else if ( val < root->val )
-        return findTreeNode(root->left, val);
-    else
-        return findTreeNode(root->right, val);
+   findTreeNodeAndParent(root, val, &ret, NULL);
+
+   return ret;
 }
 
 
@@ -68,6 +100,57 @@ struct TreeNode * addTreeNode(struct TreeNode *root, int val)
     }
 
     return node;
+}
+
+
+struct TreeNode * delTreeNode(struct TreeNode *root, int val)
+{
+    struct TreeNode **parent;
+    struct TreeNode  *node;
+    struct TreeNode  *tmp;
+    int               leftLevel;
+    int               rightLevel;
+
+
+    if ( NULL == root )
+        return 0;
+
+    parent = &root;
+    findTreeNodeAndParent(root, val, &node, &parent);
+    if ( NULL != node )
+    {
+        leftLevel  = determineMaxDepthLevel(node->left, 0);
+        rightLevel = determineMaxDepthLevel(node->right, 0);
+
+        if ( leftLevel >= rightLevel )
+        {
+            tmp = node->left;
+            while ( NULL != tmp
+                    && NULL != tmp->right )
+                tmp = tmp->right;
+
+            if ( NULL != tmp )
+                tmp->right = node->right;
+
+            *parent = node->left;
+        }
+        else
+        {
+            tmp = node->right;
+            while ( NULL != tmp
+                    && NULL != tmp->left )
+                tmp = tmp->left;
+
+            if ( NULL != tmp )
+                tmp->left = node->left;
+
+            *parent = node->right;
+        }
+
+        free(node);
+    }
+
+    return root;
 }
 
 int determineMaxDepthLevel(struct TreeNode *root,

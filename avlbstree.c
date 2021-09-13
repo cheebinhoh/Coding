@@ -129,3 +129,10 @@ struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
 
     return treeRebalance(root);
 }
+
+struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
+{
+    root = delTreeNode(root, val);
+
+    return treeRebalance(root);
+}

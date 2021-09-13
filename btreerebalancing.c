@@ -24,9 +24,14 @@ int main(int argc, char *argv[])
 
     printTreeNodeInTreeTopology(root);
 
+    root = delTreeNode(root, 8);
+    printf("After deleing 8, the tree is\n");
+    printTreeNodeInTreeTopology(root);
+
+
     root = NULL; // I do not care about memory leak for this simple test program
     printf("\n");
-    printf("Self balancing binary tree of adding 6, 7, 8, 5, 4, 10, 9\n");
+    printf("Self balancing binary tree of adding 6, 7, 8, 5, 4, 10, 9, 11\n");
     root = addTreeNodeAndRebalanceTree(root, 6);
     root = addTreeNodeAndRebalanceTree(root, 7);
     root = addTreeNodeAndRebalanceTree(root, 8);
@@ -34,7 +39,13 @@ int main(int argc, char *argv[])
     root = addTreeNodeAndRebalanceTree(root, 4);
     root = addTreeNodeAndRebalanceTree(root, 10);
     root = addTreeNodeAndRebalanceTree(root, 9);
+    root = addTreeNodeAndRebalanceTree(root, 11);
 
+    printTreeNodeInTreeTopology(root);
+
+    root = delTreeNodeAndRebalanceTree(root, 5);
+    root = delTreeNodeAndRebalanceTree(root, 6);
+    printf("After deleing 5 and 6, the tree is\n");
     printTreeNodeInTreeTopology(root);
 
     return 0;
