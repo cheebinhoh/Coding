@@ -48,6 +48,12 @@ void findTreeNodeAndParentRecursive(struct TreeNode   *root,
     }
 }
 
+/* WARNING that caller is responsible to set the dereferenced object if parent
+ * is not NULL as upon return if the deleted node is root, then the recursive
+ * function will not the value into location at parent as there is no way
+ * we can tell what is the address of the root in caller of this method via
+ * to levels of method calls.
+ */
 void findTreeNodeAndParent(struct TreeNode   *root,
                            int                val,
                            struct TreeNode  **node,
