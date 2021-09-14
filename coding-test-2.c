@@ -13,6 +13,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "btree.h"
 
 
@@ -129,7 +130,74 @@ void runDeteremineIf2NumberSumToValue(void)
     printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
     printf("The list of two numbers added to 10 is ");
     print2NumberSumToValue(array1, sizeof(array1) / sizeof(array1[0]), 10);
+    printf("\n");
 }
+
+/* Test 3:
+ *
+ * Given a dictionary of words and a large input string. You have to find out whether the
+ * input string can be completely segmented into the words of a given dictionary.
+ */
+
+int determineIfStringCanBeSegmented(char *dictionary[], char *s)
+{
+    int i;
+    int len;
+    int can;
+
+
+    for ( i = 0; NULL != dictionary[i]; i++ )
+    {
+        len = strlen(dictionary[i]);
+
+        if ( strncmp(dictionary[i], s, len ) == 0 )
+        {
+            if ( '\0' == s[len] )
+                return 1;
+            else if ( determineIfStringCanBeSegmented(dictionary, s + len) )
+                return 1;
+
+            // recursive method can be expensive and depending on the string to be segemented,
+            // we can be stack overflow, another way is to maintain backtracking explicitly by
+            // string the previous position in a list or array.
+        }
+    }
+
+    return 0;
+}
+
+void runStringSegmentation(void)
+{
+    char *dictionary[] = { "apple", "pear", "pie", NULL };
+    char  s1[]         = "applepie";
+    char  s2[]         = "applepeer";
+    int   i;
+
+
+    printf("Test 3: given a dictionary of words and a large input string. You have to find out "
+            "whether the input string can be completely segmented into the words of a given dictionary.\n");
+    printf("\n");
+
+    printf("The dictionary words are: ");
+    for ( i = 0; NULL != dictionary[i]; i++ )
+        printf("\"%s\" ", dictionary[i]);
+
+    printf("\n");
+
+    if ( determineIfStringCanBeSegmented(dictionary, s1) )
+         printf("The string \"%s\" can be segmented\n", s1);
+    else
+         printf("The string \"%s\" can not be segmented\n", s1);
+
+    if ( determineIfStringCanBeSegmented(dictionary, s2) )
+         printf("The string \"%s\" can be segmented\n", s2);
+    else
+         printf("The string \"%s\" can not be segmented\n", s2);
+
+    printf("\n");
+}
+
+
 
 // the starting point...
 int main(int argc, char *argv[])
@@ -138,6 +206,9 @@ int main(int argc, char *argv[])
     printf("\n");
 
     runDeteremineIf2NumberSumToValue();
+    printf("\n");
+
+    runStringSegmentation();
     printf("\n");
 
     return 0;
