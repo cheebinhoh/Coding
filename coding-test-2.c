@@ -1,8 +1,8 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Coding test questions from Apple (at least internet claim it :)) and many others.
+ * Coding test questions from Amazon (at least internet claim it :)) and many others.
  *
- * https://www.codinginterview.com/apple-interview-questions, I also include
+ * https://www.educative.io/blog/crack-amazon-coding-interview-questions#questions
  * questions that is similar I come across from friend or online.
  *
  * All answers are done by me with some assumption sometimes to make it easy for me :)
@@ -159,7 +159,9 @@ int determineIfStringCanBeSegmented(char *dictionary[], char *s)
 
             // recursive method can be expensive and depending on the string to be segemented,
             // we can be stack overflow, another way is to maintain backtracking explicitly by
-            // string the previous position in a list or array.
+            // storing the previous position in a list or array, so that if next search and
+            // match does not work, we backtrack to previous poistion in string to explore
+            // into other search.
         }
     }
 
