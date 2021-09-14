@@ -281,6 +281,7 @@ void runFindLowHighIndex(void)
     int low;
     int high;
 
+
     printf("The integer array is ");
     printIntegerArray(array, sizeof(array) / sizeof(array[0]));
     findLowHighIndex(array, sizeof(array) / sizeof(array[0]), 5, &low, &high);

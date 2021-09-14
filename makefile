@@ -7,11 +7,15 @@ all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck
  	string-utility.out calculator.out shrink-space.out trim-space.out replace-tab-with-space.out \
 	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out transformStr2Str.out \
 	trafficdemand.out coding-test.out btreemirrorswap.out btreeidentical.out \
-        btreerebalancing.out coding-test-2.out libbtree.a
+        btreerebalancing.out coding-test-2.out libbtree.a libllist.a list-test.out
 
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c
 	gcc -c btree.c avlbstree.c
 	ar -rc libbtree.a btree.o avlbstree.o
+
+libllist.a : llist.c llist.h llist-internal.h
+	gcc -c llist.c
+	ar -rc libllist.a llist.o
 
 btreepathsum.out : btreepathsum.c 
 	gcc -o $@ btreepathsum.c 
@@ -87,6 +91,9 @@ btreerebalancing.out : btreerebalancing.c libbtree.a btree.h
 
 coding-test-2.out : coding-test-2.c libbtree.a btree.h
 	gcc -o $@ coding-test-2.c -L. -lbtree
+
+list-test.out : list-test.c libllist.a
+	gcc -o $@ list-test.c -L. -lllist
 
 clean:
 	rm -f *.out *.o lib*.a
