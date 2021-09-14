@@ -199,6 +199,94 @@ void runStringSegmentation(void)
     printf("\n");
 }
 
+/*
+ * Test 4:
+ *
+ * Given a sorted array of integers, return the low and high index of the given key.
+ * You must return -1 if the indexes are not found. The array length can be in the
+ * millions with many duplicates.
+ */
+
+int binarySearch(int list[], int size, int value)
+{
+    int head   = 0;
+    int tail   = size - 1;
+    int middle = ( head + tail ) / 2;
+
+
+    while ( head <= tail
+            && list[middle] != value )
+    {
+       if ( value < list[middle] )
+          tail = middle - 1;
+       else
+          head = middle + 1;
+
+       middle = ( head + tail ) / 2;
+    }
+
+    return list[middle] == value ? middle : -1;
+}
+
+int findLowHighIndex(int array[], int size, int val, int *low, int *high)
+{
+    int s;
+    int e;
+    int mid;
+    int foundIndex;
+    int startIndex;
+
+
+    *low       = -1;
+    *high      = -1;
+    foundIndex = binarySearch(array, size, val);
+    if ( -1 == foundIndex )
+        return foundIndex;
+
+    // find the low
+    s     = 0;
+    e     = foundIndex - 1;
+    while ( s < e )
+    {
+        mid = ( e - s ) / 2;
+        if ( val <= array[mid] )
+            e = mid - 1;
+        else
+            s = mid + 1;
+    }
+
+    *low  = e + 1;
+
+    // fidn the high
+    s          = foundIndex + 1;
+    e          = size - 1;
+    startIndex = s;
+    while ( e > s )
+    {
+        mid = s + ( ( e - s ) / 2 );
+        if ( val >= array[mid] )
+            s = mid + 1;
+        else
+            e = mid - 1;
+    }
+
+    *high = s - 1;
+
+    return *low;
+}
+
+void runFindLowHighIndex(void)
+{
+    int array[] = { 1, 2, 5, 5, 5, 5, 5, 5, 5, 5, 20 };
+    int low;
+    int high;
+
+    printf("The integer array is ");
+    printIntegerArray(array, sizeof(array) / sizeof(array[0]));
+    findLowHighIndex(array, sizeof(array) / sizeof(array[0]), 5, &low, &high);
+    if ( -1 != low )
+        printf("For value %d, the low index is %d and high index is %d\n", 5, low, high);
+}
 
 
 // the starting point...
@@ -211,6 +299,9 @@ int main(int argc, char *argv[])
     printf("\n");
 
     runStringSegmentation();
+    printf("\n");
+
+    runFindLowHighIndex();
     printf("\n");
 
     return 0;
