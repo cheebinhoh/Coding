@@ -370,7 +370,9 @@ void runRotateArrayByKElement(void)
 {
     int array1[] = { 1, 2, 3, 4, 5, 6, 7 };
 
-
+  
+    printf("Test 4: rotate array by k elements\n");
+    printf("\n");
     printf("The integer array is ");
     printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
     rotateArrayByKElement(array1, sizeof(array1) / sizeof(array1[0]), 2);
@@ -450,6 +452,9 @@ void runRotateMatrix90DegreeToRight(void)
     int array1[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     int array2[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 
+
+    printf("Test 5: rotate matrix 90\" degree to right.\n");
+    printf("\n");
 
     printf("3 x 3 matrix:\n");
     printArrayInMatrix(array1, sizeof( array1 ) / sizeof( array1[0] ), 3);
