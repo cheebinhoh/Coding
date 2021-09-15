@@ -7,6 +7,50 @@
 #include <stdlib.h>
 #include "llist.h"
 
+
+int delListNode(int val, struct ListNode **start, struct ListNode **end)
+{
+    struct ListNode *tmp;
+    struct ListNode *del;
+
+
+    if ( NULL == (*start) )
+        return 0;
+
+    if ( (*start)->val == val )
+    {
+        del    = (*start);
+        *start = del->next;
+        if ( NULL != end
+             && del == *end )
+            *end = *start;
+
+        free(del);
+
+        return 1;
+    }
+
+    tmp = *start;
+    while ( NULL != tmp->next
+            && val != tmp->next->val )
+        tmp = tmp->next;
+
+    if ( NULL != tmp->next )
+    {
+        del       = tmp->next;
+        tmp->next = del->next;
+        if ( NULL != end
+             && del == *end )
+            *end = tmp;
+
+        free(del);
+
+        return 1;
+    }
+
+    return 0;
+}
+
 struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode **end)
 {
     struct ListNode *node;
@@ -21,12 +65,12 @@ struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode 
     node->next = NULL;
 
     if ( NULL == *start
-         || val <= (*start)->val )
+         || val < (*start)->val )
     {
         node->next = *start;
         *start     = node;
     }
-    else
+    else if ( val > (*start)->val )
     {
         tmp = *start;
         while ( NULL != tmp->next
@@ -36,12 +80,32 @@ struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode 
         node->next = tmp->next;
         tmp->next  = node;
     }
+    else
+    {
+        free(node);
+        node = NULL;
+    }
 
-    if ( NULL == node->next )
+    if ( NULL != node
+         && NULL == node->next )
         if ( NULL != end )
             *end = *start;
 
     return node;
+}
+
+void freeListNode(struct ListNode *start)
+{
+    struct ListNode *tmp;
+
+
+    while ( NULL != start )
+    {
+        tmp   = start;
+        start = start->next;
+
+        free(tmp);
+    }
 }
 
 void printListNode(struct ListNode *start)

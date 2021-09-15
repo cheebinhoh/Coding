@@ -10,6 +10,9 @@
 #include "llist-internal.h"
 
 struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode **end);
+int               delListNode(int val, struct ListNode **start, struct ListNode **end);
+void              freeListNode(struct ListNode *start);
+
 void printListNode(struct ListNode *start);
 
 #endif

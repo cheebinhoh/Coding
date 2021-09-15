@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "btree.h"
+#include "llist.h"
 
 
 void printIntegerArray(int array[], int size)
@@ -290,6 +291,94 @@ void runFindLowHighIndex(void)
 }
 
 
+/*
+ * Test 5:
+ *
+ * find k largest(or smallest) elements in an array
+ */
+void printKLargestElementsInArray(int array[], int size, int k)
+{
+    int i;
+    int n;
+    struct ListNode *start = NULL;
+
+
+    n = 0;
+    for ( i = 0; i < size; i++ )
+    {
+        if ( n < k )
+        {
+            addListNode(array[i], &start, NULL);
+            n++;
+        }
+        else if ( array[i] > start->val )
+        {
+            delListNode(start->val, &start, NULL);
+            addListNode(array[i], &start, NULL);
+        }
+    }
+
+    printf("The largest %d values are :", k);
+    printListNode(start);
+    freeListNode(start);
+}
+
+void runFindKLargestElementsInArray(void)
+{
+    int array1[] = { 1, 23, 12, 9, 30, 2, 50 };
+
+
+    printf("The integer array is ");
+    printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
+    printKLargestElementsInArray(array1, sizeof(array1) / sizeof(array1[0]), 3);
+    printf("\n");
+}
+
+
+/*
+ * Test 5:
+ *
+ * Rotate array by k elements
+ */
+void rotateArrayByKElement(int array[], int size, int k)
+{
+    int              i;
+    struct ListNode *start = NULL;
+    struct ListNode *tmp;
+
+
+    for ( i = 0; i < k && i < size; i++ )
+        addListNode(array[i], &start, NULL);
+
+    for ( i = 0; i < size - k; i++ )
+    {
+       array[i] = array[i + k];
+    }
+
+    tmp = start;
+    while ( NULL != tmp )
+    {
+        array[i++] = tmp->val;
+        tmp = tmp->next;
+    }
+
+    freeListNode(start);
+}
+
+void runRotateArrayByKElement(void)
+{
+    int array1[] = { 1, 2, 3, 4, 5, 6, 7 };
+
+
+    printf("The integer array is ");
+    printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
+    rotateArrayByKElement(array1, sizeof(array1) / sizeof(array1[0]), 2);
+
+    printf("\n");
+    printf("After rotating by 2, the integer array is ");
+    printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
+}
+
 // the starting point...
 int main(int argc, char *argv[])
 {
@@ -303,6 +392,12 @@ int main(int argc, char *argv[])
     printf("\n");
 
     runFindLowHighIndex();
+    printf("\n");
+
+    runFindKLargestElementsInArray();
+    printf("\n");
+
+    runRotateArrayByKElement();
     printf("\n");
 
     return 0;

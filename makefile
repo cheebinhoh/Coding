@@ -89,8 +89,8 @@ btreeidentical.out : btreeidentical.c btree.c btree.h
 btreerebalancing.out : btreerebalancing.c libbtree.a btree.h
 	gcc -o $@ btreerebalancing.c -L. -lbtree
 
-coding-test-2.out : coding-test-2.c libbtree.a btree.h
-	gcc -o $@ coding-test-2.c -L. -lbtree
+coding-test-2.out : coding-test-2.c libbtree.a btree.h libllist.a llist.h
+	gcc -o $@ coding-test-2.c -L. -lbtree -lllist
 
 list-test.out : list-test.c libllist.a
 	gcc -o $@ list-test.c -L. -lllist

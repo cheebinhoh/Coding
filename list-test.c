@@ -22,5 +22,10 @@ int main(int argc, char *argv[])
     printListNode(start);
     printf("\n");
 
+    printf("After deleeting 2\n");
+    delListNode(2, &start, &end);
+    printListNode(start);
+    printf("\n");
+
     return 0;
 }
