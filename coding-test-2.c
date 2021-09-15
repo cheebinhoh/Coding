@@ -283,6 +283,11 @@ void runFindLowHighIndex(void)
     int low;
     int high;
 
+ 
+    printf("Test 4: given a sorted array of integers, return the low and high index of the given key. "
+           "You must return -1 if the indexes are not found. The array length can be in the "
+           "millions with many duplicates.\n");
+    printf("\n");
 
     printf("The integer array is ");
     printIntegerArray(array, sizeof(array) / sizeof(array[0]));
@@ -329,6 +334,9 @@ void runFindKLargestElementsInArray(void)
     int array1[] = { 1, 23, 12, 9, 30, 2, 50 };
 
 
+    printf("Test 7: find k largest(or smallest) elements in an array.\n");
+    printf("\n");
+
     printf("The integer array is ");
     printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
     printKLargestElementsInArray(array1, sizeof(array1) / sizeof(array1[0]), 3);
@@ -337,7 +345,7 @@ void runFindKLargestElementsInArray(void)
 
 
 /*
- * Test 5:
+ * Test 6:
  *
  * Rotate array by k elements
  */
@@ -371,7 +379,7 @@ void runRotateArrayByKElement(void)
     int array1[] = { 1, 2, 3, 4, 5, 6, 7 };
 
   
-    printf("Test 4: rotate array by k elements\n");
+    printf("Test 6: rotate array by k elements\n");
     printf("\n");
     printf("The integer array is ");
     printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
@@ -383,7 +391,7 @@ void runRotateArrayByKElement(void)
 }
 
 /*
- * Test 5:
+ * Test 7:
  *
  * Rotate matrix 90" degree to right.
  */
