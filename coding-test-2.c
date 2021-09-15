@@ -13,6 +13,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "btree.h"
 #include "llist.h"
@@ -379,6 +380,99 @@ void runRotateArrayByKElement(void)
     printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
 }
 
+/*
+ * Test 5:
+ *
+ * Rotate matrix 90" degree to right.
+ */
+void printArrayInMatrix(int array[], int size, int matrixSize)
+{
+    int r;
+    int c;
+    int rIndex;
+
+
+    for ( r = 0; r < matrixSize; r++ )
+    {
+        rIndex = r * matrixSize;
+
+        for ( c = 0; c < matrixSize; c++ )
+        {
+            printf("%2d     ", array[rIndex + c]);
+        }
+
+        printf("\n");
+    }
+}
+
+void rotateMatrix90DegreeToRight(int array[], int size, int matrixSize)
+{
+    int  i;
+    int  j;
+    int  k;
+    int  n;
+    int  l;
+    int *buffer;
+
+
+    buffer = malloc(sizeof(int) * matrixSize);
+    if ( NULL == buffer )
+        return;
+
+    l = 0;
+    for ( i = 0; i < matrixSize; i++ )
+    {
+        n = 0;
+        k = size - ( matrixSize - i );
+        for ( j = 0; j < matrixSize; j++ )
+        {
+            buffer[n] = array[k];
+
+            if ( k - j - ( i * matrixSize ) > 0 )
+                memmove(&array[l + 1], &array[l], ( k - j - ( i * matrixSize ) ) * sizeof( int ));
+
+            k = k - ( matrixSize - i - 1 );
+            n++;
+            l++;
+        }
+
+        for ( j = 0; j < matrixSize; j++ )
+        {
+            array[l - matrixSize + j] = buffer[j];
+        }
+    }
+
+    free(buffer);
+}
+
+void runRotateMatrix90DegreeToRight(void)
+{
+    int array1[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    int array2[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+
+
+    printf("3 x 3 matrix:\n");
+    printArrayInMatrix(array1, sizeof( array1 ) / sizeof( array1[0] ), 3);
+    printf("\n");
+
+    rotateMatrix90DegreeToRight(array1, sizeof( array1 ) / sizeof( array1[0] ), 3 );
+
+    printf("After rotating matrix 90\" degree to right:\n");
+    printArrayInMatrix(array1, sizeof( array1 ) / sizeof( array1[0] ), 3);
+    printf("\n");
+
+
+    printf("4 x 4 matrix:\n");
+    printArrayInMatrix(array2, sizeof( array2 ) / sizeof( array2[0] ), 4);
+    printf("\n");
+
+    rotateMatrix90DegreeToRight(array2, sizeof( array2 ) / sizeof( array2[0] ), 4 );
+
+    printf("After rotating matrix 90\" degree to right:\n");
+    printArrayInMatrix(array2, sizeof( array2 ) / sizeof( array2[0] ), 4);
+    printf("\n");
+}
+
 // the starting point...
 int main(int argc, char *argv[])
 {
@@ -398,6 +492,9 @@ int main(int argc, char *argv[])
     printf("\n");
 
     runRotateArrayByKElement();
+    printf("\n");
+
+    runRotateMatrix90DegreeToRight();
     printf("\n");
 
     return 0;
