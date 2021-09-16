@@ -28,7 +28,6 @@ int main(int argc, char *argv[])
     printf("After deleing 8, the tree is\n");
     printTreeNodeInTreeTopology(root);
 
-
     root = NULL; // I do not care about memory leak for this simple test program
     printf("\n");
     printf("Self balancing binary tree of adding 6, 7, 8, 5, 4, 10, 9, 11\n");

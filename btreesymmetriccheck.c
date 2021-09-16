@@ -68,39 +68,8 @@ int treeIsSysmetric(struct TreeNode *root)
     if ( NULL == root )
         return 1;
 
-
     linearTree(root, 1, leftList, &leftListCnt);
     linearTree(root, 0, rightList, &rightListCnt);
-
-    printf("left  = " );
-    for ( i = 0; i < leftListCnt; i++ )
-    {
-        struct TreeNode *node;
-
-
-        node = leftList[i];
-        if ( NULL == node )
-            printf("-%s", i + 1 >= leftListCnt ? "" : ", ");
-        else
-            printf("%d, ", node->val);
-    }
-
-    printf("\n");
-
-    printf("right = ");
-    for ( i = 0; i < rightListCnt; i++ )
-    {
-        struct TreeNode *node;
-
-
-        node = rightList[i];
-        if ( NULL == node )
-            printf("-%s", i + 1 >= rightListCnt ? "" : ", ");
-        else
-           printf("%d, ", node->val);
-    }
-
-    printf("\n");
 
     if ( leftListCnt != rightListCnt )
     {
