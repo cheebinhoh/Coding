@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find the maximum path sum. The path may start and end at any node in the tree. 
+ * Find the maximum path sum. The path may start and end at any node in the tree.
  */
 
 #include <stdio.h>

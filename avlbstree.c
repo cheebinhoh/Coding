@@ -144,3 +144,32 @@ struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
 
     return treeRebalance(root);
 }
+
+int isTreeNodeBalanced(struct TreeNode *root)
+{
+    int leftLevel;
+    int rightLevel;
+
+
+    if ( NULL == root )
+        return 1;
+
+    if ( NULL != root->left )
+        if ( ! isTreeNodeBalanced(root->left) )
+            return 0;
+
+    if ( NULL != root->right )
+        if ( ! isTreeNodeBalanced(root->right) )
+            return 0;
+
+    rightLevel = determineMaxDepthLevel(root->right, 0);
+    leftLevel  = determineMaxDepthLevel(root->left, 0);
+
+    if ( ( leftLevel - rightLevel ) >= 2 )
+        return 0;
+
+    if ( ( rightLevel - leftLevel ) >= 2 )
+        return 0;
+
+    return 1;
+}
