@@ -145,6 +145,10 @@ struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
     return treeRebalance(root);
 }
 
+/* We take a bottom up approach that we validate if such tree is AVL balanced,
+ * if it is not, then we can return immediately to top of the stack call, else
+ * we validate at higher level if the tree is AVL balanced.
+ */
 int isTreeNodeBalanced(struct TreeNode *root)
 {
     int leftLevel;
