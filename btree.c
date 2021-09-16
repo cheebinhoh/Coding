@@ -208,10 +208,10 @@ void printTreeNodeInTreeTopologyRecursive(struct TreeNode *root,
         return;
     }
 
-    printf("%d (R=%d, L=%d)\n",
+    printf("%d (L=%d, R=%d)\n",
            root->val,
-           determineMaxDepthLevel(root->right),
-           determineMaxDepthLevel(root->left));
+           determineMaxDepthLevel(root->left),
+           determineMaxDepthLevel(root->right));
 
     printTreeNodeInTreeTopologyRecursive(root->right, level + 1);
     printTreeNodeInTreeTopologyRecursive(root->left, level + 1);

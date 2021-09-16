@@ -15,7 +15,6 @@ struct TreeNode * mirrorSwap(struct TreeNode *root)
     if ( NULL == root )
        return NULL;
 
-
     tmp         = root->left;
     root->left  = mirrorSwap(root->right);
     root->right = mirrorSwap(tmp);
@@ -33,15 +32,14 @@ int main(int argc, char *argv[])
     root = addTreeNode(root, 7);
     root = addTreeNode(root, 4);
 
-    printf("Ascending order = ");
-    printTreeNodeInOrder(root);
+    printf("The tree topology:\n");
+    printTreeNodeInTreeTopology(root);
     printf("\n"); // we can introduce wrapper entry call to printTreeNodeInOrder to printf \n
 
-    printf("\n");
-    printf("Executing mirror swap of tree\n");
     root = mirrorSwap(root);
-    printf("Descending order = ");
-    printTreeNodeInOrder(root);
+
+    printf("The tree topology after mirror swap of tree node:\n");
+    printTreeNodeInTreeTopology(root);
     printf("\n"); // we can introduce wrapper entry call to printTreeNodeInOrder to printf \n
 
     return 0;
