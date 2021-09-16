@@ -19,6 +19,7 @@ void printTreeNodeInOrder(struct TreeNode *root)
     printTreeNodeInOrder(root->right);
 }
 
+
 void findTreeNodeAndParentRecursive(struct TreeNode   *root,
                                     int                val,
                                     struct TreeNode  **retNode,
@@ -56,6 +57,7 @@ notfound:
     *retNode = NULL;
 }
 
+
 /* WARNING that caller is responsible to set the dereferenced object if parent
  * is not NULL as upon return if the deleted node is root, then the recursive
  * function will not the value into location at parent as there is no way
@@ -69,6 +71,7 @@ void findTreeNodeAndParent(struct TreeNode   *root,
 {
     findTreeNodeAndParentRecursive(root, val, node, parent);
 }
+
 
 struct TreeNode * findTreeNode(struct TreeNode *root, int val)
 {
@@ -167,6 +170,7 @@ struct TreeNode * delTreeNode(struct TreeNode *root, int val)
     return root;
 }
 
+
 int determineMaxDepthLevel(struct TreeNode *root,
                            int              level)
 {
@@ -182,6 +186,7 @@ int determineMaxDepthLevel(struct TreeNode *root,
 
     return ( rightLevel > leftLevel ) ? rightLevel : leftLevel;
 }
+
 
 void printTreeNodeInTreeTopologyRecursive(struct TreeNode *root,
                                           int              level)
@@ -207,10 +212,12 @@ void printTreeNodeInTreeTopologyRecursive(struct TreeNode *root,
     printTreeNodeInTreeTopologyRecursive(root->left, level + 1);
 }
 
+
 void printTreeNodeInTreeTopology(struct TreeNode *root)
 {
     printTreeNodeInTreeTopologyRecursive(root, 0);
 }
+
 
 void traverseTreeNodeInOrderRecursive(struct TreeNode        *root,
                                       int                    *pos,
@@ -229,6 +236,7 @@ void traverseTreeNodeInOrderRecursive(struct TreeNode        *root,
     traverseTreeNodeInOrderRecursive(root->right, pos, func, data);
 }
 
+
 void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data)
 {
     int pos;
@@ -237,6 +245,7 @@ void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func,
     pos = 0;
     traverseTreeNodeInOrderRecursive(root, &pos, func, data);
 }
+
 
 void countTreeNode(struct TreeNode *node, int pos, void *data)
 {
@@ -247,6 +256,7 @@ void countTreeNode(struct TreeNode *node, int pos, void *data)
     *count = *count + 1;
 }
 
+
 int findTotalNumberOfTreeNode(struct TreeNode *root)
 {
     int count = 0;
@@ -256,6 +266,7 @@ int findTotalNumberOfTreeNode(struct TreeNode *root)
 
     return count;
 }
+
 
 void freeTreeNode(struct TreeNode *root)
 {

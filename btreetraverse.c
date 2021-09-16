@@ -171,6 +171,7 @@ void inOrderTraversal(struct TreeNode *root)
         printf("\n");
 }
 
+
 /* A pre order traversal logic:
  *
  * We process the node, the left branch, and then right branch, we traverse tree in depth first approach,

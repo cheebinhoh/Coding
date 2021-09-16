@@ -112,16 +112,17 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     }
 }
 
+
 struct TreeNode * treeRebalance(struct TreeNode *root)
 {
     if ( NULL == root )
         return NULL;
 
-
     treeRebalanceRecursive(&root, root);
 
     return root;
 }
+
 
 struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
 {
@@ -129,6 +130,7 @@ struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
 
     return treeRebalance(root);
 }
+
 
 struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
 {
@@ -145,9 +147,15 @@ struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
     return treeRebalance(root);
 }
 
+
 /* We take a bottom up approach that we validate if such tree is AVL balanced,
  * if it is not, then we can return immediately to top of the stack call, else
  * we validate at higher level if the tree is AVL balanced.
+ *
+ * The other approach is that the AVL TreeNode maintains a left and right count
+ * depth level at all time, and rolling the maximum depth level up to higher level
+ * and so we only need to check the root level left and right maximum depth gap
+ * to decide if the whole tree is AVL
  */
 int isTreeNodeBalanced(struct TreeNode *root)
 {
@@ -169,11 +177,6 @@ int isTreeNodeBalanced(struct TreeNode *root)
     rightLevel = determineMaxDepthLevel(root->right, 0);
     leftLevel  = determineMaxDepthLevel(root->left, 0);
 
-    if ( ( leftLevel - rightLevel ) >= 2 )
-        return 0;
-
-    if ( ( rightLevel - leftLevel ) >= 2 )
-        return 0;
-
-    return 1;
+    return  ( ( leftLevel - rightLevel ) < 2 )
+            && ( ( rightLevel - leftLevel ) < 2 );
 }

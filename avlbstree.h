@@ -12,7 +12,6 @@
 struct TreeNode * treeRebalance(struct TreeNode *root);
 struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val);
 struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val);
-
-int isTreeNodeBalanced(struct TreeNode *root);
+int               isTreeNodeBalanced(struct TreeNode *root);
 
 #endif
