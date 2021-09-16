@@ -30,7 +30,12 @@ void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
         return;
 
     for ( i = 0; i < currentLevelCnt; i++ )
-        printf("%d%s", currentLevelList[i]->val, ( i + 1 < currentLevelCnt ) ? ", " : "");
+    {
+        printf("%d", currentLevelList[i]->val);
+
+        if ( i + 1 < currentLevelCnt )
+            printf(", ");
+    }
 
     for ( i = 0; i < nextLevelCnt; i++ )
         currentLevelList[i] = nextLevelList[i];

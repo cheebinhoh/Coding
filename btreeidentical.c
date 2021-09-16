@@ -38,12 +38,12 @@ int main(int argc, char *argv[])
     other = addTreeNode(other, 4);
 
 
-    printf("1st tree is = ");
-    printTreeNodeInOrder(root);
+    printf("1st tree topology:\n");
+    printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("2nd tree is = ");
-    printTreeNodeInOrder(other);
+    printf("2nd tree topology:\n");
+    printTreeNodeInTreeTopology(other);
     printf("\n");
 
     identical = isTreeIdentical(root, other);
@@ -61,8 +61,8 @@ int main(int argc, char *argv[])
     other = addTreeNode(other, 9);
 
     printf("\n");
-    printf("2nd tree is changed = ");
-    printTreeNodeInOrder(other);
+    printf("2nd tree is changed, the tree topology:");
+    printTreeNodeInTreeTopology(other);
     printf("\n");
 
     identical = isTreeIdentical(root, other);
@@ -70,6 +70,8 @@ int main(int argc, char *argv[])
         printf("Both trees are identical\n");
     else
         printf("Both trees are not identical\n");
+
+    printf("\n");
 
     return 0;
 }

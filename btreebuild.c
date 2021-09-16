@@ -29,9 +29,7 @@ struct TreeNode * findParent(struct TreeNode *root,
         return root;
 
     if ( NULL != root->left )
-    {
         parent = findParent(root->left, node);
-    }
 
     if ( NULL == parent)
     {
@@ -100,11 +98,11 @@ struct TreeNode * buildTree(int inorder[],
             if ( pos >= i )
             {
                 prev->right = new;
-                prev = new;
+                prev        = new;
             }
             else
             {
-                prev = findParent(root, prev);
+                prev       = findParent(root, prev);
                 prev->left = new;
             }
         }
@@ -125,6 +123,7 @@ struct TreeNode * buildTree(int inorder[],
  */
 int main(int argc, char * argv[])
 {
+    int              i;
     struct TreeNode *root         = NULL;
     int              inorder[]    = { 9, 3, 15, 20, 7 };
     int              postorder[]  = { 9, 15, 7, 20, 3 };
@@ -134,29 +133,58 @@ int main(int argc, char * argv[])
     int              postorder3[] = { 2, 1 };
 
 
+    printf("Binary tree inorder list: ");
+    for ( i = 0; i < sizeof( inorder ) / sizeof( inorder[0] ); i++ )
+        printf("%d, ", inorder[i]);
+
+    printf("\n");
+    printf("Binary tree postorder list: ");
+    for ( i = 0; i < sizeof( postorder ) / sizeof( postorder[0] ); i++ )
+        printf("%d, ", postorder[i]);
+
     root = buildTree(inorder, postorder, sizeof(inorder) / sizeof(inorder[0]));
 
-    printf("in order    = ");
-    inOrderTraversal(root);
+    printf("\n");
+    printf("Building a binary tree from the lists above, the tree topology:\n");
+    printf("\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
 
-    printf("post order  = ");
-    postOrderTraversal(root);
+    printf("\n");
+    printf("Binary tree inorder list: ");
+    for ( i = 0; i < sizeof( inorder2 ) / sizeof( inorder2[0] ); i++ )
+        printf("%d, ", inorder2[i]);
+
+    printf("\n");
+    printf("Binary tree postorder list: ");
+    for ( i = 0; i < sizeof( postorder2 ) / sizeof( postorder2[0] ); i++ )
+        printf("%d, ", postorder2[i]);
 
     root = buildTree(inorder2, postorder2, sizeof(inorder2) / sizeof(inorder2[0]));
 
-    printf("in order2   = ");
-    inOrderTraversal(root);
+    printf("\n");
+    printf("Building a binary tree from the lists above, the tree topology:\n");
+    printf("\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
 
-    printf("post order2 = ");
-    postOrderTraversal(root);
+    printf("\n");
+    printf("Binary tree inorder list: ");
+    for ( i = 0; i < sizeof( inorder3 ) / sizeof( inorder3[0] ); i++ )
+        printf("%d, ", inorder3[i]);
+
+    printf("\n");
+    printf("Binary tree postorder list: ");
+    for ( i = 0; i < sizeof( postorder3 ) / sizeof( postorder3[0] ); i++ )
+        printf("%d, ", postorder3[i]);
 
     root = buildTree(inorder3, postorder3, sizeof(inorder3) / sizeof(inorder3[0]));
 
-    printf("in order3   = ");
-    inOrderTraversal(root);
-
-    printf("post order3 = ");
-    postOrderTraversal(root);
+    printf("\n");
+    printf("Building a binary tree from the lists above, the tree topology:\n");
+    printf("\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.

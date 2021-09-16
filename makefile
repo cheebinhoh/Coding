@@ -39,8 +39,8 @@ btreesymmetriccheck.out : btreesymmetriccheck.c btree.h libbtree.a
 btreetraverse.out : btreetraverse.c btreetraverse-main.c btree.h btreetraverse.h libbtree.a
 	gcc -o $@ btreetraverse.c btreetraverse-main.c -L. -lbtree
 
-btreebuild.out : btreebuild.c btreetraverse.c btree.h btreetraverse.h
-	gcc -o $@ btreebuild.c btreetraverse.c 
+btreebuild.out : btreebuild.c btreetraverse.c btree.h btreetraverse.h libbtree.a
+	gcc -o $@ btreebuild.c btreetraverse.c -L. -lbtree 
 
 btreelca.out : btreelca.c btreetraverse.c btree.h btreetraverse.h libbtree.a
 	gcc -o $@ btreelca.c btreetraverse.c -L. -lbtree

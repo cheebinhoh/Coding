@@ -83,7 +83,7 @@ int main(int argc, char * argv[])
     other->right              = NULL;
     root->right->right->right = other;
 
-    printf("The tree topology:");
+    printf("The tree topology:\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
 

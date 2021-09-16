@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * ADT Binary tree (with AVL self-balancing functionality)
+ * ADT binary search tree
  */
 
 #include <stdio.h>
@@ -12,7 +12,6 @@ void printTreeNodeInOrder(struct TreeNode *root)
 {
     if ( NULL == root )
         return;
-
 
     printTreeNodeInOrder(root->left);
     printf("%d, ", root->val);
@@ -130,7 +129,7 @@ struct TreeNode * delTreeNode(struct TreeNode *root, int val)
 
 
     if ( NULL == root )
-        return 0;
+        return NULL;
 
     parent = &root;
     findTreeNodeAndParent(root, val, &node, &parent);
@@ -226,7 +225,6 @@ void traverseTreeNodeInOrderRecursive(struct TreeNode        *root,
 {
     if ( NULL == root )
         return;
-
 
     traverseTreeNodeInOrderRecursive(root->left, pos, func, data);
 
