@@ -20,8 +20,8 @@ libllist.a : llist.c llist.h llist-internal.h
 btreepathsum.out : btreepathsum.c 
 	gcc -o $@ btreepathsum.c 
 
-btreebltraverse.out : btreebltraverse.c btree.h 
-	gcc -o $@ btreebltraverse.c
+btreebltraverse.out : btreebltraverse.c btree.h libbtree.a 
+	gcc -o $@ btreebltraverse.c -L. -lbtree
 
 btreemaxlevel.out : btreemaxlevel.c btree.h
 	gcc -o $@ btreemaxlevel.c
@@ -29,8 +29,8 @@ btreemaxlevel.out : btreemaxlevel.c btree.h
 btreesymmetriccheck.out : btreesymmetriccheck.c btree.h
 	gcc -o $@ btreesymmetriccheck.c
 
-btreetraverse.out : btreetraverse.c btreetraverse-main.c btree.h btreetraverse.h
-	gcc -o $@ btreetraverse.c btreetraverse-main.c
+btreetraverse.out : btreetraverse.c btreetraverse-main.c btree.h btreetraverse.h libbtree.a
+	gcc -o $@ btreetraverse.c btreetraverse-main.c -L. -lbtree
 
 btreebuild.out : btreebuild.c btreetraverse.c btree.h btreetraverse.h
 	gcc -o $@ btreebuild.c btreetraverse.c 
