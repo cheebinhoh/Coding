@@ -204,6 +204,10 @@ int main(int argc, char * argv[])
 
     root->right->left = other;
 
+    printf("The tree topology:\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+
     printf("Is sysmetric = %d\n", treeIsSysmetric(root));
     printf("\n");
 

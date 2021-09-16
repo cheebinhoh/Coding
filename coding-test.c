@@ -901,7 +901,7 @@ void runAVLSelfbalanceTree(void)
     for ( i = 0; i < sizeof( array ) / sizeof( array[0] ); i++ )
         root = addTreeNodeAndRebalanceTree( root, array[i] );
 
-    printf("The binary search tree topology:\n");
+    printf("The tree topology:\n");
     printf("\n");
     printTreeNodeInTreeTopology(root);
 }

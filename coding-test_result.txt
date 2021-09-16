@@ -133,7 +133,7 @@ CAB
 Test 10 description: implementing AVL (Adelson-Velsky and Landis) self-balancing binary search tree.
 
 Adding a list of integer arrays in the following order1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
-The binary search tree topology:
+The tree topology:
 
 8 (L=4, R=3)
      3 (L=2, R=3)

@@ -26,8 +26,8 @@ btreebltraverse.out : btreebltraverse.c btree.h libbtree.a
 btreemaxlevel.out : btreemaxlevel.c btree.h
 	gcc -o $@ btreemaxlevel.c
 
-btreesymmetriccheck.out : btreesymmetriccheck.c btree.h
-	gcc -o $@ btreesymmetriccheck.c
+btreesymmetriccheck.out : btreesymmetriccheck.c btree.h libbtree.a
+	gcc -o $@ btreesymmetriccheck.c -L. -lbtree
 
 btreetraverse.out : btreetraverse.c btreetraverse-main.c btree.h btreetraverse.h libbtree.a
 	gcc -o $@ btreetraverse.c btreetraverse-main.c -L. -lbtree
