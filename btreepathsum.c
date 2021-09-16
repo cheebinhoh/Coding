@@ -129,6 +129,9 @@ int main(int argc, char * argv[])
     other->right               = NULL;
     root->right->right->right  = other;
 
+    printf("The tree topology:\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
     printf("target sum (15) is %d\n", btreePathSum(root, 15));
     printf("target sum (6) is %d\n", btreePathSum(root, 6));
     printf("target sum (5) is %d\n", btreePathSum(root, 5));

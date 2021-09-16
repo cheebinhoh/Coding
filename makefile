@@ -17,8 +17,8 @@ libllist.a : llist.c llist.h llist-internal.h
 	gcc -c llist.c
 	ar -rc libllist.a llist.o
 
-btreepathsum.out : btreepathsum.c 
-	gcc -o $@ btreepathsum.c 
+btreepathsum.out : btreepathsum.c btree.h libbtree.a
+	gcc -o $@ btreepathsum.c -L. -lbtree
 
 btreebltraverse.out : btreebltraverse.c btree.h libbtree.a 
 	gcc -o $@ btreebltraverse.c -L. -lbtree

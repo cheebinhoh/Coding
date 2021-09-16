@@ -18,12 +18,12 @@ void linearTree(struct TreeNode  *root,
     if ( NULL == root )
     {
         list[*listCnt] = NULL;
-        *listCnt = *listCnt + 1;
+        *listCnt       = *listCnt + 1;
     }
     else
     {
         list[*listCnt] = root;
-        *listCnt = *listCnt + 1;
+        *listCnt       = *listCnt + 1;
 
         if ( left )
         {
@@ -80,13 +80,9 @@ int treeIsSysmetric(struct TreeNode *root)
 
         node = leftList[i];
         if ( NULL == node )
-        {
             printf("-%s", i + 1 >= leftListCnt ? "" : ", ");
-        }
         else
-        {
             printf("%d, ", node->val);
-        }
     }
 
     printf("\n");
@@ -99,13 +95,9 @@ int treeIsSysmetric(struct TreeNode *root)
 
         node = rightList[i];
         if ( NULL == node )
-        {
             printf("-%s", i + 1 >= rightListCnt ? "" : ", ");
-        }
         else
-        {
            printf("%d, ", node->val);
-        }
     }
 
     printf("\n");
@@ -122,9 +114,7 @@ int treeIsSysmetric(struct TreeNode *root)
                  && NULL != rightList[i] )
             {
                 if ( leftList[i]->val != rightList[i]->val )
-                {
                     return 0;
-                }
             }
             else if ( leftList[i] != rightList[i] )
             {
@@ -213,7 +203,12 @@ int main(int argc, char * argv[])
 
     root->right->left = NULL;
 
-    printf("Is sysmetric (after setting root->right->left to NULL) = %d\n", treeIsSysmetric(root));
+    printf("The tree topology (after setting root->right->left to NULL):\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+
+    printf("Is sysmetric = %d\n", treeIsSysmetric(root));
+    printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
