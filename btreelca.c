@@ -131,7 +131,7 @@ int main(int argc, char * argv[])
 {
     struct TreeNode *root  = NULL;
     struct TreeNode *other = NULL;
-
+  
 
     root        = malloc(sizeof( struct TreeNode ));
     root->val   = 0;
@@ -186,6 +186,8 @@ int main(int argc, char * argv[])
     other->right              = NULL;
     root->right->right->right = other;
 
+    printf("The tree topology:\n");
+    printTreeNodeInTreeTopology(root);
 
     other = findLeastCommonAncestor(root, 1, 2);
     if ( NULL != other )
