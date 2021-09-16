@@ -7,7 +7,7 @@ all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck
  	string-utility.out calculator.out shrink-space.out trim-space.out replace-tab-with-space.out \
 	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out transformStr2Str.out \
 	trafficdemand.out coding-test.out btreemirrorswap.out btreeidentical.out \
-        btreerebalancing.out coding-test-2.out libbtree.a libllist.a list-test.out
+        btreerebalancing.out coding-test-2.out libbtree.a libllist.a list-test.out btreemaxpathsum.out
 
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c
 	gcc -c btree.c avlbstree.c
@@ -19,6 +19,9 @@ libllist.a : llist.c llist.h llist-internal.h
 
 btreepathsum.out : btreepathsum.c btree.h libbtree.a
 	gcc -o $@ btreepathsum.c -L. -lbtree
+
+btreemaxpathsum.out : btreemaxpathsum.c btree.h libbtree.a
+	gcc -o $@ btreemaxpathsum.c -L. -lbtree
 
 btreebltraverse.out : btreebltraverse.c btree.h libbtree.a 
 	gcc -o $@ btreebltraverse.c -L. -lbtree
