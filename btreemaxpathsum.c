@@ -1,7 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find out if there exists a path from root to a leaf that its sum of values of all nodes
- * equal to the target.
+ * Find the maximum path sum. The path may start and end at any node in the tree. 
  */
 
 #include <stdio.h>
@@ -9,11 +8,6 @@
 #include "btree.h"
 
 
-/* This is internal recursive method that we sum up all value until leaf and then compare the sum
- * value to target sum and return 0 (false) or 1 (true) that the sum value is equal to target value.
- *
- * we only call btreePathSumInternal on a right branch if left branch does not result in 1.
- */
 int btreePathSumInternal(struct TreeNode *root,
                          int              sum)
 {
