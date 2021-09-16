@@ -283,7 +283,7 @@ void runFindLowHighIndex(void)
     int low;
     int high;
 
- 
+
     printf("Test 4: given a sorted array of integers, return the low and high index of the given key. "
            "You must return -1 if the indexes are not found. The array length can be in the "
            "millions with many duplicates.\n");
@@ -378,7 +378,7 @@ void runRotateArrayByKElement(void)
 {
     int array1[] = { 1, 2, 3, 4, 5, 6, 7 };
 
-  
+
     printf("Test 6: rotate array by k elements\n");
     printf("\n");
     printf("The integer array is ");
@@ -420,7 +420,6 @@ void rotateMatrix90DegreeToRight(int array[], int size, int matrixSize)
     int  i;
     int  j;
     int  k;
-    int  n;
     int  l;
     int *buffer;
 
@@ -432,17 +431,15 @@ void rotateMatrix90DegreeToRight(int array[], int size, int matrixSize)
     l = 0;
     for ( i = 0; i < matrixSize; i++ )
     {
-        n = 0;
         k = size - ( matrixSize - i );
         for ( j = 0; j < matrixSize; j++ )
         {
-            buffer[n] = array[k];
+            buffer[j] = array[k];
 
             if ( k - j - ( i * matrixSize ) > 0 )
                 memmove(&array[l + 1], &array[l], ( k - j - ( i * matrixSize ) ) * sizeof( int ));
 
             k = k - ( matrixSize - i - 1 );
-            n++;
             l++;
         }
 
