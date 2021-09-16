@@ -26,4 +26,6 @@ void printTreeNodeInTreeTopology(struct TreeNode *root);
 int  findTotalNumberOfTreeNode(struct TreeNode *root);
 void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 
+int determineMaxDepthLevel(struct TreeNode *root);
+
 #endif

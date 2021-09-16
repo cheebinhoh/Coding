@@ -9,27 +9,6 @@
 #include "btreetraverse.h"
 
 
-struct TreeNode * findNode(struct TreeNode *root,
-                           int              val)
-{
-    struct TreeNode *node;
-
-
-    if ( NULL == root )
-        return NULL;
-
-    if ( val == root->val )
-        return root;
-
-    node = findNode(root->left, val);
-    if ( NULL != node )
-        return node;
-
-    node = findNode(root->right, val);
-
-    return node;
-}
-
 /* Internal recursive method to find the least common ancestor
  */
 struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
@@ -53,16 +32,12 @@ struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
     if ( NULL == root->left )
     {
         if ( root->val == val1
-             && findNode(root->right, val2) != NULL )
-        {
+             && findTreeNode(root->right, val2) != NULL )
             return root;
-        }
 
         if ( root->val == val2
-             && findNode(root->right, val1) != NULL )
-        {
+             && findTreeNode(root->right, val1) != NULL )
             return root;
-        }
 
         return findLeastCommonAncestorInternal(root->right, val1, val2);
     }
@@ -70,26 +45,22 @@ struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
     if ( NULL == root->right )
     {
         if ( root->val == val1
-             && findNode(root->left, val2) != NULL )
-        {
+             && findTreeNode(root->left, val2) != NULL )
             return root;
-        }
 
         if ( root->val == val2
-             && findNode(root->left, val1) != NULL )
-        {
+             && findTreeNode(root->left, val1) != NULL )
             return root;
-        }
 
         return findLeastCommonAncestorInternal(root->left, val1, val2);
     }
 
-    if ( findNode(root->left, val1) != NULL
-         && findNode(root->right, val2) != NULL )
+    if ( findTreeNode(root->left, val1) != NULL
+         && findTreeNode(root->right, val2) != NULL )
         return root;
 
-    if ( findNode(root->left, val2) != NULL
-         && findNode(root->right, val1) != NULL )
+    if ( findTreeNode(root->left, val2) != NULL
+         && findTreeNode(root->right, val1) != NULL )
         return root;
 
     node = findLeastCommonAncestorInternal(root->left, val1, val2);
@@ -212,6 +183,8 @@ int main(int argc, char * argv[])
     other = findLeastCommonAncestor(root, 3, 8);
     if ( NULL != other )
         printf("The least common ancestor of 3 and 8 is %d\n", other->val);
+
+    printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.

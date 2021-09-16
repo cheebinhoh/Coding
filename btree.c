@@ -135,8 +135,8 @@ struct TreeNode * delTreeNode(struct TreeNode *root, int val)
     findTreeNodeAndParent(root, val, &node, &parent);
     if ( NULL != node )
     {
-        leftLevel  = determineMaxDepthLevel(node->left, 0);
-        rightLevel = determineMaxDepthLevel(node->right, 0);
+        leftLevel  = determineMaxDepthLevel(node->left);
+        rightLevel = determineMaxDepthLevel(node->right);
 
         if ( leftLevel >= rightLevel )
         {
@@ -170,8 +170,8 @@ struct TreeNode * delTreeNode(struct TreeNode *root, int val)
 }
 
 
-int determineMaxDepthLevel(struct TreeNode *root,
-                           int              level)
+int determineMaxDepthLevelRecursive(struct TreeNode *root,
+                                    int              level)
 {
     int rightLevel;
     int leftLevel;
@@ -180,10 +180,16 @@ int determineMaxDepthLevel(struct TreeNode *root,
     if ( NULL == root )
         return level;
 
-    rightLevel = determineMaxDepthLevel(root->left, level + 1);
-    leftLevel = determineMaxDepthLevel(root->right, level + 1);
+    rightLevel = determineMaxDepthLevelRecursive(root->left, level + 1);
+    leftLevel = determineMaxDepthLevelRecursive(root->right, level + 1);
 
     return ( rightLevel > leftLevel ) ? rightLevel : leftLevel;
+}
+
+
+int determineMaxDepthLevel(struct TreeNode *root)
+{
+    return determineMaxDepthLevelRecursive(root, 0);
 }
 
 
@@ -204,8 +210,8 @@ void printTreeNodeInTreeTopologyRecursive(struct TreeNode *root,
 
     printf("%d (R=%d, L=%d)\n",
            root->val,
-           determineMaxDepthLevel(root->right, 0),
-           determineMaxDepthLevel(root->left, 0));
+           determineMaxDepthLevel(root->right),
+           determineMaxDepthLevel(root->left));
 
     printTreeNodeInTreeTopologyRecursive(root->right, level + 1);
     printTreeNodeInTreeTopologyRecursive(root->left, level + 1);

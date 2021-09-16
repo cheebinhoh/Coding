@@ -16,6 +16,6 @@ struct TreeNode {
      struct TreeNode *right;
 };
 
-int determineMaxDepthLevel(struct TreeNode *root, int level);
+int determineMaxDepthLevelRecursive(struct TreeNode *root, int level);
 
 #endif

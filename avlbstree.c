@@ -27,8 +27,8 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     if ( NULL != root->right )
        treeRebalanceRecursive(&(root->right), root->right);
 
-    rightLevel = determineMaxDepthLevel(root->right, 0);
-    leftLevel  = determineMaxDepthLevel(root->left, 0);
+    rightLevel = determineMaxDepthLevel(root->right);
+    leftLevel  = determineMaxDepthLevel(root->left);
 
     // TODO?
     // - there are significant amount of similarly duplicate logic, where
@@ -53,8 +53,8 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     if ( ( rightLevel - leftLevel ) >= 2 ) // reorder right branch
     {
         newRoot    = root->right;
-        rightLevel = determineMaxDepthLevel(newRoot->right, 0);
-        leftLevel  = determineMaxDepthLevel(newRoot->left, 0);
+        rightLevel = determineMaxDepthLevel(newRoot->right);
+        leftLevel  = determineMaxDepthLevel(newRoot->left);
 
 
         if ( leftLevel > rightLevel )
@@ -84,8 +84,8 @@ void treeRebalanceRecursive(struct TreeNode **parent,
     {
         newRoot = root->left;
 
-        rightLevel = determineMaxDepthLevel(newRoot->right, 0);
-        leftLevel  = determineMaxDepthLevel(newRoot->left, 0);
+        rightLevel = determineMaxDepthLevel(newRoot->right);
+        leftLevel  = determineMaxDepthLevel(newRoot->left);
 
         if ( rightLevel > leftLevel )
         {
@@ -174,8 +174,8 @@ int isTreeNodeBalanced(struct TreeNode *root)
         if ( ! isTreeNodeBalanced(root->right) )
             return 0;
 
-    rightLevel = determineMaxDepthLevel(root->right, 0);
-    leftLevel  = determineMaxDepthLevel(root->left, 0);
+    rightLevel = determineMaxDepthLevel(root->right);
+    leftLevel  = determineMaxDepthLevel(root->left);
 
     return  ( ( leftLevel - rightLevel ) < 2 )
             && ( ( rightLevel - leftLevel ) < 2 );

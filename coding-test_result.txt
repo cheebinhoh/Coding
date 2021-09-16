@@ -187,7 +187,7 @@ The rotating point is at index 5 and value is 0
 Test 13 description: check if a binary tree is binary search tree.
 
 root1 is a binary search tree
-Tree topology:
+The tree topology:
 2 (R=2, L=1)
      3 (R=1, L=0)
           4 (R=0, L=0)
@@ -199,7 +199,7 @@ Tree topology:
           -
 
 root2 is not a binary search tree
-Tree topology:
+The tree topology:
 4 (R=1, L=2)
      5 (R=0, L=0)
           -

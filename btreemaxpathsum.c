@@ -128,6 +128,8 @@ int main(int argc, char * argv[])
     printf("\n");
 
     printf("The maximum path sum is %d\n", btreeMaximumPathSum(root));
+    printf("\n");
+
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
 

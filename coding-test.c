@@ -1117,7 +1117,7 @@ void runCheckIfIsBinarySearchTree(void)
     else
         printf("root1 is not a binary search tree");
 
-    printf("Tree topology:\n");
+    printf("The tree topology:\n");
     printTreeNodeInTreeTopology(root1);
 
 
@@ -1145,7 +1145,7 @@ void runCheckIfIsBinarySearchTree(void)
     else
         printf("root2 is not a binary search tree\n");
 
-    printf("Tree topology:\n");
+    printf("The tree topology:\n");
     printTreeNodeInTreeTopology(root2);
 }
 

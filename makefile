@@ -30,8 +30,8 @@ btreemaxpathsum.out : btreemaxpathsum.c btree.h libbtree.a
 btreebltraverse.out : btreebltraverse.c btree.h libbtree.a 
 	gcc -o $@ btreebltraverse.c -L. -lbtree
 
-btreemaxlevel.out : btreemaxlevel.c btree.h
-	gcc -o $@ btreemaxlevel.c
+btreemaxlevel.out : btreemaxlevel.c btree.h libbtree.a
+	gcc -o $@ btreemaxlevel.c -L. -lbtree
 
 btreesymmetriccheck.out : btreesymmetriccheck.c btree.h libbtree.a
 	gcc -o $@ btreesymmetriccheck.c -L. -lbtree

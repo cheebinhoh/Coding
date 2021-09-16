@@ -8,46 +8,6 @@
 #include "btree.h"
 
 
-/* To derive the max level of tree, we can use any of the depth first search, and increase
- * the level as we progress to left or right branch, and only return the max level if the
- * level we are now in is higher than current max level value.
- */
-void treeMaxLevelInternal(struct TreeNode *root,
-                          int              level,
-                          int             *maxLevel)
-{
-    if ( NULL == root )
-        return;
-
-
-    level++;
-
-    if ( level > *maxLevel )
-        *maxLevel = level;
-
-    if ( NULL != root->left )
-        treeMaxLevelInternal(root->left, level, maxLevel);
-
-    if ( NULL != root->right )
-        treeMaxLevelInternal(root->right, level, maxLevel);
-
-    return;
-}
-
-
-/* An API front end to return max level of tree
- */
-int treeMaxLevel(struct TreeNode *root)
-{
-    int level = 0;
-
-
-    treeMaxLevelInternal(root, level, &level);
-
-    return level;
-}
-
-
 /*
  *               0
  *               |
@@ -122,10 +82,15 @@ int main(int argc, char * argv[])
     other->right              = NULL;
     root->right->right->right = other;
 
+    printf("The tree topology:\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
 
-    printf("Max tree level = %d\n", treeMaxLevel(root));
+    printf("Max tree level = %d\n", determineMaxDepthLevel(root));
+    printf("\n");
 
     return 0;
  }
