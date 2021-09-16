@@ -86,7 +86,7 @@ int main(int argc, char * argv[])
     printf("The tree topology:");
     printTreeNodeInTreeTopology(root);
     printf("\n");
-  
+
     printf("pre order  = ");
     preOrderTraversal(root);
 

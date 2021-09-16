@@ -61,7 +61,7 @@ void breadthLevelTraversal_Internal(struct TreeNode **currentLevelList,
  * - we maintain two list levels, current and next level.
  * - the loop is going on if current level is NOT exhausted.
  * - the first iterative of the current level, we clear the next level list (empty it).
- * - as we process each node of current level, we gather the next level node into the next level list 
+ * - as we process each node of current level, we gather the next level node into the next level list
  *   (appending to what is built up).
  * - if we exhaust the current level list, and there is next level list, we refresh the current level
  *   list with next level nodes.

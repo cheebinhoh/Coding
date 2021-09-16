@@ -16,7 +16,7 @@
  * (if any), and then the node that owns the left and right child nodes. When we are in a child node,
  * we will apply same processing ordering (left, right and node itself).
  *
- * It is a depth first approach starting at the left branch, so we will further deeper on the left 
+ * It is a depth first approach starting at the left branch, so we will further deeper on the left
  * and then to right branch, and apply the same left, right and node ordering, then go up one level
  * to another right branch and apply the same left, right and node ordering.
  *
@@ -34,8 +34,8 @@
  * - if we have exhausted left or right branches of a node (root), then we need to bracktrack, so the
  *   backtracking is logic as that
  *   -- if topPendingList is not empty, and we peek at the top (of topPendingList), and if the top's right
- *      branch is equal to the root now, then we are at the right branch of top, then we pop out top from 
- *      topPendingList, and assigning it to the root, and continue the loop, eventually we are backtracking 
+ *      branch is equal to the root now, then we are at the right branch of top, then we pop out top from
+ *      topPendingList, and assigning it to the root, and continue the loop, eventually we are backtracking
  *      from right branch backward to higher branch of the tree.
  *
  *      we will continue that backtracking from right branch up the tree until we are reach a top from
@@ -173,7 +173,7 @@ void inOrderTraversal(struct TreeNode *root)
 
 /* A pre order traversal logic:
  *
- * We process the node, the left branch, and then right branch, we traverse tree in depth first approach, 
+ * We process the node, the left branch, and then right branch, we traverse tree in depth first approach,
  * so if there is left branch, we will proceed further left as far as possible, and then right branch,
  * when we are in right branch, in each next level, we will repeat above.
  *
@@ -191,7 +191,7 @@ void preOrderTraversal(struct TreeNode *root)
             && count < 1000 )
     {
         count++;
-        
+
         if  ( count > 1 )
             printf(", ");
 

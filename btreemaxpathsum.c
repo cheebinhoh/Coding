@@ -18,7 +18,7 @@ int btreePathSumInternal(struct TreeNode *root,
                          int              sum)
 {
     int lsum;
-    int rsum; 
+    int rsum;
 
 
     if ( NULL == root )
@@ -33,12 +33,12 @@ int btreePathSumInternal(struct TreeNode *root,
 
     if ( NULL != root->right )
         rsum = btreePathSumInternal(root->right, sum);
-	
+
     if ( lsum > sum )
-	sum = lsum;
+        sum = lsum;
 
     if ( rsum > sum )
-	sum = rsum;
+        sum = rsum;
 
     return sum;
 }
