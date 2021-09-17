@@ -27,7 +27,7 @@ int findMaxNumberOfNodeInLevel(struct TreeNode *root)
 {
     int i;
     int max;
-    int levelCnt[100];
+    int levelCnt[100];  // having a queue will help avoid this limit, TODO
 
 
     for ( i = 0; i < sizeof( levelCnt ) / sizeof( levelCnt[0] ); i++ )
