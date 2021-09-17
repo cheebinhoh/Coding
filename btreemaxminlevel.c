@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find the tree maximum level.
+ * Find the tree maximum and minimum level.
  */
 
 #include <stdio.h>
