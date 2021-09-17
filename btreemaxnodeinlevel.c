@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find the least common ancestor of two nodes.
+ * Find the maximum nummber of nodes in a level of a tree.
  */
 
 #include <stdio.h>
