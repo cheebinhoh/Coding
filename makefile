@@ -8,7 +8,7 @@ all : btreepathsum.out btreebltraverse.out btreemaxminlevel.out btreesymmetricch
 	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out transformStr2Str.out \
 	trafficdemand.out coding-test.out btreemirrorswap.out btreeidentical.out \
         btreerebalancing.out coding-test-2.out libbtree.a libllist.a list-test.out btreemaxpathsum.out \
-	btreeisbalanced.out btreemaxnodeinlevel.out
+	btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out
 
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.c llist.h llist-internal.h
 	gcc -c btree.c avlbstree.c
@@ -105,6 +105,9 @@ coding-test-2.out : coding-test-2.c libbtree.a btree.h libllist.a llist.h
 
 list-test.out : list-test.c libllist.a
 	gcc -o $@ list-test.c -L. -lllist
+
+btreeverticalsum.out : btreeverticalsum.c libbtree.a btree.h
+	gcc -o $@ btreeverticalsum.c -L. -lbtree
 
 clean:
 	rm -f *.out *.o lib*.a

@@ -120,7 +120,26 @@ void printListNode(struct ListNode *start)
 }
 
 
-struct ListNode * enqueue(int val, struct ListNode **head)
+struct ListNode * findNthListNode(struct ListNode *start, int n)
+{
+     int i;
+
+
+     if ( NULL == start )
+         return NULL;
+
+     i = 0;
+     while ( i < n && NULL != start->next )
+     {
+         start = start->next;
+         i++;
+     }
+
+     return i == n ? start : NULL;
+}
+
+
+struct ListNode * enQueue(int val, struct ListNode **head)
 {
     struct ListNode *node;
     struct ListNode *tmp;
@@ -149,7 +168,8 @@ struct ListNode * enqueue(int val, struct ListNode **head)
     return node;
 }
 
-struct ListNode * dequeue(struct ListNode **head)
+
+struct ListNode * deQueue(struct ListNode **head)
 {
     struct ListNode *node;
 
@@ -162,6 +182,48 @@ struct ListNode * dequeue(struct ListNode **head)
 
     return node;
 }
+
+
+void freeQueue(struct ListNode **head)
+{
+   struct ListNode *tmp;
+
+
+   while ( NULL != *head )
+   {
+       tmp = (*head)->next;
+       free(*head);
+
+       *head = tmp;
+   }
+
+   *head = NULL;
+}
+
+
+struct ListNode * reverseQueue(struct ListNode *head)
+{
+    struct ListNode *prev;
+    struct ListNode *tmp;
+
+
+    if ( NULL == head )
+        return NULL;
+
+    prev = NULL;
+    while ( NULL != head->next )
+    {
+        tmp        = head->next;
+        head->next = prev;
+        prev       = head;
+        head       = tmp;
+    }
+
+    head->next = prev;
+
+    return head;
+}
+
 
 struct ListNode * pushStack(int val, struct ListNode **top)
 {
@@ -202,7 +264,7 @@ struct ListNode * popStack(struct ListNode **top)
 }
 
 
-void delStack(struct ListNode *top)
+void freeStack(struct ListNode *top)
 {
     struct ListNode *tmp;
 

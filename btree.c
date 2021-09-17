@@ -413,8 +413,8 @@ int isTreeBinarySearchTree(struct TreeNode *root)
 
     ret = isTreeBinarySearchTreeRecursive(root, smaller, larger);
 
-    delStack(smaller);
-    delStack(larger);
+    freeStack(smaller);
+    freeStack(larger);
 
     return ret;
 }
