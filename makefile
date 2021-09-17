@@ -2,7 +2,7 @@
 # 
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : btreepathsum.out btreebltraverse.out btreemaxlevel.out btreesymmetriccheck.out btreetraverse.out \
+all : btreepathsum.out btreebltraverse.out btreemaxminlevel.out btreesymmetriccheck.out btreetraverse.out \
 	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out remove-c-comment.out \
  	string-utility.out calculator.out shrink-space.out trim-space.out replace-tab-with-space.out \
 	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out transformStr2Str.out \
@@ -30,8 +30,8 @@ btreemaxpathsum.out : btreemaxpathsum.c btree.h libbtree.a
 btreebltraverse.out : btreebltraverse.c btree.h libbtree.a 
 	gcc -o $@ btreebltraverse.c -L. -lbtree
 
-btreemaxlevel.out : btreemaxlevel.c btree.h libbtree.a
-	gcc -o $@ btreemaxlevel.c -L. -lbtree
+btreemaxminlevel.out : btreemaxminlevel.c btree.h libbtree.a
+	gcc -o $@ btreemaxminlevel.c -L. -lbtree
 
 btreesymmetriccheck.out : btreesymmetriccheck.c btree.h libbtree.a
 	gcc -o $@ btreesymmetriccheck.c -L. -lbtree

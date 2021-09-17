@@ -90,6 +90,7 @@ int main(int argc, char * argv[])
     // this one off program.
 
     printf("Max tree level = %d\n", determineMaxDepthLevel(root));
+    printf("Min tree level = %d\n", determineMinDepthLevel(root));
     printf("\n");
 
     return 0;

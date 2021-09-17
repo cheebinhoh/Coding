@@ -192,6 +192,60 @@ int determineMaxDepthLevel(struct TreeNode *root)
     return determineMaxDepthLevelRecursive(root, 0);
 }
 
+int determineMinDepthLevelRecursive(struct TreeNode *root,
+                                    int              level,
+                                    int             *retMinLevel)
+{
+    int leftLevel;
+    int rightLevel;
+    int oldMinLevel;
+
+
+    if ( NULL == root )
+    {
+        if ( level < *retMinLevel )
+            *retMinLevel = level;
+
+        return level;
+    }
+
+    level       = level + 1;
+    oldMinLevel = *retMinLevel;
+    leftLevel   = determineMinDepthLevelRecursive(root->left, level, retMinLevel);
+
+    if ( leftLevel == level
+         && NULL != root->right )
+        *retMinLevel = oldMinLevel;
+
+    oldMinLevel = *retMinLevel;
+    rightLevel  = determineMinDepthLevelRecursive(root->right, level, retMinLevel);
+
+    if ( rightLevel == level
+         && NULL != root->left )
+        *retMinLevel = oldMinLevel;
+
+    return ( leftLevel < rightLevel ) ? rightLevel : leftLevel;
+}
+
+int determineMinDepthLevel(struct TreeNode *root)
+{
+    int minLevel;
+    int i;
+
+
+    i        = 1;
+    minLevel = i;
+    while ( i > 0 )
+    {
+        minLevel = i;
+        i = i << 1;
+        i = i + 1;
+    }
+
+    determineMinDepthLevelRecursive(root, 0, &minLevel);
+
+    return minLevel;
+}
 
 void printTreeNodeInTreeTopologyRecursive(struct TreeNode *root,
                                           int              level)
