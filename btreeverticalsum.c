@@ -1,7 +1,7 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find out if there exists a path from root to a leaf that its sum of values of all nodes
- * equal to the target.
+ * Find the vertical sum of a binary tree. Assume that the left and right child 
+ * of a node makes 45 degree angle with the parent.
  */
 
 #include <stdio.h>
