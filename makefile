@@ -10,9 +10,10 @@ all : btreepathsum.out btreebltraverse.out btreemaxminlevel.out btreesymmetricch
         btreerebalancing.out coding-test-2.out libbtree.a libllist.a list-test.out btreemaxpathsum.out \
 	btreeisbalanced.out btreemaxnodeinlevel.out
 
-libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c
+libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.c llist.h llist-internal.h
 	gcc -c btree.c avlbstree.c
-	ar -rc libbtree.a btree.o avlbstree.o
+	gcc -c llist.c 
+	ar -rc libbtree.a btree.o avlbstree.o llist.o
 
 libllist.a : llist.c llist.h llist-internal.h
 	gcc -c llist.c
@@ -90,11 +91,11 @@ trafficdemand.out : trafficdemand.c
 coding-test.out : coding-test.c btree.h libbtree.a
 	gcc -o $@ coding-test.c -L. -lbtree
 
-btreemirrorswap.out : btreemirrorswap.c btree.c btree.h
-	gcc -o $@ btreemirrorswap.c btree.c
+btreemirrorswap.out : btreemirrorswap.c btree.h libbtree.a
+	gcc -o $@ btreemirrorswap.c -L. -lbtree
 
-btreeidentical.out : btreeidentical.c btree.c btree.h
-	gcc -o $@ btreeidentical.c btree.c
+btreeidentical.out : btreeidentical.c btree.h libbtree.a
+	gcc -o $@ btreeidentical.c -L. -lbtree
 
 btreerebalancing.out : btreerebalancing.c libbtree.a btree.h
 	gcc -o $@ btreerebalancing.c -L. -lbtree

@@ -118,3 +118,100 @@ void printListNode(struct ListNode *start)
 
     printf("-\n");
 }
+
+
+struct ListNode * enqueue(int val, struct ListNode **head)
+{
+    struct ListNode *node;
+    struct ListNode *tmp;
+
+
+    node = malloc(sizeof( struct ListNode ));
+    if ( NULL == node )
+        return NULL;
+
+    node->val  = val;
+    node->next = NULL;
+
+    if ( NULL == *head )
+    {
+        *head = node;
+    }
+    else
+    {
+        tmp = *head;
+        while ( NULL != tmp->next )
+            tmp = tmp->next;
+
+        tmp->next = node;
+    }
+
+    return node;
+}
+
+struct ListNode * dequeue(struct ListNode **head)
+{
+    struct ListNode *node;
+
+
+    if ( NULL == *head )
+        return NULL;
+
+    node = *head;
+    *head = (*head)->next;
+
+    return node;
+}
+
+struct ListNode * pushStack(int val, struct ListNode **top)
+{
+    struct ListNode *node;
+
+
+    node = malloc(sizeof(struct ListNode));
+    if ( NULL == node )
+        return NULL;
+
+    node->val  = val;
+    node->next = NULL;
+
+    if ( NULL == *top )
+        *top = node;
+    else
+    {
+        node->next = *top;
+        *top       = node;
+    }
+
+    return node;
+}
+
+
+struct ListNode * popStack(struct ListNode **top)
+{
+    struct ListNode *tmp;
+
+
+    if ( *top == NULL )
+        return NULL;
+
+    tmp  = *top;
+    *top = (*top)->next;
+
+    return tmp;
+}
+
+
+void delStack(struct ListNode *top)
+{
+    struct ListNode *tmp;
+
+
+    while ( NULL != top )
+    {
+        tmp = top;
+        top = top->next;
+
+        free(tmp);
+    }
+}

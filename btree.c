@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "btree.h"
+#include "llist.h"
 
 
 void printTreeNodeInOrder(struct TreeNode *root)
@@ -338,4 +339,82 @@ void freeTreeNode(struct TreeNode *root)
         freeTreeNode(root->right);
 
     free(root);
+}
+
+int isSmallerThanList(int val, struct ListNode *list)
+{
+    if ( NULL == list )
+       return 1;
+
+    do {
+        if ( val > list->val )
+            return 0;
+
+        list = list->next;
+    } while ( NULL != list );
+
+    return 1;
+}
+
+int isLargerThanList(int val, struct ListNode *list)
+{
+    if ( NULL == list )
+       return 1;
+
+    do {
+        if ( val < list->val )
+            return 0;
+
+        list = list->next;
+    } while ( NULL != list );
+
+    return 1;
+}
+
+int isTreeBinarySearchTreeRecursive(struct TreeNode *root,
+                                    struct ListNode *smaller,
+                                    struct ListNode *larger)
+{
+    struct ListNode *tmp;
+
+
+    if ( NULL == root )
+        return 1;
+
+    if ( ! isSmallerThanList(root->val, smaller) )
+        return 0;
+
+    if ( ! isLargerThanList(root->val, larger) )
+        return 0;
+
+    pushStack(root->val, &smaller);
+    if ( ! isTreeBinarySearchTreeRecursive(root->left, smaller, larger) )
+        return 0;
+
+    tmp = popStack(&smaller);
+    free(tmp);
+
+    pushStack(root->val, &larger);
+    if ( ! isTreeBinarySearchTreeRecursive(root->right, smaller, larger) )
+        return 0;
+
+    tmp = popStack(&larger);
+    free(tmp);
+
+    return 1;
+}
+
+int isTreeBinarySearchTree(struct TreeNode *root)
+{
+    struct ListNode *smaller = NULL;
+    struct ListNode *larger  = NULL;
+    int              ret;
+
+
+    ret = isTreeBinarySearchTreeRecursive(root, smaller, larger);
+
+    delStack(smaller);
+    delStack(larger);
+
+    return ret;
 }

@@ -15,4 +15,14 @@ void              freeListNode(struct ListNode *start);
 
 void printListNode(struct ListNode *start);
 
+
+// queue
+struct ListNode * enqueue(int val, struct ListNode **head);
+struct ListNode * dequeue(struct ListNode **head);
+
+// stack
+struct ListNode * pushStack(int val, struct ListNode **top);
+struct ListNode * popStack(struct ListNode **top);
+void              delStack(struct ListNode *top);
+
 #endif

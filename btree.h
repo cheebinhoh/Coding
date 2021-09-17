@@ -29,4 +29,6 @@ void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func,
 int determineMaxDepthLevel(struct TreeNode *root);
 int determineMinDepthLevel(struct TreeNode *root);
 
+int isTreeBinarySearchTree(struct TreeNode *root);
+
 #endif
