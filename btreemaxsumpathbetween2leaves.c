@@ -1,12 +1,28 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find the maximum sum path to a leaf value in a binary tree
+ * Find the maximum sum path betweeen two leaves in a binary tree.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "btree.h"
 
+
+int findMaxinumSumPathBetween2Leaves(struct TreeNode *root, int val1, int val2)
+{
+    int sum1;
+    int sum2;
+
+
+    root = findLeastCommonAncestor(root, val1, val2);
+    if ( NULL == root )
+        return 0;
+
+    sum1 = findMaximumSumPathToLeafValue(root, val1);
+    sum2 = findMaximumSumPathToLeafValue(root, val2);
+
+    return sum1 + sum2 - root->val;
+}
 
 /*
  *               0
@@ -86,14 +102,10 @@ int main(int argc, char * argv[])
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("The maximum sum of path to leaf value %d is %d\n",
-           3, findMaximumSumPathToLeafValue(root, 3) );
-    printf("The maximum sum of path to leaf value %d is %d\n",
-           4, findMaximumSumPathToLeafValue(root, 4) );
-    printf("The maximum sum of path to leaf value %d is %d\n",
-           7, findMaximumSumPathToLeafValue(root, 7) );
-    printf("The maximum sum of path to leaf value %d is %d\n",
-           8, findMaximumSumPathToLeafValue(root, 8) );
+    printf("The maximum sum path between leaves %d and %d is %d\n",
+           3, 4, findMaxinumSumPathBetween2Leaves(root, 3, 4));
+    printf("The maximum sum path between leaves %d and %d is %d\n",
+           8, 7, findMaxinumSumPathBetween2Leaves(root, 8, 7));
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for

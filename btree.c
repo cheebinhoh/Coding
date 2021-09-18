@@ -493,19 +493,21 @@ struct TreeNode * findLeastCommonAncestor(struct TreeNode *root,
 
 int findMaximumSumPathToLeafValueRecursive(struct TreeNode *root, int val, int *sum)
 {
-    int ret = 0;
-    int lret;  
+    int ret;
+    int lret;
     int lsum;
     int rret;
     int rsum;
 
 
+    ret = 0;
+
     if ( NULL == root )
-        return 0;
+        return ret;
 
-    *sum = *sum + val;
+    *sum = *sum + root->val;
 
-    if ( NULL == root->left 
+    if ( NULL == root->left
          && NULL == root->right )
     {
         ret = root->val == val;
@@ -517,17 +519,17 @@ int findMaximumSumPathToLeafValueRecursive(struct TreeNode *root, int val, int *
        rsum = *sum;
        rret = 0;
 
-       
+
        if ( NULL != root->left )
            lret = findMaximumSumPathToLeafValueRecursive(root->left, val, &lsum);
-      
+
        if ( lret )
            *sum = lsum;
 
        if ( NULL != root->right )
        {
            rret = findMaximumSumPathToLeafValueRecursive(root->right, val, &rsum);
- 
+
            if ( rret && rsum > *sum )
                *sum = rsum;
        }
@@ -541,11 +543,12 @@ int findMaximumSumPathToLeafValueRecursive(struct TreeNode *root, int val, int *
     return ret;
 }
 
+
 int findMaximumSumPathToLeafValue(struct TreeNode *root, int val)
 {
     int sum = 0;
 
-    
+
     findMaximumSumPathToLeafValueRecursive(root, val, &sum);
 
     return sum;
