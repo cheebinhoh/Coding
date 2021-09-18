@@ -326,7 +326,7 @@ void printKLargestElementsInArray(int array[], int size, int k)
 
     printf("The largest %d values are :", k);
     printListNode(start);
-    freeList(start);
+    freeList(&start);
 }
 
 void runFindKLargestElementsInArray(void)
@@ -371,7 +371,7 @@ void rotateArrayByKElement(int array[], int size, int k)
         tmp = tmp->next;
     }
 
-    freeList(start);
+    freeList(&start);
 }
 
 void runRotateArrayByKElement(void)

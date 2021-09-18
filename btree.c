@@ -260,7 +260,7 @@ int determineMinDepthLevelRecursive(struct TreeNode *root,
          && NULL != root->left )
         *retMinLevel = oldMinLevel;
 
-    return ( leftLevel < rightLevel ) ? rightLevel : leftLevel;
+    return ( leftLevel < rightLevel ) ? leftLevel : rightLevel; 
 }
 
 
@@ -410,6 +410,7 @@ int isLargerThanList(int val, struct ListNode *list)
     return 1;
 }
 
+
 /* In this approach, we maintain a two lists:
  * - smaller is a list of values that visit node value must be smaller than any value in the list
  * - larger is a list of values that visit node value must be larger than any value in the list
@@ -461,8 +462,8 @@ int isTreeBinarySearchTree(struct TreeNode *root)
 
     ret = isTreeBinarySearchTreeRecursive(root, smaller, larger);
 
-    freeStack(smaller);
-    freeStack(larger);
+    freeStack(&smaller);
+    freeStack(&larger);
 
     return ret;
 }
@@ -690,9 +691,12 @@ int isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2)
 
     list1 = getPostOrderList(tree1);
     list2 = getPostOrderList(tree2);
-    if ( ! isSubsetList(list1, list2 ) )
+    if ( ! isSubsetList(list1, list2) )
         goto cleanup;
 
+    freeList(&list1);
+    freeList(&list2);
+ 
     list1 = getInOrderList(tree1);
     list2 = getInOrderList(tree2);
     if ( ! isSubsetList(list1, list2 ) )
@@ -701,8 +705,8 @@ int isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2)
     ret = 1;
 
 cleanup:
-    freeList(list1);
-    freeList(list2);
+    freeList(&list1);
+    freeList(&list2);
 
     return ret;
 }

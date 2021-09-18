@@ -14,7 +14,7 @@
 // sorted list
 struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode **end);
 int               delListNode(int val, struct ListNode **start, struct ListNode **end);
-void              freeList(struct ListNode *start);
+void              freeList(struct ListNode **start);
 
 
 // queue
@@ -27,7 +27,7 @@ void              freeQueue(struct ListNode **head);
 // stack
 struct ListNode * pushStack(int val, struct ListNode **top);
 struct ListNode * popStack(struct ListNode **top);
-void              freeStack(struct ListNode *top);
+void              freeStack(struct ListNode **top);
 
 
 // Miscallenous applicable to all

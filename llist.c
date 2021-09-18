@@ -102,18 +102,20 @@ struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode 
 }
 
 
-void freeList(struct ListNode *start)
+void freeList(struct ListNode **start)
 {
     struct ListNode *tmp;
 
 
-    while ( NULL != start )
+    while ( NULL != *start )
     {
-        tmp   = start;
-        start = start->next;
+        tmp    = *start;
+        *start = (*start)->next;
 
         free(tmp);
     }
+
+    *start = NULL;
 }
 
 
@@ -276,18 +278,20 @@ struct ListNode * popStack(struct ListNode **top)
 }
 
 
-void freeStack(struct ListNode *top)
+void freeStack(struct ListNode **top)
 {
     struct ListNode *tmp;
 
 
-    while ( NULL != top )
+    while ( NULL != *top )
     {
-        tmp = top;
-        top = top->next;
+        tmp  = *top;
+        *top = (*top)->next;
 
         free(tmp);
     }
+
+    *top = NULL;
 }
 
 
