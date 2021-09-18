@@ -14,7 +14,7 @@
  * - in order list of tree value + postorder list of the tree value.
  * - in order list of tree value + preorder list of the tree value.
  *
- * The implementation of isSubBinaryTree in libbtree library will 
+ * The implementation of isSubBinaryTree in libbtree library will
  * serialize in order and post order list of both tree and check that
  * that both list are subset of another tree' in order and post order lists.
  */
