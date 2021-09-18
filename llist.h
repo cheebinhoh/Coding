@@ -9,9 +9,11 @@
 
 #include "llist-internal.h"
 
+
+// sorted list
 struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode **end);
 int               delListNode(int val, struct ListNode **start, struct ListNode **end);
-void              freeListNode(struct ListNode *start);
+void              freeList(struct ListNode *start);
 struct ListNode * findNthListNode(struct ListNode *start, int n);
 
 void printListNode(struct ListNode *start);
@@ -27,5 +29,11 @@ void              freeQueue(struct ListNode **head);
 struct ListNode * pushStack(int val, struct ListNode **top);
 struct ListNode * popStack(struct ListNode **top);
 void              freeStack(struct ListNode *top);
+
+// Miscallenous applicable to all
+int getListLength(struct ListNode *start);
+void printList(struct ListNode *start);
+int isSubsetList(struct ListNode *list, struct ListNode *sublist);
+
 
 #endif

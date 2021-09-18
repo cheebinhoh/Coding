@@ -9,7 +9,7 @@ all : btreepathsum.out btreebltraverse.out btreemaxminlevel.out btreesymmetricch
 	trafficdemand.out coding-test.out btreemirrorswap.out btreeidentical.out \
         btreerebalancing.out coding-test-2.out libbtree.a libllist.a list-test.out btreemaxpathsum.out \
 	btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out btreemaxsumpathtoleaf.out \
-	btreemaxsumpathbetween2leaves.out
+	btreemaxsumpathbetween2leaves.out btreesubtree.out
 
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.c llist.h llist-internal.h
 	gcc -c btree.c avlbstree.c
@@ -115,6 +115,9 @@ btreemaxsumpathtoleaf.out : btreemaxsumpathtoleaf.c libbtree.a btree.h
 
 btreemaxsumpathbetween2leaves.out : btreemaxsumpathbetween2leaves.c libbtree.a btree.h
 	gcc -o $@ btreemaxsumpathbetween2leaves.c -L. -lbtree
+
+btreesubtree.out : btreesubtree.c libbtree.a btree.h
+	gcc -o $@ btreesubtree.c -L. -lbtree
 
 clean:
 	rm -f *.out *.o lib*.a

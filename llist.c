@@ -94,7 +94,7 @@ struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode 
     return node;
 }
 
-void freeListNode(struct ListNode *start)
+void freeList(struct ListNode *start)
 {
     struct ListNode *tmp;
 
@@ -276,4 +276,80 @@ void freeStack(struct ListNode *top)
 
         free(tmp);
     }
+}
+
+
+int getListLength(struct ListNode *start)
+{
+    int i = 0;
+
+
+    while ( NULL != start )
+    {
+        start = start->next;
+        i++;
+    }
+
+    return i;
+}
+
+
+void printList(struct ListNode *start)
+{
+    int len;
+
+
+    len = getListLength(start);
+    if ( len > 0 )
+    {
+        while ( len > 1
+                && NULL != start )
+        {
+            printf("%d, ", start->val);
+
+            start = start->next;
+            len--;
+        }
+
+        printf("%d", start->val);
+        printf("\n");
+    }
+}
+
+
+int isSubsetList(struct ListNode *list, struct ListNode *sublist)
+{
+    int              llen;
+    int              subllen;
+    struct ListNode *iter1;
+    struct ListNode *iter2;
+    struct ListNode *iter3;
+
+
+    llen    = getListLength(list);
+    subllen = getListLength(sublist);
+    if ( subllen > llen || llen <= 0 || subllen <= 0 )
+        return 0;
+
+    iter1 = list;
+    while ( NULL != iter1 )
+    {
+        iter2 = sublist;
+        iter3 = iter1;
+
+        while ( NULL != iter2
+                && NULL != iter3
+                && iter2->val == iter3->val )
+        {
+            iter2 = iter2->next;
+            iter3 = iter3->next;
+        }
+
+        if ( NULL == iter2 ) // is subset
+            break;
+
+        iter1 = iter1->next;
+    }
+
+    return NULL != iter1;
 }

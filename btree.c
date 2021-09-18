@@ -193,6 +193,7 @@ int determineMaxDepthLevel(struct TreeNode *root)
     return determineMaxDepthLevelRecursive(root, 0);
 }
 
+
 int determineMinDepthLevelRecursive(struct TreeNode *root,
                                     int              level,
                                     int             *retMinLevel)
@@ -227,6 +228,7 @@ int determineMinDepthLevelRecursive(struct TreeNode *root,
 
     return ( leftLevel < rightLevel ) ? rightLevel : leftLevel;
 }
+
 
 int determineMinDepthLevel(struct TreeNode *root)
 {
@@ -341,6 +343,7 @@ void freeTreeNode(struct TreeNode *root)
     free(root);
 }
 
+
 int isSmallerThanList(int val, struct ListNode *list)
 {
     if ( NULL == list )
@@ -356,6 +359,7 @@ int isSmallerThanList(int val, struct ListNode *list)
     return 1;
 }
 
+
 int isLargerThanList(int val, struct ListNode *list)
 {
     if ( NULL == list )
@@ -370,6 +374,7 @@ int isLargerThanList(int val, struct ListNode *list)
 
     return 1;
 }
+
 
 int isTreeBinarySearchTreeRecursive(struct TreeNode *root,
                                     struct ListNode *smaller,
@@ -403,6 +408,7 @@ int isTreeBinarySearchTreeRecursive(struct TreeNode *root,
 
     return 1;
 }
+
 
 int isTreeBinarySearchTree(struct TreeNode *root)
 {
@@ -491,6 +497,7 @@ struct TreeNode * findLeastCommonAncestor(struct TreeNode *root,
     return findLeastCommonAncestorInternal(root, val1, val2);
 }
 
+
 int findMaximumSumPathToLeafValueRecursive(struct TreeNode *root, int val, int *sum)
 {
     int ret;
@@ -552,4 +559,108 @@ int findMaximumSumPathToLeafValue(struct TreeNode *root, int val)
     findMaximumSumPathToLeafValueRecursive(root, val, &sum);
 
     return sum;
+}
+
+
+/* Have a small function that does one thing at a time, a similar philosophy from
+ * Unix that has program that does one thing at a time and does it well. :)
+ *
+ * So we do not have a monolithic function that execute behavior of pre, in and post order.
+ */
+void getInOrderListRecursively(struct TreeNode *root, struct ListNode **start)
+{
+    if ( NULL == root )
+        return;
+
+    getInOrderListRecursively(root->left, start);
+
+    enQueue(root->val, start);
+
+    getInOrderListRecursively(root->right, start);
+}
+
+
+struct ListNode * getInOrderList(struct TreeNode *root)
+{
+    struct ListNode *start = NULL;
+
+
+    getInOrderListRecursively(root, &start);
+
+    return start;
+}
+
+
+void getPreOrderListRecursively(struct TreeNode *root, struct ListNode **start)
+{
+    if ( NULL == root )
+        return;
+
+    enQueue(root->val, start);
+
+    getPreOrderListRecursively(root->left, start);
+    getPreOrderListRecursively(root->right, start);
+}
+
+
+struct ListNode * getPreOrderList(struct TreeNode *root)
+{
+    struct ListNode *start = NULL;
+
+
+    getPreOrderListRecursively(root, &start);
+
+    return start;
+}
+
+
+void getPostOrderListRecursively(struct TreeNode *root, struct ListNode **start)
+{
+    if ( NULL == root )
+        return;
+
+    getPostOrderListRecursively(root->left, start);
+    getPostOrderListRecursively(root->right, start);
+
+    enQueue(root->val, start);
+}
+
+
+struct ListNode * getPostOrderList(struct TreeNode *root)
+{
+    struct ListNode *start = NULL;
+
+
+    getPostOrderListRecursively(root, &start);
+
+    return start;
+}
+
+
+int isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2)
+{
+    struct ListNode *list1;
+    struct ListNode *list2;
+
+
+   list1 = getPostOrderList(tree1);
+   list2 = getPostOrderList(tree2);
+   if ( ! isSubsetList(list1, list2 ) )
+       goto fail;
+
+   list1 = getInOrderList(tree1);
+   list2 = getInOrderList(tree2);
+   if ( ! isSubsetList(list1, list2 ) )
+       goto fail;
+
+   freeList(list1);
+   freeList(list2);
+
+   return 1;
+
+fail:
+    freeList(list1);
+    freeList(list2);
+
+    return 0;
 }
