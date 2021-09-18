@@ -418,3 +418,135 @@ int isTreeBinarySearchTree(struct TreeNode *root)
 
     return ret;
 }
+
+
+struct TreeNode * findLeastCommonAncestorInternal(struct TreeNode *root,
+                                                  int              val1,
+                                                  int              val2)
+{
+    struct TreeNode *node;
+
+
+    if ( NULL == root )
+        return NULL;
+
+    if ( val1 == val2
+         && val2 == root->val )
+        return root;
+
+    if ( NULL == root->left
+         && NULL == root->right )
+        return NULL;
+
+    if ( NULL == root->left )
+    {
+        if ( root->val == val1
+             && findTreeNode(root->right, val2) != NULL )
+            return root;
+
+        if ( root->val == val2
+             && findTreeNode(root->right, val1) != NULL )
+            return root;
+
+        return findLeastCommonAncestorInternal(root->right, val1, val2);
+    }
+
+    if ( NULL == root->right )
+    {
+        if ( root->val == val1
+             && findTreeNode(root->left, val2) != NULL )
+            return root;
+
+        if ( root->val == val2
+             && findTreeNode(root->left, val1) != NULL )
+            return root;
+
+        return findLeastCommonAncestorInternal(root->left, val1, val2);
+    }
+
+    if ( findTreeNode(root->left, val1) != NULL
+         && findTreeNode(root->right, val2) != NULL )
+        return root;
+
+    if ( findTreeNode(root->left, val2) != NULL
+         && findTreeNode(root->right, val1) != NULL )
+        return root;
+
+    node = findLeastCommonAncestorInternal(root->left, val1, val2);
+    if ( NULL != node )
+        return node;
+
+    node = findLeastCommonAncestorInternal(root->right, val1, val2);
+    if ( NULL != node )
+        return node;
+
+    return NULL;
+}
+
+
+struct TreeNode * findLeastCommonAncestor(struct TreeNode *root,
+                                          int              val1,
+                                          int              val2)
+{
+    return findLeastCommonAncestorInternal(root, val1, val2);
+}
+
+int findMaximumSumPathToLeafValueRecursive(struct TreeNode *root, int val, int *sum)
+{
+    int ret = 0;
+    int lret;  
+    int lsum;
+    int rret;
+    int rsum;
+
+
+    if ( NULL == root )
+        return 0;
+
+    *sum = *sum + val;
+
+    if ( NULL == root->left 
+         && NULL == root->right )
+    {
+        ret = root->val == val;
+    }
+    else
+    {
+       lsum = *sum;
+       lret = 0;
+       rsum = *sum;
+       rret = 0;
+
+       
+       if ( NULL != root->left )
+           lret = findMaximumSumPathToLeafValueRecursive(root->left, val, &lsum);
+      
+       if ( lret )
+           *sum = lsum;
+
+       if ( NULL != root->right )
+       {
+           rret = findMaximumSumPathToLeafValueRecursive(root->right, val, &rsum);
+ 
+           if ( rret && rsum > *sum )
+               *sum = rsum;
+       }
+
+       ret = lret || rret;
+    }
+
+    if ( ! ret )
+        *sum = *sum - root->val;
+
+    return ret;
+}
+
+int findMaximumSumPathToLeafValue(struct TreeNode *root, int val)
+{
+    int sum = 0;
+
+    
+    findMaximumSumPathToLeafValueRecursive(root, val, &sum);
+
+    return sum;
+}

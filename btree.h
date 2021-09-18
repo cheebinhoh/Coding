@@ -31,4 +31,8 @@ int determineMinDepthLevel(struct TreeNode *root);
 
 int isTreeBinarySearchTree(struct TreeNode *root);
 
+struct TreeNode * findLeastCommonAncestor(struct TreeNode *root, int val1, int val2);
+int findMaximumSumPathToLeafValue(struct TreeNode *root, int val);
+
+
 #endif
