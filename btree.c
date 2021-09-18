@@ -284,6 +284,7 @@ int determineMinDepthLevel(struct TreeNode *root)
     return minLevel;
 }
 
+
 void printTreeNodeInTreeTopologyRecursive(struct TreeNode *root,
                                           int              level)
 {
