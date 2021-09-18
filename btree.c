@@ -5,19 +5,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "btree.h"
 #include "llist.h"
-
-
-void printTreeNodeInOrder(struct TreeNode *root)
-{
-    if ( NULL == root )
-        return;
-
-    printTreeNodeInOrder(root->left);
-    printf("%d, ", root->val);
-    printTreeNodeInOrder(root->right);
-}
 
 
 void findTreeNodeAndParentRecursive(struct TreeNode   *root,
@@ -26,7 +16,14 @@ void findTreeNodeAndParentRecursive(struct TreeNode   *root,
                                     struct TreeNode ***retParent)
 {
     if ( NULL == root )
-        goto notfound;
+    {
+        if ( NULL != retParent )
+            *retParent = NULL;
+
+        *retNode = NULL;
+
+        return;
+    }
 
     if ( val == root->val )
     {
@@ -47,14 +44,6 @@ void findTreeNodeAndParentRecursive(struct TreeNode   *root,
 
         findTreeNodeAndParentRecursive(root->right, val, retNode, retParent);
     }
-
-    return;
-
-notfound:
-    if ( NULL != retParent )
-        *retParent = NULL;
-
-    *retNode = NULL;
 }
 
 
@@ -92,6 +81,7 @@ struct TreeNode * addTreeNode(struct TreeNode *root, int val)
     if ( NULL == root )
     {
         node = malloc(sizeof( struct TreeNode )); // I do not care about NULL error as it is just a test
+        assert( NULL != node );
 
         node->val   = val;
         node->left  = NULL;
@@ -124,7 +114,6 @@ struct TreeNode * delTreeNode(struct TreeNode *root, int val)
 {
     struct TreeNode **parent;
     struct TreeNode  *node;
-    struct TreeNode  *tmp;
     int               leftLevel;
     int               rightLevel;
 
@@ -132,6 +121,7 @@ struct TreeNode * delTreeNode(struct TreeNode *root, int val)
     if ( NULL == root )
         return NULL;
 
+    node   = NULL;
     parent = &root;
     findTreeNodeAndParent(root, val, &node, &parent);
     if ( NULL != node )
@@ -141,27 +131,71 @@ struct TreeNode * delTreeNode(struct TreeNode *root, int val)
 
         if ( leftLevel >= rightLevel )
         {
-            tmp = node->left;
-            while ( NULL != tmp
-                    && NULL != tmp->right )
-                tmp = tmp->right;
+            struct TreeNode *farRight;
+            struct TreeNode *farLeft;
+            struct TreeNode *prev;
 
-            if ( NULL != tmp )
-                tmp->right = node->right;
 
-            *parent = node->left;
+            prev     = NULL;
+            farRight = node->left;
+            while ( NULL != farRight
+                    && NULL != farRight->right )
+            {
+                prev     = farRight;
+                farRight = farRight->right;
+            }
+
+            if ( NULL != farRight )
+            {
+                farRight->right = node->right;
+                if ( farRight != node->left )
+                {
+                    prev->right = NULL;
+                    farLeft     = farRight;
+
+                    while ( NULL != farLeft
+                            && NULL != farLeft->left )
+                       farLeft = farLeft->left;
+
+                    farLeft->left = node->left;
+                }
+            }
+
+            *parent  = farRight;
         }
         else
         {
-            tmp = node->right;
-            while ( NULL != tmp
-                    && NULL != tmp->left )
-                tmp = tmp->left;
+            struct TreeNode *farRight;
+            struct TreeNode *farLeft;
+            struct TreeNode *prev;
 
-            if ( NULL != tmp )
-                tmp->left = node->left;
 
-            *parent = node->right;
+            prev     = NULL;
+            farLeft = node->right;
+            while ( NULL != farLeft
+                    && NULL != farLeft->left )
+            {
+                prev    = farLeft;
+                farLeft = farLeft->left;
+            }
+
+            if ( NULL != farLeft )
+            {
+                farLeft->left = node->left;
+                if ( farLeft!= node->right )
+                {
+                    prev->left = NULL;
+                    farRight    = farLeft;
+
+                    while ( NULL != farRight
+                            && NULL != farRight->right )
+                        farRight = farRight->right;
+
+                    farRight->right = node->right;
+                }
+            }
+
+            *parent  = farLeft;
         }
 
         free(node);

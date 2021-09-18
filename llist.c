@@ -16,7 +16,7 @@ int delListNode(int val, struct ListNode **start, struct ListNode **end)
 
     if ( NULL == (*start) )
         return 0;
- 
+
     // we can potentially combine the logic inside the if ... then block with logic after it, but
     // it is also more obvious that we check if start matches the value, and do a set of activities,
     // else we search through the list for a matching node and do another set of activities.
