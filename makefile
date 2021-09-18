@@ -11,6 +11,7 @@ all : btreepathsum.out btreebltraverse.out btreemaxminlevel.out btreesymmetricch
 	btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out btreemaxsumpathtoleaf.out \
 	btreemaxsumpathbetween2leaves.out btreesubtree.out
 
+
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.c llist.h llist-internal.h
 	gcc -c btree.c avlbstree.c
 	gcc -c llist.c 
@@ -19,6 +20,7 @@ libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.c ll
 libllist.a : llist.c llist.h llist-internal.h
 	gcc -c llist.c
 	ar -rc libllist.a llist.o
+
 
 btreeisbalanced.out : btreeisbalanced.c btree.h libbtree.a
 	gcc -o $@ btreeisbalanced.c -L. -lbtree

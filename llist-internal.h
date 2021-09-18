@@ -7,10 +7,12 @@
 
 #define LLIST_INTERNAL_H_HAS_INCLUDED
 
+
 struct ListNode {
 
      int              val;
      struct ListNode *next;
 };
+
 
 #endif

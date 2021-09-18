@@ -16,11 +16,16 @@ int delListNode(int val, struct ListNode **start, struct ListNode **end)
 
     if ( NULL == (*start) )
         return 0;
+ 
+    // we can potentially combine the logic inside the if ... then block with logic after it, but
+    // it is also more obvious that we check if start matches the value, and do a set of activities,
+    // else we search through the list for a matching node and do another set of activities.
 
     if ( (*start)->val == val )
     {
         del    = (*start);
         *start = del->next;
+
         if ( NULL != end
              && del == *end )
             *end = *start;
@@ -39,6 +44,7 @@ int delListNode(int val, struct ListNode **start, struct ListNode **end)
     {
         del       = tmp->next;
         tmp->next = del->next;
+
         if ( NULL != end
              && del == *end )
             *end = tmp;
@@ -50,6 +56,7 @@ int delListNode(int val, struct ListNode **start, struct ListNode **end)
 
     return 0;
 }
+
 
 struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode **end)
 {
@@ -94,6 +101,7 @@ struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode 
     return node;
 }
 
+
 void freeList(struct ListNode *start)
 {
     struct ListNode *tmp;
@@ -107,6 +115,7 @@ void freeList(struct ListNode *start)
         free(tmp);
     }
 }
+
 
 void printListNode(struct ListNode *start)
 {
@@ -158,6 +167,9 @@ struct ListNode * enQueue(int val, struct ListNode **head)
     }
     else
     {
+        // this can be inefficient if the list is long, a proper way is that the ListNode ADT
+        // data also point a pointer to the tail node, so that we can insert without traversal.
+
         tmp = *head;
         while ( NULL != tmp->next )
             tmp = tmp->next;
@@ -311,8 +323,7 @@ void printList(struct ListNode *start)
             len--;
         }
 
-        printf("%d", start->val);
-        printf("\n");
+        printf("%d\n", start->val);
     }
 }
 
