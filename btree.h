@@ -29,11 +29,10 @@ void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func,
 int determineMaxDepthLevel(struct TreeNode *root);
 int determineMinDepthLevel(struct TreeNode *root);
 
-int isTreeBinarySearchTree(struct TreeNode *root);
-
 struct TreeNode * findLeastCommonAncestor(struct TreeNode *root, int val1, int val2);
-int findMaximumSumPathToLeafValue(struct TreeNode *root, int val);
-int isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2);
+int               findMaximumSumPathToLeafValue(struct TreeNode *root, int val);
+int               isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2);
+int               isTreeBinarySearchTree(struct TreeNode *root);
 
 struct ListNode * getInOrderList(struct TreeNode *root);
 struct ListNode * getPreOrderList(struct TreeNode *root);

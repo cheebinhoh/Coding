@@ -2,16 +2,18 @@
 # 
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : btreepathsum.out btreebltraverse.out btreemaxminlevel.out btreesymmetriccheck.out btreetraverse.out \
-	btreebuild.out btreelca.out tree2btreebuild.out search-sort.out remove-c-comment.out \
- 	string-utility.out calculator.out shrink-space.out trim-space.out replace-tab-with-space.out \
-	syntax-validate-parenthese.out fold-line.out find2ndMaxNumber.out transformStr2Str.out \
-	trafficdemand.out coding-test.out btreemirrorswap.out btreeidentical.out \
-        btreerebalancing.out coding-test-2.out libbtree.a libllist.a llist-test.out btreemaxpathsum.out \
-	btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out btreemaxsumpathtoleaf.out \
-	btreemaxsumpathbetween2leaves.out btreesubtree.out btree-test.out
+all : libbtree.a libllist.a btreepathsum.out btreebltraverse.out btreemaxminlevel.out \
+        btreesymmetriccheck.out btreetraverse.out btreemirrorswap.out btreeidentical.out \
+	btreebuild.out btreelca.out tree2btreebuild.out btreerebalancing.out btreemaxpathsum.out \
+        btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out btreemaxsumpathtoleaf.out \
+        btreemaxsumpathbetween2leaves.out btreesubtree.out btree-test.out \
+        search-sort.out remove-c-comment.out string-utility.out calculator.out shrink-space.out \
+        trim-space.out replace-tab-with-space.out syntax-validate-parenthese.out fold-line.out \
+        find2ndMaxNumber.out transformStr2Str.out trafficdemand.out coding-test.out \
+        coding-test-2.out llist-test.out 
 
 
+# libraries
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.h llist-internal.h llist.c
 	gcc -c btree.c avlbstree.c
 	gcc -c llist.c 
@@ -22,6 +24,7 @@ libllist.a : llist.c llist.h llist-internal.h
 	ar -rc libllist.a llist.o
 
 
+# programs
 btreeisbalanced.out : btreeisbalanced.c btree.h libbtree.a
 	gcc -o $@ btreeisbalanced.c -L. -lbtree
 
@@ -124,9 +127,10 @@ btreesubtree.out : btreesubtree.c libbtree.a btree.h
 btree-test.out : btree-test.c libbtree.a btree.h
 	gcc -o $@ btree-test.c -L. -lbtree
 
+
+# miscallenous
 clean:
 	rm -f *.out *.o lib*.a
-
 
 test: 
 	make all
