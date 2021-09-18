@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find out if a tree is a substree of another tree.
+ * Find out if a binar tree is a substree of another binary tree.
  */
 
 #include <stdio.h>
@@ -9,21 +9,14 @@
 #include "llist.h"
 
 
-
-/*
- *               0
- *               |
- *      +--------+---------+
- *      1                  2
- *      |                  |
- * +----+----+       //----+----+
- * 3         4                  5
- *                              |
- *                    +---------+---------+
- *                    6                   8
- *                    |                   |
- *              //----+----+          //--+--//
- *                         7
+/* A binary tree is uniquely identified by either of the following:
+ *
+ * - in order list of tree value + postorder list of the tree value.
+ * - in order list of tree value + preorder list of the tree value.
+ *
+ * The implementation of isSubBinaryTree in libbtree library will 
+ * serialize in order and post order list of both tree and check that
+ * that both list are subset of another tree' in order and post order lists.
  */
 int main(int argc, char * argv[])
 {

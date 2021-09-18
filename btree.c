@@ -375,7 +375,14 @@ int isLargerThanList(int val, struct ListNode *list)
     return 1;
 }
 
-
+/* In this approach, we maintain a two lists:
+ * - smaller is a list of values that visit node value must be smaller than any value in the list
+ * - larger is a list of values that visit node value must be larger than any value in the list
+ *
+ * The other approach is to traverse the whole tree in in order list a
+ * and passing last visit value from node to node and where new node value should not exceed last
+ * visit node if it is a binary search tree.
+ */
 int isTreeBinarySearchTreeRecursive(struct TreeNode *root,
                                     struct ListNode *smaller,
                                     struct ListNode *larger)
@@ -545,7 +552,7 @@ int findMaximumSumPathToLeafValueRecursive(struct TreeNode *root, int val, int *
     }
 
     if ( ! ret )
-        *sum = *sum - root->val;
+        *sum = *sum - root->val;  // backtracking :)
 
     return ret;
 }
@@ -641,26 +648,26 @@ int isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2)
 {
     struct ListNode *list1;
     struct ListNode *list2;
+    int              ret;
 
 
-   list1 = getPostOrderList(tree1);
-   list2 = getPostOrderList(tree2);
-   if ( ! isSubsetList(list1, list2 ) )
-       goto fail;
+    ret = 0;
 
-   list1 = getInOrderList(tree1);
-   list2 = getInOrderList(tree2);
-   if ( ! isSubsetList(list1, list2 ) )
-       goto fail;
+    list1 = getPostOrderList(tree1);
+    list2 = getPostOrderList(tree2);
+    if ( ! isSubsetList(list1, list2 ) )
+        goto cleanup;
 
-   freeList(list1);
-   freeList(list2);
+    list1 = getInOrderList(tree1);
+    list2 = getInOrderList(tree2);
+    if ( ! isSubsetList(list1, list2 ) )
+        goto cleanup;
 
-   return 1;
+    ret = 1;
 
-fail:
+cleanup:
     freeList(list1);
     freeList(list2);
 
-    return 0;
+    return ret;
 }
