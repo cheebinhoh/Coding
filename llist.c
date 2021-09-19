@@ -368,3 +368,20 @@ int isSubsetList(struct ListNode *list, struct ListNode *sublist)
 
     return NULL != iter1;
 }
+
+
+int findListNodeIndex(struct ListNode *start, int val)
+{
+    int i;
+
+
+    i = 0;
+    while ( NULL != start
+            && start->val != val )
+    {
+        start = start->next;
+        i++;
+    }
+
+    return NULL == start ? -1 : i;
+}

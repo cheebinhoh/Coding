@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     other = addTreeNode(other, 9);
 
     printf("\n");
-    printf("2nd tree is changed, the tree topology:");
+    printf("2nd tree is changed, the tree topology:\n");
     printTreeNodeInTreeTopology(other);
     printf("\n");
 
@@ -72,6 +72,10 @@ int main(int argc, char *argv[])
         printf("Both trees are not identical\n");
 
     printf("\n");
+
+    // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
+    // this one off program.
+
 
     return 0;
 }

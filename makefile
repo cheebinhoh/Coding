@@ -17,7 +17,7 @@ all : libbtree.a libllist.a btreepathsum.out btreebltraverse.out btreemaxminleve
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.h llist-internal.h llist.c
 	gcc -c btree.c avlbstree.c
 	gcc -c llist.c 
-	ar -rcT libbtree.a btree.o avlbstree.o llist.o
+	ar -rc libbtree.a btree.o avlbstree.o llist.o
 
 libllist.a : llist.c llist.h llist-internal.h
 	gcc -c llist.c

@@ -9,109 +9,6 @@
 #include "btreetraverse.h"
 
 
-/* Find a parent node from a tree for a node
- */
-struct TreeNode * findParent(struct TreeNode *root,
-                             struct TreeNode *node)
-{
-    struct TreeNode *parent = NULL;
-
-
-    if ( NULL == root
-         || NULL == node )
-        return NULL;
-
-    if ( root == node )
-        return node;
-
-    if ( root->left == node
-         || root->right == node )
-        return root;
-
-    if ( NULL != root->left )
-        parent = findParent(root->left, node);
-
-    if ( NULL == parent)
-    {
-        if ( NULL != root->right )
-        {
-            parent = findParent(root->right, node);
-        }
-    }
-
-    return parent;
-}
-
-
-/* The logic is simple:
- * - we can build a binary tree from post order list much easily as a reverse postorder tree resemble the
- *   top-down fashion of the tree with right branch lean. so a binary tree postorder is left-lean, a reverse
- *   of it is right branch lean.
- *
- * - if a post order node value appears on right position of the in order list, then the value is part of the
- *   right branch of previous node.
- *
- * - if a post order node value appears on left positio of the in order list, then the value is part of the
- *   left branch of _parent_ node of previous node.
- */
-struct TreeNode * buildTree(int inorder[],
-                            int postorder[],
-                            int cnt)
-{
-    struct TreeNode *root, *prev, *new;
-    int              i;
-    int              tmp;
-    int              pos;
-
-
-    root = NULL;
-    prev = NULL;
-    for ( i = 0; i < cnt / 2; i++ )
-    {
-        tmp = postorder[cnt - 1 - i];
-
-        postorder[cnt - 1 - i] = postorder[i];
-        postorder[i]           = tmp;
-    }
-
-    for ( i = 0; i < cnt; i++ )
-    {
-        new = malloc(sizeof( struct TreeNode ));
-
-        new->left = new->right = NULL;
-        new->val  = postorder[i];
-
-        if ( NULL == root )
-        {
-            root = new;
-            prev = new;
-        }
-        else
-        {
-            pos = 0;
-            while ( pos < cnt
-                    && inorder[pos] != postorder[i] )
-            {
-                pos++;
-            }
-
-            if ( pos >= i )
-            {
-                prev->right = new;
-                prev        = new;
-            }
-            else
-            {
-                prev       = findParent(root, prev);
-                prev->left = new;
-            }
-        }
-    }
-
-    return root;
-}
-
-
 /*
  *               3
  *               |
@@ -131,58 +28,73 @@ int main(int argc, char * argv[])
     int              postorder2[] = { 2, 1 };
     int              inorder3[]   = { 1, 2 };
     int              postorder3[] = { 2, 1 };
+    struct ListNode *inorderList;
+    struct ListNode *postorderList;
 
 
-    printf("Binary tree inorder list: ");
-    for ( i = 0; i < sizeof( inorder ) / sizeof( inorder[0] ); i++ )
-        printf("%d, ", inorder[i]);
+    inorderList   = NULL;
+    enQueue(9, &inorderList);
+    enQueue(3, &inorderList);
+    enQueue(15, &inorderList);
+    enQueue(20, &inorderList);
+    enQueue(7, &inorderList);
+    printf("Inorder list: ");
+    printList(inorderList);
 
+    postorderList = NULL;
+    enQueue(9, &postorderList);
+    enQueue(15, &postorderList);
+    enQueue(7, &postorderList);
+    enQueue(20, &postorderList);
+    enQueue(3, &postorderList);
+    printf("Postorder list: ");
+    printList(postorderList);
     printf("\n");
-    printf("Binary tree postorder list: ");
-    for ( i = 0; i < sizeof( postorder ) / sizeof( postorder[0] ); i++ )
-        printf("%d, ", postorder[i]);
 
-    root = buildTree(inorder, postorder, sizeof(inorder) / sizeof(inorder[0]));
-
-    printf("\n");
-    printf("Building a binary tree from the lists above, the tree topology:\n");
-    printf("\n");
+    root = buildBinaryTree(inorderList, postorderList);
+    printf("Building binary tree from inorder and postorder list, the tree topology:\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("\n");
-    printf("Binary tree inorder list: ");
-    for ( i = 0; i < sizeof( inorder2 ) / sizeof( inorder2[0] ); i++ )
-        printf("%d, ", inorder2[i]);
+    freeList(&inorderList);
+    freeList(&postorderList);
 
-    printf("\n");
-    printf("Binary tree postorder list: ");
-    for ( i = 0; i < sizeof( postorder2 ) / sizeof( postorder2[0] ); i++ )
-        printf("%d, ", postorder2[i]);
+    inorderList   = NULL;
+    enQueue(2, &inorderList);
+    enQueue(1, &inorderList);
+    printf("Inorder list: ");
+    printList(inorderList);
 
-    root = buildTree(inorder2, postorder2, sizeof(inorder2) / sizeof(inorder2[0]));
+    postorderList = NULL;
+    enQueue(2, &postorderList);
+    enQueue(1, &postorderList);
+    printf("Postorder list: ");
+    printList(postorderList);
+    printf("\n");
 
-    printf("\n");
-    printf("Building a binary tree from the lists above, the tree topology:\n");
-    printf("\n");
+    root = buildBinaryTree(inorderList, postorderList);
+    printf("Building binary tree from inorder and postorder list, the tree topology:\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("\n");
-    printf("Binary tree inorder list: ");
-    for ( i = 0; i < sizeof( inorder3 ) / sizeof( inorder3[0] ); i++ )
-        printf("%d, ", inorder3[i]);
+    freeList(&inorderList);
+    freeList(&postorderList);
 
-    printf("\n");
-    printf("Binary tree postorder list: ");
-    for ( i = 0; i < sizeof( postorder3 ) / sizeof( postorder3[0] ); i++ )
-        printf("%d, ", postorder3[i]);
+    inorderList   = NULL;
+    enQueue(1, &inorderList);
+    enQueue(2, &inorderList);
+    printf("Inorder list: ");
+    printList(inorderList);
 
-    root = buildTree(inorder3, postorder3, sizeof(inorder3) / sizeof(inorder3[0]));
+    postorderList = NULL;
+    enQueue(2, &postorderList);
+    enQueue(1, &postorderList);
+    printf("Postorder list: ");
+    printList(postorderList);
+    printf("\n");
 
-    printf("\n");
-    printf("Building a binary tree from the lists above, the tree topology:\n");
-    printf("\n");
+    root = buildBinaryTree(inorderList, postorderList);
+    printf("Building binary tree from inorder and postorder list, the tree topology:\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
 

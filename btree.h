@@ -21,6 +21,9 @@ struct TreeNode * treeRebalance(struct TreeNode *root);
 struct TreeNode * delTreeNode(struct TreeNode *root, int val);
 void              freeTreeNode(struct TreeNode *root);
 
+
+struct TreeNode *buildBinaryTree(struct ListNode *inorder, struct ListNode *postorder);
+
 void printTreeNodeInTreeTopology(struct TreeNode *root);
 
 int  findTotalNumberOfTreeNode(struct TreeNode *root);

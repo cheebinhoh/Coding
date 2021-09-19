@@ -34,6 +34,7 @@ void              freeStack(struct ListNode **top);
 struct ListNode * findNthListNode(struct ListNode *start, int n);
 int               getListLength(struct ListNode *start);
 int               isSubsetList(struct ListNode *list, struct ListNode *sublist);
+int               findListNodeIndex(struct ListNode *start, int val);
 
 void printList(struct ListNode *start);
 void printListNode(struct ListNode *start);

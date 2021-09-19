@@ -260,7 +260,7 @@ int determineMinDepthLevelRecursive(struct TreeNode *root,
          && NULL != root->left )
         *retMinLevel = oldMinLevel;
 
-    return ( leftLevel < rightLevel ) ? leftLevel : rightLevel; 
+    return ( leftLevel < rightLevel ) ? leftLevel : rightLevel;
 }
 
 
@@ -696,7 +696,7 @@ int isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2)
 
     freeList(&list1);
     freeList(&list2);
- 
+
     list1 = getInOrderList(tree1);
     list2 = getInOrderList(tree2);
     if ( ! isSubsetList(list1, list2 ) )
@@ -709,4 +709,106 @@ cleanup:
     freeList(&list2);
 
     return ret;
+}
+
+
+struct TreeNode * findTreeNodeParent(struct TreeNode *root,
+                                     struct TreeNode *node)
+{
+    struct TreeNode *parent = NULL;
+
+
+    if ( NULL == root
+         || NULL == node )
+        return NULL;
+
+    if ( root == node )
+        return node;
+
+    if ( root->left == node
+         || root->right == node )
+        return root;
+
+    if ( NULL != root->left )
+        parent = findTreeNodeParent(root->left, node);
+
+    if ( NULL == parent)
+    {
+        if ( NULL != root->right )
+        {
+            parent = findTreeNodeParent(root->right, node);
+        }
+    }
+
+    return parent;
+}
+
+
+/* The logic is simple:
+ * - we can build a binary tree from post order list much easily via a reverse postorder tree it resembles the
+ *   top-down fashion of the tree with right branch lean. so a binary tree postorder is left-lean, a reversed
+ *   postorder list is right branch lean.
+ *
+ * - if a post order node value appears on right position of the in order list, then the value is part of the
+ *   right branch of previous node.
+ *
+ * - if a post order node value appears on left positio of the in order list, then the value is part of the
+ *   left branch of _parent_ node of previous node.
+ */
+struct TreeNode * buildBinaryTree(struct ListNode *inorder, struct ListNode *postorder)
+{
+    int              cnt;
+    int              i;
+    int              j;
+    struct TreeNode *root;
+    struct TreeNode *new;
+    struct TreeNode *prev;
+
+
+    if ( NULL == inorder
+         || NULL == postorder )
+        return NULL;
+
+    cnt = getListLength(inorder);
+    if ( cnt != getListLength(postorder) )
+        return NULL;
+
+    root      = NULL;
+    postorder = reverseQueue(postorder);
+    i         = 0;
+    while ( NULL != postorder )
+    {
+        new = malloc(sizeof( struct TreeNode ));
+
+        new->left  = NULL;
+        new->right = NULL;
+        new->val   = postorder->val;
+
+        if ( NULL == root )
+        {
+            root = new;
+            prev = new;
+        }
+        else
+        {
+            j = findListNodeIndex(inorder, new->val);
+            assert( j != -1 ); // we do not handle it properly yet.
+
+            if ( j >= i )
+            {
+                prev->right = new;
+                prev        = new;
+            }
+            else
+            {
+                prev       = findTreeNodeParent(root, prev);
+                prev->left = new;
+            }
+        }
+
+        postorder = postorder->next;
+        i++;
+    }
+
+    return root;
 }
