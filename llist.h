@@ -12,20 +12,22 @@
 
 
 // sorted list
-struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode **end);
-int               delListNode(int val, struct ListNode **start, struct ListNode **end);
+struct ListNode * addListNodeInt(int val, struct ListNode **start, struct ListNode **end);
+int               delListNodeInt(int val, struct ListNode **start, struct ListNode **end);
 void              freeList(struct ListNode **start);
 
 
 // queue
-struct ListNode * enQueue(int val, struct ListNode **head);
+struct ListNode * enQueueInt(int val, struct ListNode **head);
+struct ListNode * enQueueRef(void *ref, struct ListNode **head);
 struct ListNode * deQueue(struct ListNode **head);
 struct ListNode * reverseQueue(struct ListNode *head);
 void              freeQueue(struct ListNode **head);
 
 
 // stack
-struct ListNode * pushStack(int val, struct ListNode **top);
+struct ListNode * pushStackInt(int val, struct ListNode **top);
+struct ListNode * pushStackRef(void *ref, struct ListNode **top);
 struct ListNode * popStack(struct ListNode **top);
 void              freeStack(struct ListNode **top);
 
@@ -34,10 +36,10 @@ void              freeStack(struct ListNode **top);
 struct ListNode * findNthListNode(struct ListNode *start, int n);
 int               getListLength(struct ListNode *start);
 int               isSubsetList(struct ListNode *list, struct ListNode *sublist);
-int               findListNodeIndex(struct ListNode *start, int val);
+int               findListNodeIntIndex(struct ListNode *start, int val);
 
-void printList(struct ListNode *start);
-void printListNode(struct ListNode *start);
+void printListInt(struct ListNode *start);
+void printListNodeInt(struct ListNode *start);
 
 
 #endif

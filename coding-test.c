@@ -776,7 +776,7 @@ struct medianData
     int values[2];
 };
 
-void calculateMedian(struct TreeNode *node, int pos, void *data)
+void calculateMedian(struct TreeNode *node, int pos, int *stop, void *data)
 {
     struct medianData *pData = data;
     int                i;
@@ -1065,7 +1065,7 @@ struct checkBinarySearchTreeData
     int started;
 };
 
-void checkTreeNodeValueInOrder(struct TreeNode *node, int pos, void *data)
+void checkTreeNodeValueInOrder(struct TreeNode *node, int pos, int *stop, void *data)
 {
      struct checkBinarySearchTreeData *pData;
 
@@ -1077,6 +1077,8 @@ void checkTreeNodeValueInOrder(struct TreeNode *node, int pos, void *data)
          pData->isValid = 0;
 
      pData->lastValue = node->val;
+
+     *stop = 0 == pData->isValid;
 }
 
 

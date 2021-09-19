@@ -316,19 +316,28 @@ void printTreeNodeInTreeTopology(struct TreeNode *root)
 }
 
 
-void traverseTreeNodePreOrderRecursive(struct TreeNode        *root,
-                                       int                    *pos,
-                                       bTreeTraversalCallback  func,
-                                       void                   *data)
+int traverseTreeNodePreOrderRecursive(struct TreeNode        *root,
+                                      int                    *pos,
+                                      bTreeTraversalCallback  func,
+                                      void                   *data)
 {
-    if ( NULL == root )
-        return;
+    int stop = 0;
 
-    func(root, *pos, data);
+
+    if ( NULL == root )
+        return 0;
+
+    func(root, *pos, &stop, data);
+    if ( stop )
+        return stop;
+
     *pos = *pos + 1;
 
-    traverseTreeNodePreOrderRecursive(root->left, pos, func, data);
-    traverseTreeNodePreOrderRecursive(root->right, pos, func, data);
+    stop = traverseTreeNodePreOrderRecursive(root->left, pos, func, data);
+    if ( stop )
+        return stop;
+
+    return traverseTreeNodePreOrderRecursive(root->right, pos, func, data);
 }
 
 
@@ -342,20 +351,28 @@ void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func
 }
 
 
-void traverseTreeNodeInOrderRecursive(struct TreeNode        *root,
-                                      int                    *pos,
-                                      bTreeTraversalCallback  func,
-                                      void                   *data)
+int traverseTreeNodeInOrderRecursive(struct TreeNode        *root,
+                                     int                    *pos,
+                                     bTreeTraversalCallback  func,
+                                     void                   *data)
 {
+    int stop = 0;
+
+
     if ( NULL == root )
-        return;
+        return 0;
 
-    traverseTreeNodeInOrderRecursive(root->left, pos, func, data);
+    stop = traverseTreeNodeInOrderRecursive(root->left, pos, func, data);
+    if ( stop )
+        return stop;
 
-    func(root, *pos, data);
+    func(root, *pos, &stop, data);
+    if ( stop )
+        return stop;
+
     *pos = *pos + 1;
 
-    traverseTreeNodeInOrderRecursive(root->right, pos, func, data);
+    return traverseTreeNodeInOrderRecursive(root->right, pos, func, data);
 }
 
 
@@ -369,19 +386,29 @@ void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func,
 }
 
 
-void traverseTreeNodePostOrderRecursive(struct TreeNode        *root,
-                                        int                    *pos,
-                                        bTreeTraversalCallback  func,
-                                        void                   *data)
+int traverseTreeNodePostOrderRecursive(struct TreeNode        *root,
+                                       int                    *pos,
+                                       bTreeTraversalCallback  func,
+                                       void                   *data)
 {
+    int stop = 0;
+
+
     if ( NULL == root )
-        return;
+        return 0;
 
-    traverseTreeNodePostOrderRecursive(root->left, pos, func, data);
-    traverseTreeNodePostOrderRecursive(root->right, pos, func, data);
+    stop = traverseTreeNodePostOrderRecursive(root->left, pos, func, data);
+    if ( stop )
+        return stop;
 
-    func(root, *pos, data);
+    stop = traverseTreeNodePostOrderRecursive(root->right, pos, func, data);
+    if ( stop )
+        return stop;
+
+    func(root, *pos, &stop, data);
     *pos = *pos + 1;
+
+    return stop;
 }
 
 
@@ -395,7 +422,7 @@ void traverseTreeNodePostOrder(struct TreeNode *root, bTreeTraversalCallback fun
 }
 
 
-void countTreeNode(struct TreeNode *node, int pos, void *data)
+void countTreeNode(struct TreeNode *node, int pos, int *stop, void *data)
 {
     int *count;
 
@@ -437,7 +464,7 @@ int isSmallerThanList(int val, struct ListNode *list)
        return 1;
 
     do {
-        if ( val > list->val )
+        if ( val > list->data.val )
             return 0;
 
         list = list->next;
@@ -453,7 +480,7 @@ int isLargerThanList(int val, struct ListNode *list)
        return 1;
 
     do {
-        if ( val < list->val )
+        if ( val < list->data.val )
             return 0;
 
         list = list->next;
@@ -470,12 +497,12 @@ static void getTreeSubbranchAsList(struct TreeNode  *root,
 {
     if ( NULL == root )
     {
-        enQueue(missingVal, head);
+        enQueueInt(missingVal, head);
 
         return;
     }
 
-    enQueue(root->val, head);
+    enQueueInt(root->val, head);
     if ( left )
     {
         getTreeSubbranchAsList(root->left, left, missingVal, head);
@@ -534,9 +561,9 @@ int isTreeSymmetric(struct TreeNode *root)
     rightIter = rightList;
     while ( leftIter != NULL )
     {
-        if ( ( leftIter->val == missingVal
-               || rightIter->val == missingVal )
-             && leftIter->val != rightIter->val )
+        if ( ( leftIter->data.val == missingVal
+               || rightIter->data.val == missingVal )
+             && leftIter->data.val != rightIter->data.val )
             break;
 
         leftIter  = leftIter->next;
@@ -573,14 +600,14 @@ int isTreeSearchTreeRecursive(struct TreeNode *root,
     if ( ! isLargerThanList(root->val, larger) )
         return 0;
 
-    pushStack(root->val, &smaller);
+    pushStackInt(root->val, &smaller);
     if ( ! isTreeSearchTreeRecursive(root->left, smaller, larger) )
         return 0;
 
     tmp = popStack(&smaller);
     free(tmp);
 
-    pushStack(root->val, &larger);
+    pushStackInt(root->val, &larger);
     if ( ! isTreeSearchTreeRecursive(root->right, smaller, larger) )
         return 0;
 
@@ -755,7 +782,7 @@ void getInOrderListRecursively(struct TreeNode *root, struct ListNode **start)
 
     getInOrderListRecursively(root->left, start);
 
-    enQueue(root->val, start);
+    enQueueInt(root->val, start);
 
     getInOrderListRecursively(root->right, start);
 }
@@ -777,7 +804,7 @@ void getPreOrderListRecursively(struct TreeNode *root, struct ListNode **start)
     if ( NULL == root )
         return;
 
-    enQueue(root->val, start);
+    enQueueInt(root->val, start);
 
     getPreOrderListRecursively(root->left, start);
     getPreOrderListRecursively(root->right, start);
@@ -803,7 +830,7 @@ void getPostOrderListRecursively(struct TreeNode *root, struct ListNode **start)
     getPostOrderListRecursively(root->left, start);
     getPostOrderListRecursively(root->right, start);
 
-    enQueue(root->val, start);
+    enQueueInt(root->val, start);
 }
 
 
@@ -940,7 +967,7 @@ struct TreeNode * buildBinaryTree(struct ListNode *inorder, struct ListNode *pos
 
         new->left  = NULL;
         new->right = NULL;
-        new->val   = postorder->val;
+        new->val   = postorder->data.val;
 
         if ( NULL == root )
         {
@@ -949,7 +976,7 @@ struct TreeNode * buildBinaryTree(struct ListNode *inorder, struct ListNode *pos
         }
         else
         {
-            j = findListNodeIndex(inorder, new->val);
+            j = findListNodeIntIndex(inorder, new->val);
             assert( j != -1 ); // we do not handle it properly yet.
 
             if ( j >= i )
@@ -969,4 +996,91 @@ struct TreeNode * buildBinaryTree(struct ListNode *inorder, struct ListNode *pos
     }
 
     return root;
+}
+
+void traverseTreeNodeInLevelLeftToRightOrderRecursive(struct ListNode             **firstLevel,
+                                                      struct ListNode             **nextLevel,
+                                                      int                           level,
+                                                      int                           pos,
+                                                      bTreeLevelTraversalCallback   func,
+                                                      void                         *data)
+{
+    struct ListNode *lnode;
+    struct ListNode *liter;
+    struct TreeNode *tnode;
+    int              stop;
+
+
+    stop  = 0;
+    lnode = deQueue(firstLevel);
+    while ( NULL != lnode )
+    {
+        tnode = lnode->data.ref;
+        free(lnode);
+
+        func(tnode, pos, level, &stop, data);
+        if ( stop )
+           goto quit;
+
+        pos = pos + 1;
+
+        lnode = deQueue(firstLevel);
+    }
+
+    assert(*firstLevel == NULL);
+
+    *firstLevel = *nextLevel;
+    *nextLevel  = NULL;
+
+    liter = *firstLevel;
+    while ( NULL != liter )
+    {
+        tnode = liter->data.ref;
+
+        if ( NULL != tnode->left )
+            enQueueRef(tnode->left, nextLevel);
+
+        if ( NULL != tnode->right )
+            enQueueRef(tnode->right, nextLevel);
+
+        liter = liter->next;
+    }
+
+    if ( NULL != *firstLevel )
+    {
+       level = level + 1;
+
+       traverseTreeNodeInLevelLeftToRightOrderRecursive(firstLevel, nextLevel, level, pos, func, data);
+    }
+
+quit:
+    freeQueue(firstLevel);
+    freeQueue(nextLevel);
+}
+
+void traverseTreeNodeInLevelLeftToRightOrder(struct TreeNode *root, bTreeLevelTraversalCallback func, void *data)
+{
+    struct ListNode *firstLevel = NULL;
+    struct ListNode *nextLevel  = NULL;
+    int              level      = 0;
+    int              pos        = 0;
+
+
+    if ( NULL == root )
+        return;
+
+    enQueueRef(root, &firstLevel);
+
+    if ( NULL != root->left )
+        enQueueRef(root->left, &nextLevel);
+
+    if ( NULL != root->right )
+        enQueueRef(root->right, &nextLevel);
+
+    traverseTreeNodeInLevelLeftToRightOrderRecursive(&firstLevel,
+                                                     &nextLevel,
+                                                     level,
+                                                     pos,
+                                                     func,
+                                                     data);
 }

@@ -8,11 +8,16 @@
 
 #define LLIST_INTERNAL_H_HAS_INCLUDED
 
+union ListNodeData
+{
+    void *ref;
+    int   val;
+};
 
 struct ListNode {
 
-     int              val;
-     struct ListNode *next;
+     union ListNodeData  data;
+     struct ListNode    *next;
 };
 
 

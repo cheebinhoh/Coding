@@ -314,18 +314,18 @@ void printKLargestElementsInArray(int array[], int size, int k)
     {
         if ( n < k )
         {
-            addListNode(array[i], &start, NULL);
+            addListNodeInt(array[i], &start, NULL);
             n++;
         }
-        else if ( array[i] > start->val )
+        else if ( array[i] > start->data.val )
         {
-            delListNode(start->val, &start, NULL);
-            addListNode(array[i], &start, NULL);
+            delListNodeInt(start->data.val, &start, NULL);
+            addListNodeInt(array[i], &start, NULL);
         }
     }
 
     printf("The largest %d values are :", k);
-    printListNode(start);
+    printListNodeInt(start);
     freeList(&start);
 }
 
@@ -357,7 +357,7 @@ void rotateArrayByKElement(int array[], int size, int k)
 
 
     for ( i = 0; i < k && i < size; i++ )
-        addListNode(array[i], &start, NULL);
+        addListNodeInt(array[i], &start, NULL);
 
     for ( i = 0; i < size - k; i++ )
     {
@@ -367,7 +367,7 @@ void rotateArrayByKElement(int array[], int size, int k)
     tmp = start;
     while ( NULL != tmp )
     {
-        array[i++] = tmp->val;
+        array[i++] = tmp->data.val;
         tmp = tmp->next;
     }
 

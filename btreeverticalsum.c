@@ -25,9 +25,9 @@ void calculateBTreeVerticalSumRecursive(struct TreeNode  *root,
     {
         node = findNthListNode(*right, vAxis);
         if ( NULL == node )
-            enQueue(root->val, right);
+            enQueueInt(root->val, right);
         else
-            node->val += root->val;
+            node->data.val += root->val;
     }
     else
     {
@@ -35,9 +35,9 @@ void calculateBTreeVerticalSumRecursive(struct TreeNode  *root,
 
         node = findNthListNode(*left, adjustedVAxis);
         if ( NULL == node )
-            enQueue(root->val, left);
+            enQueueInt(root->val, left);
         else
-            node->val += root->val;
+            node->data.val += root->val;
     }
 
     calculateBTreeVerticalSumRecursive(root->left, vAxis - 1, left, right);
@@ -60,7 +60,7 @@ struct ListNode * calculateBTreeVerticalSum(struct TreeNode *root)
     queueIter = rightlist;
     while ( NULL != queueIter )
     {
-        enQueue(queueIter->val, &leftlist);
+        enQueueInt(queueIter->data.val, &leftlist);
         queueIter = queueIter->next;
     }
 
@@ -144,7 +144,7 @@ int main(int argc, char * argv[])
     listIter = resultlist;
     while ( NULL != listIter )
     {
-        printf("\t%d", listIter->val);
+        printf("\t%d", listIter->data.val);
         listIter = listIter->next;
     }
 

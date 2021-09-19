@@ -33,22 +33,22 @@ int main(int argc, char * argv[])
 
 
     inorderList   = NULL;
-    enQueue(9, &inorderList);
-    enQueue(3, &inorderList);
-    enQueue(15, &inorderList);
-    enQueue(20, &inorderList);
-    enQueue(7, &inorderList);
+    enQueueInt(9, &inorderList);
+    enQueueInt(3, &inorderList);
+    enQueueInt(15, &inorderList);
+    enQueueInt(20, &inorderList);
+    enQueueInt(7, &inorderList);
     printf("Inorder list: ");
-    printList(inorderList);
+    printListInt(inorderList);
 
     postorderList = NULL;
-    enQueue(9, &postorderList);
-    enQueue(15, &postorderList);
-    enQueue(7, &postorderList);
-    enQueue(20, &postorderList);
-    enQueue(3, &postorderList);
+    enQueueInt(9, &postorderList);
+    enQueueInt(15, &postorderList);
+    enQueueInt(7, &postorderList);
+    enQueueInt(20, &postorderList);
+    enQueueInt(3, &postorderList);
     printf("Postorder list: ");
-    printList(postorderList);
+    printListInt(postorderList);
     printf("\n");
 
     root = buildBinaryTree(inorderList, postorderList);
@@ -60,16 +60,16 @@ int main(int argc, char * argv[])
     freeList(&postorderList);
 
     inorderList   = NULL;
-    enQueue(2, &inorderList);
-    enQueue(1, &inorderList);
+    enQueueInt(2, &inorderList);
+    enQueueInt(1, &inorderList);
     printf("Inorder list: ");
-    printList(inorderList);
+    printListInt(inorderList);
 
     postorderList = NULL;
-    enQueue(2, &postorderList);
-    enQueue(1, &postorderList);
+    enQueueInt(2, &postorderList);
+    enQueueInt(1, &postorderList);
     printf("Postorder list: ");
-    printList(postorderList);
+    printListInt(postorderList);
     printf("\n");
 
     root = buildBinaryTree(inorderList, postorderList);
@@ -81,16 +81,16 @@ int main(int argc, char * argv[])
     freeList(&postorderList);
 
     inorderList   = NULL;
-    enQueue(1, &inorderList);
-    enQueue(2, &inorderList);
+    enQueueInt(1, &inorderList);
+    enQueueInt(2, &inorderList);
     printf("Inorder list: ");
-    printList(inorderList);
+    printListInt(inorderList);
 
     postorderList = NULL;
-    enQueue(2, &postorderList);
-    enQueue(1, &postorderList);
+    enQueueInt(2, &postorderList);
+    enQueueInt(1, &postorderList);
     printf("Postorder list: ");
-    printList(postorderList);
+    printListInt(postorderList);
     printf("\n");
 
     root = buildBinaryTree(inorderList, postorderList);

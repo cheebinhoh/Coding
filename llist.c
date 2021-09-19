@@ -8,7 +8,7 @@
 #include "llist.h"
 
 
-int delListNode(int val, struct ListNode **start, struct ListNode **end)
+int delListNodeInt(int val, struct ListNode **start, struct ListNode **end)
 {
     struct ListNode *tmp;
     struct ListNode *del;
@@ -21,7 +21,7 @@ int delListNode(int val, struct ListNode **start, struct ListNode **end)
     // it is also more obvious that we check if start matches the value, and do a set of activities,
     // else we search through the list for a matching node and do another set of activities.
 
-    if ( (*start)->val == val )
+    if ( (*start)->data.val == val )
     {
         del    = (*start);
         *start = del->next;
@@ -37,7 +37,7 @@ int delListNode(int val, struct ListNode **start, struct ListNode **end)
 
     tmp = *start;
     while ( NULL != tmp->next
-            && val != tmp->next->val )
+            && val != tmp->next->data.val )
         tmp = tmp->next;
 
     if ( NULL != tmp->next )
@@ -58,7 +58,7 @@ int delListNode(int val, struct ListNode **start, struct ListNode **end)
 }
 
 
-struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode **end)
+struct ListNode * addListNodeInt(int val, struct ListNode **start, struct ListNode **end)
 {
     struct ListNode *node;
     struct ListNode *tmp;
@@ -68,20 +68,20 @@ struct ListNode * addListNode(int val, struct ListNode **start, struct ListNode 
     if ( NULL == node )
         return node;
 
-    node->val  = val;
-    node->next = NULL;
+    node->data.val  = val;
+    node->next      = NULL;
 
     if ( NULL == *start
-         || val < (*start)->val )
+         || val < (*start)->data.val )
     {
         node->next = *start;
         *start     = node;
     }
-    else if ( val > (*start)->val )
+    else if ( val > (*start)->data.val )
     {
         tmp = *start;
         while ( NULL != tmp->next
-                && val > tmp->next->val )
+                && val > tmp->next->data.val )
             tmp = tmp->next;
 
         node->next = tmp->next;
@@ -119,11 +119,11 @@ void freeList(struct ListNode **start)
 }
 
 
-void printListNode(struct ListNode *start)
+void printListNodeInt(struct ListNode *start)
 {
     while ( NULL != start )
     {
-        printf("%d -> ", start->val);
+        printf("%d -> ", start->data.val);
         start = start->next;
     }
 
@@ -150,7 +150,7 @@ struct ListNode * findNthListNode(struct ListNode *start, int n)
 }
 
 
-struct ListNode * enQueue(int val, struct ListNode **head)
+struct ListNode * enQueue(union ListNodeData data, struct ListNode **head)
 {
     struct ListNode *node;
     struct ListNode *tmp;
@@ -160,7 +160,7 @@ struct ListNode * enQueue(int val, struct ListNode **head)
     if ( NULL == node )
         return NULL;
 
-    node->val  = val;
+    node->data = data;
     node->next = NULL;
 
     if ( NULL == *head )
@@ -183,6 +183,26 @@ struct ListNode * enQueue(int val, struct ListNode **head)
 }
 
 
+struct ListNode * enQueueRef(void *ref, struct ListNode **head)
+{
+    union ListNodeData data;
+
+
+    data.ref = ref;
+    return enQueue(data, head);
+}
+
+
+struct ListNode * enQueueInt(int val, struct ListNode **head)
+{
+    union ListNodeData data;
+
+
+    data.val = val;
+    return enQueue(data, head);
+}
+
+
 struct ListNode * deQueue(struct ListNode **head)
 {
     struct ListNode *node;
@@ -193,6 +213,8 @@ struct ListNode * deQueue(struct ListNode **head)
 
     node = *head;
     *head = (*head)->next;
+
+    node->next = NULL; // to make sure that the node is not linked
 
     return node;
 }
@@ -239,7 +261,7 @@ struct ListNode * reverseQueue(struct ListNode *head)
 }
 
 
-struct ListNode * pushStack(int val, struct ListNode **top)
+struct ListNode * pushStack(union ListNodeData data, struct ListNode **top)
 {
     struct ListNode *node;
 
@@ -248,7 +270,7 @@ struct ListNode * pushStack(int val, struct ListNode **top)
     if ( NULL == node )
         return NULL;
 
-    node->val  = val;
+    node->data = data;
     node->next = NULL;
 
     if ( NULL == *top )
@@ -260,6 +282,27 @@ struct ListNode * pushStack(int val, struct ListNode **top)
     }
 
     return node;
+}
+
+
+struct ListNode * pushStackRef(void *ref, struct ListNode **top)
+{
+    union ListNodeData data;
+
+
+    data.ref = ref;
+
+    return pushStack(data, top);
+}
+
+struct ListNode * pushStackInt(int val, struct ListNode **top)
+{
+    union ListNodeData data;
+
+
+    data.val = val;
+
+    return pushStack(data, top);
 }
 
 
@@ -310,7 +353,7 @@ int getListLength(struct ListNode *start)
 }
 
 
-void printList(struct ListNode *start)
+void printListInt(struct ListNode *start)
 {
     int len;
 
@@ -321,13 +364,13 @@ void printList(struct ListNode *start)
         while ( len > 1
                 && NULL != start )
         {
-            printf("%d, ", start->val);
+            printf("%d, ", start->data.val);
 
             start = start->next;
             len--;
         }
 
-        printf("%d\n", start->val);
+        printf("%d\n", start->data.val);
     }
 }
 
@@ -354,7 +397,7 @@ int isSubsetList(struct ListNode *list, struct ListNode *sublist)
 
         while ( NULL != iter2
                 && NULL != iter3
-                && iter2->val == iter3->val )
+                && iter2->data.val == iter3->data.val )
         {
             iter2 = iter2->next;
             iter3 = iter3->next;
@@ -370,14 +413,14 @@ int isSubsetList(struct ListNode *list, struct ListNode *sublist)
 }
 
 
-int findListNodeIndex(struct ListNode *start, int val)
+int findListNodeIntIndex(struct ListNode *start, int val)
 {
     int i;
 
 
     i = 0;
     while ( NULL != start
-            && start->val != val )
+            && start->data.val != val )
     {
         start = start->next;
         i++;

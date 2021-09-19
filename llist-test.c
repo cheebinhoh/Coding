@@ -13,18 +13,18 @@ int main(int argc, char *argv[])
     struct ListNode *end   = NULL;
 
 
-    addListNode(3, &start, &end);
-    addListNode(2, &start, &end);
-    addListNode(4, &start, &end);
-    addListNode(1, &start, &end);
+    addListNodeInt(3, &start, &end);
+    addListNodeInt(2, &start, &end);
+    addListNodeInt(4, &start, &end);
+    addListNodeInt(1, &start, &end);
 
     printf("The list of integer is: ");
-    printListNode(start);
+    printListNodeInt(start);
     printf("\n");
 
-    printf("After deleeting 2\n");
-    delListNode(2, &start, &end);
-    printListNode(start);
+    printf("After deleting 2\n");
+    delListNodeInt(2, &start, &end);
+    printListNodeInt(start);
     printf("\n");
 
     return 0;

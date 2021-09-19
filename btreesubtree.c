@@ -93,15 +93,15 @@ int main(int argc, char * argv[])
     printf("\n");
     inl = getInOrderList(root);
     printf("In order list: ");
-    printList(inl);
+    printListInt(inl);
 
     prel = getPreOrderList(root);
     printf("Pre order list: ");
-    printList(prel);
+    printListInt(prel);
 
     postl = getPostOrderList(root);
     printf("Post order list: ");
-    printList(postl);
+    printListInt(postl);
     printf("\n");
 
 
@@ -129,15 +129,15 @@ int main(int argc, char * argv[])
     printf("\n");
     inl = getInOrderList(root2);
     printf("In order list: ");
-    printList(inl);
+    printListInt(inl);
 
     prel = getPreOrderList(root2);
     printf("Pre order list: ");
-    printList(prel);
+    printListInt(prel);
 
     postl = getPostOrderList(root2);
     printf("Post order list: ");
-    printList(postl);
+    printListInt(postl);
     printf("\n");
 
     checkIf2ndTreeIsSubtreeOfFirstTree(root, root2);
@@ -156,15 +156,15 @@ int main(int argc, char * argv[])
     printf("\n");
     inl = getInOrderList(root2);
     printf("In order list: ");
-    printList(inl);
+    printListInt(inl);
 
     prel = getPreOrderList(root2);
     printf("Pre order list: ");
-    printList(prel);
+    printListInt(prel);
 
     postl = getPostOrderList(root2);
     printf("Post order list: ");
-    printList(postl);
+    printListInt(postl);
     printf("\n");
 
     checkIf2ndTreeIsSubtreeOfFirstTree(root, root2);
@@ -191,15 +191,15 @@ int main(int argc, char * argv[])
     printf("\n");
     inl = getInOrderList(root2);
     printf("In order list: ");
-    printList(inl);
+    printListInt(inl);
 
     prel = getPreOrderList(root2);
     printf("Pre order list: ");
-    printList(prel);
+    printListInt(prel);
 
     postl = getPostOrderList(root2);
     printf("Post order list: ");
-    printList(postl);
+    printListInt(postl);
     printf("\n");
 
     checkIf2ndTreeIsSubtreeOfFirstTree(root, root2);

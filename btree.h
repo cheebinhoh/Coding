@@ -12,7 +12,8 @@
 #include "llist.h"
 
 
-typedef void (bTreeTraversalCallback)(struct TreeNode *node, int pos, void *data);
+typedef void (bTreeTraversalCallback)(struct TreeNode *node, int pos, int *stop, void *data);
+typedef void (bTreeLevelTraversalCallback)(struct TreeNode *node, int pos, int level, int *stop, void *data);
 
 
 struct TreeNode * addTreeNode(struct TreeNode *root, int val);
@@ -32,6 +33,8 @@ int  findTotalNumberOfTreeNode(struct TreeNode *root);
 void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodePostOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
+
+void traverseTreeNodeInLevelLeftToRightOrder(struct TreeNode *root, bTreeLevelTraversalCallback func, void *data);
 
 int determineMaxDepthLevel(struct TreeNode *root);
 int determineMinDepthLevel(struct TreeNode *root);
