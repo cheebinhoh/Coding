@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Build binary tree from inorder and postorder list.
+ * Build binary tree from an none binary tree which # of childs can be more than 2.
  */
 
 #include <stdio.h>
