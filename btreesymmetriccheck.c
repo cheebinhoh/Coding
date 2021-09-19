@@ -1,11 +1,25 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Check if tree is sysmetric that right branch of root is mirror of left branch.
+ * Check if tree is sysmetric that right branch of root is mirror of left branch
+ * in layout of the tree (not the values of node).
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "btree.h"
+
+
+void checkIfTreeIsSysmetric(struct TreeNode *root)
+{
+    if ( isTreeSymmetric(root) )
+    {
+        printf("The tree is sysmetric\n");
+    }
+    else
+    {
+        printf("The tree is not sysmetric\n");
+    }
+}
 
 
 int main(int argc, char * argv[])
@@ -68,7 +82,8 @@ int main(int argc, char * argv[])
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("Is sysmetric = %d\n", isTreeSymmetric(root));
+    checkIfTreeIsSysmetric(root);
+    printf("\n");
     printf("\n");
 
     root->right->left = NULL;
@@ -77,7 +92,7 @@ int main(int argc, char * argv[])
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("Is sysmetric = %d\n", isTreeSymmetric(root));
+    checkIfTreeIsSysmetric(root);
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for

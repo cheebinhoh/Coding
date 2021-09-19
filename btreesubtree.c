@@ -9,6 +9,20 @@
 #include "llist.h"
 
 
+void checkIf2ndTreeIsSubtreeOfFirstTree(struct TreeNode *tree1,
+                                        struct TreeNode *tree2)
+{
+    if ( isTreeSubTree(tree1, tree2) )
+    {
+        printf("The 2nd tree is sub tree of 1st tree\n");
+    }
+    else
+    {
+        printf("The 2nd tree is not sub tree of 1st tree\n");
+    }
+}
+
+
 int main(int argc, char * argv[])
 {
     struct TreeNode *root  = NULL;
@@ -78,17 +92,15 @@ int main(int argc, char * argv[])
 
     printf("\n");
     inl = getInOrderList(root);
-    printf("In order list, length = %d\n", getListLength(inl));
+    printf("In order list: ");
     printList(inl);
-    printf("\n");
 
     prel = getPreOrderList(root);
-    printf("Pre order list, length = %d\n", getListLength(prel));
+    printf("Pre order list: ");
     printList(prel);
-    printf("\n");
 
     postl = getPostOrderList(root);
-    printf("Post order list, length = %d\n", getListLength(postl));
+    printf("Post order list: ");
     printList(postl);
     printf("\n");
 
@@ -116,30 +128,21 @@ int main(int argc, char * argv[])
 
     printf("\n");
     inl = getInOrderList(root2);
-    printf("In order list, length = %d\n", getListLength(inl));
+    printf("In order list: ");
     printList(inl);
-    printf("\n");
 
     prel = getPreOrderList(root2);
-    printf("Pre order list, length = %d\n", getListLength(prel));
+    printf("Pre order list: ");
     printList(prel);
-    printf("\n");
 
     postl = getPostOrderList(root2);
-    printf("Post order list, length = %d\n", getListLength(postl));
+    printf("Post order list: ");
     printList(postl);
     printf("\n");
 
-    if ( isTreeSubTree(root, root2) )
-    {
-        printf("The 2nd tree is sub tree of first tree\n");
-    }
-    else
-    {
-        printf("The 2nd tree is not sub tree of first tree\n");
-    }
-
+    checkIf2ndTreeIsSubtreeOfFirstTree(root, root2);
     printf("\n");
+
     printf("\n");
     printf("Adjusting 2nd tree by by swapping left and right branch value\n");
     tmp               = root2->left->val;
@@ -152,30 +155,21 @@ int main(int argc, char * argv[])
 
     printf("\n");
     inl = getInOrderList(root2);
-    printf("In order list, length = %d\n", getListLength(inl));
+    printf("In order list: ");
     printList(inl);
-    printf("\n");
 
     prel = getPreOrderList(root2);
-    printf("Pre order list, length = %d\n", getListLength(prel));
+    printf("Pre order list: ");
     printList(prel);
-    printf("\n");
 
     postl = getPostOrderList(root2);
-    printf("Post order list, length = %d\n", getListLength(postl));
+    printf("Post order list: ");
     printList(postl);
     printf("\n");
 
-    if ( isTreeSubTree(root, root2) )
-    {
-        printf("The adjusted 2nd tree is sub tree of first tree\n");
-    }
-    else
-    {
-        printf("The adjusted 2nd tree is not sub tree of first tree\n");
-    }
-
+    checkIf2ndTreeIsSubtreeOfFirstTree(root, root2);
     printf("\n");
+
     printf("\n");
     printf("Adjusting 2nd tree by extending val 3 with left child 5\n");
 
@@ -196,29 +190,19 @@ int main(int argc, char * argv[])
 
     printf("\n");
     inl = getInOrderList(root2);
-    printf("In order list, length = %d\n", getListLength(inl));
+    printf("In order list: ");
     printList(inl);
-    printf("\n");
 
     prel = getPreOrderList(root2);
-    printf("Pre order list, length = %d\n", getListLength(prel));
+    printf("Pre order list: ");
     printList(prel);
-    printf("\n");
 
     postl = getPostOrderList(root2);
-    printf("Post order list, length = %d\n", getListLength(postl));
+    printf("Post order list: ");
     printList(postl);
     printf("\n");
 
-    if ( isTreeSubTree(root, root2) )
-    {
-        printf("The adjusted 2nd tree is sub tree of first tree\n");
-    }
-    else
-    {
-        printf("The adjusted 2nd tree is not sub tree of first tree\n");
-    }
-
+    checkIf2ndTreeIsSubtreeOfFirstTree(root, root2);
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
