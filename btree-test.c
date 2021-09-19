@@ -48,7 +48,7 @@ int main(int argc, char * argv[])
     printf("After deleting 2 and 7, the tree topology:\n");
     printTreeNodeInTreeTopology(root);
 
-    if ( isTreeBinarySearchTree(root) )
+    if ( isTreeSearchTree(root) )
     {
         printf("\n");
         printf("It is still a binary search tree\n");

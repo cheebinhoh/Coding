@@ -24,9 +24,11 @@ void              freeTreeNode(struct TreeNode *root);
 
 struct TreeNode *buildBinaryTree(struct ListNode *inorder, struct ListNode *postorder);
 
+void treeMirrorSwap(struct TreeNode *root);
 void printTreeNodeInTreeTopology(struct TreeNode *root);
 
 int  findTotalNumberOfTreeNode(struct TreeNode *root);
+
 void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodePostOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
@@ -37,7 +39,7 @@ int determineMinDepthLevel(struct TreeNode *root);
 struct TreeNode * findLeastCommonAncestor(struct TreeNode *root, int val1, int val2);
 int               findMaximumSumPathToLeafValue(struct TreeNode *root, int val);
 int               isTreeSubTree(struct TreeNode *tree1, struct TreeNode *tree2);
-int               isTreeBinarySearchTree(struct TreeNode *root);
+int               isTreeSearchTree(struct TreeNode *root);
 int               isTreeSymmetric(struct TreeNode *root);
 
 struct ListNode * getInOrderList(struct TreeNode *root);

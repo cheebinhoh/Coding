@@ -557,9 +557,9 @@ int isTreeSymmetric(struct TreeNode *root)
  * and passing last visit value from node to node and where new node value should not exceed last
  * visit node if it is a binary search tree.
  */
-int isTreeBinarySearchTreeRecursive(struct TreeNode *root,
-                                    struct ListNode *smaller,
-                                    struct ListNode *larger)
+int isTreeSearchTreeRecursive(struct TreeNode *root,
+                              struct ListNode *smaller,
+                              struct ListNode *larger)
 {
     struct ListNode *tmp;
 
@@ -574,14 +574,14 @@ int isTreeBinarySearchTreeRecursive(struct TreeNode *root,
         return 0;
 
     pushStack(root->val, &smaller);
-    if ( ! isTreeBinarySearchTreeRecursive(root->left, smaller, larger) )
+    if ( ! isTreeSearchTreeRecursive(root->left, smaller, larger) )
         return 0;
 
     tmp = popStack(&smaller);
     free(tmp);
 
     pushStack(root->val, &larger);
-    if ( ! isTreeBinarySearchTreeRecursive(root->right, smaller, larger) )
+    if ( ! isTreeSearchTreeRecursive(root->right, smaller, larger) )
         return 0;
 
     tmp = popStack(&larger);
@@ -591,14 +591,14 @@ int isTreeBinarySearchTreeRecursive(struct TreeNode *root,
 }
 
 
-int isTreeBinarySearchTree(struct TreeNode *root)
+int isTreeSearchTree(struct TreeNode *root)
 {
     struct ListNode *smaller = NULL;
     struct ListNode *larger  = NULL;
     int              ret;
 
 
-    ret = isTreeBinarySearchTreeRecursive(root, smaller, larger);
+    ret = isTreeSearchTreeRecursive(root, smaller, larger);
 
     freeStack(&smaller);
     freeStack(&larger);
@@ -877,6 +877,28 @@ struct TreeNode * findTreeNodeParent(struct TreeNode *root,
     }
 
     return parent;
+}
+
+
+static struct TreeNode * treeMirrorSwapRecursive(struct TreeNode *root)
+{
+    struct TreeNode *tmp;
+
+
+    if ( NULL == root )
+       return NULL;
+
+    tmp         = root->left;
+    root->left  = treeMirrorSwapRecursive(root->right);
+    root->right = treeMirrorSwapRecursive(tmp);
+
+    return root;
+}
+
+
+void treeMirrorSwap(struct TreeNode *root)
+{
+    treeMirrorSwapRecursive(root);
 }
 
 

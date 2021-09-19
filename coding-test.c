@@ -1112,7 +1112,7 @@ void runCheckIfIsBinarySearchTree(void)
     root1 = addTreeNodeAndRebalanceTree(root1, 3);
     root1 = addTreeNodeAndRebalanceTree(root1, 4);
 
-    if ( isTreeBinarySearchTree(root1) && isBinarySearchTree(root1) )
+    if ( isTreeSearchTree(root1) && isTreeSearchTree(root1) )
         printf("root1 is a binary search tree\n");
     else
         printf("root1 is not a binary search tree");
@@ -1140,7 +1140,7 @@ void runCheckIfIsBinarySearchTree(void)
     root2->left->right->right = NULL;
 
     printf("\n");
-    if ( isBinarySearchTree(root2) && isBinarySearchTree(root2) )
+    if ( isTreeSearchTree(root2) && isTreeSearchTree(root2) )
         printf("root2 is a binary search tree\n");
     else
         printf("root2 is not a binary search tree\n");

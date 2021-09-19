@@ -7,21 +7,6 @@
 #include "btree.h"
 
 
-struct TreeNode * mirrorSwap(struct TreeNode *root)
-{
-    struct TreeNode *tmp;
-
-
-    if ( NULL == root )
-       return NULL;
-
-    tmp         = root->left;
-    root->left  = mirrorSwap(root->right);
-    root->right = mirrorSwap(tmp);
-
-    return root;
-}
-
 int main(int argc, char *argv[])
 {
     struct TreeNode *root = NULL;
@@ -36,7 +21,7 @@ int main(int argc, char *argv[])
     printTreeNodeInTreeTopology(root);
     printf("\n"); // we can introduce wrapper entry call to printTreeNodeInOrder to printf \n
 
-    root = mirrorSwap(root);
+    treeMirrorSwap(root);
 
     printf("The tree topology after mirror swap of tree node:\n");
     printTreeNodeInTreeTopology(root);
