@@ -316,6 +316,32 @@ void printTreeNodeInTreeTopology(struct TreeNode *root)
 }
 
 
+void traverseTreeNodePreOrderRecursive(struct TreeNode        *root,
+                                       int                    *pos,
+                                       bTreeTraversalCallback  func,
+                                       void                   *data)
+{
+    if ( NULL == root )
+        return;
+
+    func(root, *pos, data);
+    *pos = *pos + 1;
+
+    traverseTreeNodePreOrderRecursive(root->left, pos, func, data);
+    traverseTreeNodePreOrderRecursive(root->right, pos, func, data);
+}
+
+
+void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data)
+{
+    int pos;
+
+
+    pos = 0;
+    traverseTreeNodePreOrderRecursive(root, &pos, func, data);
+}
+
+
 void traverseTreeNodeInOrderRecursive(struct TreeNode        *root,
                                       int                    *pos,
                                       bTreeTraversalCallback  func,
@@ -340,6 +366,32 @@ void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func,
 
     pos = 0;
     traverseTreeNodeInOrderRecursive(root, &pos, func, data);
+}
+
+
+void traverseTreeNodePostOrderRecursive(struct TreeNode        *root,
+                                        int                    *pos,
+                                        bTreeTraversalCallback  func,
+                                        void                   *data)
+{
+    if ( NULL == root )
+        return;
+
+    traverseTreeNodePostOrderRecursive(root->left, pos, func, data);
+    traverseTreeNodePostOrderRecursive(root->right, pos, func, data);
+
+    func(root, *pos, data);
+    *pos = *pos + 1;
+}
+
+
+void traverseTreeNodePostOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data)
+{
+    int pos;
+
+
+    pos = 0;
+    traverseTreeNodePostOrderRecursive(root, &pos, func, data);
 }
 
 
@@ -410,6 +462,92 @@ int isLargerThanList(int val, struct ListNode *list)
     return 1;
 }
 
+
+static void getTreeSubbranchAsList(struct TreeNode  *root,
+                                   int               left,
+                                   int               missingVal,
+                                   struct ListNode **head)
+{
+    if ( NULL == root )
+    {
+        enQueue(missingVal, head);
+
+        return;
+    }
+
+    enQueue(root->val, head);
+    if ( left )
+    {
+        getTreeSubbranchAsList(root->left, left, missingVal, head);
+        getTreeSubbranchAsList(root->right, left, missingVal, head);
+    }
+    else
+    {
+        getTreeSubbranchAsList(root->right, left, missingVal, head);
+        getTreeSubbranchAsList(root->left, left, missingVal, head);
+    }
+}
+
+int isTreeSymmetric(struct TreeNode *root)
+{
+    int              i;
+    int              missingVal;
+    struct ListNode *leftList;
+    struct ListNode *rightList;
+    struct ListNode *leftIter;
+    struct ListNode *rightIter;
+
+
+    if ( NULL == root )
+        return 1;
+
+
+    i          = 1;
+    missingVal = i;
+    while ( i > 0 )
+    {
+        missingVal = i;
+        i = i << 1;
+        i = i + 1;
+    }
+
+    // C programming language is simple, beautiful and concise and high performance, but it
+    // does come with certain deficiency in term of moderm programming language, like it does
+    // insist initialization of variable, programmer is either discipline or runtime stack
+    // decide what value you got :)
+
+    leftList  = NULL;
+    rightList = NULL;
+    getTreeSubbranchAsList(root->left, 1, missingVal, &leftList);
+    getTreeSubbranchAsList(root->right, 0, missingVal, &rightList);
+
+    i = getListLength(leftList);
+    if ( i != getListLength(rightList) )
+    {
+        freeList(&leftList);
+        freeList(&rightList);
+
+        return 0;
+    }
+
+    leftIter  = leftList;
+    rightIter = rightList;
+    while ( leftIter != NULL )
+    {
+        if ( ( leftIter->val == missingVal
+               || rightIter->val == missingVal )
+             && leftIter->val != rightIter->val )
+            break;
+
+        leftIter  = leftIter->next;
+        rightIter = rightIter->next;
+    }
+
+    freeList(&leftList);
+    freeList(&rightList);
+
+    return NULL == leftIter;
+}
 
 /* In this approach, we maintain a two lists:
  * - smaller is a list of values that visit node value must be smaller than any value in the list
@@ -680,7 +818,7 @@ struct ListNode * getPostOrderList(struct TreeNode *root)
 }
 
 
-int isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2)
+int isTreeSubTree(struct TreeNode *tree1, struct TreeNode *tree2)
 {
     struct ListNode *list1;
     struct ListNode *list2;
@@ -699,10 +837,8 @@ int isSubBinaryTree(struct TreeNode *tree1, struct TreeNode *tree2)
 
     list1 = getInOrderList(tree1);
     list2 = getInOrderList(tree2);
-    if ( ! isSubsetList(list1, list2 ) )
-        goto cleanup;
 
-    ret = 1;
+    ret = isSubsetList(list1, list2 );
 
 cleanup:
     freeList(&list1);

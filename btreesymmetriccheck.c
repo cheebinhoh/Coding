@@ -8,105 +8,6 @@
 #include "btree.h"
 
 
-/* This method will linearize the tree into a list either left or right lean.
- */
-void linearTree(struct TreeNode  *root,
-                int               left,
-                struct TreeNode **list,
-                int              *listCnt)
-{
-    if ( NULL == root )
-    {
-        list[*listCnt] = NULL;
-        *listCnt       = *listCnt + 1;
-    }
-    else
-    {
-        list[*listCnt] = root;
-        *listCnt       = *listCnt + 1;
-
-        if ( left )
-        {
-          linearTree(root->left,
-                     left,
-                     list,
-                     listCnt);
-
-          linearTree(root->right,
-                     left,
-                     list,
-                     listCnt);
-        }
-        else
-        {
-          linearTree(root->right,
-                     left,
-                     list,
-                     listCnt);
-
-          linearTree(root->left,
-                     left,
-                     list,
-                     listCnt);
-        }
-    } /* if ( NULL == root ) ... else */
-}
-
-
-/* This method is to derive if a tree is sysmetric, a tree is sysmetric if we linearize
- * the tree into a list left or right lean, and it has same result.
- */
-int treeIsSysmetric(struct TreeNode *root)
-{
-    struct TreeNode *leftList[100];
-    struct TreeNode *rightList[100];
-    int              leftListCnt  = 0;
-    int              rightListCnt = 0;
-    int              i;
-
-
-    if ( NULL == root )
-        return 1;
-
-    linearTree(root, 1, leftList, &leftListCnt);
-    linearTree(root, 0, rightList, &rightListCnt);
-
-    if ( leftListCnt != rightListCnt )
-    {
-        return 0;
-    }
-    else
-    {
-        for ( i = 0; i < leftListCnt; i++ )
-        {
-            if ( NULL != leftList[i]
-                 && NULL != rightList[i] )
-            {
-                if ( leftList[i]->val != rightList[i]->val )
-                    return 0;
-            }
-            else if ( leftList[i] != rightList[i] )
-            {
-                return 0;
-            }
-        }
-
-        return 1;
-    }
-}
-
-
-/*
- *               0
- *               |
- *      +--------+---------+
- *      1                  1
- *      |                  |
- * +---------+        +---------+
- * 2         3        3*        2
- *
- * remark *: 3 will be deleted in 2nd sysmetric check below
- */
 int main(int argc, char * argv[])
 {
     struct TreeNode *root  = NULL;
@@ -167,7 +68,7 @@ int main(int argc, char * argv[])
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("Is sysmetric = %d\n", treeIsSysmetric(root));
+    printf("Is sysmetric = %d\n", isTreeSymmetric(root));
     printf("\n");
 
     root->right->left = NULL;
@@ -176,7 +77,7 @@ int main(int argc, char * argv[])
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("Is sysmetric = %d\n", treeIsSysmetric(root));
+    printf("Is sysmetric = %d\n", isTreeSymmetric(root));
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
