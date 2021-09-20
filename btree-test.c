@@ -313,6 +313,8 @@ int main(int argc, char * argv[])
     printTheLargestBSTInBinaryTree(root);
     printf("\n");
 
+    printf("\n");
+    printf("The tree topology:\n");
     root = malloc(sizeof(struct TreeNode));
     root->val   = 10;
     root->left  = NULL;
@@ -411,6 +413,7 @@ int main(int argc, char * argv[])
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
+    printf("Traverse node in tree boundary left to right: ");
     traverseTreeNodeInBoundary(root, traversalInTreeBoundary, NULL);
 
     printf("\n");
