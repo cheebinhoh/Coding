@@ -1086,3 +1086,27 @@ void traverseTreeNodeInLevelLeftToRightOrder(struct TreeNode *root, bTreeLevelTr
                                                      func,
                                                      data);
 }
+
+
+void findTotalNumberOfNodesRecursive(struct TreeNode *root, int *total)
+{
+    if ( NULL == root )
+        return;
+
+    *total = *total + 1;
+
+    findTotalNumberOfNodesRecursive(root->left, total);
+    findTotalNumberOfNodesRecursive(root->right, total);
+}
+
+
+int findTotalNumberOfNodes(struct TreeNode *root)
+{
+    int total;
+
+
+    total = 0;
+    findTotalNumberOfNodesRecursive(root, &total);
+
+    return total;
+}

@@ -130,6 +130,47 @@ void printTreeNodeOnReverseOrderLevel(struct TreeNode *root)
 }
 
 
+struct FindLargestBST
+{
+    int size;
+    int level;
+};
+
+
+void traversalToFindLargestBST(struct TreeNode *node, int pos, int level, int *stop, void *data)
+{
+    struct FindLargestBST *pData = data;
+
+
+    if ( pData->size > 0 && pData->level != level )
+    {
+        *stop = 1;
+    }
+    else
+    {
+        if ( isTreeSearchTree(node) )
+        {
+            pData->size = findTotalNumberOfNodes(node);
+        }
+    }
+
+    pData->level = level;
+}
+
+
+void printTheLargestBSTInBinaryTree(struct TreeNode *root)
+{
+    struct FindLargestBST data;
+
+
+    data.size  = 0;
+    data.level = 0;
+
+    traverseTreeNodeInLevelLeftToRightOrder(root, traversalToFindLargestBST, &data);
+    printf("The largest BST in binary tree is %d\n", data.size);
+}
+
+
 int main(int argc, char * argv[])
 {
     int              level = 0;
@@ -192,6 +233,81 @@ int main(int argc, char * argv[])
 
     printf("Print values in reversed order of level\n");
     printTreeNodeOnReverseOrderLevel(root);
+    printf("\n");
+
+    root        = malloc(sizeof(struct TreeNode));
+    root->val   = 50;
+    root->left  = NULL;
+    root->right = NULL;
+
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 30;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->left   = other;
+
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 5;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->left->left = other;
+
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 20;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->left->right = other;
+
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 60;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->right = other;
+
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 45;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->right->left = other;
+
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 70;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->right->right = other;
+
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 65;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->right->right->left = other;
+
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 80;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->right->right->right = other;
+
+    printf("The tree topology:\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+
+    printf("Total number of nodes in tree is %d\n", findTotalNumberOfNodes(root));
+    if ( isTreeSearchTree(root) )
+        printf("The tree is binary search tree\n");
+    else
+        printf("The tree is not binary search tree\n");
+
+
+    printTheLargestBSTInBinaryTree(root);
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
