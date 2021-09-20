@@ -1110,3 +1110,176 @@ int findTotalNumberOfNodes(struct TreeNode *root)
 
     return total;
 }
+
+int determineLeftBoundaryDepth(struct TreeNode *root, int level)
+{
+     if ( NULL == root )
+         return level;
+
+     if ( NULL != root->left )
+         return determineLeftBoundaryDepth(root->left, level + 1);
+     else if ( NULL != root->right )
+         return determineLeftBoundaryDepth(root->right, level + 1);
+     else
+         return level + 1;
+}
+
+
+int traverseTreeNodeInBoundaryRightRecursive(struct TreeNode        *root,
+                                             int                    *pos,
+                                             int                     level,
+                                             int                     minLevel,
+                                             bTreeTraversalCallback  func,
+                                             void                   *data)
+{
+    int stop;
+    int leftLevel;
+    int rightLevel;
+
+
+    stop = 0;
+    if ( NULL == root )
+        goto quit;
+
+    if ( NULL == root->left
+         && NULL == root->right )
+    {
+        func(root, *pos, &stop, data);
+        *pos = *pos + 1;
+    }
+    else
+    {
+        if ( NULL != root->left )
+        {
+            int nextMinLevel = determineLeftBoundaryDepth(root->right, level);
+
+
+            if ( minLevel > nextMinLevel )
+                nextMinLevel = minLevel;
+
+            stop = traverseTreeNodeInBoundaryRightRecursive(root->left,
+                                                            pos,
+                                                            level + 1,
+                                                            nextMinLevel,
+                                                            func,
+                                                            data);
+            if ( stop )
+                goto quit;
+        }
+
+        if ( NULL != root->right )
+        {
+            stop = traverseTreeNodeInBoundaryRightRecursive(root->right,
+                                                            pos,
+                                                            level + 1,
+                                                            minLevel,
+                                                            func,
+                                                            data);
+
+            if ( stop )
+                goto quit;
+        }
+
+        if ( level >= minLevel )
+        {
+            func(root, *pos, &stop, data);
+            *pos = *pos + 1;
+        }
+    }
+
+quit:
+    return stop;
+}
+
+int traverseTreeNodeInBoundaryLeftRecursive(struct TreeNode        *root,
+                                            int                    *pos,
+                                            int                     level,
+                                            int                    *maxlevel,
+                                            int                     rightBackTrack,
+                                            bTreeTraversalCallback  func,
+                                            void                   *data)
+{
+    int stop = 0;
+
+
+    if ( NULL == root )
+         goto quit;
+
+    if ( NULL == root->left
+         && NULL == root->right )
+    {
+        func(root, *pos, &stop, data);
+        *pos = *pos + 1;
+    }
+    else if ( ! rightBackTrack )
+    {
+        func(root, *pos, &stop, data);
+        *pos = *pos + 1;
+    }
+    else if ( level > *maxlevel )
+    {
+        func(root, *pos, &stop, data);
+        *pos = *pos + 1;
+    }
+
+    if ( stop )
+         goto quit;
+
+    if ( level > *maxlevel )
+        *maxlevel = level;
+
+    if ( NULL != root->left )
+    {
+        stop = traverseTreeNodeInBoundaryLeftRecursive(root->left,
+                                                       pos,
+                                                       level + 1,
+                                                       maxlevel,
+                                                       rightBackTrack,
+                                                       func,
+                                                       data);
+
+        if ( stop )
+            goto quit;
+    }
+
+    if ( NULL != root->right )
+    {
+        rightBackTrack = 1;
+
+        stop = traverseTreeNodeInBoundaryLeftRecursive(root->right,
+                                                       pos,
+                                                       level + 1,
+                                                       maxlevel,
+                                                       rightBackTrack,
+                                                       func,
+                                                       data);
+    }
+
+quit:
+    return stop;
+}
+
+
+void traverseTreeNodeInBoundary(struct TreeNode *root, bTreeTraversalCallback func, void *data)
+{
+    int maxlevel;
+    int pos;
+
+
+    if ( NULL == root )
+        return;
+
+    pos   = 0;
+    printf("%d ", root->val);
+
+    pos = pos + 1;
+    maxlevel = 1;
+
+    if ( NULL != root->left )
+       traverseTreeNodeInBoundaryLeftRecursive(root->left, &pos, 1, &maxlevel, 0, func, data);
+
+    if ( NULL != root->right )
+    {
+       traverseTreeNodeInBoundaryRightRecursive(root->right, &pos, 1, 1, func, data);
+    }
+}

@@ -30,11 +30,12 @@ void printTreeNodeInTreeTopology(struct TreeNode *root);
 
 int  findTotalNumberOfTreeNode(struct TreeNode *root);
 
-void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
+void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodePostOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 
 void traverseTreeNodeInLevelLeftToRightOrder(struct TreeNode *root, bTreeLevelTraversalCallback func, void *data);
+void traverseTreeNodeInBoundary(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 
 int determineMaxDepthLevel(struct TreeNode *root);
 int determineMinDepthLevel(struct TreeNode *root);

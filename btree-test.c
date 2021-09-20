@@ -170,6 +170,10 @@ void printTheLargestBSTInBinaryTree(struct TreeNode *root)
     printf("The largest BST in binary tree is %d\n", data.size);
 }
 
+void traversalInTreeBoundary(struct TreeNode *node, int pos, int *stop, void *data)
+{
+    printf("%d ", node->val);
+}
 
 int main(int argc, char * argv[])
 {
@@ -306,8 +310,110 @@ int main(int argc, char * argv[])
     else
         printf("The tree is not binary search tree\n");
 
-
     printTheLargestBSTInBinaryTree(root);
+    printf("\n");
+
+    root = malloc(sizeof(struct TreeNode));
+    root->val   = 10;
+    root->left  = NULL;
+    root->right = NULL;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 5;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 8;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 9;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left->right->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 2;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 4;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left->left->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 3;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left->left->right->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 6;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left->left->right->left->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 7;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left->left->right->left->right->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 15;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 14;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 13;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->left->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 16;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 17;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->right->right = other;
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+
+    traverseTreeNodeInBoundary(root, traversalInTreeBoundary, NULL);
+
+    printf("\n");
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for

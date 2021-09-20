@@ -37,11 +37,9 @@ Check if each node of a binary tree has exactly one child
 Evaluate a Binary Expression Tree
 Construction of an expression tree
 Fix children-sum property in a binary tree
-Maximum path sum in a binary tree
 Create a mirror of an m–ary tree
 Print a two-dimensional view of a binary tree
 Construct a binary tree from an ancestor matrix
-Determine whether a given binary tree is a BST or not
 Find inorder successor for the given key in a BST
 Fix a binary tree that is only one swap away from becoming a BST
 Print binary tree structure with its contents in C++
@@ -52,7 +50,6 @@ Calculate the height of a binary tree with leaf nodes forming a circular doubly 
 Link nodes present in each level of a binary tree in the form of a linked list
 Convert a ternary tree to a doubly-linked list
 Extract leaves of a binary tree into a doubly-linked list
-Find the vertical sum of a binary tree
 In-place convert a binary tree to a doubly-linked list
 Check whether the leaf traversal of given binary trees is the same or not
 Efficiently print all nodes between two given levels in a binary tree
