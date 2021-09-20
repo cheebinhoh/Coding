@@ -998,6 +998,7 @@ struct TreeNode * buildBinaryTree(struct ListNode *inorder, struct ListNode *pos
     return root;
 }
 
+
 void traverseTreeNodeInLevelLeftToRightOrderRecursive(struct ListNode             **firstLevel,
                                                       struct ListNode             **nextLevel,
                                                       int                           level,
@@ -1057,6 +1058,7 @@ quit:
     freeQueue(firstLevel);
     freeQueue(nextLevel);
 }
+
 
 void traverseTreeNodeInLevelLeftToRightOrder(struct TreeNode *root, bTreeLevelTraversalCallback func, void *data)
 {

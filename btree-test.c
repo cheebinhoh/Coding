@@ -54,7 +54,81 @@ void findNextNodeOnSameLevel(struct TreeNode *root, int val)
     {
         printf("The next node of %d is %d\n", val, data.nextNode->val);
     }
+    else
+    {
+        printf("The next node of %d is none\n", val);
+    }
 }
+
+
+struct NodesOnReversedOrder
+{
+    int              level;
+    struct ListNode *nodeList;
+    struct ListNode *tailList;
+};
+
+
+void printTreeNodeOnReverseOrderLevelCallback(struct TreeNode *node, int pos, int level, int *stop, void *data)
+{
+    struct NodesOnReversedOrder *pData = data;
+    struct ListNode             *iter;
+
+
+    if ( pData->level != level )
+    {
+        iter = pData->tailList;
+        while ( NULL != iter->next )
+            iter = iter->next;
+
+        iter->next = pData->nodeList;
+
+        pData->nodeList = pData->tailList;
+        pData->tailList = NULL;
+        pData->level    = level;
+    }
+
+    enQueueRef(node, &(pData->tailList));
+}
+
+
+void printTreeNodeOnReverseOrderLevel(struct TreeNode *root)
+{
+    struct NodesOnReversedOrder  data;
+    struct ListNode             *iter;
+    struct TreeNode             *node;
+
+    data.level    = 0;
+    data.nodeList = NULL;
+    data.tailList = NULL;
+
+    traverseTreeNodeInLevelLeftToRightOrder(root, printTreeNodeOnReverseOrderLevelCallback, &data);
+
+    iter = data.tailList;
+    while ( NULL != iter )
+    {
+        node = iter->data.ref;
+        printf("%d ", node->val);
+
+        iter = iter->next;
+    }
+
+    iter = data.nodeList;
+    while ( NULL != iter )
+    {
+        node = iter->data.ref;
+        printf("%d ", node->val);
+
+        iter = iter->next;
+    }
+
+    if ( NULL != data.tailList )
+        printf("\n");
+
+    freeList(&(data.tailList));
+    freeList(&(data.nodeList));
+}
+
 
 int main(int argc, char * argv[])
 {
@@ -113,6 +187,11 @@ int main(int argc, char * argv[])
     printf("Find the next node of others in same level\n");
     findNextNodeOnSameLevel(root, 0);
     findNextNodeOnSameLevel(root, 6);
+    findNextNodeOnSameLevel(root, -2);
+    printf("\n");
+
+    printf("Print values in reversed order of level\n");
+    printTreeNodeOnReverseOrderLevel(root);
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
