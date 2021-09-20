@@ -32,7 +32,6 @@ Threaded Binary Tree — Overview and Implementation
 Determine if a binary tree satisfies the height-balanced property of a red–black tree
 Construct an ancestor matrix from a binary tree
 Find all possible binary trees having the same inorder traversal
-Perform boundary traversal on a binary tree
 Check if each node of a binary tree has exactly one child
 Evaluate a Binary Expression Tree
 Construction of an expression tree

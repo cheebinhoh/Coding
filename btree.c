@@ -1151,9 +1151,10 @@ int traverseTreeNodeInBoundaryRightRecursive(struct TreeNode        *root,
     {
         if ( NULL != root->left )
         {
-            int nextMinLevel = determineLeftBoundaryDepth(root->right, level);
+            int nextMinLevel;
 
 
+            nextMinLevel = determineLeftBoundaryDepth(root->right, level);
             if ( minLevel > nextMinLevel )
                 nextMinLevel = minLevel;
 
