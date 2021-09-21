@@ -405,6 +405,20 @@ int main(int argc, char * argv[])
     root->right->right = other;
 
     other = malloc(sizeof(struct TreeNode));
+    other->val = 18;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->right->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 19;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->right->left->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
     other->val = 17;
     other->left = NULL;
     other->right = NULL;
