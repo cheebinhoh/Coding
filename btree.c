@@ -1265,15 +1265,19 @@ void traverseTreeNodeInBoundary(struct TreeNode *root, bTreeTraversalCallback fu
 {
     int maxlevel;
     int pos;
+    int stop;
 
 
     if ( NULL == root )
         return;
 
-    pos   = 0;
-    printf("%d ", root->val);
+    pos  = 0;
+    stop = 0;
+    func(root, pos, &stop, data);
+    if ( stop )
+        return;
 
-    pos = pos + 1;
+    pos      = pos + 1;
     maxlevel = 1;
 
     if ( NULL != root->left )
