@@ -54,7 +54,6 @@ Efficiently print all nodes between two given levels in a binary tree
 Spiral order traversal of a binary tree
 Print all nodes of a perfect binary tree in a specific order
 Print left view of a binary tree
-Print diagonal traversal of a binary tree
 Print corner nodes of every level in a binary tree
 Convert a binary tree into a doubly-linked list in spiral order
 Check if a binary tree is a min-heap or not
