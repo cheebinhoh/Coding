@@ -17,65 +17,24 @@ struct NTreeNode {
 };
 
 
-void printNTreeInSingleLevel(struct NTreeNode **list,
-                             int                listCnt,
-                             int                level)
-{
-    int i;
-
-
-    printf("level %d = ", level);
-
-    for ( i = 0; i < listCnt; i++ )
-    {
-        printf("%d, ", list[i]->val);
-    }
-}
-
-
 void printNTreeInMultiLevel(struct NTreeNode *list[],
                             int               listCnt,
                             int               level)
 {
-    int                i;
-    int                j;
-    int                nextLevelListCnt  = 0;
-    int                nextLevelListSize = 0;
-    struct NTreeNode **nextLevelList     = NULL;
+    int i;
+    int j;
 
 
-    printNTreeInSingleLevel(list, listCnt, level);
-    printf("\n");
+    if ( 0 == listCnt )
+        return;
 
-    for ( i = 0; i < listCnt; i++ )
+    for ( i = listCnt - 1; i >= 0; i-- )
     {
-        for ( j = 0; j < list[i]->numberOfChild; j++ )
-        {
-            if ( nextLevelListCnt >= nextLevelListSize )
-            {
-                // WARNING: we do not check malloc and realloc return, in production code, we need!
-                // it is also an inefficient allocation, we should have allocated N slot where N is increased in related
-                // to number of child rather than 1 node at a time.
+        for ( j = 0; j < level * 5; j++ )
+            putchar(' ');
 
-                if ( NULL == nextLevelList )
-                {
-                    nextLevelList = malloc(sizeof( struct NTreeNode * ) * 1);
-                    nextLevelListSize += 1;
-                }
-                else
-                {
-                    nextLevelList = realloc(nextLevelList, sizeof( struct NTreeNode * ) * ( nextLevelListSize + 1 ));
-                    nextLevelListSize += 1;
-                }
-            }
-
-            nextLevelList[nextLevelListCnt++] = list[i]->child[j];
-        }
-    }
-
-    if ( nextLevelListCnt > 0 )
-    {
-        printNTreeInMultiLevel(nextLevelList, nextLevelListCnt, level + 1);
+        printf("%d\n", (list[i])->val);
+        printNTreeInMultiLevel((list[i])->child, (list[i])->numberOfChild, level + 1);
     }
 }
 
@@ -240,15 +199,17 @@ int main(int argc, char * argv[])
 
     root->child[0]->numberOfChild = n;
 
-    broot = ntree2btree(root);
-    inOrderTraversal(broot);
+    printNTree(root);
+    printf("\n");
 
-    printTreeNodeInTreeTopology(broot);
+    broot = ntree2btree(root);
 
     printf("\n");
-    printf("Build a binary search tree\n");
     broot = ntree2bstree(root);
+    printf("Build a binary search tree, the tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(broot);
+    printf("\n");
 
     // printNTree(root);
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for

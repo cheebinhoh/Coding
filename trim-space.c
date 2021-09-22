@@ -19,11 +19,13 @@ int main(int argc, char *argv[])
     int          c;
     int          i;
     int          j;
-    int          tokenIndex   = 0;
-    int          numOfNewLine = 0;
+    int          tokenIndex;
+    int          numOfNewLine;
     struct Token tokenList[100];
 
 
+    tokenIndex   = 0;
+    numOfNewLine = 0;
     while ( ( c = getchar() ) != EOF )
     {
        if ( isspace(c) )
