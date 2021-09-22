@@ -1,7 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Given the roots of two binary trees, determine if these trees are
- * identical or not. Identical trees have the same layout and data at each node.
+ * Determien if a tree is AVL balanced.
  */
 
 #include <stdio.h>
