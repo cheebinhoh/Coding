@@ -167,8 +167,9 @@ void printTheLargestBSTInBinaryTree(struct TreeNode *root)
     data.level = 0;
 
     traverseTreeNodeInLevelLeftToRightOrder(root, traversalToFindLargestBST, &data);
-    printf("The largest BST in binary tree is %d\n", data.size);
+    printf("the largest BST in binary tree is %d\n", data.size);
 }
+
 
 void traversalInTreeBoundary(struct TreeNode *node, int pos, int *stop, void *data)
 {
@@ -218,6 +219,9 @@ int main(int argc, char * argv[])
     struct TreeNode *other = NULL;
 
 
+    printf("Test 1: is tree a binary search tree\n");
+    printf("\n");
+
     root = addTreeNodeAndRebalanceTree(root, 1);
     root = addTreeNodeAndRebalanceTree(root, 2);
     root = addTreeNodeAndRebalanceTree(root, 3);
@@ -232,7 +236,7 @@ int main(int argc, char * argv[])
     other->left  = NULL;
     other->right = NULL;
 
-    node = findTreeNode(root, 1);
+    node       = findTreeNode(root, 1);
     node->val  = -1;
     node->left = other;
 
@@ -244,6 +248,8 @@ int main(int argc, char * argv[])
 
     printf("The tree topology:\n");
     printTreeNodeInTreeTopology(root);
+    printf("\n");
+
 
     root = delTreeNode(root, 2);
     root = delTreeNode(root, 7);
@@ -257,20 +263,22 @@ int main(int argc, char * argv[])
     }
 
     printf("\n");
+    printf("\n");
 
-    printf("Traverse tree in level left to right\n");
+    printf("Test 2: traverse tree in level left to right\n");
     traverseTreeNodeInLevelLeftToRightOrder(root, levelTraversalCallback, NULL);
     printf("\n");
 
 
     printf("\n");
-    printf("Find the next node of others in same level\n");
+    printf("Test 3: find the next node of others in same level\n");
     findNextNodeOnSameLevel(root, 0);
     findNextNodeOnSameLevel(root, 6);
     findNextNodeOnSameLevel(root, -2);
     printf("\n");
+    printf("\n");
 
-    printf("Print values in reversed order of level\n");
+    printf("Test 4: print values in reversed order of level\n");
     printTreeNodeOnReverseOrderLevel(root);
     printf("\n");
 
@@ -335,187 +343,189 @@ int main(int argc, char * argv[])
 
     root->right->right->right = other;
 
+    printf("\n");
     printf("The tree topology:\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("Total number of nodes in tree is %d\n", findTotalNumberOfNodes(root));
-    if ( isTreeSearchTree(root) )
-        printf("The tree is binary search tree\n");
-    else
-        printf("The tree is not binary search tree\n");
-
+    printf("Test 5: total number of nodes in tree is %d\n", findTotalNumberOfNodes(root));
+    printf("Test 6: ");
     printTheLargestBSTInBinaryTree(root);
     printf("\n");
+    printf("\n");
 
+    printf("Test 7: traverse node in tree boundary left to right\n");
     printf("\n");
     printf("The tree topology:\n");
+
     root = malloc(sizeof(struct TreeNode));
     root->val   = 10;
     root->left  = NULL;
     root->right = NULL;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 5;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 5;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 8;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 8;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 9;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 9;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left->right->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 2;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 2;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 4;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 4;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left->left->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 3;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 3;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left->left->right->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 6;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 6;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left->left->right->left->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 7;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 7;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left->left->right->left->right->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 15;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 15;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 14;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 14;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 13;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 13;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->left->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 16;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 16;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 18;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 18;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->right->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 19;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 19;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->right->left->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 17;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 17;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->right->right = other;
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
-    printf("Traverse node in tree boundary left to right: ");
+    printf("node values: ");
     traverseTreeNodeInBoundary(root, traversalInTreeBoundary, NULL);
     printf("\n");
     printf("\n");
 
-    root = malloc(sizeof(struct TreeNode));
-    root->val = 1;
-    root->left = NULL;
+    root        = malloc(sizeof(struct TreeNode));
+    root->val   = 1;
+    root->left  = NULL;
     root->right = NULL;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 2;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 2;
+    other->left  = NULL;
     other->right = NULL;
 
     root->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 3;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 3;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 6;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 6;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->right = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 5;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 5;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 7;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 7;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->left->left = other;
 
-    other = malloc(sizeof(struct TreeNode));
-    other->val = 8;
-    other->left = NULL;
+    other        = malloc(sizeof(struct TreeNode));
+    other->val   = 8;
+    other->left  = NULL;
     other->right = NULL;
 
     root->right->left->right = other;
 
+    printf("Test 8: traverse node in vertical axis left to right\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
+    printf("Nodes values (an axis per row):\n");
     printNodeInVerticalAxisLevel(root);
 
     printf("\n");
