@@ -9,15 +9,6 @@
 #include "btreetraverse.h"
 
 
-/*
- *               3
- *               |
- *      +--------+---------+
- *      9                  20
- *                         |
- *                    +----+----+
- *                    15        7
- */
 int main(int argc, char * argv[])
 {
     int              i;
