@@ -88,6 +88,7 @@ int main(int argc, char * argv[])
     root->right->right->right = other;
 
     printf("The tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
 
     printf("\n");
@@ -124,6 +125,7 @@ int main(int argc, char * argv[])
 
     printf("\n");
     printf("The 2nd tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root2);
 
     printf("\n");
@@ -151,6 +153,7 @@ int main(int argc, char * argv[])
 
     printf("\n");
     printf("The adjusted 2nd tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root2);
 
     printf("\n");
@@ -186,6 +189,7 @@ int main(int argc, char * argv[])
 
     printf("\n");
     printf("The adjusted 2nd tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root2);
 
     printf("\n");

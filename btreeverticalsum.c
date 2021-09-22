@@ -122,6 +122,7 @@ int main(int argc, char * argv[])
     root->right->left->right = other;
 
     printf("The tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
 

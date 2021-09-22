@@ -39,10 +39,12 @@ int main(int argc, char *argv[])
 
 
     printf("1st tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
     printf("2nd tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(other);
     printf("\n");
 
@@ -61,7 +63,9 @@ int main(int argc, char *argv[])
     other = addTreeNode(other, 9);
 
     printf("\n");
+    printf("\n");
     printf("2nd tree is changed, the tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(other);
     printf("\n");
 

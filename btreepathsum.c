@@ -115,12 +115,14 @@ int main(int argc, char * argv[])
     root->right->right->right  = other;
 
     printf("The tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
     printf("target sum (15) is %d\n", btreePathSum(root, 15));
     printf("target sum (6) is %d\n", btreePathSum(root, 6));
     printf("target sum (5) is %d\n", btreePathSum(root, 5));
     printf("target sum (7) is %d\n", btreePathSum(root, 7));
+    printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.

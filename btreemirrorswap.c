@@ -18,12 +18,15 @@ int main(int argc, char *argv[])
     root = addTreeNode(root, 4);
 
     printf("The tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
     printf("\n"); // we can introduce wrapper entry call to printTreeNodeInOrder to printf \n
+    printf("\n");
 
     treeMirrorSwap(root);
 
     printf("The tree topology after mirror swap of tree node:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
     printf("\n"); // we can introduce wrapper entry call to printTreeNodeInOrder to printf \n
 

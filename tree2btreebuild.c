@@ -155,8 +155,8 @@ int main(int argc, char * argv[])
 {
     struct NTreeNode *root;
     struct NTreeNode *other;
-    int               n;
     struct  TreeNode *broot;
+    int               n;
 
 
     root = malloc(sizeof( struct NTreeNode ));
@@ -165,53 +165,53 @@ int main(int argc, char * argv[])
 
     n = 0;
     other = malloc(sizeof( struct NTreeNode ));
-    other->val = 10;
+    other->val           = 10;
     other->numberOfChild = 0;
-    root->child[n++] = other;
+    root->child[n++]     = other;
 
     other = malloc(sizeof( struct NTreeNode ));
-    other->val = 20;
+    other->val           = 20;
     other->numberOfChild = 0;
-    root->child[n++] = other;
+    root->child[n++]     = other;
 
     other = malloc(sizeof( struct NTreeNode ));
-    other->val = 30;
+    other->val           = 30;
     other->numberOfChild = 0;
-    root->child[n++] = other;
 
-    root->numberOfChild = n;
+    root->child[n++]     = other;
+    root->numberOfChild  = n;
 
     n = 0;
+
     other = malloc(sizeof( struct NTreeNode ));
-    other->val = 100;
-    other->numberOfChild = 0;
+    other->val                 = 100;
+    other->numberOfChild       = 0;
     root->child[0]->child[n++] = other;
 
     other = malloc(sizeof( struct NTreeNode ));
-    other->val = 101;
-    other->numberOfChild = 0;
+    other->val                 = 101;
+    other->numberOfChild       = 0;
     root->child[0]->child[n++] = other;
 
     other = malloc(sizeof( struct NTreeNode ));
-    other->val = 102;
-    other->numberOfChild = 0;
-    root->child[0]->child[n++] = other;
-
+    other->val                    = 102;
+    other->numberOfChild          = 0;
+    root->child[0]->child[n++]    = other;
     root->child[0]->numberOfChild = n;
 
+    printf("Nary tree topology:\n");
+    printf("\n");
     printNTree(root);
     printf("\n");
-
-    broot = ntree2btree(root);
 
     printf("\n");
     broot = ntree2bstree(root);
     printf("Build a binary search tree, the tree topology:\n");
     printf("\n");
+
     printTreeNodeInTreeTopology(broot);
     printf("\n");
 
-    // printNTree(root);
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
 

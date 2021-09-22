@@ -120,6 +120,7 @@ int main(int argc, char * argv[])
     root->right->right->right = other;
 
     printf("The tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
 
     printf("\n");
@@ -142,7 +143,9 @@ int main(int argc, char * argv[])
 
     extendedBranch->right = other;
 
+    printf("\n");
     printf("Extending branch 3 with two child nodes, the new tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
 
     printf("\n");

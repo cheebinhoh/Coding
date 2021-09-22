@@ -85,7 +85,9 @@ int main(int argc, char * argv[])
     root->right->right->right = other;
 
     printf("The tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
+    printf("\n");
 
     other = findLeastCommonAncestor(root, 1, 2);
     if ( NULL != other )

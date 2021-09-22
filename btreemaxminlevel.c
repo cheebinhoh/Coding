@@ -83,15 +83,16 @@ int main(int argc, char * argv[])
     root->right->right->right = other;
 
     printf("The tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
-
-    // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
-    // this one off program.
 
     printf("Max tree level = %d\n", determineMaxDepthLevel(root));
     printf("Min tree level = %d\n", determineMinDepthLevel(root));
     printf("\n");
+
+    // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
+    // this one off program.
 
     return 0;
  }
