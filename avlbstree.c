@@ -138,9 +138,6 @@ struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
     // However re-balancing is not always needed if the delete does not change
     // the height of subtree of the parent node of the to be deleted node does not
     // change.
-    //
-    // To do that, we need a delTreeNode that return root and also the parent of the
-    // to be deleted node.
 
     root = delTreeNode(root, val);
 

@@ -1466,9 +1466,7 @@ void traverseTreeNodeInDiagonalWithAxisLevelRecursive(struct TreeNode *root, str
 
     listHeader = findNthListNode(*llist, axis);
     if ( NULL == listHeader )
-    {
         listHeader = enQueueRef(NULL, llist);
-    }
 
     list = listHeader->data.ref;
 
