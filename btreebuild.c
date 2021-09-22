@@ -53,6 +53,7 @@ int main(int argc, char * argv[])
 
     root = buildBinaryTree(inorderList, postorderList);
     printf("Building binary tree from inorder and postorder list, the tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
 
@@ -74,7 +75,9 @@ int main(int argc, char * argv[])
 
     root = buildBinaryTree(inorderList, postorderList);
     printf("Building binary tree from inorder and postorder list, the tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
+    printf("\n");
     printf("\n");
 
     freeList(&inorderList);
@@ -95,7 +98,9 @@ int main(int argc, char * argv[])
 
     root = buildBinaryTree(inorderList, postorderList);
     printf("Building binary tree from inorder and postorder list, the tree topology:\n");
+    printf("\n");
     printTreeNodeInTreeTopology(root);
+    printf("\n");
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for

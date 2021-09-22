@@ -351,6 +351,8 @@ int main(int argc, char * argv[])
     printf("\n");
 
     printf("Test 5: total number of nodes in tree is %d\n", findTotalNumberOfNodes(root));
+    printf("\n");
+    printf("\n");
     printf("Test 6: ");
     printTheLargestBSTInBinaryTree(root);
     printf("\n");
@@ -524,12 +526,14 @@ int main(int argc, char * argv[])
 
     root->right->left->right = other;
 
+    printf("\n");
     printf("Test 8: traverse node in vertical axis left to right\n");
     printTreeNodeInTreeTopology(root);
     printf("\n");
     printf("Nodes values (an axis per row):\n");
     printNodeInVerticalAxisLevel(root);
 
+    printf("\n");
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for

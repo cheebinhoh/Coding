@@ -97,6 +97,7 @@ int main(int argc, char * argv[])
     printf("in order   = ");
     inOrderTraversal(root);
     printf("\n");
+    printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
