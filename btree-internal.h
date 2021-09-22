@@ -9,8 +9,8 @@
 #define BTREE_INTERNAL_H_HAS_INCLUDED
 
 
-struct TreeNode {
-
+struct TreeNode 
+{
      int              val;
      struct TreeNode *left;
      struct TreeNode *right;

@@ -24,20 +24,16 @@ struct TreeNode * delTreeNode(struct TreeNode *root, int val);
 void              freeTreeNode(struct TreeNode *root);
 
 struct TreeNode *buildBinaryTree(struct ListNode *inorder, struct ListNode *postorder);
+void             treeMirrorSwap(struct TreeNode *root);
 
-void treeMirrorSwap(struct TreeNode *root);
 void printTreeNodeInTreeTopology(struct TreeNode *root);
-
-int  findTotalNumberOfTreeNode(struct TreeNode *root);
 
 void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodePostOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
-
 void traverseTreeNodeInVerticalOrderTopDown(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data);
 void traverseTreeNodePreOrderWithAxisLevel(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data);
 void traverseTreeNodeInDiagonalWithAxisLevel(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data);
-
 void traverseTreeNodeInLevelLeftToRightOrder(struct TreeNode *root, bTreeLevelTraversalCallback func, void *data);
 void traverseTreeNodeInBoundary(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 
@@ -45,6 +41,7 @@ int determineMaxDepthLevel(struct TreeNode *root);
 int determineMinDepthLevel(struct TreeNode *root);
 
 struct TreeNode * findLeastCommonAncestor(struct TreeNode *root, int val1, int val2);
+int               findTotalNumberOfTreeNode(struct TreeNode *root);
 int               findMaximumSumPathToLeafValue(struct TreeNode *root, int val);
 int               findMaximumDiameter(struct TreeNode *root);
 int               findTotalNumberOfNodes(struct TreeNode *root);
