@@ -1453,3 +1453,38 @@ void traverseTreeNodeInVerticalOrderTopDown(struct TreeNode *root, bTreeTraversa
                                    func,
                                    data);
 }
+
+
+
+void findMaximumDiameterRecursive(struct TreeNode *root, int *maxDiameter)
+{
+    int leftLevel;
+    int rightLevel;
+    int diameter;
+
+
+    if ( NULL == root )
+        return;
+
+    leftLevel  = determineMaxDepthLevel(root->left);
+    rightLevel = determineMaxDepthLevel(root->right);
+
+    diameter   = leftLevel + rightLevel + 1;
+
+    if ( diameter > *maxDiameter )
+        *maxDiameter = diameter;
+
+    findMaximumDiameterRecursive(root->left, maxDiameter);
+    findMaximumDiameterRecursive(root->right, maxDiameter);
+}
+
+int findMaximumDiameter(struct TreeNode *root)
+{
+    int maxDiameter;
+
+
+    maxDiameter = 0;
+    findMaximumDiameterRecursive(root, &maxDiameter);
+
+    return maxDiameter;
+}

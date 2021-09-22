@@ -45,6 +45,7 @@ int determineMinDepthLevel(struct TreeNode *root);
 
 struct TreeNode * findLeastCommonAncestor(struct TreeNode *root, int val1, int val2);
 int               findMaximumSumPathToLeafValue(struct TreeNode *root, int val);
+int               findMaximumDiameter(struct TreeNode *root);
 int               findTotalNumberOfNodes(struct TreeNode *root);
 int               isTreeSubTree(struct TreeNode *tree1, struct TreeNode *tree2);
 int               isTreeSearchTree(struct TreeNode *root);
