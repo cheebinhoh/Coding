@@ -36,6 +36,7 @@ void traverseTreeNodePostOrder(struct TreeNode *root, bTreeTraversalCallback fun
 
 void traverseTreeNodeInVerticalOrderTopDown(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data);
 void traverseTreeNodePreOrderWithAxisLevel(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data);
+void traverseTreeNodeInDiagonalWithAxisLevel(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data);
 
 void traverseTreeNodeInLevelLeftToRightOrder(struct TreeNode *root, bTreeLevelTraversalCallback func, void *data);
 void traverseTreeNodeInBoundary(struct TreeNode *root, bTreeTraversalCallback func, void *data);

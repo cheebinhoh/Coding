@@ -1368,12 +1368,12 @@ void verticalAxisTraversalCallback(struct TreeNode *node, int pos, int axis, int
 }
 
 
-void traverseTreeNodeInVerticallist(struct ListNode                     **llist,
-                                    int                                  *stop,
-                                    int                                   axis,
-                                    int                                  *pos,
-                                    bTreeTraversalCallbackWithAxisLevel   func,
-                                    void                                 *data)
+void traverseTreeNodeInList(struct ListNode                     **llist,
+                            int                                  *stop,
+                            int                                   axis,
+                            int                                  *pos,
+                            bTreeTraversalCallbackWithAxisLevel   func,
+                            void                                 *data)
 {
     struct ListNode *iterList;
     struct ListNode *list;
@@ -1439,21 +1439,67 @@ void traverseTreeNodeInVerticalOrderTopDown(struct TreeNode *root, bTreeTraversa
 
     pos  = -1;
     stop = 0;
-    traverseTreeNodeInVerticallist(&(verticalAxisData.negativeList),
-                                   &stop,
-                                   getListLength(verticalAxisData.negativeList) * -1,
-                                   &pos,
-                                   func,
-                                   data);
+    traverseTreeNodeInList(&(verticalAxisData.negativeList),
+                           &stop,
+                           getListLength(verticalAxisData.negativeList) * -1,
+                           &pos,
+                           func,
+                           data);
 
-    traverseTreeNodeInVerticallist(&(verticalAxisData.positiveList),
-                                   &stop,
-                                   0,
-                                   &pos,
-                                   func,
-                                   data);
+    traverseTreeNodeInList(&(verticalAxisData.positiveList),
+                           &stop,
+                           0,
+                           &pos,
+                           func,
+                           data);
 }
 
+
+void traverseTreeNodeInDiagonalWithAxisLevelRecursive(struct TreeNode *root, struct ListNode **llist, int axis)
+{
+    struct ListNode                  *listHeader;
+    struct ListNode                  *list;
+
+
+    if ( NULL == root )
+        return;
+
+    listHeader = findNthListNode(*llist, axis);
+    if ( NULL == listHeader )
+    {
+        listHeader = enQueueRef(NULL, llist);
+    }
+
+    list = listHeader->data.ref;
+
+    enQueueRef(root, &list);
+
+    listHeader->data.ref = list;
+
+    traverseTreeNodeInDiagonalWithAxisLevelRecursive(root->left, llist, axis + 1);
+    traverseTreeNodeInDiagonalWithAxisLevelRecursive(root->right, llist, axis);
+}
+
+
+void traverseTreeNodeInDiagonalWithAxisLevel(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data)
+{
+    struct ListNode *llist;
+    int              stop;
+    int              pos;
+
+
+    llist = NULL;
+    traverseTreeNodeInDiagonalWithAxisLevelRecursive(root, &llist, 0);
+
+    stop = 0;
+    pos  = 0;
+    traverseTreeNodeInList(&llist,
+                           &stop,
+                           0,
+                           &pos,
+                           func,
+                           data);
+}
 
 
 void findMaximumDiameterRecursive(struct TreeNode *root, int *maxDiameter)
