@@ -16,7 +16,7 @@ int btreePathSumInternal(struct TreeNode *root,
 
 
     if ( NULL == root )
-        return sum; // when tree is empty, there is no path, a path must be at least a node in minimum
+        return sum;
 
     sum  = sum + root->val;
     lsum = sum;
