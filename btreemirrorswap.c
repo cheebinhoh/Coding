@@ -30,6 +30,5 @@ int main(int argc, char *argv[])
     printTreeNodeInTreeTopology(root);
     printf("\n"); // we can introduce wrapper entry call to printTreeNodeInOrder to printf \n
 
-
     return 0;
 }
