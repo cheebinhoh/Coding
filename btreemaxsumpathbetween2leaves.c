@@ -24,21 +24,7 @@ int findMaxinumSumPathBetween2Leaves(struct TreeNode *root, int val1, int val2)
     return sum1 + sum2 - root->val;
 }
 
-/*
- *               0
- *               |
- *      +--------+---------+
- *      1                  2
- *      |                  |
- * +----+----+       //----+----+
- * 3         4                  5
- *                              |
- *                    +---------+---------+
- *                    6                   8
- *                    |                   |
- *              //----+----+          //--+--//
- *                         7
- */
+
 int main(int argc, char * argv[])
 {
     struct TreeNode *root  = NULL;
