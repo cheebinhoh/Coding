@@ -153,21 +153,6 @@ void breadthLevelTraversal(struct TreeNode *root)
 }
 
 
-/*
- *               0
- *               |
- *      +--------+---------+
- *      1                  2
- *      |                  |
- * +----+----+       //----+----+
- * 3         4                  5
- *                              |
- *                    +---------+---------+
- *                    6                   8
- *                    |                   |
- *              //----+----+          //--+--//
- *                         7
- */
 int main(int argc, char * argv[])
 {
     struct TreeNode *root  = NULL;
