@@ -1468,7 +1468,6 @@ void findMaximumDiameterRecursive(struct TreeNode *root, int *maxDiameter)
 
     leftLevel  = determineMaxDepthLevel(root->left);
     rightLevel = determineMaxDepthLevel(root->right);
-
     diameter   = leftLevel + rightLevel + 1;
 
     if ( diameter > *maxDiameter )
@@ -1477,6 +1476,7 @@ void findMaximumDiameterRecursive(struct TreeNode *root, int *maxDiameter)
     findMaximumDiameterRecursive(root->left, maxDiameter);
     findMaximumDiameterRecursive(root->right, maxDiameter);
 }
+
 
 int findMaximumDiameter(struct TreeNode *root)
 {
