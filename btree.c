@@ -351,6 +351,42 @@ void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func
 }
 
 
+int traverseTreeNodePreOrderWithAxisLevelRecursive(struct TreeNode                     *root,
+                                                   int                                 *pos,
+                                                   int                                  axisLevel,
+                                                   bTreeTraversalCallbackWithAxisLevel  func,
+                                                   void                                *data)
+{
+    int stop = 0;
+
+
+    if ( NULL == root )
+        return 0;
+
+    func(root, *pos, axisLevel, &stop, data);
+    if ( stop )
+        return stop;
+
+    *pos = *pos + 1;
+
+    stop = traverseTreeNodePreOrderWithAxisLevelRecursive(root->left, pos, axisLevel - 1, func, data);
+    if ( stop )
+        return stop;
+
+    return traverseTreeNodePreOrderWithAxisLevelRecursive(root->right, pos, axisLevel + 1, func, data);
+}
+
+
+void traverseTreeNodePreOrderWithAxisLevel(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data)
+{
+    int pos;
+
+
+    pos = 0;
+    traverseTreeNodePreOrderWithAxisLevelRecursive(root, &pos, 0, func, data);
+}
+
+
 int traverseTreeNodeInOrderRecursive(struct TreeNode        *root,
                                      int                    *pos,
                                      bTreeTraversalCallback  func,
@@ -1287,4 +1323,132 @@ void traverseTreeNodeInBoundary(struct TreeNode *root, bTreeTraversalCallback fu
     {
        traverseTreeNodeInBoundaryRightRecursive(root->right, &pos, 1, 1, func, data);
     }
+}
+
+
+struct VerticalAxisTraversalData
+{
+    struct ListNode *negativeList;
+    struct ListNode *positiveList;
+};
+
+
+void verticalAxisTraversalCallback(struct TreeNode *node, int pos, int axis, int *stop, void *data)
+{
+    struct VerticalAxisTraversalData *pData;
+    struct ListNode                  *listHeader;
+    struct ListNode                  *list;
+
+
+    pData      = data;
+
+    if ( axis >= 0 )
+    {
+        listHeader = findNthListNode(pData->positiveList, axis);
+        if ( NULL == listHeader )
+        {
+            listHeader = enQueueRef(NULL, &(pData->positiveList));
+        }
+    }
+    else
+    {
+        listHeader = findNthListNode(pData->negativeList, ( axis * -1 ) - 1);
+        if ( NULL == listHeader )
+        {
+            listHeader = enQueueRef(NULL, &(pData->negativeList));
+        }
+    }
+
+    list = listHeader->data.ref;
+
+    enQueueRef(node, &list);
+
+    listHeader->data.ref = list;
+}
+
+
+void traverseTreeNodeInVerticallist(struct ListNode                     **llist,
+                                    int                                  *stop,
+                                    int                                   axis,
+                                    int                                  *pos,
+                                    bTreeTraversalCallbackWithAxisLevel   func,
+                                    void                                 *data)
+{
+    struct ListNode *iterList;
+    struct ListNode *list;
+    struct ListNode *iterNode;
+    struct TreeNode *treeNode;
+
+
+    if ( *stop )
+        goto quit;
+
+    iterList = deQueue(llist);
+    while ( NULL != iterList )
+    {
+        list = iterList->data.ref;
+        free(iterList);
+
+        iterNode = deQueue(&list);
+        while ( NULL != iterNode )
+        {
+            treeNode = iterNode->data.ref;
+            free(iterNode);
+
+            func(treeNode, *pos, axis, stop, data);
+            if ( *stop )
+            {
+                freeQueue(&list);
+                goto quit;
+            }
+
+            iterNode = deQueue(&list);
+        }
+
+        axis++;
+        iterList = deQueue(llist);
+    }
+
+quit:
+    iterList = deQueue(llist);
+    while ( NULL != iterList )
+    {
+       list = iterList->data.ref;
+       free(iterList);
+       freeList(&list);
+
+       iterList = deQueue(llist);
+    }
+}
+
+
+void traverseTreeNodeInVerticalOrderTopDown(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data)
+{
+    struct VerticalAxisTraversalData verticalAxisData;
+    int                              stop;
+    int                              pos;
+
+
+    verticalAxisData.negativeList = NULL;
+    verticalAxisData.positiveList = NULL;
+
+    traverseTreeNodePreOrderWithAxisLevel(root, verticalAxisTraversalCallback, &verticalAxisData);
+
+    verticalAxisData.negativeList = reverseQueue(verticalAxisData.negativeList);
+
+    pos  = -1;
+    stop = 0;
+    traverseTreeNodeInVerticallist(&(verticalAxisData.negativeList),
+                                   &stop,
+                                   getListLength(verticalAxisData.negativeList) * -1,
+                                   &pos,
+                                   func,
+                                   data);
+
+    traverseTreeNodeInVerticallist(&(verticalAxisData.positiveList),
+                                   &stop,
+                                   0,
+                                   &pos,
+                                   func,
+                                   data);
 }

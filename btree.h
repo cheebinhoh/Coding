@@ -14,6 +14,7 @@
 
 typedef void (bTreeTraversalCallback)(struct TreeNode *node, int pos, int *stop, void *data);
 typedef void (bTreeLevelTraversalCallback)(struct TreeNode *node, int pos, int level, int *stop, void *data);
+typedef void (bTreeTraversalCallbackWithAxisLevel)(struct TreeNode *node, int pos, int axis, int *stop, void *data);
 
 
 struct TreeNode * addTreeNode(struct TreeNode *root, int val);
@@ -21,7 +22,6 @@ struct TreeNode * findTreeNode(struct TreeNode *root, int val);
 struct TreeNode * treeRebalance(struct TreeNode *root);
 struct TreeNode * delTreeNode(struct TreeNode *root, int val);
 void              freeTreeNode(struct TreeNode *root);
-
 
 struct TreeNode *buildBinaryTree(struct ListNode *inorder, struct ListNode *postorder);
 
@@ -33,6 +33,9 @@ int  findTotalNumberOfTreeNode(struct TreeNode *root);
 void traverseTreeNodeInOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodePreOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
 void traverseTreeNodePostOrder(struct TreeNode *root, bTreeTraversalCallback func, void *data);
+
+void traverseTreeNodeInVerticalOrderTopDown(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data);
+void traverseTreeNodePreOrderWithAxisLevel(struct TreeNode *root, bTreeTraversalCallbackWithAxisLevel func, void *data);
 
 void traverseTreeNodeInLevelLeftToRightOrder(struct TreeNode *root, bTreeLevelTraversalCallback func, void *data);
 void traverseTreeNodeInBoundary(struct TreeNode *root, bTreeTraversalCallback func, void *data);

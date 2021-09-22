@@ -175,6 +175,41 @@ void traversalInTreeBoundary(struct TreeNode *node, int pos, int *stop, void *da
     printf("%d ", node->val);
 }
 
+
+void traversalInVerticalAxisLevel(struct TreeNode *node, int pos, int axis, int *stop, void *data)
+{
+     int *lastAxis;
+
+
+     lastAxis = data;
+     if ( axis != *lastAxis )
+     {
+         printf("\n");
+         *lastAxis = axis;
+     }
+
+     printf("%d ", node->val);
+}
+
+void printNodeInVerticalAxisLevel(struct TreeNode *root)
+{
+    int i;
+    int axis;
+
+
+    i    = 1;
+    axis = i;
+    while ( i > 0 )
+    {
+        axis = i;
+        i = i << 1;
+        i = i + 1;
+    }
+
+    traverseTreeNodeInVerticalOrderTopDown(root, traversalInVerticalAxisLevel, &axis);
+    printf("\n");
+}
+
 int main(int argc, char * argv[])
 {
     int              level = 0;
@@ -429,8 +464,60 @@ int main(int argc, char * argv[])
 
     printf("Traverse node in tree boundary left to right: ");
     traverseTreeNodeInBoundary(root, traversalInTreeBoundary, NULL);
-
     printf("\n");
+    printf("\n");
+
+    root = malloc(sizeof(struct TreeNode));
+    root->val = 1;
+    root->left = NULL;
+    root->right = NULL;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 2;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 3;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 6;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 5;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 7;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->left->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val = 8;
+    other->left = NULL;
+    other->right = NULL;
+
+    root->right->left->right = other;
+
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+    printNodeInVerticalAxisLevel(root);
+
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
