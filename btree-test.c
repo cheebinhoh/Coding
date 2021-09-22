@@ -641,7 +641,6 @@ int main(int argc, char * argv[])
     root->left  = NULL;
     root->right = NULL;
 
-
     other = malloc(sizeof(struct TreeNode ));
     other->val   = 2;
     other->left  = NULL;
