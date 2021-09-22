@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Determien if a tree is AVL balanced.
+ * Determine if a tree is AVL balanced.
  */
 
 #include <stdio.h>
