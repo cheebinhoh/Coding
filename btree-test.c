@@ -192,6 +192,7 @@ void traversalInVerticalAxisLevel(struct TreeNode *node, int pos, int axis, int 
      printf("%d ", node->val);
 }
 
+
 void printNodeInVerticalAxisLevel(struct TreeNode *root)
 {
     int i;
@@ -210,6 +211,7 @@ void printNodeInVerticalAxisLevel(struct TreeNode *root)
     traverseTreeNodeInVerticalOrderTopDown(root, traversalInVerticalAxisLevel, &axis);
     printf("\n");
 }
+
 
 int main(int argc, char * argv[])
 {

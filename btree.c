@@ -1341,7 +1341,7 @@ void verticalAxisTraversalCallback(struct TreeNode *node, int pos, int axis, int
     struct ListNode                  *list;
 
 
-    pData      = data;
+    pData = data;
 
     if ( axis >= 0 )
     {
