@@ -11,4 +11,4 @@ some are exercises from book I read.
 If you found a bug or have a better idea about some improvement, please ping me, so I can learn and
 be better on it.
 
-to complet it, just type "make all" at any GNU/Linux command prompt or macOS command line.
+to compile it, just type "make all" at any GNU/Linux command prompt or macOS command line.
