@@ -13,7 +13,7 @@
 struct VerticalSum
 {
     struct ListNode *llist;
-    struct ListNode *rlist; 
+    struct ListNode *rlist;
 };
 
 
@@ -62,7 +62,7 @@ struct ListNode * calculateBTreeVerticalSum(struct TreeNode *root)
     {
         list = reverseQueue(list);
         node = list;
- 
+
         while ( NULL != node->next )
             node = node->next;
 
