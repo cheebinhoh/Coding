@@ -10,63 +10,66 @@
 #include "llist.h"
 
 
-void calculateBTreeVerticalSumRecursive(struct TreeNode  *root,
-                                        int               vAxis,
-                                        struct ListNode **left,
-                                        struct ListNode **right)
+struct VerticalSum
 {
-    struct ListNode *node;
+    struct ListNode *llist;
+    struct ListNode *rlist; 
+};
 
 
-    if ( NULL == root )
-        return;
+void traverseVerticalSumCallback(struct TreeNode *node, int pos, int axis, int *stop, void *data)
+{
+    struct VerticalSum *pData;
+    struct ListNode    *lnode;
 
-    if ( vAxis >= 0 )
+
+    pData = data;
+    if ( axis >= 0 )
     {
-        node = findNthListNode(*right, vAxis);
-        if ( NULL == node )
-            enQueueInt(root->val, right);
+        lnode = findNthListNode(pData->rlist, axis);
+        if ( NULL == lnode )
+            enQueueInt(node->val, &((pData)->rlist));
         else
-            node->data.val += root->val;
+            lnode->data.val += node->val;
     }
     else
     {
-        int adjustedVAxis = ( vAxis * -1 ) - 1;
-
-        node = findNthListNode(*left, adjustedVAxis);
-        if ( NULL == node )
-            enQueueInt(root->val, left);
+        lnode = findNthListNode(pData->llist, ( axis * - 1 ) - 1);
+        if ( NULL == lnode )
+            enQueueInt(node->val, &((pData)->llist));
         else
-            node->data.val += root->val;
+            lnode->data.val += node->val;
     }
-
-    calculateBTreeVerticalSumRecursive(root->left, vAxis - 1, left, right);
-    calculateBTreeVerticalSumRecursive(root->right, vAxis + 1, left, right);
 }
+
 
 struct ListNode * calculateBTreeVerticalSum(struct TreeNode *root)
 {
-    struct ListNode *rightlist = NULL;
-    struct ListNode *leftlist  = NULL;
-    struct ListNode *queueIter = NULL;
+    struct VerticalSum  data;
+    struct ListNode    *list;
+    struct ListNode    *node;
 
 
-    if ( NULL == root )
-        return NULL;
+    data.llist = NULL;
+    data.rlist = NULL;
 
-    calculateBTreeVerticalSumRecursive(root, 0, &leftlist, &rightlist);
+    traverseTreeNodeInVerticalOrderTopDown(root, traverseVerticalSumCallback, &data);
 
-    leftlist = reverseQueue(leftlist);
-    queueIter = rightlist;
-    while ( NULL != queueIter )
+    list = data.llist;
+    if ( NULL == list )
+        list = data.rlist;
+    else
     {
-        enQueueInt(queueIter->data.val, &leftlist);
-        queueIter = queueIter->next;
+        list = reverseQueue(list);
+        node = list;
+ 
+        while ( NULL != node->next )
+            node = node->next;
+
+        node->next = data.rlist;
     }
 
-    freeQueue(&rightlist);
-
-    return leftlist;
+    return list;
 }
 
 /*
