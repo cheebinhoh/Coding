@@ -132,8 +132,7 @@ btree-test.out : btree-test.c libbtree.a btree.h
 clean:
 	rm -f *.out *.o lib*.a
 
-test: 
-	make all
+test: transformStr2Str.out coding-test.out coding-test-2.out 
 	@echo
 	./transformStr2Str.out -d | diff - ./transformStr2Str_result.txt
 	./coding-test.out | diff - ./coding-test_result.txt 
