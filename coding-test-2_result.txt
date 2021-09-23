@@ -1,0 +1,61 @@
+Test 1: find the missing number in the array.
+
+The integer array is 3, 7, 1, 2, 8, 4, 5
+The missing integer is 6
+
+
+Test 2: determine if the sum of two integers is equal to the given value.
+
+The integer array is 5, 7, 1, 2, 8, 4, 3
+The list of two numbers added to 10 is [7, 3] [2, 8] 
+
+
+Test 3: given a dictionary of words and a large input string. You have to find out whether the input string can be completely segmented into the words of a given dictionary.
+
+The dictionary words are: "apple" "pear" "pie" 
+The string "applepie" can be segmented
+The string "applepeer" can not be segmented
+
+
+Test 4: given a sorted array of integers, return the low and high index of the given key. You must return -1 if the indexes are not found. The array length can be in the millions with many duplicates.
+
+The integer array is 1, 2, 5, 5, 5, 5, 5, 5, 5, 5, 20
+For value 5, the low index is 2 and high index is 9
+
+Test 7: find k largest(or smallest) elements in an array.
+
+The integer array is 1, 23, 12, 9, 30, 2, 50
+The largest 3 values are :23 -> 30 -> 50 -> -
+
+
+Test 6: rotate array by k elements
+
+The integer array is 1, 2, 3, 4, 5, 6, 7
+
+After rotating by 2, the integer array is 3, 4, 5, 6, 7, 1, 2
+
+Test 5: rotate matrix 90" degree to right.
+
+3 x 3 matrix:
+ 1      2      3     
+ 4      5      6     
+ 7      8      9     
+
+After rotating matrix 90" degree to right:
+ 7      4      1     
+ 8      5      2     
+ 9      6      3     
+
+4 x 4 matrix:
+ 1      2      3      4     
+ 5      6      7      8     
+ 9     10     11     12     
+13     14     15     16     
+
+After rotating matrix 90" degree to right:
+13      9      5      1     
+14     10      6      2     
+15     11      7      3     
+16     12      8      4     
+
+

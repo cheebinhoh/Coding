@@ -137,3 +137,4 @@ test:
 	@echo
 	./transformStr2Str.out -d | diff - ./transformStr2Str_result.txt
 	./coding-test.out | diff - ./coding-test_result.txt 
+	./coding-test-2.out | diff - ./coding-test-2_result.txt
