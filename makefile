@@ -23,6 +23,9 @@ libllist.a : llist.c llist.h llist-internal.h
 	gcc -c llist.c
 	ar -rc libllist.a llist.o
 
+libsearch-sort.a : search-sort.c search-sort.h
+	gcc -c search-sort.c
+	ar -rc libsearch-sort.a search-sort.o
 
 # programs
 btreeisbalanced.out : btreeisbalanced.c btree.h libbtree.a
@@ -58,8 +61,8 @@ btreelca.out : btreelca.c btreetraverse.c btree.h btreetraverse.h libbtree.a
 tree2btreebuild.out : tree2btreebuild.c btreetraverse.c btree.h btreetraverse.h libbtree.a
 	gcc -o $@ tree2btreebuild.c btreetraverse.c -L. -lbtree
 
-search-sort.out : search-sort.c 
-	gcc -o $@ search-sort.c 
+search-sort.out : search-sort-main.c search-sort.h libsearch-sort.a
+	gcc -o $@ search-sort-main.c -L. -lsearch-sort
 
 remove-c-comment.out : remove-c-comment.c
 	gcc -o $@ remove-c-comment.c
@@ -94,8 +97,8 @@ transformStr2Str.out : transformStr2Str.c
 trafficdemand.out : trafficdemand.c
 	gcc -o $@ trafficdemand.c
 
-coding-test.out : coding-test.c btree.h libbtree.a
-	gcc -o $@ coding-test.c -L. -lbtree
+coding-test.out : coding-test.c btree.h libbtree.a search-sort.h libsearch-sort.a
+	gcc -o $@ coding-test.c -L. -lbtree -lsearch-sort
 
 btreemirrorswap.out : btreemirrorswap.c btree.h libbtree.a
 	gcc -o $@ btreemirrorswap.c -L. -lbtree
@@ -106,8 +109,8 @@ btreeidentical.out : btreeidentical.c btree.h libbtree.a
 btreerebalancing.out : btreerebalancing.c libbtree.a btree.h
 	gcc -o $@ btreerebalancing.c -L. -lbtree
 
-coding-test-2.out : coding-test-2.c libbtree.a btree.h libllist.a llist.h
-	gcc -o $@ coding-test-2.c -L. -lbtree -lllist
+coding-test-2.out : coding-test-2.c libbtree.a btree.h libllist.a llist.h search-sort.h libsearch-sort.a
+	gcc -o $@ coding-test-2.c -L. -lbtree -lllist -lsearch-sort
 
 llist-test.out : llist-test.c libllist.a
 	gcc -o $@ llist-test.c -L. -lllist

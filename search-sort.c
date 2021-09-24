@@ -4,39 +4,7 @@
  */
 
 #include <stdio.h>
-
-
-#define ARRAY_COUNT(array)  ( sizeof((array)) / sizeof((array)[0]) )
-
-
-void bubbleSort(int list[], int size);
-void insertionSort(int list[], int size);
-void shellSort(int list[], int size);
-void quickSort(int list[], int size);
-int binarySearch(int list[], int size, int value);
-int isSorted(int list[], int size);
-
-
-int main(int argc, char *argv[])
-{
-    //             0  1  2  3  4
-    int list[] = { 5, 4, 3, 1, 2 };
-    int index;
-
-
-    printf("-- is sorted = %d\n", isSorted(list, ARRAY_COUNT( list )));
-    shellSort(list, ARRAY_COUNT( list ));
-    for ( index = 0; index < ARRAY_COUNT( list ); index++ )
-    {
-        printf("%d ", list[index]);
-    }
-
-    printf("\n");
-
-    printf("-- is sorted = %d\n", isSorted( list, ARRAY_COUNT( list )));
-
-    return 0;
-}
+#include "search-sort.h"
 
 
 int isSorted(int list[], int size)
@@ -144,8 +112,6 @@ void shellSort(int list[], int size)
             }
         }
     }
-
-    printf("total swap = %d\n", count);
 }
 
 
@@ -175,8 +141,6 @@ void insertionSort(int list[], int size)
 
         list[j + 1] = tmp;
     }
-
-    printf("total swap = %d\n", count);
 }
 
 
@@ -204,8 +168,38 @@ void bubbleSort(int list[], int size)
             }
         }
     }
+}
 
-    printf("total swap = %d\n", count);
+
+int binarySearchOnRotateList(int list[], int size, int rotatedStep, int value)
+{
+    int head   = 0;
+    int tail   = size - 1;
+    int middle = ( head + tail ) / 2;
+    int index;
+
+
+    while ( head <= tail )
+    {
+       index = ( rotatedStep + middle ) % size;
+
+       if ( list[index] == value )
+       {
+          return index;
+       }
+       else if ( value < list[index] )
+       {
+          tail = middle - 1;
+       }
+       else
+       {
+          head = middle + 1;
+       }
+
+       middle = ( head + tail ) / 2;
+    }
+
+    return -1;
 }
 
 
@@ -213,21 +207,40 @@ void bubbleSort(int list[], int size)
  */
 int binarySearch(int list[], int size, int value)
 {
-    int head   = 0;
-    int tail   = size - 1;
-    int middle = ( head + tail ) / 2;
+    int rotatedStep = 0;
+    int prev;
+    int i;
 
 
-    while ( head <= tail
-            && list[middle] != value )
+    // find out how much has been rotated.
+    if ( size > 1 )
     {
-       if ( value < list[middle] )
-          tail = middle - 1;
-       else
-          head = middle + 1;
+        prev = list[0];
 
-       middle = ( head + tail ) / 2;
+        for ( i = 1; i < size; i++ )
+        {
+            if ( prev > list[i] )
+            {
+                rotatedStep = i;
+                break;
+            }
+
+            prev = list[i];
+        }
     }
 
-    return list[middle] == value ? middle : -1;
+    return binarySearchOnRotateList(list, size, rotatedStep, value);
+}
+
+
+void printIntegerArray(int array[], int size)
+{
+    int i;
+
+
+    for ( i = 0; i < size - 1; i++ )
+       printf("%d, ", array[i]);
+
+    if ( size >= 1 )
+       printf("%d\n", array[size - 1]);
 }

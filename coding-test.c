@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include "btree.h"
 #include "avlbstree.h"
+#include "search-sort.h"
+
 
 /* Test 1:
  *
@@ -28,6 +30,8 @@
  * so we traverse from start (smaller number), if the current value at j is
  * positive value and j + k already exceeds sum, then we can skip the remaining as
  * we are not going to find a sum of i + j + i that is equal to sum.
+ *
+ * This is ineffecient and the logic is quadratic in term of O(n^3)
  */
 int deteremineIf3NumberSumToValue(int array[], int size, int sum)
 {
@@ -45,6 +49,50 @@ int deteremineIf3NumberSumToValue(int array[], int size, int sum)
                if ( ( array[i] + array[j] + array[k] ) == sum )
                    goto found;
            }
+        }
+    }
+
+    return 0;
+
+found:
+    return 1;
+}
+
+
+int determineIf3NumberSumToValueBySort(int array[], int size, int sum)
+{
+    int i;
+    int j;
+    int k;
+    int remaining;
+
+
+    quickSort(array, size);
+
+    remaining = sum;
+    for ( i = size - 1; i > 1; i-- )
+    {
+        if ( ( remaining - array[i]) > 1 )
+        {
+            remaining -= array[i];
+
+            for ( j = i - 1; j > 0; j-- )
+            {
+                if ( ( remaining - array[j] ) > 0 )
+                {
+                    remaining -= array[j];
+
+                    for ( k = j - 1; k >= 0; k-- )
+                    {
+                        if ( ( remaining - array[k] ) == 0 )
+                            goto found;
+                    }
+
+                    remaining += array[j];
+                }
+            }
+
+            remaining += array[i];
         }
     }
 
@@ -133,21 +181,10 @@ int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size, int sum)
                                                                  size / 2);
 }
 
-void printIntegerArray(int array[], int size)
-{
-    int i;
-
-
-    for ( i = 0; i < size - 1; i++ )
-       printf("%d, ", array[i]);
-
-    if ( size >= 1 )
-       printf("%d\n", array[size - 1]);
-}
 
 void runDeteremineIf3NumberSumToValue(void)
 {
-    int number[] = { 0, 1, 2, 3, 4, 5 };
+    int number[] = { 3, 7, 1, 2, 8, 4, 5 };
     int found;
 
 
@@ -161,83 +198,87 @@ void runDeteremineIf3NumberSumToValue(void)
     printf("Use brute force method\n");
     found = deteremineIf3NumberSumToValue(number,
                                           sizeof( number ) / sizeof( number[0] ),
-                                          6);
+                                          20);
 
     if ( found )
     {
-       printf("There are 3 numbers sum up to %d\n", 6);
+       printf("There are 3 numbers sum up to %d\n", 20);
     }
     else
     {
-       printf("There are no 3 numbers sum up to %d\n", 6);
+       printf("There are no 3 numbers sum up to %d\n", 20);
     }
 
     found = deteremineIf3NumberSumToValue(number,
                                           sizeof( number ) / sizeof( number[0] ),
-                                          3);
+                                          21);
 
     if ( found )
     {
-       printf("There are 3 numbers sum up to %d\n", 3);
+       printf("There are 3 numbers sum up to %d\n", 21);
     }
     else
     {
-       printf("There are no 3 numbers sum up to %d\n", 3);
+       printf("There are no 3 numbers sum up to %d\n", 21);
     }
 
-    found = deteremineIf3NumberSumToValue(number,
-                                          sizeof( number ) / sizeof( number[0] ),
-                                          22);
-
-    if ( found )
-    {
-       printf("There are 3 numbers sum up to %d\n", 22);
-    }
-    else
-    {
-       printf("There are no 3 numbers sum up to %d\n", 22);
-    }
 
     printf("\n");
     printf("Use Divide & Conquer and Binary way of brute force method\n");
     found = deteremineIf3NumberSumToValueInDivAndConquer(number,
                                                          sizeof( number ) / sizeof( number[0] ),
-                                                         6);
+                                                         20);
 
     if ( found )
     {
-       printf("There are 3 numbers sum up to %d\n", 6);
+       printf("There are 3 numbers sum up to %d\n", 20);
     }
     else
     {
-       printf("There are no 3 numbers sum up to %d\n", 6);
+       printf("There are no 3 numbers sum up to %d\n", 20);
     }
 
     found = deteremineIf3NumberSumToValueInDivAndConquer(number,
                                                          sizeof( number ) / sizeof( number[0] ),
-                                                         3);
+                                                         21);
 
     if ( found )
     {
-       printf("There are 3 numbers sum up to %d\n", 3);
+       printf("There are 3 numbers sum up to %d\n", 21);
     }
     else
     {
-       printf("There are no 3 numbers sum up to %d\n", 3);
+       printf("There are no 3 numbers sum up to %d\n", 21);
     }
 
-    found = deteremineIf3NumberSumToValueInDivAndConquer(number,
-                                                         sizeof( number ) / sizeof( number[0] ),
-                                                         22);
+    printf("\n");
+    printf("Sort it before attempting it\n");
+    found = determineIf3NumberSumToValueBySort(number,
+                                               sizeof( number ) / sizeof( number[0] ),
+                                               20);
 
     if ( found )
     {
-       printf("There are 3 numbers sum up to %d\n", 22);
+       printf("There are 3 numbers sum up to %d\n", 20);
     }
     else
     {
-       printf("There are no 3 numbers sum up to %d\n", 22);
+       printf("There are no 3 numbers sum up to %d\n", 20);
     }
+
+    found = determineIf3NumberSumToValueBySort(number,
+                                               sizeof( number ) / sizeof( number[0] ),
+                                               21);
+
+    if ( found )
+    {
+       printf("There are 3 numbers sum up to %d\n", 21);
+    }
+    else
+    {
+       printf("There are no 3 numbers sum up to %d\n", 21);
+    }
+
 
     printf("\n");
 }
@@ -324,64 +365,6 @@ void runCollapseOverlapInterval(void)
  * that has been rotated by some arbitrary number. Return -1 if the number
  * does not exist.
  */
-int binarySearchOnRotateList(int list[], int size, int rotatedStep, int value)
-{
-    int head   = 0;
-    int tail   = size - 1;
-    int middle = ( head + tail ) / 2;
-    int index;
-
-
-    while ( head <= tail )
-    {
-       index = ( rotatedStep + middle ) % size;
-
-       if ( list[index] == value )
-       {
-          return index;
-       }
-       else if ( value < list[index] )
-       {
-          tail = middle - 1;
-       }
-       else
-       {
-          head = middle + 1;
-       }
-
-       middle = ( head + tail ) / 2;
-    }
-
-    return -1;
-}
-
-int binarySearch(int list[], int size, int value)
-{
-    int rotatedStep = 0;
-    int prev;
-    int i;
-
-
-    // find out how much has been rotated.
-    if ( size > 1 )
-    {
-        prev = list[0];
-
-        for ( i = 1; i < size; i++ )
-        {
-            if ( prev > list[i] )
-            {
-                rotatedStep = i;
-                break;
-            }
-
-            prev = list[i];
-        }
-    }
-
-    return binarySearchOnRotateList(list, size, rotatedStep, value);
-}
-
 void runBinarySearchOnRotatedSortedList(void)
 {
     int array[]        = { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 };
