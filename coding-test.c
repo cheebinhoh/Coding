@@ -1141,13 +1141,10 @@ int checkIfListAreInOrderOfAnotherList(int list1[], int list1Size,
     int last;
 
 
-    last = 0;
+    last = -1;
     for ( i = 0; i < list1Size; i++ )
     {
-        if ( last > i )
-            j = last + 1;
-        else
-            j = i;
+        j = last + 1;
 
         while ( j < list2Size )
         {
@@ -1211,7 +1208,7 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
     else
         printf("list1 and list2 are not served in order\n");
 
-
+    printf("\n");
     printf("list4 = ");
     printIntegerArray( list4, sizeof( list4 ) / sizeof( list4[0] ));
 
@@ -1221,6 +1218,7 @@ void runCheckIfTwoListsAre1stCome1stServe(void)
     printf("list6 = ");
     printIntegerArray( list6, sizeof( list6 ) / sizeof( list6[0] ));
 
+    printf("\n");
     inOrder = checkIfTwoListsAre1stCome1stServe(list4, sizeof( list4 ) / sizeof( list4[0] ),
                                                 list5, sizeof( list5 ) / sizeof( list5[0] ),
                                                 list6, sizeof( list6 ) / sizeof( list6[0] ));

@@ -551,6 +551,7 @@ static void getTreeSubbranchAsList(struct TreeNode  *root,
     }
 }
 
+
 int isTreeSymmetric(struct TreeNode *root)
 {
     int              i;
