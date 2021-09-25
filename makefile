@@ -2,7 +2,7 @@
 # 
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : libbtree.a libllist.a btreepathsum.out btreebltraverse.out btreemaxminlevel.out \
+all : libbtree.a libllist.a libsearch-sort.a libdgraph.a btreepathsum.out btreebltraverse.out btreemaxminlevel.out \
         btreesymmetriccheck.out btreetraverse.out btreemirrorswap.out btreeidentical.out \
 	btreebuild.out btreelca.out tree2btreebuild.out btreerebalancing.out btreemaxpathsum.out \
         btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out btreemaxsumpathtoleaf.out \
@@ -10,7 +10,7 @@ all : libbtree.a libllist.a btreepathsum.out btreebltraverse.out btreemaxminleve
         search-sort.out remove-c-comment.out string-utility.out calculator.out shrink-space.out \
         trim-space.out replace-tab-with-space.out syntax-validate-parenthese.out fold-line.out \
         find2ndMaxNumber.out transformStr2Str.out trafficdemand.out coding-test.out \
-        coding-test-2.out llist-test.out 
+        coding-test-2.out llist-test.out dgraph-test.out
 
 
 # libraries
@@ -26,6 +26,10 @@ libllist.a : llist.c llist.h llist-internal.h
 libsearch-sort.a : search-sort.c search-sort.h
 	gcc -c search-sort.c
 	ar -rc libsearch-sort.a search-sort.o
+
+libdgraph.a : dgraph.h dgraph-internal.h dgraph.c
+	gcc -c dgraph.c
+	ar -rc libdgraph.a dgraph.o
 
 # programs
 btreeisbalanced.out : btreeisbalanced.c btree.h libbtree.a
@@ -130,6 +134,8 @@ btreesubtree.out : btreesubtree.c libbtree.a btree.h
 btree-test.out : btree-test.c libbtree.a btree.h
 	gcc -o $@ btree-test.c -L. -lbtree
 
+dgraph-test.out : dgraph-test.c libdgraph.a libllist.a
+	gcc -o $@ dgraph-test.c -L. -ldgraph -lllist
 
 # miscallenous
 clean:
