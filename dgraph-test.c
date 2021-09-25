@@ -38,9 +38,14 @@ int main(int argc, char *argv[])
     node4 = addGraphNodeInt(&graph, node1, 4);
     linkDGraphNode(node3, node4);
 
-
+    printf("Traverse graph:\n");
     traverseDGraph(graph, traverseDGraphNode, NULL);
     printf("\n");
+
+    printf("Traverse graph uniquely:\n");
+    traverseDGraphUniquely(graph, traverseDGraphNode, NULL);
+    printf("\n");
+
 
     return 0;
 }

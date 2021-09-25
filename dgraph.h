@@ -16,5 +16,6 @@ struct DGraphNode * addGraphNodeInt(struct DGraph **graph, struct DGraphNode *fr
 void                linkDGraphNode(struct DGraphNode *from, struct DGraphNode *node);
 
 void traverseDGraph(struct DGraph *graph, DGraphTraversalCallback func, void *data);
+void traverseDGraphUniquely(struct DGraph *graph, DGraphTraversalCallback func, void *data);
 
 #endif

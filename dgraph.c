@@ -70,19 +70,23 @@ int traverseDGraphRecursively(struct DGraphNode        *parent,
     if ( NULL == node )
         return stop;
 
-    iter = *visited;
-    while ( NULL != iter
-            && node != iter->data.ref )
-        iter = iter->next;
+    if ( NULL != visited )
+    {
+        iter = *visited;
+        while ( NULL != iter
+                && node != iter->data.ref )
+            iter = iter->next;
 
-    if ( NULL != iter )
-        return stop;
+        if ( NULL != iter )
+            return stop;
+
+        enQueueRef(node, visited);
+    }
 
     func(parent, node, &stop, data);
     if ( stop )
         return stop;
 
-    enQueueRef(node, visited);
 
     parent = node;
     iter   = node->edges;
@@ -102,12 +106,21 @@ int traverseDGraphRecursively(struct DGraphNode        *parent,
 
 void traverseDGraph(struct DGraph *graph, DGraphTraversalCallback func, void *data)
 {
+    traverseDGraphRecursively(NULL, graph->root, NULL, func, data);
+}
+
+void traverseDGraphUniquely(struct DGraph *graph, DGraphTraversalCallback func, void *data)
+{
     struct ListNode *visited;
 
 
     visited = NULL;
     traverseDGraphRecursively(NULL, graph->root, &visited, func, data);
+
+    if ( NULL != visited )
+        freeList(&visited);
 }
+
 
 
 void linkDGraphNode(struct DGraphNode *from, struct DGraphNode *node)
