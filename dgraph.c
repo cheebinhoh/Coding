@@ -144,7 +144,7 @@ struct DGraph * cloneGraphInt(struct DGraph *graph)
             newGraph->root = newNode;
 
         iter = iter->next;
-    }   
+    }
 
     iter    = graph->vertices;
     iterNew = newGraph->vertices;
@@ -193,7 +193,7 @@ void freeGraph(struct DGraph *graph)
         tmp = iter->next;
         free(iter->data.ref);
         free(iter);
- 
+
         iter = tmp;
     }
 
@@ -234,4 +234,3 @@ void linkDGraphNode(struct DGraphNode *from, struct DGraphNode *node)
 
     enQueueRef(node, &(from->edges));
 }
-
