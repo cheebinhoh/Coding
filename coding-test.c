@@ -16,6 +16,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "btree.h"
 #include "avlbstree.h"
 #include "search-sort.h"
@@ -101,6 +102,7 @@ int determineIf3NumberSumToValueBySort(int array[], int size, int sum)
 found:
     return 1;
 }
+
 
 // in the case we have a long list of items, e.g. 5000 and the 3 values added up to the sum are
 // located between 4500 to 5000, then searching from the beginning will be in efficient.
@@ -900,58 +902,49 @@ void printMaximumSubarrayNumber(int array[], int size)
 {
     int i;
     int j;
-    int start;
-    int end;
-    int val;
-    int largest;
-    int pivotStart;
-    int pivotEnd;
-    int pivotLargest;
+    int sum;
+    int largestSum;
+    int largestSumStart;
+    int largestSumEnd;
 
 
-    if ( size <= 0 )
-        return;
+    i               = 0;
+    largestSum      = array[i];
+    largestSumStart = i;
+    largestSumEnd   = i;
 
-    pivotStart = -1;
-    pivotEnd   = -1;
-
-    for ( i = 0; i < size; i++ )
+    do
     {
-        start   = i;
-        end     = i;
-        val     = array[i];
-        largest =  val;
-
-
-        for ( j = i + 1; j < size; j++ )
+        sum = array[i];
+        for ( j = i + 1; j < size - 1; j++ )
         {
-            val = val + array[j];
+            if ( ( sum + array[j] ) >= sum )
+                sum += array[j];
+            else
+                break;
+        }
 
-            if ( val >= largest )
+        if ( j < size - 1 )
+        {
+            if ( sum >= largestSum )
             {
-                largest = val;
-                end     = j;
+                largestSum      = sum;
+                largestSumStart = i;
+                largestSumEnd   = j - 1;
             }
         }
 
-        if ( -1 == pivotEnd
-             || largest > pivotLargest )
-        {
-            pivotStart   = start;
-            pivotEnd     = end;
-            pivotLargest = largest;
-        }
+        i++;
     }
+    while ( i < size - 1 );
 
-    for ( i = pivotStart; i <= pivotEnd; i++ )
-        printf("%d, ", array[i]);
-
-    printf("\n");
+    printIntegerArray(&array[largestSumStart], largestSumEnd - largestSumStart + 1);
 }
 
 void runMaximumSubarrayNumber(void)
 {
-    int array[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
+    int array[]  = { -4, 2, -5, 1, 2, 3, 6, -5, 1 };
+    int array2[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
 
 
     printf("Test 11 description: finding the largest possible sum of a contiguous subarray, within\n"

@@ -436,7 +436,7 @@ struct ListNode * mergeSortedListInt(struct ListNode *first, struct ListNode *se
     struct ListNode *tail;
     struct ListNode *tmp;
 
-    
+
     result = NULL;
     if ( NULL == first )
     {
@@ -462,7 +462,7 @@ struct ListNode * mergeSortedListInt(struct ListNode *first, struct ListNode *se
         result->next = NULL;
         tail         = result;
 
-        while ( NULL != first 
+        while ( NULL != first
                 && NULL != second )
         {
             if ( first->data.val == second->data.val )
@@ -488,10 +488,10 @@ struct ListNode * mergeSortedListInt(struct ListNode *first, struct ListNode *se
             {
                 tail->next = second;
 
-                while ( NULL != second->next 
+                while ( NULL != second->next
                         && second->next->data.val < first->data.val )
                     second = second->next;
-                
+
                 tail       = second;
                 second     = second->next;
                 tail->next = NULL;

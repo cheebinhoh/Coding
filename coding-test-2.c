@@ -463,7 +463,7 @@ void runMergeTwoLists(void)
     struct ListNode *first  = NULL;
     struct ListNode *second = NULL;
     struct ListNode *merge  = NULL;
-    
+
 
     enQueueInt(1, &first);
     enQueueInt(2, &first);
@@ -481,10 +481,10 @@ void runMergeTwoLists(void)
     printf("second list is: ");
     printListInt(second);
     printf("\n");
-   
+
     merge = mergeSortedListInt(first, second);
     printf("merge list is: ");
-    printListInt(merge);   
+    printListInt(merge);
 }
 
 void runRotateMatrix90DegreeToRight(void)
@@ -544,6 +544,6 @@ int main(int argc, char *argv[])
 
     runMergeTwoLists();
     printf("\n");
-   
+
     return 0;
 }
