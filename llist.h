@@ -33,6 +33,7 @@ void              freeStack(struct ListNode **top);
 
 
 // Miscallenous applicable to all
+struct ListNode * mergeSortedListInt(struct ListNode *first, struct ListNode *second);
 struct ListNode * findNthListNode(struct ListNode *start, int n);
 int               getListLength(struct ListNode *start);
 int               isSubsetList(struct ListNode *list, struct ListNode *sublist);

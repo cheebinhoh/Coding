@@ -326,6 +326,7 @@ int collapseOverlapInterval(int start[], int end[], int size)
     return ( size < 2 ) ? size : prev + 1;
 }
 
+
 void printInterval(int start[], int end[], int size)
 {
     int i;

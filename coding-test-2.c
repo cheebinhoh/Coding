@@ -452,6 +452,41 @@ void rotateMatrix90DegreeToRight(int array[], int size, int matrixSize)
     free(buffer);
 }
 
+
+/*
+ * Test 8:
+ *
+ * Merge two lists.
+ */
+void runMergeTwoLists(void)
+{
+    struct ListNode *first  = NULL;
+    struct ListNode *second = NULL;
+    struct ListNode *merge  = NULL;
+    
+
+    enQueueInt(1, &first);
+    enQueueInt(2, &first);
+    enQueueInt(5, &first);
+    enQueueInt(6, &first);
+
+    enQueueInt(2, &second);
+    enQueueInt(3, &second);
+    enQueueInt(4, &second);
+    enQueueInt(7, &second);
+
+    printf("first list is:  ");
+    printListInt(first);
+
+    printf("second list is: ");
+    printListInt(second);
+    printf("\n");
+   
+    merge = mergeSortedListInt(first, second);
+    printf("merge list is: ");
+    printListInt(merge);   
+}
+
 void runRotateMatrix90DegreeToRight(void)
 {
     int array1[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -507,5 +542,8 @@ int main(int argc, char *argv[])
     runRotateMatrix90DegreeToRight();
     printf("\n");
 
+    runMergeTwoLists();
+    printf("\n");
+   
     return 0;
 }

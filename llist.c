@@ -428,3 +428,81 @@ int findListNodeIntIndex(struct ListNode *start, int val)
 
     return NULL == start ? -1 : i;
 }
+
+
+struct ListNode * mergeSortedListInt(struct ListNode *first, struct ListNode *second)
+{
+    struct ListNode *result;
+    struct ListNode *tail;
+    struct ListNode *tmp;
+
+    
+    result = NULL;
+    if ( NULL == first )
+    {
+        result = second;
+    }
+    else if ( NULL == second )
+    {
+        result = first;
+    }
+    else
+    {
+        if ( first->data.val < second->data.val )
+        {
+            result = first;
+            first  = first->next;
+        }
+        else
+        {
+            result = second;
+            second = second->next;
+        }
+
+        result->next = NULL;
+        tail         = result;
+
+        while ( NULL != first 
+                && NULL != second )
+        {
+            if ( first->data.val == second->data.val )
+            {
+                // we might be able to improve performance by shortening the longest list.
+                tmp   = first;
+                first = first->next;
+                free(tmp);
+            }
+            else if ( first->data.val < second->data.val )
+            {
+                tail->next = first;
+
+                while ( NULL != first->next
+                        && first->next->data.val < second->data.val )
+                    first = first->next;
+
+                tail       = first;
+                first      = first->next;
+                tail->next = NULL;
+            }
+            else
+            {
+                tail->next = second;
+
+                while ( NULL != second->next 
+                        && second->next->data.val < first->data.val )
+                    second = second->next;
+                
+                tail       = second;
+                second     = second->next;
+                tail->next = NULL;
+            }
+        }
+
+        if ( NULL == first )
+            tail->next = second;
+        else
+            tail->next = first;
+    }
+
+    return result;
+}
