@@ -1373,6 +1373,7 @@ void runLongestPalindromicSubsequence(void)
     char s2[] = "abdbca";
     char s3[] = "cddpd";
     char s4[] = "pqr";
+    char s5[] = "abbdcacb";
     int  len;
 
 
@@ -1395,6 +1396,10 @@ void runLongestPalindromicSubsequence(void)
     len = strlen(s4);
     printf("The longest palinidromic subsequence of \"%s\" is %d\n",
            s4, getLongestPalindromicSubsequence(s4, 0, len - 1 ));
+
+    len = strlen(s5);
+    printf("The longest palinidromic subsequence of \"%s\" is %d\n",
+           s5, getLongestPalindromicSubsequence(s5, 0, len - 1 ));
 }
 
 int getLongestCommonSubsequenceInSubString(char s1[], char s2[])
@@ -1473,6 +1478,8 @@ void runLongestCommonSubsequence(void)
     char s2[] = "cbda";
     char s3[] = "passport";
     char s4[] = "ppsspt";
+    char s5[] = "abc";
+    char s6[] = "xzabtttabcg";
 
 
     printf("Test 17 description: given two strings s1 and s2, find the length of the longest subsequence which"
@@ -1483,6 +1490,8 @@ void runLongestCommonSubsequence(void)
            s1, s2, getLongestCommonSubsequence(s1, s2));
     printf("The longest substring of \"%s\" and \"%s\" is %d\n",
            s3, s4, getLongestCommonSubsequence(s3, s4));
+    printf("The longest substring of \"%s\" and \"%s\" is %d\n",
+           s5, s6, getLongestCommonSubsequence(s5, s6));
 }
 
 
