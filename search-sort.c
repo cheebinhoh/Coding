@@ -184,17 +184,11 @@ int binarySearchOnRotateList(int list[], int size, int rotatedStep, int value)
        index = ( rotatedStep + middle ) % size;
 
        if ( list[index] == value )
-       {
           return index;
-       }
        else if ( value < list[index] )
-       {
           tail = middle - 1;
-       }
        else
-       {
           head = middle + 1;
-       }
 
        middle = ( head + tail ) / 2;
     }

@@ -1440,10 +1440,6 @@ int getLongestCommonSubsequence(char s1[], char s2[])
     char *str2;
 
 
-    // we will traverse the shortest string in outer loop, and then inner loop for longest string
-    // in most of nested traverse, we want to inner loop to be shortest string, but because that
-    // we do not start from start of inner string for each outer loop element and we want to find
-    // out longest substring, so we use the shortest string for outer loop to do less traverse.
     len1 = strlen(s1);
     len2 = strlen(s2);
     if ( len1 > len2 )
@@ -1488,6 +1484,7 @@ void runLongestCommonSubsequence(void)
     printf("The longest substring of \"%s\" and \"%s\" is %d\n",
            s3, s4, getLongestCommonSubsequence(s3, s4));
 }
+
 
 // the starting point...
 int main(int argc, char *argv[])
