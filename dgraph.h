@@ -14,6 +14,8 @@ typedef void (DGraphTraversalCallback)(struct DGraphNode *from, struct DGraphNod
 
 struct DGraphNode * addGraphNodeInt(struct DGraph **graph, struct DGraphNode *from, int val);
 void                linkDGraphNode(struct DGraphNode *from, struct DGraphNode *node);
+void                freeGraph(struct DGraph *graph);
+struct DGraph *     cloneGraphInt(struct DGraph *graph);
 
 void traverseDGraph(struct DGraph *graph, DGraphTraversalCallback func, void *data);
 void traverseDGraphUniquely(struct DGraph *graph, DGraphTraversalCallback func, void *data);

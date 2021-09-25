@@ -413,6 +413,22 @@ int isSubsetList(struct ListNode *list, struct ListNode *sublist)
 }
 
 
+int findListNodeRefIndex(struct ListNode *start, void *ref)
+{
+    int i;
+
+
+    i = 0;
+    while ( NULL != start
+            && start->data.ref != ref ) // to be geneic, we need to pass in comparison method for truely object identity
+    {
+        start = start->next;
+        i++;
+    }
+
+    return NULL == start ? -1 : i;
+}
+
 int findListNodeIntIndex(struct ListNode *start, int val)
 {
     int i;

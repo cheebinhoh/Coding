@@ -104,6 +104,102 @@ int traverseDGraphRecursively(struct DGraphNode        *parent,
     return 0;
 }
 
+
+struct DGraph * cloneGraphInt(struct DGraph *graph)
+{
+    struct DGraph     *newGraph;
+    struct DGraphNode *newNode;
+    struct DGraphNode *node;
+    struct ListNode   *edge;
+    struct DGraphNode *otherNode;
+    struct DGraphNode *otherNodeNew;
+    struct ListNode   *iter;
+    struct ListNode   *iterNew;
+    struct ListNode   *listOther;
+    int                n;
+
+
+    newGraph = malloc(sizeof(struct DGraph));
+    if ( NULL == newGraph )
+        return NULL;
+
+    newGraph->vertices = NULL;
+    newGraph->root     = NULL;
+
+    iter = graph->vertices;
+    while ( NULL != iter )
+    {
+        newNode = malloc(sizeof(struct DGraphNode));
+        if ( NULL == newNode )
+            goto failure;
+
+        node = iter->data.ref;
+
+        newNode->data.val = node->data.val;
+        newNode->edges    = NULL;
+
+        enQueueRef(newNode, &(newGraph->vertices));
+
+        if ( node == graph->root )
+            newGraph->root = newNode;
+
+        iter = iter->next;
+    }   
+
+    iter    = graph->vertices;
+    iterNew = newGraph->vertices;
+    while ( NULL != iter )
+    {
+        newNode = iterNew->data.ref;
+        node    = iter->data.ref;
+
+        edge = node->edges;
+        while ( NULL != edge )
+        {
+            otherNode = edge->data.ref;
+            n = findListNodeRefIndex(graph->vertices, otherNode);
+
+            listOther = findNthListNode(newGraph->vertices, n);
+
+            enQueueRef(listOther->data.ref, &(newNode->edges));
+
+            edge = edge->next;
+        }
+
+        iter    = iter->next;
+        iterNew = iterNew->next;
+    }
+
+    return newGraph;
+
+failure:
+    freeGraph(newGraph);
+
+    return NULL;
+}
+
+void freeGraph(struct DGraph *graph)
+{
+    struct ListNode *iter;
+    struct ListNode *tmp;
+
+
+    if ( NULL == graph )
+        return;
+
+    iter = graph->vertices;
+    while ( NULL != iter )
+    {
+        tmp = iter->next;
+        free(iter->data.ref);
+        free(iter);
+ 
+        iter = tmp;
+    }
+
+    free(graph);
+}
+
 void traverseDGraph(struct DGraph *graph, DGraphTraversalCallback func, void *data)
 {
     traverseDGraphRecursively(NULL, graph->root, NULL, func, data);
@@ -138,3 +234,4 @@ void linkDGraphNode(struct DGraphNode *from, struct DGraphNode *node)
 
     enQueueRef(node, &(from->edges));
 }
+

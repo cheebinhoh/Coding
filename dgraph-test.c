@@ -19,6 +19,7 @@ void traverseDGraphNode(struct DGraphNode *from, struct DGraphNode *node, int *s
 int main(int argc, char *argv[])
 {
     struct DGraph     *graph;
+    struct DGraph     *cloneGraph;
     struct DGraphNode *parent;
     struct DGraphNode *node1;
     struct DGraphNode *node2;
@@ -44,6 +45,16 @@ int main(int argc, char *argv[])
 
     printf("Traverse graph uniquely:\n");
     traverseDGraphUniquely(graph, traverseDGraphNode, NULL);
+    printf("\n");
+
+
+    cloneGraph = cloneGraphInt(graph);
+    printf("Traverse cloned graph:\n");
+    traverseDGraph(cloneGraph, traverseDGraphNode, NULL);
+    printf("\n");
+
+    printf("Traverse clone graph uniquely:\n");
+    traverseDGraphUniquely(cloneGraph, traverseDGraphNode, NULL);
     printf("\n");
 
 

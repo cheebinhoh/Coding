@@ -38,6 +38,7 @@ struct ListNode * findNthListNode(struct ListNode *start, int n);
 int               getListLength(struct ListNode *start);
 int               isSubsetList(struct ListNode *list, struct ListNode *sublist);
 int               findListNodeIntIndex(struct ListNode *start, int val);
+int               findListNodeRefIndex(struct ListNode *start, void *ref);
 
 void printListInt(struct ListNode *start);
 void printListNodeInt(struct ListNode *start);
