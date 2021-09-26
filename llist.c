@@ -483,7 +483,6 @@ struct ListNode * mergeSortedListInt(struct ListNode *first, struct ListNode *se
         {
             if ( first->data.val == second->data.val )
             {
-                // we might be able to improve performance by shortening the longest list.
                 tmp   = first;
                 first = first->next;
                 free(tmp);

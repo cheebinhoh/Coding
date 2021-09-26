@@ -22,7 +22,8 @@ Test 4: given a sorted array of integers, return the low and high index of the g
 The integer array is 1, 2, 5, 5, 5, 5, 5, 5, 5, 5, 20
 For value 5, the low index is 2 and high index is 9
 
-Test 7: find k largest(or smallest) elements in an array.
+
+Test 5: find k largest(or smallest) elements in an array.
 
 The integer array is 1, 23, 12, 9, 30, 2, 50
 The largest 3 values are :23 -> 30 -> 50 -> -
@@ -34,7 +35,8 @@ The integer array is 1, 2, 3, 4, 5, 6, 7
 
 After rotating by 2, the integer array is 3, 4, 5, 6, 7, 1, 2
 
-Test 5: rotate matrix 90" degree to right.
+
+Test 7: rotate matrix 90" degree to right.
 
 3 x 3 matrix:
  1      2      3     
@@ -58,6 +60,8 @@ After rotating matrix 90" degree to right:
 15     11      7      3     
 16     12      8      4     
 
+
+Test 8: merge two lists
 
 first list is:  1, 2, 5, 6
 second list is: 2, 3, 4, 7

@@ -17,25 +17,13 @@
 #include <string.h>
 #include "btree.h"
 #include "llist.h"
+#include "search-sort.h"
 
-
-void printIntegerArray(int array[], int size)
-{
-    int i;
-
-
-    for ( i = 0; i < size - 1; i++ )
-       printf("%d, ", array[i]);
-
-    if ( size >= 1 )
-       printf("%d\n", array[size - 1]);
-}
 
 /* Test 1:
  *
  * you are given an array of positive numbers from 1 to n, such that all numbers
  * from 1 to n are present except one number x. You have to find x. The input array is not sorted.
- * Look at the below array and give it a try before checking the solution
  */
 int findMissingNumberInTheArray(int array[], int size, int n)
 {
@@ -96,6 +84,10 @@ void print2NumberSumToValue(int array[], int size, int val)
     foundList = NULL;
     for ( i = 0; i < size; i++ )
     {
+         // if we have 1, 2, 3, ... 9, 10, and we want to find sum of two to 7
+         // we will find 3 and 7, this check will avoid repeating it by finding 7
+         // which is already found when 3 is a pivot value in early loop.
+
          node = findTreeNode(foundList, array[i]);
          if ( NULL != node )
              continue;
@@ -135,6 +127,7 @@ void runDeteremineIf2NumberSumToValue(void)
     printf("\n");
 }
 
+
 /* Test 3:
  *
  * Given a dictionary of words and a large input string. You have to find out whether the
@@ -170,6 +163,75 @@ int determineIfStringCanBeSegmented(char *dictionary[], char *s)
     return 0;
 }
 
+
+int determineIfStringCanBeSegmentedIterative(char *dictionary[], char *s)
+{
+    int              i;
+    int              j;
+    int              len;
+    struct ListNode *sPosStack;
+    struct ListNode *dPosStack;
+    struct ListNode *tmp;
+
+
+    sPosStack = NULL;
+    dPosStack = NULL;
+    j         = 0;
+    i         = 0;
+    while ( NULL != dictionary[i] )
+    {
+        len = strlen(dictionary[i]);
+
+        if ( strncmp(dictionary[i], s + j, len ) == 0 )
+        {
+            if ( '\0' == *(s + j + len) )
+            {
+                goto success;
+            }
+            else
+            {
+                pushStackInt(j, &sPosStack);
+                j += len;
+
+                pushStackInt(i + 1, &dPosStack);
+                i = 0;
+
+                continue;
+            }
+
+            // recursive method can be expensive and depending on the string to be segemented,
+            // we can be stack overflow, another way is to maintain backtracking explicitly by
+            // storing the previous position in a list or array, so that if next search and
+            // match does not work, we backtrack to previous poistion in string to explore
+            // into other search.
+        }
+
+        i++;
+
+        if ( NULL == dictionary[i] )
+        {
+            if ( getListLength(dPosStack) > 0 )
+            {
+                tmp = popStack(&sPosStack);
+                j   = tmp->data.val;
+                free(tmp);
+
+                tmp = popStack(&dPosStack);
+                i   = tmp->data.val;
+                free(tmp);
+            }
+        }
+    }
+
+    return 0;
+
+success:
+    freeList(&sPosStack);
+    freeList(&dPosStack);
+
+    return 1;
+}
+
 void runStringSegmentation(void)
 {
     char *dictionary[] = { "apple", "pear", "pie", NULL };
@@ -188,12 +250,12 @@ void runStringSegmentation(void)
 
     printf("\n");
 
-    if ( determineIfStringCanBeSegmented(dictionary, s1) )
+    if ( determineIfStringCanBeSegmentedIterative(dictionary, s1) )
          printf("The string \"%s\" can be segmented\n", s1);
     else
          printf("The string \"%s\" can not be segmented\n", s1);
 
-    if ( determineIfStringCanBeSegmented(dictionary, s2) )
+    if ( determineIfStringCanBeSegmentedIterative(dictionary, s2) )
          printf("The string \"%s\" can be segmented\n", s2);
     else
          printf("The string \"%s\" can not be segmented\n", s2);
@@ -208,27 +270,6 @@ void runStringSegmentation(void)
  * You must return -1 if the indexes are not found. The array length can be in the
  * millions with many duplicates.
  */
-
-int binarySearch(int list[], int size, int value)
-{
-    int head   = 0;
-    int tail   = size - 1;
-    int middle = ( head + tail ) / 2;
-
-
-    while ( head <= tail
-            && list[middle] != value )
-    {
-       if ( value < list[middle] )
-          tail = middle - 1;
-       else
-          head = middle + 1;
-
-       middle = ( head + tail ) / 2;
-    }
-
-    return list[middle] == value ? middle : -1;
-}
 
 int findLowHighIndex(int array[], int size, int val, int *low, int *high)
 {
@@ -294,6 +335,8 @@ void runFindLowHighIndex(void)
     findLowHighIndex(array, sizeof(array) / sizeof(array[0]), 5, &low, &high);
     if ( -1 != low )
         printf("For value %d, the low index is %d and high index is %d\n", 5, low, high);
+
+    printf("\n");
 }
 
 
@@ -334,7 +377,7 @@ void runFindKLargestElementsInArray(void)
     int array1[] = { 1, 23, 12, 9, 30, 2, 50 };
 
 
-    printf("Test 7: find k largest(or smallest) elements in an array.\n");
+    printf("Test 5: find k largest(or smallest) elements in an array.\n");
     printf("\n");
 
     printf("The integer array is ");
@@ -388,7 +431,9 @@ void runRotateArrayByKElement(void)
     printf("\n");
     printf("After rotating by 2, the integer array is ");
     printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
+    printf("\n");
 }
+
 
 /*
  * Test 7:
@@ -453,47 +498,13 @@ void rotateMatrix90DegreeToRight(int array[], int size, int matrixSize)
 }
 
 
-/*
- * Test 8:
- *
- * Merge two lists.
- */
-void runMergeTwoLists(void)
-{
-    struct ListNode *first  = NULL;
-    struct ListNode *second = NULL;
-    struct ListNode *merge  = NULL;
-
-
-    enQueueInt(1, &first);
-    enQueueInt(2, &first);
-    enQueueInt(5, &first);
-    enQueueInt(6, &first);
-
-    enQueueInt(2, &second);
-    enQueueInt(3, &second);
-    enQueueInt(4, &second);
-    enQueueInt(7, &second);
-
-    printf("first list is:  ");
-    printListInt(first);
-
-    printf("second list is: ");
-    printListInt(second);
-    printf("\n");
-
-    merge = mergeSortedListInt(first, second);
-    printf("merge list is: ");
-    printListInt(merge);
-}
-
 void runRotateMatrix90DegreeToRight(void)
 {
     int array1[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     int array2[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 
 
-    printf("Test 5: rotate matrix 90\" degree to right.\n");
+    printf("Test 7: rotate matrix 90\" degree to right.\n");
     printf("\n");
 
     printf("3 x 3 matrix:\n");
@@ -517,6 +528,45 @@ void runRotateMatrix90DegreeToRight(void)
     printArrayInMatrix(array2, sizeof( array2 ) / sizeof( array2[0] ), 4);
     printf("\n");
 }
+
+
+/*
+ * Test 8:
+ *
+ * Merge two lists.
+ */
+void runMergeTwoLists(void)
+{
+    struct ListNode *first  = NULL;
+    struct ListNode *second = NULL;
+    struct ListNode *merge  = NULL;
+
+
+    printf("Test 8: merge two lists\n");
+    printf("\n");
+
+    enQueueInt(1, &first);
+    enQueueInt(2, &first);
+    enQueueInt(5, &first);
+    enQueueInt(6, &first);
+
+    enQueueInt(2, &second);
+    enQueueInt(3, &second);
+    enQueueInt(4, &second);
+    enQueueInt(7, &second);
+
+    printf("first list is:  ");
+    printListInt(first);
+
+    printf("second list is: ");
+    printListInt(second);
+    printf("\n");
+
+    merge = mergeSortedListInt(first, second);
+    printf("merge list is: ");
+    printListInt(merge);
+}
+
 
 // the starting point...
 int main(int argc, char *argv[])

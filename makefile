@@ -135,7 +135,7 @@ btree-test.out : btree-test.c libbtree.a btree.h
 	gcc -o $@ btree-test.c -L. -lbtree
 
 dgraph-test.out : dgraph-test.c libdgraph.a libllist.a
-	gcc -o $@ dgraph-test.c -L. -ldgraph -lllist
+	gcc -o $@ dgraph-test.c -L. -ldgraph -lllist 
 
 # miscallenous
 clean:
