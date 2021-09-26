@@ -1,0 +1,927 @@
+run btree-test.out
+
+Test 1: is tree a binary search tree
+
+The tree topology:
+4 (L=3, R=3)
+     7 (L=1, R=2)
+          8 (L=0, R=1)
+               9 (L=0, R=0)
+                    -
+                    -
+               -
+          6 (L=0, R=0)
+               -
+               -
+     2 (L=2, R=1)
+          3 (L=0, R=0)
+               -
+               -
+          -1 (L=1, R=1)
+               0 (L=0, R=0)
+                    -
+                    -
+               -2 (L=0, R=0)
+                    -
+                    -
+
+After deleting 2 and 7, the tree topology:
+4 (L=3, R=2)
+     8 (L=1, R=1)
+          9 (L=0, R=0)
+               -
+               -
+          6 (L=0, R=0)
+               -
+               -
+     0 (L=2, R=1)
+          3 (L=0, R=0)
+               -
+               -
+          -1 (L=1, R=0)
+               -
+               -2 (L=0, R=0)
+                    -
+                    -
+
+It is still a binary search tree
+
+
+Test 2: traverse tree in level left to right
+---- level = 0, pos = 0, val = 4
+---- level = 1, pos = 1, val = 0
+---- level = 1, pos = 2, val = 8
+---- level = 2, pos = 3, val = -1
+---- level = 2, pos = 4, val = 3
+---- level = 2, pos = 5, val = 6
+---- level = 2, pos = 6, val = 9
+---- level = 3, pos = 7, val = -2
+
+
+Test 3: find the next node of others in same level
+The next node of 0 is 8
+The next node of 6 is 9
+The next node of -2 is none
+
+
+Test 4: print values in reversed order of level
+-2 -1 3 6 9 0 8 4 
+
+
+The tree topology:
+50 (L=2, R=3)
+     60 (L=1, R=2)
+          70 (L=1, R=1)
+               80 (L=0, R=0)
+                    -
+                    -
+               65 (L=0, R=0)
+                    -
+                    -
+          45 (L=0, R=0)
+               -
+               -
+     30 (L=1, R=1)
+          20 (L=0, R=0)
+               -
+               -
+          5 (L=0, R=0)
+               -
+               -
+
+Test 5: total number of nodes in tree is 9
+
+
+Test 6: the largest BST in binary tree is 5
+
+
+Test 7: traverse node in tree boundary left to right
+
+The tree topology:
+10 (L=6, R=4)
+     15 (L=2, R=3)
+          16 (L=2, R=1)
+               17 (L=0, R=0)
+                    -
+                    -
+               18 (L=0, R=1)
+                    19 (L=0, R=0)
+                         -
+                         -
+                    -
+          14 (L=1, R=0)
+               -
+               13 (L=0, R=0)
+                    -
+                    -
+     5 (L=5, R=2)
+          8 (L=0, R=1)
+               9 (L=0, R=0)
+                    -
+                    -
+               -
+          2 (L=0, R=4)
+               4 (L=3, R=0)
+                    -
+                    3 (L=0, R=2)
+                         6 (L=0, R=1)
+                              7 (L=0, R=0)
+                                   -
+                                   -
+                              -
+                         -
+               -
+
+node values: 10 5 2 4 3 6 7 9 13 19 18 17 16 15 
+
+
+Test 8: traverse node in vertical axis left to right
+1 (L=1, R=3)
+     3 (L=2, R=1)
+          6 (L=0, R=0)
+               -
+               -
+          5 (L=1, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               7 (L=0, R=0)
+                    -
+                    -
+     2 (L=0, R=0)
+          -
+          -
+
+Nodes values (an axis per row):
+
+2 7 
+1 5 
+3 8 
+6 
+
+
+Test 9: Find the diameter of a binary tree
+The tree topology:
+
+1 (L=2, R=3)
+     3 (L=2, R=1)
+          6 (L=0, R=0)
+               -
+               -
+          5 (L=1, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               7 (L=0, R=0)
+                    -
+                    -
+     2 (L=0, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          -
+
+The tree diameter is 6
+
+Adjusting the tree, the new topology:
+
+1 (L=0, R=3)
+     3 (L=2, R=2)
+          6 (L=0, R=1)
+               9 (L=0, R=0)
+                    -
+                    -
+               -
+          5 (L=1, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               7 (L=0, R=0)
+                    -
+                    -
+     -
+
+The tree diameter is 5
+
+
+Test 10: Print diagonal traversal of a binary tree
+
+The tree topology:
+1 (L=2, R=3)
+     3 (L=2, R=1)
+          6 (L=0, R=0)
+               -
+               -
+          5 (L=1, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               7 (L=0, R=0)
+                    -
+                    -
+     2 (L=1, R=0)
+          -
+          4 (L=0, R=0)
+               -
+               -
+
+1 3 6 
+2 5 8 
+4 7 
+
+
+run btreebltraverse.out
+
+breadth level traverse (recursive) = 0, 1, 2, 3, 4, 5, 6, 8, 7
+breadth level traverse (iterative) = 0, 1, 2, 3, 4, 5, 6, 8, 7
+
+
+run btreebuild.out
+
+Inorder list: 9, 3, 15, 20, 7
+Postorder list: 9, 15, 7, 20, 3
+
+Building binary tree from inorder and postorder list, the tree topology:
+
+3 (L=1, R=2)
+     20 (L=1, R=1)
+          7 (L=0, R=0)
+               -
+               -
+          15 (L=0, R=0)
+               -
+               -
+     9 (L=0, R=0)
+          -
+          -
+
+Inorder list: 2, 1
+Postorder list: 2, 1
+
+Building binary tree from inorder and postorder list, the tree topology:
+
+1 (L=1, R=0)
+     -
+     2 (L=0, R=0)
+          -
+          -
+
+
+Inorder list: 1, 2
+Postorder list: 2, 1
+
+Building binary tree from inorder and postorder list, the tree topology:
+
+1 (L=0, R=1)
+     2 (L=0, R=0)
+          -
+          -
+     -
+
+
+run btreeidentical.out
+
+1st tree topology:
+
+5 (L=2, R=1)
+     7 (L=0, R=0)
+          -
+          -
+     3 (L=0, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          -
+
+2nd tree topology:
+
+5 (L=2, R=1)
+     7 (L=0, R=0)
+          -
+          -
+     3 (L=0, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          -
+
+Both trees are identical
+
+
+2nd tree is changed, the tree topology:
+
+5 (L=2, R=2)
+     7 (L=0, R=1)
+          9 (L=0, R=0)
+               -
+               -
+          -
+     3 (L=0, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          -
+
+Both trees are not identical
+
+
+run btreeisbalanced.out
+
+Binary tree of adding 3, 2, 4, 5, 6, the tree topology:
+
+3 (L=1, R=3)
+     4 (L=0, R=2)
+          5 (L=0, R=1)
+               6 (L=0, R=0)
+                    -
+                    -
+               -
+          -
+     2 (L=0, R=0)
+          -
+          -
+
+
+The tree is not AVL balanced, rebalancing the tree, the tree topology:
+
+3 (L=1, R=2)
+     5 (L=1, R=1)
+          6 (L=0, R=0)
+               -
+               -
+          4 (L=0, R=0)
+               -
+               -
+     2 (L=0, R=0)
+          -
+          -
+
+The tree is now AVL balanced
+
+
+run btreelca.out
+
+The tree topology:
+
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+The least common ancestor of 1 and 2 is 0
+The least common ancestor of 3 and 4 is 1
+The least common ancestor of 2 and 5 is 2
+The least common ancestor of 2 and 8 is 2
+The least common ancestor of 1 and 8 is 0
+
+
+run btreemaxminlevel.out
+
+The tree topology:
+
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+Max tree level = 5
+Min tree level = 3
+
+
+run btreemaxnodeinlevel.out
+
+The tree topology:
+
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+The maximum number of nodes in a level is 3
+
+
+Extending branch 3 with two child nodes, the new tree topology:
+
+0 (L=3, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=2, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=1, R=1)
+               300 (L=0, R=0)
+                    -
+                    -
+               30 (L=0, R=0)
+                    -
+                    -
+
+The maximum number of nodes in a level is 4
+
+
+run btreemaxpathsum.out
+
+The tree topology:
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+The maximum path sum is 20
+
+
+run btreemaxsumpathbetween2leaves.out
+
+The tree topology:
+
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+The maximum sum path between leaves 3 and 4 is 8
+The maximum sum path between leaves 8 and 7 is 26
+
+
+run btreemaxsumpathtoleaf.out
+
+The tree topology:
+
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+The maximum sum of path to leaf value 3 is 4
+The maximum sum of path to leaf value 4 is 5
+The maximum sum of path to leaf value 7 is 20
+The maximum sum of path to leaf value 8 is 15
+
+
+run btreemirrorswap.out
+
+The tree topology:
+
+5 (L=2, R=1)
+     7 (L=0, R=0)
+          -
+          -
+     3 (L=0, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          -
+
+
+The tree topology after mirror swap of tree node:
+
+5 (L=1, R=2)
+     3 (L=1, R=0)
+          -
+          4 (L=0, R=0)
+               -
+               -
+     7 (L=0, R=0)
+          -
+          -
+
+
+run btreepathsum.out
+
+The tree topology:
+
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+target sum (15) is 1
+target sum (6) is 0
+target sum (5) is 1
+target sum (7) is 0
+
+
+run btreerebalancing.out
+
+Binary tree topology of adding 6, 7, 8, 5, 4, 10, 9:
+
+6 (L=2, R=4)
+     7 (L=0, R=3)
+          8 (L=0, R=2)
+               10 (L=1, R=0)
+                    -
+                    9 (L=0, R=0)
+                         -
+                         -
+               -
+          -
+     5 (L=1, R=0)
+          -
+          4 (L=0, R=0)
+               -
+               -
+
+The binary tree is not AVL balanced
+
+
+After deleing 8, the tree topology:
+
+6 (L=2, R=3)
+     7 (L=0, R=2)
+          9 (L=0, R=1)
+               10 (L=0, R=0)
+                    -
+                    -
+               -
+          -
+     5 (L=1, R=0)
+          -
+          4 (L=0, R=0)
+               -
+               -
+
+The binary tree is not AVL balanced
+
+
+Self balancing binary tree of adding 6, 7, 8, 5, 4, 10, 9, 11:
+
+7 (L=2, R=3)
+     9 (L=1, R=2)
+          10 (L=0, R=1)
+               11 (L=0, R=0)
+                    -
+                    -
+               -
+          8 (L=0, R=0)
+               -
+               -
+     5 (L=1, R=1)
+          6 (L=0, R=0)
+               -
+               -
+          4 (L=0, R=0)
+               -
+               -
+
+The binary tree is AVL balanced
+
+
+After deleing 5 and 6, the tree topology:
+
+9 (L=2, R=2)
+     10 (L=0, R=1)
+          11 (L=0, R=0)
+               -
+               -
+          -
+     7 (L=1, R=1)
+          8 (L=0, R=0)
+               -
+               -
+          4 (L=0, R=0)
+               -
+               -
+
+The binary tree is AVL balanced
+
+
+run btreesubtree.out
+
+The tree topology:
+
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+In order list: 3, 1, 4, 0, 2, 6, 7, 5, 8
+Pre order list: 0, 1, 3, 4, 2, 5, 6, 7, 8
+Post order list: 3, 4, 1, 7, 6, 8, 5, 2, 0
+
+
+The 2nd tree topology:
+
+1 (L=1, R=1)
+     4 (L=0, R=0)
+          -
+          -
+     3 (L=0, R=0)
+          -
+          -
+
+In order list: 3, 1, 4
+Pre order list: 1, 3, 4
+Post order list: 3, 4, 1
+
+The 2nd tree is sub tree of 1st tree
+
+
+Adjusting 2nd tree by by swapping left and right branch value
+
+The adjusted 2nd tree topology:
+
+1 (L=1, R=1)
+     3 (L=0, R=0)
+          -
+          -
+     4 (L=0, R=0)
+          -
+          -
+
+In order list: 4, 1, 3
+Pre order list: 1, 4, 3
+Post order list: 4, 3, 1
+
+The 2nd tree is not sub tree of 1st tree
+
+
+Adjusting 2nd tree by extending val 3 with left child 5
+
+The adjusted 2nd tree topology:
+
+1 (L=2, R=1)
+     4 (L=0, R=0)
+          -
+          -
+     3 (L=1, R=0)
+          -
+          5 (L=0, R=0)
+               -
+               -
+
+In order list: 5, 3, 1, 4
+Pre order list: 1, 3, 5, 4
+Post order list: 5, 3, 4, 1
+
+The 2nd tree is not sub tree of 1st tree
+
+
+run btreesymmetriccheck.out
+
+The tree topology:
+
+0 (L=2, R=2)
+     1 (L=1, R=1)
+          2 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+     1 (L=1, R=1)
+          3 (L=0, R=0)
+               -
+               -
+          2 (L=0, R=0)
+               -
+               -
+
+The tree is sysmetric
+
+
+The tree topology (after setting root->right->left to NULL):
+
+0 (L=2, R=2)
+     1 (L=0, R=1)
+          2 (L=0, R=0)
+               -
+               -
+          -
+     1 (L=1, R=1)
+          3 (L=0, R=0)
+               -
+               -
+          2 (L=0, R=0)
+               -
+               -
+
+The tree is not sysmetric
+
+
+run btreetraverse.out
+
+The tree topology:
+
+0 (L=2, R=4)
+     2 (L=0, R=3)
+          5 (L=2, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               6 (L=0, R=1)
+                    7 (L=0, R=0)
+                         -
+                         -
+                    -
+          -
+     1 (L=1, R=1)
+          4 (L=0, R=0)
+               -
+               -
+          3 (L=0, R=0)
+               -
+               -
+
+pre order  = 0, 1, 3, 4, 2, 5, 6, 7, 8
+post order = 3, 4, 1, 7, 6, 8, 5, 2, 0
+in order   = 3, 1, 4, 0, 2, 6, 7, 5, 8
+
+
+run btreeverticalsum.out
+
+The tree topology:
+
+1 (L=1, R=3)
+     3 (L=2, R=1)
+          6 (L=0, R=0)
+               -
+               -
+          5 (L=1, R=1)
+               8 (L=0, R=0)
+                    -
+                    -
+               7 (L=0, R=0)
+                    -
+                    -
+     2 (L=0, R=0)
+          -
+          -
+
+
+The tree in aligned vertical axis
+
+		1
+
+	2		3
+
+		5		6
+
+	7		8
+
+
+Vertical node sum:
+
+	9	6	11	6
+
+
+run tree2btreebuild.out
+
+Nary tree topology:
+
+1
+     30
+     20
+     10
+          102
+          101
+          100
+
+
+Build a binary search tree, the tree topology:
+
+100 (L=3, R=2)
+     101 (L=0, R=1)
+          102 (L=0, R=0)
+               -
+               -
+          -
+     10 (L=1, R=2)
+          20 (L=0, R=1)
+               30 (L=0, R=0)
+                    -
+                    -
+               -
+          1 (L=0, R=0)
+               -
+               -
+

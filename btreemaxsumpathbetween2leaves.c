@@ -94,6 +94,7 @@ int main(int argc, char * argv[])
     printf("The maximum sum path between leaves %d and %d is %d\n",
            8, 7, findMaxinumSumPathBetween2Leaves(root, 8, 7));
     printf("\n");
+    printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.

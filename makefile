@@ -141,8 +141,9 @@ dgraph-test.out : dgraph-test.c libdgraph.a libllist.a
 clean:
 	rm -f *.out *.o lib*.a
 
-test: transformStr2Str.out coding-test.out coding-test-2.out 
+test: all
 	@echo
 	./transformStr2Str.out -d | diff - ./transformStr2Str_result.txt
 	./coding-test.out | diff - ./coding-test_result.txt 
 	./coding-test-2.out | diff - ./coding-test-2_result.txt
+	for file in `echo *tree*.out | sort`; do echo "run $${file}"; echo; ./$${file} ; done | diff - ./btree_result.txt

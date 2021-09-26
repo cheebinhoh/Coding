@@ -75,6 +75,7 @@ int main(int argc, char * argv[])
     printf("Max tree level = %d\n", determineMaxDepthLevel(root));
     printf("Min tree level = %d\n", determineMinDepthLevel(root));
     printf("\n");
+    printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.

@@ -81,6 +81,7 @@ int main(int argc, char * argv[])
     printf("The maximum sum of path to leaf value %d is %d\n",
            8, findMaximumSumPathToLeafValue(root, 8) );
     printf("\n");
+    printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
