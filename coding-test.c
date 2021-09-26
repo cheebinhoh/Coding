@@ -1264,6 +1264,7 @@ void printLongestSubstringCommon(char s1[], char s2[])
     }
 
     longestStrStart = 0;
+    longest         = 0;
 
     for ( i = 0; i < pivotStrLen; i++ )
     {
