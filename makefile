@@ -1,5 +1,5 @@
 # old good makefile to help compiling
-# 
+#
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
 all : libbtree.a libllist.a libsearch-sort.a libdgraph.a btreepathsum.out btreebltraverse.out btreemaxminlevel.out \
@@ -16,7 +16,7 @@ all : libbtree.a libllist.a libsearch-sort.a libdgraph.a btreepathsum.out btreeb
 # libraries
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.h llist-internal.h llist.c
 	gcc -c btree.c avlbstree.c
-	gcc -c llist.c 
+	gcc -c llist.c
 	ar -rc libbtree.a btree.o avlbstree.o llist.o
 
 libllist.a : llist.c llist.h llist-internal.h
@@ -35,14 +35,14 @@ libdgraph.a : dgraph.h dgraph-internal.h dgraph.c
 btreeisbalanced.out : btreeisbalanced.c btree.h libbtree.a
 	gcc -o $@ btreeisbalanced.c -L. -lbtree
 
-btreepathsum.out : btreepathsum.c btree.h libbtree.a 
-	gcc -o $@ btreepathsum.c -L. -lbtree 
+btreepathsum.out : btreepathsum.c btree.h libbtree.a
+	gcc -o $@ btreepathsum.c -L. -lbtree
 
 btreemaxpathsum.out : btreemaxpathsum.c btree.h libbtree.a
-	gcc -o $@ btreemaxpathsum.c -L. -lbtree 
+	gcc -o $@ btreemaxpathsum.c -L. -lbtree
 
-btreebltraverse.out : btreebltraverse.c btree.h libbtree.a 
-	gcc -o $@ btreebltraverse.c -L. -lbtree 
+btreebltraverse.out : btreebltraverse.c btree.h libbtree.a
+	gcc -o $@ btreebltraverse.c -L. -lbtree
 
 btreemaxminlevel.out : btreemaxminlevel.c btree.h libbtree.a
 	gcc -o $@ btreemaxminlevel.c -L. -lbtree
@@ -57,7 +57,7 @@ btreetraverse.out : btreetraverse.c btreetraverse-main.c btree.h btreetraverse.h
 	gcc -o $@ btreetraverse.c btreetraverse-main.c -L. -lbtree
 
 btreebuild.out : btreebuild.c btreetraverse.c btree.h btreetraverse.h libbtree.a
-	gcc -o $@ btreebuild.c btreetraverse.c -L. -lbtree 
+	gcc -o $@ btreebuild.c btreetraverse.c -L. -lbtree
 
 btreelca.out : btreelca.c btreetraverse.c btree.h btreetraverse.h libbtree.a
 	gcc -o $@ btreelca.c btreetraverse.c -L. -lbtree
@@ -81,10 +81,10 @@ shrink-space.out : shrink-space.c
 	gcc -o $@ shrink-space.c
 
 trim-space.out : trim-space.c
-	gcc -o $@ trim-space.c 
+	gcc -o $@ trim-space.c
 
-replace-tab-with-space.out : replace-tab-with-space.c 
-	gcc -o $@ replace-tab-with-space.c 
+replace-tab-with-space.out : replace-tab-with-space.c
+	gcc -o $@ replace-tab-with-space.c
 
 syntax-validate-parenthese.out : syntax-validate-parenthese.c
 	gcc -o $@ syntax-validate-parenthese.c
@@ -135,7 +135,7 @@ btree-test.out : btree-test.c libbtree.a btree.h
 	gcc -o $@ btree-test.c -L. -lbtree
 
 dgraph-test.out : dgraph-test.c libdgraph.a libllist.a
-	gcc -o $@ dgraph-test.c -L. -ldgraph -lllist 
+	gcc -o $@ dgraph-test.c -L. -ldgraph -lllist
 
 # miscallenous
 clean:
@@ -144,6 +144,6 @@ clean:
 test: all
 	@echo
 	./transformStr2Str.out -d | diff - ./transformStr2Str_result.txt
-	./coding-test.out | diff - ./coding-test_result.txt 
+	./coding-test.out | diff - ./coding-test_result.txt
 	./coding-test-2.out | diff - ./coding-test-2_result.txt
 	for file in `echo *tree*.out | sort`; do echo "run $${file}"; echo; ./$${file} ; done | diff - ./btree_result.txt
