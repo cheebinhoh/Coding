@@ -497,7 +497,7 @@ void printArrayInMatrix(int array[], int size, int matrixSize)
  * 8      5      2
  * 3+     6+     9+
  *
- * new 3rd row is 9, 6 and 3, backaed by 1 space, so we pick 9, 6 and 3 into 3rd row,
+ * new 3rd row is 9, 6 and 3, backard by 1 space, so we pick 9, 6 and 3 into 3rd row,
  * so the final matrix is:
  *
  * 7      4      1
