@@ -488,14 +488,14 @@ void printArrayInMatrix(int array[], int size, int matrixSize)
  * after first row is moved, the matrix is like this:
  *
  * 7      4      1
- * 2      3      5
- * 6      8      9
+ * 2+     3      5+
+ * 6      8+     9
  *
  * new 2nd row is 8, 5 and 2, backward by 2 space, so new matrix is then:
  *
  * 7      4      1
  * 8      5      2
- * 3      6      9
+ * 3+     6+     9+
  *
  * new 3rd row is 9, 6 and 3, backaed by 1 space, so we pick 9, 6 and 3 into 3rd row,
  * so the final matrix is:
