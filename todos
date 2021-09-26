@@ -57,5 +57,5 @@ Print left view of a binary tree
 Print corner nodes of every level in a binary tree
 Convert a binary tree into a doubly-linked list in spiral order
 Check if a binary tree is a min-heap or not
-Invert alternate levels of a perfect binary tree
 Print right view of a binary tree
+Invert alternate levels of a perfect binary tree
