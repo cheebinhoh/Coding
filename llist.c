@@ -124,7 +124,7 @@ void printListNodeInt(struct ListNode *start)
     while ( NULL != start )
     {
         printf("%d", start->data.val);
-        
+
         if ( NULL != start->next )
             printf(" -> ");
 

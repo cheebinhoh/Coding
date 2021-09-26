@@ -26,7 +26,7 @@ For value 5, the low index is 2 and high index is 9
 Test 5: find k largest(or smallest) elements in an array.
 
 The integer array is 1, 23, 12, 9, 30, 2, 50
-The largest 3 values are :23 -> 30 -> 50 -> -
+The largest 3 values are :23 -> 30 -> 50
 
 
 Test 6: rotate array by k elements

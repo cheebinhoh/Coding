@@ -460,15 +460,49 @@ void printArrayInMatrix(int array[], int size, int matrixSize)
     }
 }
 
-/* This method is memory effective as it only requires matrixSize of extra buffer, 
+/* This method is memory effective as it only requires matrixSize of extra buffer,
  * so if we have a 16 x 16 matrix, it only requires 16 int buffer, than 16 x 16.
  *
  * The logic is that:
- * - we will form the intended first row by picking up number backward from the list
- * - as a number is picked and put into buffer to be part of first row, we will 
- *   move the number down the list.
- * - as 3 number is picked for 1st row, the first row of the list will have free up
- *   for the new first row number.
+ * - we will form the new first row by picking up number backward from the list that
+ *   need to be in the new first row.
+ * - as a number is picked and put into buffer to be part of new first row, we will
+ *   move the prior number down the list, so we free up space in first row of the list
+ * - as 3 numbers are  picked for 1st row, the first row of the list will have freed up
+ *   for the new first row of numbers.
+ *
+ * Note that the new first row is NOT the old last row because we rotate to right by 90" degree,
+ * instead first loop, the new first row is 7, 4, 1 which is separated by 3 spaces (exactly the
+ * matrix size), after picking up one number, we will move number prior to it down the list.
+ *
+ * After picking first row, the 2nd row number started backward from the list at backward position
+ * matrix - 1 (2nd row index) and separate by 2 space (matrix size 3 - 1, 2nd row).
+ *
+ * Example, new first row is marked by + sign.
+ *
+ * 3 x 3 matrix:
+ * 1+     2      3
+ * 4+     5      6
+ * 7+     8      9
+ *
+ * after first row is moved, the matrix is like this:
+ *
+ * 7      4      1
+ * 2      3      5
+ * 6      8      9
+ *
+ * new 2nd row is 8, 5 and 2, backward by 2 space, so new matrix is then:
+ *
+ * 7      4      1
+ * 8      5      2
+ * 3      6      9
+ *
+ * new 3rd row is 9, 6 and 3, backaed by 1 space, so we pick 9, 6 and 3 into 3rd row,
+ * so the final matrix is:
+ *
+ * 7      4      1
+ * 8      5      2
+ * 9      6      3
  */
 void rotateMatrix90DegreeToRight(int array[], int size, int matrixSize)
 {
