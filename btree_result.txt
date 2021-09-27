@@ -230,6 +230,42 @@ The tree topology:
 4 7 
 
 
+Test 11: determine if a tree is a sum tree
+The tree topology:
+26 (L=2, R=2)
+     3 (L=0, R=1)
+          3 (L=0, R=0)
+               -
+               -
+          -
+     10 (L=1, R=1)
+          6 (L=0, R=0)
+               -
+               -
+          4 (L=0, R=0)
+               -
+               -
+
+This is a sum tree
+
+Adjust root->left->left->val to 5, the Tree topology:
+26 (L=2, R=2)
+     3 (L=0, R=1)
+          3 (L=0, R=0)
+               -
+               -
+          -
+     10 (L=1, R=1)
+          6 (L=0, R=0)
+               -
+               -
+          5 (L=0, R=0)
+               -
+               -
+
+This is not a sum tree
+
+
 run btreebltraverse.out
 
 breadth level traverse (recursive) = 0, 1, 2, 3, 4, 5, 6, 8, 7

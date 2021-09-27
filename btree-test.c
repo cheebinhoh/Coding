@@ -698,6 +698,71 @@ int main(int argc, char * argv[])
     printf("\n");
     printf("\n");
 
+    printf("Test 11: determine if a tree is a sum tree\n");
+    root = malloc(sizeof(struct TreeNode));
+    root->val   = 26;
+    root->left  = NULL;
+    root->right = NULL;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val   = 10;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val   = 4;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->left->left = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val   = 6;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->left->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val   = 3;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->right = other;
+
+    other = malloc(sizeof(struct TreeNode));
+    other->val   = 3;
+    other->left  = NULL;
+    other->right = NULL;
+
+    root->right->right = other;
+
+    printf("The tree topology:\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+
+    if ( isTreeSumTree(root) )
+        printf("This is a sum tree\n");
+    else
+        printf("This is not a sum tree\n");
+
+    printf("\n");
+    printf("Adjust root->left->left->val to 5, the Tree topology:\n");
+    root->left->left->val = 5;
+
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+
+    if ( isTreeSumTree(root) )
+        printf("This is a sum tree\n");
+    else
+        printf("This is not a sum tree\n");
+
+    printf("\n");
+    printf("\n");
+
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for
     // this one off program.
 

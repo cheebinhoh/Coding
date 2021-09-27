@@ -1533,3 +1533,41 @@ int findMaximumDiameter(struct TreeNode *root)
 
     return maxDiameter;
 }
+
+
+int isTreeSumTreeRecursive(struct TreeNode *tree, int *total)
+{
+    int leftTotal;
+    int rightTotal;
+    int ret;
+
+
+    if ( NULL == tree )
+        return 1;
+
+    leftTotal  = 0;
+    rightTotal = 0;
+    ret = isTreeSumTreeRecursive(tree->left, &leftTotal);
+    if ( ! ret )
+        return 0;
+
+    ret = isTreeSumTreeRecursive(tree->right, &rightTotal);
+    if ( ! ret )
+        return 0;
+
+    if ( ( NULL != tree->left || NULL != tree->right )
+         && leftTotal + rightTotal != tree->val )
+        return 0;
+
+    if ( NULL != total )
+        *total = *total + leftTotal + rightTotal + tree->val;
+
+
+    return 1;
+}
+
+
+int isTreeSumTree(struct TreeNode *tree)
+{
+    return isTreeSumTreeRecursive( tree, NULL );
+}

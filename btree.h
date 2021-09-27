@@ -48,6 +48,7 @@ int               findTotalNumberOfNodes(struct TreeNode *root);
 int               isTreeSubTree(struct TreeNode *tree1, struct TreeNode *tree2);
 int               isTreeSearchTree(struct TreeNode *root);
 int               isTreeSymmetric(struct TreeNode *root);
+int               isTreeSumTree(struct TreeNode *tree);
 
 struct ListNode * getInOrderList(struct TreeNode *root);
 struct ListNode * getPreOrderList(struct TreeNode *root);

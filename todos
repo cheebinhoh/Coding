@@ -3,7 +3,6 @@ Print top view of a binary tree
 In-place convert a binary tree to its sum tree
 Determine whether the given binary tree nodes are cousins of each other
 Print cousins of a given node in a binary tree
-Check if a binary tree is a sum tree or not
 Combinations of words formed by replacing given numbers with corresponding alphabets
 Determine if a binary tree can be converted to another by doing any number of swaps of children
 Print all paths from the root to leaf nodes of a binary tree
