@@ -25,6 +25,7 @@ void              freeTreeNode(struct TreeNode *root);
 
 struct TreeNode *buildBinaryTree(struct ListNode *inorder, struct ListNode *postorder);
 void             treeMirrorSwap(struct TreeNode *root);
+void             convertBinaryTreeIntoSumTree(struct TreeNode *root);
 
 void printTreeNodeInTreeTopology(struct TreeNode *root);
 

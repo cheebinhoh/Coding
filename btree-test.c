@@ -761,6 +761,18 @@ int main(int argc, char * argv[])
         printf("This is not a sum tree\n");
 
     printf("\n");
+
+    convertBinaryTreeIntoSumTree(root);
+    printf("Converting tree into a sum tree, the tree topology:\n");
+    printTreeNodeInTreeTopology(root);
+    printf("\n");
+
+    if ( isTreeSumTree(root) )
+        printf("This is a sum tree\n");
+    else
+        printf("This is not a sum tree\n");
+
+    printf("\n");
     printf("\n");
 
     // I do not care about freeing malloced memory, OS will take care of freeing heap that is part of process for

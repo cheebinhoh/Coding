@@ -1571,3 +1571,31 @@ int isTreeSumTree(struct TreeNode *tree)
 {
     return isTreeSumTreeRecursive( tree, NULL );
 }
+
+
+void convertBinaryTreeIntoSumTreeRecursively(struct TreeNode *root, int *total)
+{
+    int leftTotal;
+    int rightTotal;
+
+
+    if ( NULL == root )
+        return;
+
+    leftTotal  = 0;
+    rightTotal = 0;
+
+    convertBinaryTreeIntoSumTreeRecursively(root->left, &leftTotal);
+    convertBinaryTreeIntoSumTreeRecursively(root->right, &rightTotal);
+
+    if ( NULL != root->left && NULL != root->right )
+        root->val = leftTotal + rightTotal;
+
+    if ( NULL != total )
+        *total = *total + root->val + leftTotal + rightTotal;
+}
+
+void convertBinaryTreeIntoSumTree(struct TreeNode *root)
+{
+    convertBinaryTreeIntoSumTreeRecursively(root, NULL);
+}
