@@ -3,4 +3,4 @@
 # it combines 3 commands into one
 
 git fetch .
-git pull origin
+git pull origin master
