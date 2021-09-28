@@ -230,18 +230,23 @@ The tree topology:
 4 7 
 
 
-Test 11: print sum values in diagonal level of tree
+Test 11: find the distance between two nodes
+The distance between 8 and 7 is 2
+The distance between 6 and 7 is 3
+
+
+Test 12: print sum values in diagonal level of tree
 10
 15
 11
 
 
-Test 12: print the all ancestors of node in reverse order
+Test 13: print the all ancestors of node in reverse order
 8 = 5 3 1 
 1 = 
 
 
-Test 13: determine if a tree is a sum tree
+Test 14: determine if a tree is a sum tree
 The tree topology:
 26 (L=2, R=2)
      3 (L=0, R=1)
@@ -452,6 +457,7 @@ The least common ancestor of 3 and 4 is 1
 The least common ancestor of 2 and 5 is 2
 The least common ancestor of 2 and 8 is 2
 The least common ancestor of 1 and 8 is 0
+The least common ancestor of 3 and 8 is 0
 
 
 run btreemaxminlevel.out

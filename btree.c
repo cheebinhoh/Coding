@@ -29,6 +29,27 @@ void findTreeNodeAndParentRecursive(struct TreeNode   *root,
     {
         *retNode = root;
     }
+    else
+    {
+        if ( NULL != root->left )
+        {
+            if ( NULL != retParent )
+                *retParent = &(root->left);
+
+            findTreeNodeAndParentRecursive(root->left, val, retNode, retParent);
+        }
+
+        if ( NULL == *retNode
+             && NULL != root->right )
+        {
+            if (NULL != retParent)
+                *retParent = &(root->right);
+
+            findTreeNodeAndParentRecursive(root->right, val, retNode, retParent);
+        }
+    }
+
+    /* This is binary search tree finding, but we assume it is just a binary tree
     else if ( val < root->val
               && NULL != root->left )
     {
@@ -44,6 +65,7 @@ void findTreeNodeAndParentRecursive(struct TreeNode   *root,
 
         findTreeNodeAndParentRecursive(root->right, val, retNode, retParent);
     }
+    */
 }
 
 
@@ -1613,7 +1635,7 @@ int getAllAncestorsOfNodeValueRecursive(struct TreeNode *root, int val, struct L
         return 1;
 
     pushStackRef(root, list);
-    
+
     if ( getAllAncestorsOfNodeValueRecursive(root->left, val, list) )
         return 1;
 
@@ -1623,7 +1645,7 @@ int getAllAncestorsOfNodeValueRecursive(struct TreeNode *root, int val, struct L
     node = popStack(list);
     free(node);
 
-    return 0;   
+    return 0;
 }
 
 
@@ -1634,8 +1656,39 @@ struct ListNode * getAllAncestorsOfNodeValue(struct TreeNode *root, int val)
 
     list = NULL;
 
-    getAllAncestorsOfNodeValueRecursive(root, val, &list);      
+    getAllAncestorsOfNodeValueRecursive(root, val, &list);
 
     return list;
 }
 
+
+int findDistanceToNodeValue(struct TreeNode *root, int val)
+{
+    struct ListNode *list;
+    int               n;
+
+
+    list = getAllAncestorsOfNodeValue(root, val);
+    n    = getListLength(list);
+
+    freeList(&list);
+
+    return n;
+}
+
+
+int findDistanceBetweenNodeValues(struct TreeNode *root, int val1, int val2)
+{
+    int              n;
+    struct TreeNode *ancestor;
+
+    n        = 0;
+    ancestor = findLeastCommonAncestor(root, val1, val2);
+    if ( NULL != ancestor )
+    {
+        n = findDistanceToNodeValue(ancestor, val1)
+            + findDistanceToNodeValue(ancestor, val2);
+    }
+
+    return n;
+}

@@ -282,7 +282,7 @@ void printAllAncestorValuesOfANodeValue(struct TreeNode *root, int val)
     while ( NULL != node )
     {
         printf("%d ", ((struct TreeNode *)node->data.ref)->val);
-        
+
         free(node);
         node = deQueue(&list);
     }
@@ -755,20 +755,25 @@ int main(int argc, char * argv[])
     printf("\n");
     printf("\n");
 
-    printf("Test 11: print sum values in diagonal level of tree\n");
+    printf("Test 11: find the distance between two nodes\n");
+    printf("The distance between 8 and 7 is %d\n", findDistanceBetweenNodeValues(root, 8, 7));
+    printf("The distance between 6 and 7 is %d\n", findDistanceBetweenNodeValues(root, 6, 7));
+    printf("\n");
+    printf("\n");
+
+    printf("Test 12: print sum values in diagonal level of tree\n");
     printSumValuesInDiagonalAxisLevel(root);
     printf("\n");
 
- 
-    printf("Test 12: print the all ancestors of node in reverse order\n");
+    printf("Test 13: print the all ancestors of node in reverse order\n");
     printf("8 = ");
     printAllAncestorValuesOfANodeValue(root, 8);
     printf("1 = ");
     printAllAncestorValuesOfANodeValue(root, 1);
     printf("\n");
     printf("\n");
-   
-    printf("Test 13: determine if a tree is a sum tree\n");
+
+    printf("Test 14: determine if a tree is a sum tree\n");
     root = malloc(sizeof(struct TreeNode));
     root->val   = 26;
     root->left  = NULL;
