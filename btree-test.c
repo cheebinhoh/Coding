@@ -233,6 +233,44 @@ void printNodeInDiagonalAxisLevel(struct TreeNode *root)
 }
 
 
+void traversalInVerticalAxisLevelAndSumValues(struct TreeNode *node, int pos, int axis, int *stop, void *data)
+{
+    struct ListNode **list;
+    struct ListNode  *lnode;
+
+
+    list = data;
+
+    lnode = findNthListNode(*list, axis);
+    if ( NULL == lnode )
+        enQueueInt(node->val, list);
+    else
+        lnode->data.val += node->val;
+}
+
+
+void printSumValuesInDiagonalAxisLevel(struct TreeNode *root)
+{
+    struct ListNode *list;
+    struct ListNode *node;
+
+
+    list = NULL;
+    traverseTreeNodeInDiagonalWithAxisLevel(root, traversalInVerticalAxisLevelAndSumValues, &list);
+
+    node = deQueue(&list);
+    while ( NULL != node )
+    {
+        printf("%d\n", node->data.val);
+        free(node);
+
+        node = deQueue(&list);
+    }
+
+    printf("\n");
+}
+
+
 int main(int argc, char * argv[])
 {
     int              level = 0;
@@ -698,7 +736,11 @@ int main(int argc, char * argv[])
     printf("\n");
     printf("\n");
 
-    printf("Test 11: determine if a tree is a sum tree\n");
+    printf("Test 11: print sum values in diagonal level of tree\n");
+    printSumValuesInDiagonalAxisLevel(root);
+    printf("\n");
+
+    printf("Test 12: determine if a tree is a sum tree\n");
     root = malloc(sizeof(struct TreeNode));
     root->val   = 26;
     root->left  = NULL;

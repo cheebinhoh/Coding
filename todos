@@ -7,7 +7,6 @@ Determine if a binary tree can be converted to another by doing any number of sw
 Print all paths from the root to leaf nodes of a binary tree
 Find ancestors of a given node in a binary tree
 Find distance between given pairs of nodes in a binary tree
-Find the diagonal sum of a binary tree
 Sink nodes containing zero to the bottom of a binary tree
 Convert a binary tree to a full tree by removing half nodes
 Truncate a binary tree to remove nodes that lie on a path having a sum less than `k`

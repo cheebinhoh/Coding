@@ -230,7 +230,13 @@ The tree topology:
 4 7 
 
 
-Test 11: determine if a tree is a sum tree
+Test 11: print sum values in diagonal level of tree
+10
+15
+11
+
+
+Test 12: determine if a tree is a sum tree
 The tree topology:
 26 (L=2, R=2)
      3 (L=0, R=1)
