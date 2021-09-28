@@ -1599,3 +1599,43 @@ void convertBinaryTreeIntoSumTree(struct TreeNode *root)
 {
     convertBinaryTreeIntoSumTreeRecursively(root, NULL);
 }
+
+
+int getAllAncestorsOfNodeValueRecursive(struct TreeNode *root, int val, struct ListNode **list)
+{
+    struct ListNode *node;
+
+
+    if ( NULL == root )
+        return 0;
+
+    if ( root->val == val )
+        return 1;
+
+    pushStackRef(root, list);
+    
+    if ( getAllAncestorsOfNodeValueRecursive(root->left, val, list) )
+        return 1;
+
+    if ( getAllAncestorsOfNodeValueRecursive(root->right, val, list) )
+        return 1;
+
+    node = popStack(list);
+    free(node);
+
+    return 0;   
+}
+
+
+struct ListNode * getAllAncestorsOfNodeValue(struct TreeNode *root, int val)
+{
+    struct ListNode *list;
+
+
+    list = NULL;
+
+    getAllAncestorsOfNodeValueRecursive(root, val, &list);      
+
+    return list;
+}
+

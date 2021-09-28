@@ -271,6 +271,25 @@ void printSumValuesInDiagonalAxisLevel(struct TreeNode *root)
 }
 
 
+void printAllAncestorValuesOfANodeValue(struct TreeNode *root, int val)
+{
+    struct ListNode *list;
+    struct ListNode *node;
+
+
+    list = getAllAncestorsOfNodeValue(root, val);
+    node = deQueue(&list);
+    while ( NULL != node )
+    {
+        printf("%d ", ((struct TreeNode *)node->data.ref)->val);
+        
+        free(node);
+        node = deQueue(&list);
+    }
+
+    printf("\n");
+}
+
 int main(int argc, char * argv[])
 {
     int              level = 0;
@@ -740,7 +759,16 @@ int main(int argc, char * argv[])
     printSumValuesInDiagonalAxisLevel(root);
     printf("\n");
 
-    printf("Test 12: determine if a tree is a sum tree\n");
+ 
+    printf("Test 12: print the all ancestors of node in reverse order\n");
+    printf("8 = ");
+    printAllAncestorValuesOfANodeValue(root, 8);
+    printf("1 = ");
+    printAllAncestorValuesOfANodeValue(root, 1);
+    printf("\n");
+    printf("\n");
+   
+    printf("Test 13: determine if a tree is a sum tree\n");
     root = malloc(sizeof(struct TreeNode));
     root->val   = 26;
     root->left  = NULL;

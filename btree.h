@@ -54,6 +54,7 @@ int               isTreeSumTree(struct TreeNode *tree);
 struct ListNode * getInOrderList(struct TreeNode *root);
 struct ListNode * getPreOrderList(struct TreeNode *root);
 struct ListNode * getPostOrderList(struct TreeNode *root);
+struct ListNode * getAllAncestorsOfNodeValue(struct TreeNode *root, int val);
 
 
 #endif
