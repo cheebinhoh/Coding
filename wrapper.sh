@@ -7,6 +7,8 @@ programName=`basename $0 | sed -e 's/\...$//g'`.out
 
 make ${programName} >/dev/null || (echo "Error in running ${pogramName}";  exit 1)
 
+trap "rm *.$$" INT
+
 for f
 do
     cat $f | ${programName} > ${f}.$$ && mv ${f}.$$ $f
