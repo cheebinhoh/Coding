@@ -140,6 +140,7 @@ dgraph-test.out : dgraph-test.c libdgraph.a libllist.a
 # miscallenous
 clean:
 	rm -f *.out *.o lib*.a
+	rm -f C++/*.out
 
 test: all
 	@echo
