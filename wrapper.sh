@@ -3,9 +3,17 @@
 
 PATH=$PATH:.
 
-programName=`basename $0 | sed -e 's/\...$//g'`.out
+dirName=`dirname $0`
+programName=${dirName}/`basename $0 | sed -e 's/\...$//g'`.out
 
-make ${programName} >/dev/null || (echo "Error in running ${pogramName}";  exit 1)
+if [[ ! -x ${programName} ]] ; then
+
+    cd ${dirName}
+
+    make `basename ${programName}` >/dev/null || (echo "Error in running ${pogramName}";  exit 1)
+
+    cd -
+fi
 
 trap "rm *.$$" INT
 
