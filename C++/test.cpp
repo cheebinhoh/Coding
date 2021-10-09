@@ -4,6 +4,7 @@
  *
  */
 
+#include <iostream>
 #include <cstdio>
 #include <string>
 #include <memory>
@@ -153,10 +154,59 @@ std::ostream & operator << (std::ostream & o, Rectangle & r)
 }
 // end of Rectangle
 
+class S
+{
+   std::string _s = "";
+
+public:
+   S(const char *s);
+   std::string getStringValue();
+   operator std::string() const;
+
+   void transform(char (*)(char));
+};
+
+void S::transform(char (*f)(char))
+{
+   int i = 0;
+
+   for ( auto c : _s )
+   {
+       c = (*f)(c);
+       _s[i] = c;
+
+       i++;
+   }
+}
+
+S::S(const char *s) : _s(s)
+{
+}
+
+S::operator std::string() const
+{
+    return _s;
+}
+
+std::string S::getStringValue()
+{
+    return _s;
+}
+
 // utlities
 void testPoint( Point p )
 {
     std::cout << p << std::endl;
+}
+
+std::ostream & operator << (std::ostream &o, S &s)
+{
+    return o << std::string(s);
+}
+
+char convertToUpper(char c)
+{
+    return toupper(c);
 }
 
 int main(int argc, char *argv[])
@@ -167,6 +217,11 @@ int main(int argc, char *argv[])
     p.reset();
 
     std::cout << "Done." << std::endl;
+
+    S str("hoh chee bin");
+    str.transform([](char c) -> char { return toupper(c); });
+
+    std::cout << str << std::endl;
 
     return 0;
 }
