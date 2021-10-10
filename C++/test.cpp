@@ -8,8 +8,10 @@
 #include <cstdio>
 #include <string>
 #include <memory>
-#include <iostream>
-
+#include <vector>
+#include <utility>
+#include <iterator>
+#include <forward_list>
 
 // Start of Point
 class Point
@@ -20,20 +22,29 @@ class Point
 public:
     Point(int xVal = 1, int yVal = 1);
     Point(const Point & p);
+    Point(Point && p);
     ~Point();
 
     int getX();
     int getY();
 
+    void reset();
     Point & operator = (const Point & p);
+    Point & operator = (Point && p);
     operator std::string() const;
     Point & operator ++ ();
     Point operator ++ (int);
 };
 
+void Point::reset()
+{
+    x = 0;
+    y = 0;
+}
+
 Point::~Point()
 {
-    printf("Destroy of point: %s\n", std::string(*this).c_str());
+    printf("Destroy of point %s\n", std::string(*this).c_str());
 }
 
 Point Point::operator ++ (int)
@@ -54,10 +65,12 @@ Point & Point::operator ++ ()
    return *this;
 }
 
+
 Point::operator std::string() const
 {
-    return "x = " + std::to_string(x) + ", y = " + std::to_string(y);
+   return "Point " + std::to_string(x) + ", y = " + std::to_string(y);
 }
+
 
 Point::Point(const Point & p)
 {
@@ -65,6 +78,21 @@ Point::Point(const Point & p)
 
     x = p.x;
     y = p.y;
+}
+
+Point & Point::operator = (Point && p)
+{
+    printf("Move assignment\n");
+
+    if ( &p != this )
+    {
+        x = std::move(p.x);
+        y = std::move(p.y);
+
+        p.reset();
+    }
+
+    return *this;
 }
 
 Point & Point::operator = (const Point & p)
@@ -82,6 +110,15 @@ Point & Point::operator = (const Point & p)
 std::ostream & operator << (std::ostream & o, Point & p)
 {
     return o << "point x is " << p.getX() << ", point y is " << p.getY();
+}
+
+Point::Point(Point && p)
+{
+    printf("Move constructor\n");
+    x = std::move(p.x);
+    y = std::move(p.y);
+
+    p.reset();
 }
 
 Point::Point(int xVal, int yVal)
@@ -211,6 +248,57 @@ char convertToUpper(char c)
 
 int main(int argc, char *argv[])
 {
+    std::forward_list<int>           list = {1, 2, 3, 4, 5};
+    std::forward_list<int>::iterator iter;
+
+    for ( iter = list.begin(); iter != list.end(); iter++ )
+    {
+        std::cout << *iter << ", ";
+    }
+
+    std::cout << std::endl;
+
+    /*
+    std::ostream_iterator<int> oiter(std::cout, " " );
+
+    for ( auto i : {1, 2, 3, 4, 5 } )
+    {
+        *oiter++ = i;
+    }
+
+    std::cout << std::endl;
+    */
+
+    /*
+    std::cout << "Enter two values: " << std::flush;
+
+    std::istream_iterator<int> iiter(std::cin);
+    std::cin.clear();
+
+
+    std::cout << "first value: " << *iiter++ << std::endl;
+    std::cout << "second value: " << *iiter << std::endl;
+    */
+
+    /*
+    Point p1(5, 5);
+    Point p2 = p1;
+    Point p3(3, 3);
+
+
+    std::cout << "Point 1: " << p1 << std::endl;
+    std::cout << "Point 2: " << p2 << std::endl;
+    std::cout << "Point 3: " << p3 << std::endl;
+
+    std::cout << std::endl;
+    p2 = std::move(p3);
+    std::cout << "Point 2: " << p2 << std::endl;
+
+    Point p4 = std::move(p2);
+    std::cout << "Point 2: " << p2 << std::endl;
+    std::cout << "Point 4: " << p4 << std::endl;
+    */
+    /*
     std::unique_ptr<Point> p(new Point(10, 10));
 
     std::cout << "Value is " << std::string(*p) << std::endl;
@@ -222,6 +310,23 @@ int main(int argc, char *argv[])
     str.transform([](char c) -> char { return toupper(c); });
 
     std::cout << str << std::endl;
+
+    std::vector<int> v = {};
+    for ( int i = 0; i < 5; i++ )
+    {
+        v.insert(v.begin() + i, i);
+    }
+
+    while ( ! v.empty() )
+    {
+        int val = v.back();
+        std::cout << val << " ";
+
+        v.pop_back();
+    }
+
+    std::cout << std::endl;
+    */
 
     return 0;
 }
