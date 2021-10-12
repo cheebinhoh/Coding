@@ -1,5 +1,4 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
- *
  */
 
 #include <stdio.h>
