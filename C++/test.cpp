@@ -13,6 +13,17 @@
 #include <iterator>
 #include <forward_list>
 
+// template
+template <typename T>
+const T & maxof(const T & arg1, const T & arg2)
+{
+    return ( arg1 > arg2 ) ? arg1 : arg2;
+}
+
+template <typename T>
+T pi = T(1.23456);
+
+
 // Start of Point
 class Point
 {
@@ -34,7 +45,15 @@ public:
     operator std::string() const;
     Point & operator ++ ();
     Point operator ++ (int);
+    Point operator - ();
 };
+
+Point Point::operator - ()
+{
+    Point newP(-(x), -(y));
+
+    return newP;
+}
 
 void Point::reset()
 {
@@ -248,6 +267,12 @@ char convertToUpper(char c)
 
 int main(int argc, char *argv[])
 {
+    Point p(5, 5);
+    
+    Point p2 = -p;
+    std::cout << "The point is " << std::string(p2) << std::endl;
+
+    /*
     std::forward_list<int>           list = {1, 2, 3, 4, 5};
     std::forward_list<int>::iterator iter;
 
@@ -257,6 +282,8 @@ int main(int argc, char *argv[])
     }
 
     std::cout << std::endl;
+    std::cout << "max value = " << maxof<int>(2, 3) << std::endl;
+    */
 
     /*
     std::ostream_iterator<int> oiter(std::cout, " " );
