@@ -614,7 +614,7 @@ void runMergeTwoLists(void)
 
 
 /*
- * Test 9: 
+ * Test 9:
  *
  * Remove vowels from String
  */
@@ -635,11 +635,11 @@ void removeVowelsFromString1(char s[])
     while ( i >= 0 )
     {
         c = tolower(s[i]); // i == j at this point
-        while ( j >= 0 
+        while ( j >= 0
                 && ( 'a' == c || 'e' == c || 'i' == c || 'o' == c || 'u' == c ) )
         {
             j--;
- 
+
             c = tolower(s[j]);
         }
 
@@ -658,7 +658,7 @@ void removeVowelsFromString1(char s[])
 
         i--;
         j = i;
-    }  
+    }
 }
 
 void removeVowelsFromString2(char s[])
@@ -677,7 +677,7 @@ void removeVowelsFromString2(char s[])
     {
         c = tolower(s[i]);
         while ( 'a' == c || 'e' == c || 'i' == c || 'o' == c || 'u' == c )
-        {        
+        {
             i++;
             c = tolower(s[i]);
         }
