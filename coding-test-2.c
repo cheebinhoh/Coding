@@ -610,6 +610,7 @@ void runMergeTwoLists(void)
     merge = mergeSortedListInt(first, second);
     printf("merge list is: ");
     printListInt(merge);
+    printf("\n");
 }
 
 
@@ -696,14 +697,16 @@ void removeVowelsFromString2(char s[])
 
 void runRemoveVowelFromStrings(void)
 {
-    char s1[] = "xxaayaeiouy";
-    char s2[] = "xxaayaeiouy";
+    char s1[] = "ixxaayaeiouye";
+    char s2[] = "ixxaayaeiouye";
 
 
     printf("The original string is \"%s\"\n", s1);
     removeVowelsFromString1(s1);
     printf("After moving vowels is \"%s\"\n", s1);
 
+    printf("\n");
+    printf("Most efficient in line removing...\n");
     printf("The original string is \"%s\"\n", s2);
     removeVowelsFromString2(s2);
     printf("After moving vowels is \"%s\"\n", s2);

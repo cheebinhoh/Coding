@@ -68,3 +68,11 @@ second list is: 2, 3, 4, 7
 
 merge list is: 1, 2, 3, 4, 5, 6, 7
 
+
+The original string is "ixxaayaeiouye"
+After moving vowels is "xxyy"
+
+Most efficient in line removing...
+The original string is "ixxaayaeiouye"
+After moving vowels is "xxyy"
+
