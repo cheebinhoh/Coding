@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "btree.h"
 #include "llist.h"
 #include "search-sort.h"
@@ -612,6 +613,102 @@ void runMergeTwoLists(void)
 }
 
 
+/*
+ * Test 9: 
+ *
+ * Remove vowels from String
+ */
+
+void removeVowelsFromString1(char s[])
+{
+    int len;
+    int i;
+    int j;
+    int c;
+    int gap;
+
+
+    len = strlen(s);
+    i   = len - 1;
+    j   = i;
+
+    while ( i >= 0 )
+    {
+        c = tolower(s[i]); // i == j at this point
+        while ( j >= 0 
+                && ( 'a' == c || 'e' == c || 'i' == c || 'o' == c || 'u' == c ) )
+        {
+            j--;
+ 
+            c = tolower(s[j]);
+        }
+
+        if ( j < i )
+        {
+           gap = i - j;
+           i   = i + 1;
+           while ( i <= len )
+           {
+               s[i - gap] = s[i];
+               i++;
+           }
+
+           i = j + 1;
+        }
+
+        i--;
+        j = i;
+    }  
+}
+
+void removeVowelsFromString2(char s[])
+{
+    int len;
+    int i;
+    int j;
+    int c;
+
+
+    len = strlen(s);
+    i   = 0;
+    j   = 0;
+
+    while ( i < len )
+    {
+        c = tolower(s[i]);
+        while ( 'a' == c || 'e' == c || 'i' == c || 'o' == c || 'u' == c )
+        {        
+            i++;
+            c = tolower(s[i]);
+        }
+
+        if ( i > j )
+        {
+           s[j] = s[i];
+        }
+
+        i++;
+        j++;
+    }
+
+    s[j] = '\0';
+}
+
+void runRemoveVowelFromStrings(void)
+{
+    char s1[] = "xxaayaeiouy";
+    char s2[] = "xxaayaeiouy";
+
+
+    printf("The original string is \"%s\"\n", s1);
+    removeVowelsFromString1(s1);
+    printf("After moving vowels is \"%s\"\n", s1);
+
+    printf("The original string is \"%s\"\n", s2);
+    removeVowelsFromString2(s2);
+    printf("After moving vowels is \"%s\"\n", s2);
+}
+
 // the starting point...
 int main(int argc, char *argv[])
 {
@@ -637,6 +734,9 @@ int main(int argc, char *argv[])
     printf("\n");
 
     runMergeTwoLists();
+    printf("\n");
+
+    runRemoveVowelFromStrings();
     printf("\n");
 
     return 0;
