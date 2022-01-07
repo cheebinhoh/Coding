@@ -3,29 +3,25 @@
  * Directed graph
  */
 
-
 #ifndef DGRAPH_INTERNAL_H_HAS_INCLUDED
 
 #define DGRAPH_INTERNAL_H_HAS_INCLUDED
 
 #include "llist.h"
 
-union DGraphNodeData
-{
-    void *ref;
-    int   val;
+union DGraphNodeData {
+  void *ref;
+  int val;
 };
 
-struct DGraphNode 
-{
-    union DGraphNodeData  data;
-    struct ListNode      *edges;
+struct DGraphNode {
+  union DGraphNodeData data;
+  struct ListNode *edges;
 };
 
-struct DGraph
-{
-    struct DGraphNode *root;
-    struct ListNode   *vertices;
+struct DGraph {
+  struct DGraphNode *root;
+  struct ListNode *vertices;
 };
 
 #endif

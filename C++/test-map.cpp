@@ -4,20 +4,19 @@
  *
  */
 
-#include <iostream>
 #include <cstdio>
+#include <functional>
+#include <iostream>
+#include <map>
 #include <string>
 #include <vector>
-#include <functional>
-#include <map>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
-    map<int, string> nmap = { { 0, "Zero" }, { 1, "One" }, { 2, "Two" } };
+int main(int argc, char *argv[]) {
+  map<int, string> nmap = {{0, "Zero"}, {1, "One"}, {2, "Two"}};
 
-    cout << nmap[0] << endl;
+  cout << nmap[0] << endl;
 
-    return 0;
+  return 0;
 }

@@ -5,31 +5,23 @@
 
 #include <stdio.h>
 
+int main(int argc, char *argv[]) {
+  int c;
+  int prevIsBlank = 0;
 
-int main(int argc, char *argv[])
-{
-    int c;
-    int prevIsBlank = 0;
+  while ((c = getchar()) != EOF) {
+    if (' ' == c) {
+      if (!prevIsBlank) {
+        putchar(c);
 
+        prevIsBlank = 1;
+      }
+    } else {
+      putchar(c);
 
-    while ( ( c = getchar() ) != EOF )
-    {
-        if ( ' ' == c )
-        {
-            if ( ! prevIsBlank )
-            {
-                putchar(c);
-
-                prevIsBlank = 1;
-            }
-        }
-        else
-        {
-            putchar(c);
-
-            prevIsBlank = 0;
-        }
+      prevIsBlank = 0;
     }
+  }
 
-    return 0;
+  return 0;
 }

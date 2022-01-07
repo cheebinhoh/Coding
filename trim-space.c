@@ -3,81 +3,62 @@
  * It trims trailing space or tab at the end of line or file.
  */
 
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
 
-
-struct Token
-{
-   char ch;
-   long count;
+struct Token {
+  char ch;
+  long count;
 };
 
+int main(int argc, char *argv[]) {
+  int c;
+  int i;
+  int j;
+  int tokenIndex;
+  int numOfNewLine;
+  struct Token tokenList[100];
 
-int main(int argc, char *argv[])
-{
-    int          c;
-    int          i;
-    int          j;
-    int          tokenIndex;
-    int          numOfNewLine;
-    struct Token tokenList[100];
+  tokenIndex = 0;
+  numOfNewLine = 0;
+  while ((c = getchar()) != EOF) {
+    if (isspace(c)) {
+      if ('\n' == c) {
+        if (numOfNewLine <= 0)
+          putchar(c);
 
+        tokenIndex = 0;
 
-    tokenIndex   = 0;
-    numOfNewLine = 0;
-    while ( ( c = getchar() ) != EOF )
-    {
-       if ( isspace(c) )
-       {
-           if ( '\n' == c )
-           {
-               if ( numOfNewLine <= 0 )
-                   putchar(c);
+        numOfNewLine++;
+      } else {
+        if (tokenIndex <= 0 || tokenList[tokenIndex - 1].ch != c) {
+          tokenList[tokenIndex].ch = c;
+          tokenList[tokenIndex].count = 1;
 
-               tokenIndex = 0;
+          tokenIndex++;
+        } else {
+          tokenList[tokenIndex - 1].count++;
+        }
+      }
+    } else {
+      while (numOfNewLine > 1) {
+        putchar('\n');
 
-               numOfNewLine++;
-           }
-           else
-           {
-               if ( tokenIndex <= 0
-                    || tokenList[tokenIndex - 1].ch != c )
-               {
-                   tokenList[tokenIndex].ch    = c;
-                   tokenList[tokenIndex].count = 1;
+        numOfNewLine--;
+      }
 
-                   tokenIndex++;
-               }
-               else
-               {
-                   tokenList[tokenIndex - 1].count++;
-               }
-           }
-       }
-       else
-       {
-           while ( numOfNewLine > 1 )
-           {
-               putchar('\n');
+      for (i = 0; i < tokenIndex; i++) {
+        for (j = 0; j < tokenList[i].count; j++) {
+          putchar(tokenList[i].ch);
+        }
+      }
 
-               numOfNewLine--;
-           }
+      tokenIndex = 0;
+      numOfNewLine = 0;
 
-           for ( i = 0; i < tokenIndex; i++ )
-           {
-               for ( j = 0; j < tokenList[i].count; j++ )
-               {
-                   putchar(tokenList[i].ch);
-               }
-           }
-
-           tokenIndex   = 0;
-           numOfNewLine = 0;
-
-           putchar(c);
-       }
+      putchar(c);
     }
+  }
 
-    return 0;
+  return 0;
 }

@@ -7,73 +7,61 @@
  * case.
  */
 
-#include <stdio.h>
 #include <ctype.h>
-#include <stdlib.h>
 #include <libgen.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-
-int   space2Tab = 8;
+int space2Tab = 8;
 char *programName = NULL;
 
-
-void printHelp(void)
-{
-     fprintf(stderr, "%s [-h] [-t space]\n", programName);
-     fprintf(stderr, "\n");
-     fprintf(stderr, " -h       : print this help message\n");
-     fprintf(stderr, " -t space : number of space per tab [default is 8 and must be 1 or above]\n");
+void printHelp(void) {
+  fprintf(stderr, "%s [-h] [-t space]\n", programName);
+  fprintf(stderr, "\n");
+  fprintf(stderr, " -h       : print this help message\n");
+  fprintf(stderr, " -t space : number of space per tab [default is 8 and must "
+                  "be 1 or above]\n");
 }
 
-int main(int argc, char *argv[])
-{
-    int c;
-    int i;
-    int startWithNoneSpace = 0;
+int main(int argc, char *argv[]) {
+  int c;
+  int i;
+  int startWithNoneSpace = 0;
 
+  programName = basename(argv[0]);
 
-    programName = basename(argv[0]);
+  while ((c = getopt(argc, argv, "ht:")) != -1) {
+    switch (c) {
+    case 't':
+      space2Tab = strtol(optarg, NULL, 0);
+      break;
 
-    while ( ( c = getopt(argc, argv, "ht:") ) != -1 )
-    {
-        switch ( c )
-        {
-            case 't':
-                space2Tab = strtol(optarg, NULL, 0);
-                break;
-
-            case '?':
-            case 'h':
-                printHelp();
-                exit(1);
-        }
+    case '?':
+    case 'h':
+      printHelp();
+      exit(1);
     }
+  }
 
-    if ( space2Tab <= 0 )
-    {
-        printHelp();
-        exit(1);
+  if (space2Tab <= 0) {
+    printHelp();
+    exit(1);
+  }
+
+  while ((c = getchar()) != EOF) {
+    if ('\t' == c && !startWithNoneSpace) {
+      for (i = 0; i < space2Tab; i++)
+        putchar(' ');
+    } else {
+      if (!isspace(c))
+        startWithNoneSpace = 1;
+      else if ('\n' == c)
+        startWithNoneSpace = 0;
+
+      putchar(c);
     }
+  }
 
-    while ( ( c = getchar() ) != EOF )
-    {
-        if ( '\t' == c
-             && !startWithNoneSpace )
-        {
-            for ( i = 0; i < space2Tab; i++ )
-                putchar(' ');
-        }
-        else
-        {
-            if ( ! isspace(c ) )
-               startWithNoneSpace = 1;
-            else if ( '\n' == c )
-               startWithNoneSpace = 0;
-
-            putchar(c);
-        }
-    }
-
-    return 0;
+  return 0;
 }

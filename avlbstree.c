@@ -3,177 +3,161 @@
  * ADT binary search tree (with AVL self-balancing functionality)
  */
 
+#include "btree-internal.h"
+#include "btree.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "btree.h"
-#include "btree-internal.h"
 
+void treeRebalanceRecursive(struct TreeNode **parent, struct TreeNode *root) {
+  int leftLevel;
+  int rightLevel;
+  struct TreeNode *newRoot;
+  struct TreeNode *tmp;
 
-void treeRebalanceRecursive(struct TreeNode **parent,
-                            struct TreeNode  *root)
-{
-    int              leftLevel;
-    int              rightLevel;
-    struct TreeNode *newRoot;
-    struct TreeNode *tmp;
+  if (NULL == root)
+    return;
 
+  if (NULL != root->left)
+    treeRebalanceRecursive(&(root->left), root->left);
 
-    if ( NULL == root )
-       return;
+  if (NULL != root->right)
+    treeRebalanceRecursive(&(root->right), root->right);
 
-    if ( NULL != root->left )
-       treeRebalanceRecursive(&(root->left), root->left);
+  rightLevel = determineMaxDepthLevel(root->right);
+  leftLevel = determineMaxDepthLevel(root->left);
 
-    if ( NULL != root->right )
-       treeRebalanceRecursive(&(root->right), root->right);
+  // TODO?
+  // - there are significant amount of similarly duplicate logic, where
+  //   reordering left and right branches have similar logic, but different
+  //   pointer reference (left or right) and relational operator < or >
+  //
+  // - we can remove that "duplicate" by combinining both blocks into one
+  //   generic method that driven by a pass in boolean (left or right)
+  //
+  // - or we can use macro for text substutition, including >, <, left and right
+  // text.
+  //
+  // - or we just left it be where it is now (duplicated), 1st approach will
+  //   alter the original concise logic by taking into account of extra
+  //   argument, and it will complicate existing logic.
+  //
+  //   where else 2nd logic will have to hide thing behind a C macro which is
+  //   kind raw and hard to read when cross multiple lines, multi macro is hard
+  //   to read.
+  //
+  // In short, I prefer readability of code over saving a few lines, modern
+  // compiler is good in generating effecient code.
 
-    rightLevel = determineMaxDepthLevel(root->right);
-    leftLevel  = determineMaxDepthLevel(root->left);
+  if ((rightLevel - leftLevel) >= 2) // reorder right branch
+  {
+    newRoot = root->right;
+    rightLevel = determineMaxDepthLevel(newRoot->right);
+    leftLevel = determineMaxDepthLevel(newRoot->left);
 
-    // TODO?
-    // - there are significant amount of similarly duplicate logic, where
-    //   reordering left and right branches have similar logic, but different
-    //   pointer reference (left or right) and relational operator < or >
-    //
-    // - we can remove that "duplicate" by combinining both blocks into one
-    //   generic method that driven by a pass in boolean (left or right)
-    //
-    // - or we can use macro for text substutition, including >, <, left and right text.
-    //
-    // - or we just left it be where it is now (duplicated), 1st approach will
-    //   alter the original concise logic by taking into account of extra argument, and
-    //   it will complicate existing logic.
-    //
-    //   where else 2nd logic will have to hide thing behind a C macro which is kind
-    //   raw and hard to read when cross multiple lines, multi macro is hard to read.
-    //
-    // In short, I prefer readability of code over saving a few lines, modern compiler
-    // is good in generating effecient code.
+    if (leftLevel > rightLevel) {
+      newRoot = newRoot->left;
 
-    if ( ( rightLevel - leftLevel ) >= 2 ) // reorder right branch
-    {
-        newRoot    = root->right;
-        rightLevel = determineMaxDepthLevel(newRoot->right);
-        leftLevel  = determineMaxDepthLevel(newRoot->left);
+      tmp = newRoot;
+      while (NULL != tmp->right)
+        tmp = tmp->right;
 
-
-        if ( leftLevel > rightLevel )
-        {
-            newRoot = newRoot->left;
-
-            tmp = newRoot;
-            while ( NULL != tmp->right )
-                tmp = tmp->right;
-
-            tmp->right        = root->right;
-            root->right->left = NULL;
-        }
-
-        tmp = newRoot;
-        while ( NULL != tmp->left )
-            tmp = tmp->left;
-
-        tmp->left = root;
-
-        root->right = NULL;
-        *parent     = newRoot;
-
-        treeRebalanceRecursive(&(newRoot->left), newRoot->left);
+      tmp->right = root->right;
+      root->right->left = NULL;
     }
-    else if ( ( leftLevel - rightLevel ) >= 2 ) // reorder left branch
-    {
-        newRoot = root->left;
 
-        rightLevel = determineMaxDepthLevel(newRoot->right);
-        leftLevel  = determineMaxDepthLevel(newRoot->left);
+    tmp = newRoot;
+    while (NULL != tmp->left)
+      tmp = tmp->left;
 
-        if ( rightLevel > leftLevel )
-        {
-            newRoot = newRoot->right;
+    tmp->left = root;
 
-            tmp = newRoot;
-            while ( NULL != tmp->left )
-                tmp = tmp->left;
+    root->right = NULL;
+    *parent = newRoot;
 
-            tmp->left         = root->left;
-            root->left->right = NULL;
-        }
+    treeRebalanceRecursive(&(newRoot->left), newRoot->left);
+  } else if ((leftLevel - rightLevel) >= 2) // reorder left branch
+  {
+    newRoot = root->left;
 
-        tmp = newRoot;
-        while ( NULL != tmp->right )
-            tmp = tmp->right;
+    rightLevel = determineMaxDepthLevel(newRoot->right);
+    leftLevel = determineMaxDepthLevel(newRoot->left);
 
-        tmp->right = root;
+    if (rightLevel > leftLevel) {
+      newRoot = newRoot->right;
 
-        root->left = NULL;
-        *parent    = newRoot;
+      tmp = newRoot;
+      while (NULL != tmp->left)
+        tmp = tmp->left;
 
-        treeRebalanceRecursive(&(newRoot->right), newRoot->right);
+      tmp->left = root->left;
+      root->left->right = NULL;
     }
+
+    tmp = newRoot;
+    while (NULL != tmp->right)
+      tmp = tmp->right;
+
+    tmp->right = root;
+
+    root->left = NULL;
+    *parent = newRoot;
+
+    treeRebalanceRecursive(&(newRoot->right), newRoot->right);
+  }
 }
 
+struct TreeNode *treeRebalance(struct TreeNode *root) {
+  if (NULL == root)
+    return NULL;
 
-struct TreeNode * treeRebalance(struct TreeNode *root)
-{
-    if ( NULL == root )
-        return NULL;
+  treeRebalanceRecursive(&root, root);
 
-    treeRebalanceRecursive(&root, root);
-
-    return root;
+  return root;
 }
 
+struct TreeNode *addTreeNodeAndRebalanceTree(struct TreeNode *root, int val) {
+  root = addTreeNode(root, val);
 
-struct TreeNode * addTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
-{
-    root = addTreeNode(root, val);
-
-    return treeRebalance(root);
+  return treeRebalance(root);
 }
 
+struct TreeNode *delTreeNodeAndRebalanceTree(struct TreeNode *root, int val) {
+  // we do a general tree deletion of node and then we re-balanancing the tree.
+  // However re-balancing is not always needed if the delete does not change
+  // the height of subtree of the parent node of the to be deleted node does not
+  // change.
 
-struct TreeNode * delTreeNodeAndRebalanceTree(struct TreeNode *root, int val)
-{
-    // we do a general tree deletion of node and then we re-balanancing the tree.
-    // However re-balancing is not always needed if the delete does not change
-    // the height of subtree of the parent node of the to be deleted node does not
-    // change.
+  root = delTreeNode(root, val);
 
-    root = delTreeNode(root, val);
-
-    return treeRebalance(root);
+  return treeRebalance(root);
 }
-
 
 /* We take a bottom up approach that we validate if such tree is AVL balanced,
  * if it is not, then we can return immediately to top of the stack call, else
  * we validate at higher level if the tree is AVL balanced.
  *
  * The other approach is that the AVL TreeNode maintains a left and right count
- * depth level at all time, and rolling the maximum depth level up to higher level
- * and so we only need to check the root level left and right maximum depth gap
- * to decide if the whole tree is AVL
+ * depth level at all time, and rolling the maximum depth level up to higher
+ * level and so we only need to check the root level left and right maximum
+ * depth gap to decide if the whole tree is AVL
  */
-int isTreeNodeBalanced(struct TreeNode *root)
-{
-    int leftLevel;
-    int rightLevel;
+int isTreeNodeBalanced(struct TreeNode *root) {
+  int leftLevel;
+  int rightLevel;
 
+  if (NULL == root)
+    return 1;
 
-    if ( NULL == root )
-        return 1;
+  if (NULL != root->left)
+    if (!isTreeNodeBalanced(root->left))
+      return 0;
 
-    if ( NULL != root->left )
-        if ( ! isTreeNodeBalanced(root->left) )
-            return 0;
+  if (NULL != root->right)
+    if (!isTreeNodeBalanced(root->right))
+      return 0;
 
-    if ( NULL != root->right )
-        if ( ! isTreeNodeBalanced(root->right) )
-            return 0;
+  rightLevel = determineMaxDepthLevel(root->right);
+  leftLevel = determineMaxDepthLevel(root->left);
 
-    rightLevel = determineMaxDepthLevel(root->right);
-    leftLevel  = determineMaxDepthLevel(root->left);
-
-    return  ( ( leftLevel - rightLevel ) < 2 )
-            && ( ( rightLevel - leftLevel ) < 2 );
+  return ((leftLevel - rightLevel) < 2) && ((rightLevel - leftLevel) < 2);
 }

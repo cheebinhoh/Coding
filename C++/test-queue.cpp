@@ -4,28 +4,26 @@
  *
  */
 
-#include <iostream>
+#include <array>
 #include <cstdio>
+#include <forward_list>
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <queue>
 #include <string>
 #include <vector>
-#include <array>
-#include <list>
-#include <iterator>
-#include <queue>
-#include <forward_list>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
-    list<int> l = {1, 2, 3};
-    queue<int, list<int>> q(l);
+int main(int argc, char *argv[]) {
+  list<int> l = {1, 2, 3};
+  queue<int, list<int>> q(l);
 
-    while (! q.empty())
-    {
-        cout << q.front() << endl;
-        q.pop();
-    }
+  while (!q.empty()) {
+    cout << q.front() << endl;
+    q.pop();
+  }
 
-    return 0;
+  return 0;
 }
