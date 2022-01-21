@@ -6,7 +6,7 @@
 #
 # Happy coding!
 
-args=`getopt sf: $*`
+args=`getopt sm:f: $*`
 
 if [ $? != 0 ]; then
 
@@ -16,12 +16,17 @@ if [ $? != 0 ]; then
     exit 2
 fi
 
+msg=""
 silent=""
 set -- $args
 
 for i; do
     case "$i" in
         -s) silent="yes"
+            shift;;
+
+        -m) msg=$optarg
+            shift
             shift;;
 
         --) shift
