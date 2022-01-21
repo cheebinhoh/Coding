@@ -12,7 +12,7 @@ if [ $? != 0 ]; then
 
     echo "Usage: `basename $0` -s [-f \"%Y-%m-%d %H:%M:%S\"] \"2022-01-21 12:00:00\""
     echo
-    echo "    -s : silent"
+    echo "    -s : silent, default is echo the count down second"
     exit 2
 fi
 

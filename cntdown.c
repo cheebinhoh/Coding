@@ -1,17 +1,19 @@
-/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+/* Copyright © 2022 Chee Bin HOH. All rights reserved.
  *
  * A program that returns number of seconds until target date time.
  * it is toy program created in respond to a friend leaving a bad company
- * and employer and how I told him that I am going to create an app to
- * show the count down.
+ * and how I told him that I am going to create an app show the count down
+ * until his last day.
  *
  * It exhibits Unix philosophy, the program does a single task, determine
  * number of seconds until the target datetime, it accepts date time
- * in the following strftime format %Y-%m-%d %H:%M:%S in default, but
- * user can specify a different format with -f argument.
+ * in the following strftime format %Y-%m-%d %H:%M:%S by default, but
+ * user can specify a different format with -f argument, then it returns
+ * the number of seconds by printing it, do one thing and do it well.
  *
  * I also added a companion front end shell program that can do fun thing
- * on top of this program.
+ * on top of this program, like calling this program repeatedly until count
+ * down is zero, silent mode or other options.
  *
  * Happy coding!
  */
