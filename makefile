@@ -10,7 +10,7 @@ all : libbtree.a libllist.a libsearch-sort.a libdgraph.a btreepathsum.out btreeb
         search-sort.out remove-c-comment.out string-utility.out calculator.out shrink-space.out \
         trim-space.out replace-tab-with-space.out syntax-validate-parenthese.out fold-line.out \
         find2ndMaxNumber.out transformStr2Str.out trafficdemand.out coding-test.out \
-        coding-test-2.out llist-test.out dgraph-test.out
+        coding-test-2.out llist-test.out dgraph-test.out cntdown.out
 
 
 # libraries
@@ -136,6 +136,9 @@ btree-test.out : btree-test.c libbtree.a btree.h
 
 dgraph-test.out : dgraph-test.c libdgraph.a libllist.a
 	gcc -o $@ dgraph-test.c -L. -ldgraph -lllist
+
+cntdown.out : cntdown.c
+	gcc -o $@ cntdown.c
 
 # miscallenous
 clean:
