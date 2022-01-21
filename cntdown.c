@@ -5,7 +5,7 @@
  * and employer and how I told him that I am going to create an app to
  * show the count down.
  *
- * It exhibit Unix philosophy, the program does a single task, determine
+ * It exhibits Unix philosophy, the program does a single task, determine
  * number of seconds until the target datetime, it accepts date time
  * in the following strftime format %Y-%m-%d %H:%M:%S in default, but
  * user can specify a different format with -f argument.

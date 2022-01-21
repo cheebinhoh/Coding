@@ -7,8 +7,7 @@
 # Happy coding!
 
 args=`getopt sf: $*`
-# you should not use `getopt abo: "$@"` since that would parse
-# the arguments differently from what the set command below does.
+
 if [ $? != 0 ]; then
 
     echo "Usage: `basename $0` -s [-f \"%Y-%m-%d %H:%M:%S\"] \"2022-01-21 12:00:00\""
