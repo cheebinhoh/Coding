@@ -6,35 +6,30 @@
 #
 # Happy coding!
 
-args=`getopt sm:f: $*`
-
-if [ $? != 0 ]; then
-
-    echo "Usage: `basename $0` -s [-f \"%Y-%m-%d %H:%M:%S\"] \"2022-01-21 12:00:00\""
-    echo
-    echo "    -s : silent, default is echo the count down second"
-    exit 2
-fi
-
-msg=""
 silent=""
-set -- $args
+while getopts "m:sf:" opt; do
+    case "$opt" in
+        s)
+            silent="yes"
+            ;;
 
-for i; do
-    case "$i" in
-        -s) silent="yes"
-            shift;;
+        f)
+            formatOption="-f ${OPTARG} "
+            ;;
 
-        -m) msg=$optarg
-            shift
-            shift;;
+        m)
+            msg=${OPTARG}
+            ;;
 
-        --) shift
-            break;;
+        *)
+            echo "Usage: `basename $0` [-s -m \"message at end\" -f \"%Y-%m-%d %H:%M:%S\"] \"2022-01-21 12:00:00\""
+            exit 1
     esac
 done
 
-remain=`./cntdown.out "$*"`
+shift $((OPTIND-1))
+
+remain=`./cntdown.out ${formatOption+"$formatOption"} "$*"`
 runResult=$?
 
 if [ "$runResult" -ne "0" ]; then
@@ -50,13 +45,14 @@ while [ "${remain}" -gt "0" ]; do
     fi
 
     sleep 1;
-    remain=`./cntdown.out "$*"`
+
+    remain=`./cntdown.out ${formatOption+"$formatOption"} "$*"`
 done
 
 if [ "${silent}" != "yes" ]; then
 
     if [ "${remain}" -eq "0" ]; then
 
-        echo 0
+        echo ${msg:-0}
     fi
 fi
