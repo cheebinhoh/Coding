@@ -58,25 +58,14 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  targetTm.tm_sec = 0;
-  targetTm.tm_min = 0;
-  targetTm.tm_hour = 0;
-  targetTm.tm_mday = 0;
-  targetTm.tm_mon = 0;
-  targetTm.tm_yday = 0;
-  targetTm.tm_year = 0;
-  targetTm.tm_wday = 0;
-  targetTm.tm_yday = 0;
-  targetTm.tm_isdst = 0;
-
   stop = strptime(argv[optind], format, &targetTm);
   if (NULL == stop || '\0' != *stop) {
     fprintf(stderr, "invalid date time value\n");
     exit(2);
   }
 
-  now = time(NULL);
   targetTime = mktime(&targetTm);
+  now = time(NULL);
   printf("%ld\n", targetTime - now);
 
   return 0;
