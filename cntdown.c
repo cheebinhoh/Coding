@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
+  targetTm.tm_isdst = 0; // FIXME: do we need to set it to 1 when DST started?
   stop = strptime(argv[optind], format, &targetTm);
   if (NULL == stop || '\0' != *stop) {
     fprintf(stderr, "invalid date time value\n");
