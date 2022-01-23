@@ -5,6 +5,10 @@
  * and how I told him that I am going to create an app show the count down
  * until his last day.
  *
+ * It is more like a joke, but it spawns out that I can use this opportunity
+ * to write a little C program and companion shell script to demonstate 
+ * Unix philosophy (https://en.wikipedia.org/wiki/Unix_philosophy).
+ *
  * It exhibits Unix philosophy, the program does a single task, determine
  * number of seconds until the target datetime, it accepts date time
  * in the following strftime format %Y-%m-%d %H:%M:%S by default, but
