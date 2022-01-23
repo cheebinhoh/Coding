@@ -4,9 +4,11 @@
 #
 # A front end to cntdown
 #
-# Happy coding!  .... note that I am always a C programmer before I am anything else in computing,
-# so I always declare variable in the proper scope even bourne shell has a loose scope definition
-# and variable just spawn into existence in outer scope if it is assigned value in inner scope,
+# Happy coding!  .... note that I am always a C programmer before 
+# I am anything else in computing, so the habit of declaring variable
+# in the proper scope even bourne shell has a loose scope definition 
+# and variable just spawn into existence in outer scope if it is 
+# assigned value in inner scope.
 
 
 displayHelp()
