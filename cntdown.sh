@@ -7,8 +7,12 @@
 # Happy coding!
 
 silent=""
-while getopts "m:sf:" opt; do
+beep=""
+while getopts "bm:sf:" opt; do
     case "$opt" in
+        b)
+            beep="yes"
+            ;;
         s)
             silent="yes"
             ;;
@@ -49,10 +53,16 @@ while [ "${remain}" -gt "0" ]; do
     remain=`./cntdown.out ${formatOption+"$formatOption"} "$*"`
 done
 
-if [ "${silent}" != "yes" ]; then
 
-    if [ "${remain}" -eq "0" ]; then
+if [ "${remain}" -eq "0" ]; then
+
+    if [ "${silent}" != "yes" ]; then
 
         echo ${msg:-0}
+    fi
+
+    if [ "${beep}" == "yes" ]; then
+
+        echo '\007\c'
     fi
 fi
