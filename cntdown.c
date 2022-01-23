@@ -6,7 +6,7 @@
  * until his last day.
  *
  * It is more like a joke, but it spawns out that I can use this opportunity
- * to write a little C program and companion shell script to demonstate 
+ * to write a little C program and companion shell script to demonstate
  * Unix philosophy (https://en.wikipedia.org/wiki/Unix_philosophy).
  *
  * It exhibits Unix philosophy, the program does a single task, determine
@@ -36,10 +36,11 @@ int main(int argc, char *argv[]) {
   time_t now;
   time_t targetTime;
   struct tm targetTm;
-  char defaultFormat[] = "%Y-%m-%d %H:%M:%S";
-  char *format = defaultFormat;
-  char *stop;
-  int opt;
+  struct tm localTm;
+  char   defaultFormat[] = "%Y-%m-%d %H:%M:%S";
+  char * format = defaultFormat;
+  char * stop;
+  int    opt;
 
   baseProgName = basename(argv[0]);
 
@@ -62,15 +63,18 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  targetTm.tm_isdst = 0; // FIXME: do we need to set it to 1 when DST started?
+  now = time(NULL);
+  localtime_r(&now, &localTm);
+  targetTm = localTm;
+
   stop = strptime(argv[optind], format, &targetTm);
   if (NULL == stop || '\0' != *stop) {
     fprintf(stderr, "invalid date time value\n");
     exit(2);
   }
 
-  targetTime = mktime(&targetTm);
   now = time(NULL);
+  targetTime = mktime(&targetTm);
   printf("%ld\n", targetTime - now);
 
   return 0;

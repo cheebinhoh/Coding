@@ -105,7 +105,8 @@ while [ "${remain}" -gt "0" ]; do
 
     if [ "${silent}" != "yes" ]; then
 
-        echo "${remain}"
+        echo "\r                        \c" # a quick hack :)
+        echo "\r${remain}\c";
     fi
 
     sleep 1;
