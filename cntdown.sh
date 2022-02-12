@@ -56,6 +56,14 @@ while getopts "H:M:S:bm:sf:h" opt; do
     esac
 done
 
+# FIXME: put up an autoconf system to detect version of date and then customize the file, 
+# the other way is to use more platform independent language, like python, but who need 
+# python when you have bourne shell.
+#
+# for some reason if we try to run "date" as a command inside the "if", like "if date -v +1H 2>dev/null; then ..."
+# two instances of the command is spawned in ubuntu shell for WSL that I test, so I change it to capture 
+# output.
+
 dateResult=$(date -v +1H 2>/dev/null)
 
 if [ "$dateResult" = "" ]; then
