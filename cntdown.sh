@@ -56,10 +56,23 @@ while getopts "H:M:S:bm:sf:h" opt; do
     esac
 done
 
+if [ date --date="next hour" &>/dev/null ]; then
+    linuxDate="yes"
+else
+    linuxDate=""
+fi
+
 adjustDateTimeParams=""
 if [ "$adjustHour" != "" ]; then
 
-    adjustDateTimeParams="-v +${adjustHour}H"
+    if [ "$linuxDate" = "yes" ]; then
+       while [ "$adjustHour" -gt "0" ]; do
+           adjustDateTimeParams="${adjustDateTimeParams} next hour"
+           adjustHour=$((adjustHour -  1))
+       done
+    else
+       adjustDateTimeParams="-v +${adjustHour}H"
+    fi
 fi
 
 if [ "$adjustMin" != "" ]; then
@@ -75,7 +88,11 @@ fi
 dateTimeVal=""
 if [ "$adjustDateTimeParams" != ""  ]; then
 
-    dateTimeVal=`date $adjustDateTimeParams "+%Y-%m-%d %H:%M:%S"`
+    if [ "$linuxDate" = "yes" ]; then
+       dateTimeVal=`date --date="$adjustDateTimeParams" +"%Y-%m-%d %H:%M:%S"`
+    else
+       dateTimeVal=`date $adjustDateTimeParams "+%Y-%m-%d %H:%M:%S"`
+    fi
 fi
 
 shift $((OPTIND-1))
@@ -85,7 +102,7 @@ if [ "$#" -eq "1" ]; then
     dateTimeVal="$*"
 fi
 
-if [ "$dateTimeVal" == "" ]; then
+if [ "$dateTimeVal" = "" ]; then
  
     displayHelp
     exit 1
