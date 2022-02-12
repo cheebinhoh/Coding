@@ -56,7 +56,7 @@ while getopts "H:M:S:bm:sf:h" opt; do
     esac
 done
 
-if [ date --date="next hour" &>/dev/null ]; then
+if date --date="next hour" &>/dev/null; then
     linuxDate="yes"
 else
     linuxDate=""
