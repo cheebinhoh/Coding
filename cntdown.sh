@@ -61,8 +61,9 @@ done
 # python when you have bourne shell.
 #
 # for some reason if we try to run "date" as a command inside the "if", like "if date -v +1H 2>dev/null; then ..."
-# two instances of the command is spawned in ubuntu shell for WSL that I test, so I change it to capture 
-# output.
+# two instances of the command is spawned in ubuntu shell for WSL that I test, something that I do not quite
+# experience before, so I change it to capture output to force shell to wait for the command to run and only
+# one instance is run. I plan to look into that, but this is not needed if I put it into autoconf
 
 dateResult=$(date -v +1H 2>/dev/null)
 
