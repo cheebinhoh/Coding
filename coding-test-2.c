@@ -664,8 +664,8 @@ int getMaxNumberOfElements(int *input, int inputSize, int k, int *output) {
       output[outputSize++] = input[i];
     } else {
       /* output is full, so if there is one in output that is 
-       * smaller than input[i], we shft the output list and 
-       * add the new input[i]. 
+       * smaller than input[i], we shift the output list to left
+       * to free up space at the end and add new input[i] at end.
        */
       smallestValue = input[i];
       smallestIndex = -1;
