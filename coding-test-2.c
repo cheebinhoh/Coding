@@ -648,7 +648,7 @@ void runRemoveVowelFromStrings(void) {
 /*
  * Test 10:
  *
- * Return the k number of numbers that adds up to maximum value.
+ * Return the k number of numbers that adds up to maximum value, assuming output is preallocated.
  */
 int getMaxNumberOfElements(int *input, int inputSize, int k, int *output) {
   int outputSize;
