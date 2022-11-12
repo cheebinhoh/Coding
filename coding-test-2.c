@@ -644,6 +644,82 @@ void runRemoveVowelFromStrings(void) {
   printf("After moving vowels is \"%s\"\n", s2);
 }
 
+
+/*
+ * Test 10:
+ *
+ * Return the k number of numbers that adds up to maximum value.
+ */
+int getMaxNumberOfElements(int *input, int inputSize, int k, int *output) {
+  int outputSize;
+  int i;
+  int j;
+  int smallestIndex;
+  int smallestValue;
+  int tmp;
+
+  outputSize = 0;
+  for (i = 0; i < inputSize; i++) {
+    if (outputSize < k) {
+      output[outputSize++] = input[i];
+    } else {
+      smallestValue = input[i];
+      smallestIndex = -1;
+
+      for (j = outputSize - 1; j >= 0; j--) {
+        if (output[j] < smallestValue) {
+          smallestIndex = j;
+          smallestValue = output[j];
+        }
+      }
+
+      if (smallestIndex >= 0) {
+        for (j = smallestIndex; j < outputSize - 1; j++) {
+          output[j] = output[j + 1];
+        }
+
+        output[outputSize - 1] = input[i];
+      }
+    }
+  }
+
+  return outputSize; 
+}
+
+void runGetMaxNumberOfElements(void) {
+  int array1[] = { 3, 1, -3, -4, 2, 4, 5};
+  int output[10];
+  int outputSize;
+  int i;
+ 
+  printf("\n");
+  printf("Test 10: find k elements added up to max value\n");
+  printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
+
+  printf("\n");
+  printf("2 max elements: ");
+  outputSize = getMaxNumberOfElements(array1, sizeof( array1 ) / sizeof( array1[0] ), 2, output);
+  printIntegerArray(output, outputSize);
+
+  printf("\n");
+  printf("3 max elements: ");
+  outputSize = getMaxNumberOfElements(array1, sizeof( array1 ) / sizeof( array1[0] ), 3, output);
+  printIntegerArray(output, outputSize);
+
+  printf("\n");
+  printf("1 max elements: ");
+  outputSize = getMaxNumberOfElements(array1, sizeof( array1 ) / sizeof( array1[0] ), 1, output);
+  printIntegerArray(output, outputSize);
+
+  printf("\n");
+  printf("6 max elements: ");
+  outputSize = getMaxNumberOfElements(array1, sizeof( array1 ) / sizeof( array1[0] ), 6, output);
+  printIntegerArray(output, outputSize);
+ 
+  printf("\n");
+}
+
+
 // the starting point...
 int main(int argc, char *argv[]) {
   runFindMissingNumberInTheArray();
@@ -671,6 +747,9 @@ int main(int argc, char *argv[]) {
   printf("\n");
 
   runRemoveVowelFromStrings();
+  printf("\n");
+
+  runGetMaxNumberOfElements();
   printf("\n");
 
   return 0;
