@@ -24,15 +24,14 @@
 
 /* Test 1:
  *
- * Given an array of integers and a value, determine if there are any three
- * integers in the array whose sum equals the given value.
+ * Given an array of integers and a sum value, determine if there are any three
+ * integers in the array whose sum up equals the given sum value. And assume that
+ * the integers positive numbers and unique.
  *
- * How do we improve the performance? one way is to keep the array in sorted,
- * so we traverse from start (smaller number), if the current value at j is
- * positive value and j + k already exceeds sum, then we can skip the remaining
- * as we are not going to find a sum of i + j + i that is equal to sum.
+ * If the array of integers are unsorted, a simple but inefficient way to find
+ * if there are integers add up to the sum is to have 3 loops as below.
  *
- * This is ineffecient and the logic is quadratic in term of O(n^3)
+ * This is still ineffecient and the logic is quadratic in term of O(n^3).
  */
 int deteremineIf3NumberSumToValue(int array[], int size, int sum) {
   int i;
@@ -54,6 +53,21 @@ found:
   return 1;
 }
 
+/*
+ * How do we improve the performance from previous code? one way is to keep the
+ * array in sorted, so we traverse from start (smaller number), if the current
+ * value at i and j already add up exceeding sum, then we can skip the k loop
+ * (assume that all our numbers are positive value) as we are not going to find
+ * a sum of i + j + i that is equal to sum.
+ *
+ * The solution is still made up of 3 nested loops, but traverse backward to find
+ * a value at i (1st loop) where after minus it from sum, we have remaining sum that
+ * is greater than 0.
+ *
+ * Then in the j (2nd loop), we start the j with index 1 smaller than i (as we the 
+ * next number add up to sum will be smaller than where ith value), and remaining
+ * sum minus the value at jth should be 1 or more.
+ */
 int determineIf3NumberSumToValueBySort(int array[], int size, int sum) {
   int i;
   int j;
@@ -64,7 +78,7 @@ int determineIf3NumberSumToValueBySort(int array[], int size, int sum) {
 
   remaining = sum;
   for (i = size - 1; i > 1; i--) {
-    if ((remaining - array[i]) > 1) {
+    if ((remaining - array[i]) > 0) {
       remaining -= array[i];
 
       for (j = i - 1; j > 0; j--) {
@@ -90,71 +104,86 @@ found:
   return 1;
 }
 
-// in the case we have a long list of items, e.g. 5000 and the 3 values added up
-// to the sum are located between 4500 to 5000, then searching from the
-// beginning will be in efficient.
+// In this approach, we have 3 loops too, but we do not search through the
+// whole list of array in each loop (which is O(n^3), instead we do this:
 //
-// in this case, we can make use of binary search approach that we do the
-// following iterations:
-// - 1st = midpoint is at 2500, we try to find two values from 0 - 2499 and
-// another two from 2501 - 5000
-//   to add up to sum.
-// - 2nd = midpoint is at 3751, we try to find two values from 2501 - 3750 and
-// aniother two from 3752 - 5000
-// - 3rd = midpoint is at 4377, and we further divide it into two panes.
+// in 1st loop, we find the index in the array for the largeset value that is
+// smaller than sum, we use binary search to quickly do so (based on the fact
+// that the list of numbers are > 0 and unique).
 //
-// if we are diving into right pane, we will shorten the array in subcall as we
-// do not awant the subcall left pane to extend toward all the way to 0.
-int deteremineIf3NumberSumToValueInDivAndConquerRecursive(int array[], int size,
-                                                          int sum, int mid) {
-  int i;
-  int j;
+// in the 2nd loop, we find the index in the array (from 0 up to 1st loop current
+// index) for the largest value that is smaller than sum - 1st loop' value,
+// we use binary search to do so.
+//
+// in the 3rd loop, we find the index in the array (from 0 up to 2nd loop index) 
+// for the value that is matching to the sum - (1st loop' value + 2nd loop' value).
+//
+// This is much efficient approach if we have a long list of array and where the
+// values are unique, spread apart, example, [1, 5, 100, 2000, 2001, 2002, ...
+// 4000, 4020, ... 5000].
+//
+// A binary search to locate the largest value smaller than the remaining value
+// allows us to quickly slide down the search space in next loop.
+//
+int determineLargestValueSmallerThanN(int array[], int size, 
+                                      int n) {
+  int start;
+  int mid;
+  int end;
 
-  if (mid >= size)
-    return 0;
-
-  if (mid >= 2) {
-    for (i = mid - 1; i > 0; i--) {
-      for (j = i - 1; j >= 0; j--) {
-        if ((array[mid] + array[i] + array[j]) == sum)
-          goto found;
-      }
+  start = 0;
+  end = size - 1;
+  while (start <= end) {
+    mid = start + ((end - start) / 2);
+    if (array[mid] == n) {
+      return mid - 1;
+    } else if (array[mid] < n) {
+      start = mid + 1; 
+    } else {
+      end = mid - 1;
     }
   }
-
-  for (i = mid + 1; i < size - 1; i++) {
-    for (j = i + 1; j < size; j++) {
-      if ((array[mid] + array[i] + array[j]) == sum)
-        goto found;
-    }
-  }
-
-  if ((size - mid) > 5) {
-    if (deteremineIf3NumberSumToValueInDivAndConquerRecursive(
-            &array[mid + 1], size - mid - 1, sum, (size - mid - 1) / 2))
-      goto found;
-  } else {
-    for (i = mid + 1; i < size - 2; i++) {
-      if (deteremineIf3NumberSumToValueInDivAndConquerRecursive(
-              &array[i], size - mid - 1, sum, 0))
-        goto found;
-    }
-  }
-
-  if (mid > 0 && deteremineIf3NumberSumToValueInDivAndConquerRecursive(
-                     array, size, sum, mid / 2))
-    goto found;
-
-  return 0;
-
-found:
-  return 1;
+  
+  return mid;
 }
 
 int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size,
                                                  int sum) {
-  return deteremineIf3NumberSumToValueInDivAndConquerRecursive(array, size, sum,
-                                                               size / 2);
+  int i;
+  int j;
+  int k;
+  int remaining;
+  int largestValueSmallerThanN;
+
+  quickSort(array, size);
+
+  largestValueSmallerThanN = determineLargestValueSmallerThanN(array, size, sum);
+  if (largestValueSmallerThanN == -1) {
+    return 0;
+  }
+
+  for (i = largestValueSmallerThanN; i >= 0; i--) {
+    remaining = sum - array[i];
+
+    largestValueSmallerThanN = determineLargestValueSmallerThanN(array, i, remaining);
+    if (largestValueSmallerThanN == -1) {
+      continue;
+    }
+
+    for (j = largestValueSmallerThanN; j >= 0; j--) {
+      remaining -= array[j];
+
+      for (k = j - 1; k >= 0; k--) {
+        if (remaining == array[k]) {
+          return 1;
+        }
+      }
+      
+      remaining += array[j];
+    }
+  }
+
+  return 0;
 }
 
 void runDeteremineIf3NumberSumToValue(void) {
@@ -189,26 +218,6 @@ void runDeteremineIf3NumberSumToValue(void) {
   }
 
   printf("\n");
-  printf("Use Divide & Conquer and Binary way of brute force method\n");
-  found = deteremineIf3NumberSumToValueInDivAndConquer(
-      number, sizeof(number) / sizeof(number[0]), 20);
-
-  if (found) {
-    printf("There are 3 numbers sum up to %d\n", 20);
-  } else {
-    printf("There are no 3 numbers sum up to %d\n", 20);
-  }
-
-  found = deteremineIf3NumberSumToValueInDivAndConquer(
-      number, sizeof(number) / sizeof(number[0]), 21);
-
-  if (found) {
-    printf("There are 3 numbers sum up to %d\n", 21);
-  } else {
-    printf("There are no 3 numbers sum up to %d\n", 21);
-  }
-
-  printf("\n");
   printf("Sort it before attempting it\n");
   found = determineIf3NumberSumToValueBySort(
       number, sizeof(number) / sizeof(number[0]), 20);
@@ -220,6 +229,26 @@ void runDeteremineIf3NumberSumToValue(void) {
   }
 
   found = determineIf3NumberSumToValueBySort(
+      number, sizeof(number) / sizeof(number[0]), 21);
+
+  if (found) {
+    printf("There are 3 numbers sum up to %d\n", 21);
+  } else {
+    printf("There are no 3 numbers sum up to %d\n", 21);
+  }
+
+  printf("\n");
+  printf("Use Divide & Conquer and Binary way of brute force method\n");
+  found = deteremineIf3NumberSumToValueInDivAndConquer(
+      number, sizeof(number) / sizeof(number[0]), 20);
+
+  if (found) {
+    printf("There are 3 numbers sum up to %d\n", 20);
+  } else {
+    printf("There are no 3 numbers sum up to %d\n", 20);
+  }
+
+  found = deteremineIf3NumberSumToValueInDivAndConquer(
       number, sizeof(number) / sizeof(number[0]), 21);
 
   if (found) {
