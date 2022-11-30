@@ -1,17 +1,16 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * A friend shares above program via the following link
+ * A friend shares the following challenge.
  * https://www.geeksforgeeks.org/transform-one-string-to-another-using-minimum-number-of-given-operation
  *
  * Given two strings A and B, the task is to convert A to B if possible.
- * The only operation allowed is to put any character from A and insert it at
- * front. Find if it’s possible to convert the string. If yes, then shuffle the
- * string A into B in minimum move.
+ * The only operation allowed is move any character from A to the front to
+ * shuffle the string A into B in minimum move.
  *
  * I found it interesting enough that I would like to solve it, here is my
  * answer to it.
  *
- * Howver, my program doees not transform the string in minimum move in all
+ * However, my program doees not transform the string in minimum move in ALL 
  * cases, the logic only look one move ahead at time and find the best move
  * among characters to move to front, it does not do backtracking or consider
  * more than one consecutive moves at a time.
@@ -50,27 +49,30 @@ int debug = 0;
 char *programName = NULL;
 
 /* It returns 1 if source can be translated into target, else 0.
+ *
+ * A source can be translated into target if they meet the following
+ * conditions:
+ * 
+ * - they have same # of characters
+ * - they have same # of each of the ASCII characters (we assume ASCII C
+ *   string).
  */
 int isTransformable(char source[], char target[]) {
   int i = 0;
-  int j = 0;
   int sH[256] = {0};
   int tH[256] = {0};
 
-  while ('\0' != source[i]) {
+  while ('\0' != source[i] && '\0' != target[i]) {
     sH[source[i]]++;
+    tH[target[i]]++;
 
     i++;
   }
 
-  while ('\0' != target[j]) {
-    tH[target[j]]++;
 
-    j++;
-  }
-
-  if (j != i)
+  if (source[i] != target[i]) {
     return 0;
+  }
 
   for (i = 0; i < (sizeof(sH) / sizeof(sH[0])); i++) {
     if (sH[i] != tH[i])
@@ -80,6 +82,13 @@ int isTransformable(char source[], char target[]) {
   return 1;
 }
 
+/* This moves the pivot character to the front and then calculates
+ * a score that indicates how many characters are matched after that.
+ *
+ * The caller can use this function to decide if it is a good move, this
+ * is not an optimum way of figure out the best move as we do not support
+ * backtracking of multiple moves (see example in comment above).
+ */
 int simulateMoveAndScore(char source[], char target[], int pivot) {
   int i;
   int j;
@@ -129,6 +138,13 @@ int simulateMoveAndScore(char source[], char target[], int pivot) {
   return score;
 }
 
+/* This is the main function that determines if we can reshuffle 
+ * source into target by moving one character to the front at a 
+ * time and how many moves are needed to do so.
+ *
+ * It returns -1 if there is no move possible to reshuffle source
+ * into target, else # of moves needed to do so.
+ */
 int transform(char source[], char target[]) {
   int i;
   int move = 0;
@@ -154,7 +170,7 @@ int transform(char source[], char target[]) {
       while ('\0' != source[j]) {
         score = simulateMoveAndScore(source, target, j);
 
-        if (debug && 0) {
+        if (debug) {
           printf("---- j = %d, source = %c, score = %d, highestScore = %d\n", j,
                  source[j], score, highestScore);
         }
