@@ -7,11 +7,11 @@ Use brute force method
 There are 3 numbers sum up to 20
 There are no 3 numbers sum up to 21
 
-Use Divide & Conquer and Binary way of brute force method
+Sort it before attempting it
 There are 3 numbers sum up to 20
 There are no 3 numbers sum up to 21
 
-Sort it before attempting it
+Use Divide & Conquer and Binary way of brute force method
 There are 3 numbers sum up to 20
 There are no 3 numbers sum up to 21
 

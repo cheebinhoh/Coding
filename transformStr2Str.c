@@ -170,11 +170,6 @@ int transform(char source[], char target[]) {
       while ('\0' != source[j]) {
         score = simulateMoveAndScore(source, target, j);
 
-        if (debug) {
-          printf("---- j = %d, source = %c, score = %d, highestScore = %d\n", j,
-                 source[j], score, highestScore);
-        }
-
         if (score >= highestScore) {
           pivot = j;
           highestScore = score;
