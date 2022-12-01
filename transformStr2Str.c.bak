@@ -10,7 +10,7 @@
  * I found it interesting enough that I would like to solve it, here is my
  * answer to it.
  *
- * However, my program does not transform the string in minimum move in ALL
+ * However, my program doees not transform the string in minimum move in ALL
  * cases, the logic only look one move ahead at time and find the best move
  * among characters to move to front, it does not do backtracking or consider
  * more than one consecutive moves at a time.
@@ -206,7 +206,7 @@ void printHelp(void) {
   fprintf(stderr, "%s [-d] [-h] [-s source1,source2,..] [-t target]\n",
           programName);
   fprintf(stderr, "\n");
-  fprintf(stderr, " -d                     : debug mode to demonstrate each "
+  fprintf(stderr, " -d                     : debug mode to demonstate each "
                   "step of the moves\n");
   fprintf(stderr, " -h                     : print this help message\n");
   fprintf(stderr, " -s source1,source2,... : list of source strings to be "
@@ -225,14 +225,14 @@ void runTest(char string[], char target[]) {
   // (https://en.wikibooks.org/wiki/C_Programming/Side_effects_and_sequence_points),
   //
   // there is no guarantee that 1st left most str1 is passed to printf before
-  // it is transformed by nested method transform call(...) and also there is no
-  // guarantee that 3rd argument str1 is evaluated into expression value for
+  // it is transformed by nested method transform call(...) and also there is no 
+  // gaurantee that 3rd argument str1 is evaluated into expression value for
   // the printf(...) call after transform(...) is called.
   //
-  // str1 is referenced and potentially changed via side effect by
-  // transform(...) within a single sequencing point (the whole function call),
-  // and the reference of first str1 is not used to influence the side effect of
-  // transform(...), then such expression is undefined in C and dangerous.
+  // str1 is referenced and potentially changed via side effect by transform(...)
+  // within a single sequencing point (the whole function call), and the reference
+  // of first str1 is not used to influence the side effect of transform(...),
+  // then such expression is undefined in C and dangerous.
 
   printf("---- Transform %s => %s\n", string, target);
 

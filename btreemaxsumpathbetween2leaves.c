@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find the maximum sum path betweeen two leaves in a binary tree.
+ * Find the maximum sum path between two leaves in a binary tree.
  */
 
 #include "btree.h"

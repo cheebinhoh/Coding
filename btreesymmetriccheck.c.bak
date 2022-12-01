@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Check if tree is symmetric that right branch of root is mirror of left branch
+ * Check if tree is sysmetric that right branch of root is mirror of left branch
  * in layout of the tree (not the values of node).
  */
 
@@ -10,9 +10,9 @@
 
 void checkIfTreeIsSysmetric(struct TreeNode *root) {
   if (isTreeSymmetric(root)) {
-    printf("The tree is symmetric\n");
+    printf("The tree is sysmetric\n");
   } else {
-    printf("The tree is not symmetric\n");
+    printf("The tree is not sysmetric\n");
   }
 }
 

@@ -709,7 +709,7 @@ Binary tree topology of adding 6, 7, 8, 5, 4, 10, 9:
 The binary tree is not AVL balanced
 
 
-After deleing 8, the tree topology:
+After deleting 8, the tree topology:
 
 6 (L=2, R=3)
      7 (L=0, R=2)
@@ -751,7 +751,7 @@ Self balancing binary tree of adding 6, 7, 8, 5, 4, 10, 9, 11:
 The binary tree is AVL balanced
 
 
-After deleing 5 and 6, the tree topology:
+After deleting 5 and 6, the tree topology:
 
 9 (L=2, R=2)
      10 (L=0, R=1)
@@ -876,7 +876,7 @@ The tree topology:
                -
                -
 
-The tree is sysmetric
+The tree is symmetric
 
 
 The tree topology (after setting root->right->left to NULL):
@@ -895,7 +895,7 @@ The tree topology (after setting root->right->left to NULL):
                -
                -
 
-The tree is not sysmetric
+The tree is not symmetric
 
 
 run btreetraverse.out

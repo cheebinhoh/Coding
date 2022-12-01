@@ -141,10 +141,10 @@ int determineIfStringCanBeSegmented(char *dictionary[], char *s) {
         return 1;
 
       // recursive method can be expensive and depending on the string to be
-      // segmented, we can be stack overflow, another way is to maintain
+      // segemented, we can be stack overflow, another way is to maintain
       // backtracking explicitly by storing the previous position in a list or
       // array, so that if next search and match does not work, we backtrack to
-      // previous position in string to explore into other search.
+      // previous poistion in string to explore into other search.
     }
   }
 
@@ -180,10 +180,10 @@ int determineIfStringCanBeSegmentedIterative(char *dictionary[], char *s) {
       }
 
       // recursive method can be expensive and depending on the string to be
-      // segmented, we can be stack overflow, another way is to maintain
+      // segemented, we can be stack overflow, another way is to maintain
       // backtracking explicitly by storing the previous position in a list or
       // array, so that if next search and match does not work, we backtrack to
-      // previous position in string to explore into other search.
+      // previous poistion in string to explore into other search.
     }
 
     i++;
@@ -275,7 +275,7 @@ int findLowHighIndex(int array[], int size, int val, int *low, int *high) {
 
   *low = e + 1;
 
-  // find the high
+  // fidn the high
   s = foundIndex + 1;
   e = size - 1;
   startIndex = s;
@@ -455,8 +455,8 @@ void printArrayInMatrix(int array[], int size, int matrixSize) {
  * 8      5      2
  * 3+     6+     9+
  *
- * new 3rd row is 9, 6 and 3, backward by 1 space, so we pick 9, 6 and 3 into
- * 3rd row, so the final matrix is:
+ * new 3rd row is 9, 6 and 3, backard by 1 space, so we pick 9, 6 and 3 into 3rd
+ * row, so the final matrix is:
  *
  * 7      4      1
  * 8      5      2

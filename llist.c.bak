@@ -339,8 +339,8 @@ int findListNodeRefIndex(struct ListNode *start, void *ref) {
 
   i = 0;
   while (NULL != start &&
-         start->data.ref != ref) // to be generic, we need to pass in comparison
-                                 // method for truly object identity
+         start->data.ref != ref) // to be geneic, we need to pass in comparison
+                                 // method for truely object identity
   {
     start = start->next;
     i++;

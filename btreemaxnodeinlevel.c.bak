@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find the maximum number of nodes in a level of a tree.
+ * Find the maximum nummber of nodes in a level of a tree.
  */
 
 #include "btree.h"

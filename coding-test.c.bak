@@ -31,7 +31,7 @@
  * If the array of integers are unsorted, a simple but inefficient way to find
  * if there are integers add up to the sum is to have 3 loops as below.
  *
- * This is still inefficient and the logic is quadratic in term of O(n^3).
+ * This is still ineffecient and the logic is quadratic in term of O(n^3).
  */
 int deteremineIf3NumberSumToValue(int array[], int size, int sum) {
   int i;
@@ -107,7 +107,7 @@ found:
 // In this approach, we have 3 loops too, but we do not search through the
 // whole list of array in each loop (which is O(n^3), instead we do this:
 //
-// in 1st loop, we find the index in the array for the largest value that is
+// in 1st loop, we find the index in the array for the largeset value that is
 // smaller than sum, we use binary search to quickly do so (based on the fact
 // that the list of numbers are > 0 and unique).
 //
@@ -335,11 +335,10 @@ void runBinarySearchOnRotatedSortedList(void) {
   int key;
   int i;
 
-  printf(
-      "Test 3 description: search for a given number in a sorted array, with "
-      "unique elements,\n"
-      "that has been rotated by some arbitrary number. Return -1 if the "
-      "number does not exist.\n");
+  printf("Test 3 description: earch for a given number in a sorted array, with "
+         "unique elements,\n"
+         "that has been rotated by some arbitrary number. Return -1 if the "
+         "number does not exist.\n");
   printf("\n");
 
   printf("On none-rotated list\n");
@@ -456,7 +455,7 @@ void runFindAllSumCombination(void) {
  * position, 2nd last is moved to 2nd character.
  *
  * The result of it is a string with characters of the each word reversed,
- * then we continue to reverse characters of a word that is broad definition
+ * then we continue to reverse characters of a word that is broad defintion
  * consists of a consecutive sequence of none-space characters or a consecutive
  * space of space characters. :)
  */

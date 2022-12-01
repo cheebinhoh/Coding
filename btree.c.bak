@@ -476,7 +476,7 @@ int isTreeSymmetric(struct TreeNode *root) {
   }
 
   // C programming language is simple, beautiful and concise and high
-  // performance, but it does come with certain deficiency in term of modern
+  // performance, but it does come with certain deficiency in term of moderm
   // programming language, like it does insist initialization of variable,
   // programmer is either discipline or runtime stack decide what value you got
   // :)
@@ -814,7 +814,7 @@ void treeMirrorSwap(struct TreeNode *root) { treeMirrorSwapRecursive(root); }
  * - if a post order node value appears on right position of the in order list,
  * then the value is part of the right branch of previous node.
  *
- * - if a post order node value appears on left position of the in order list,
+ * - if a post order node value appears on left positio of the in order list,
  * then the value is part of the left branch of _parent_ node of previous node.
  */
 struct TreeNode *buildBinaryTree(struct ListNode *inorder,

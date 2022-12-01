@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Find out if a binary tree is a subtree of another binary tree.
+ * Find out if a binar tree is a substree of another binary tree.
  */
 
 #include "btree.h"

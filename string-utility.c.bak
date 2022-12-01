@@ -1,6 +1,6 @@
 /* Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
- * Some common C string utilities.
+ * Some common C string utlities.
  */
 
 #include <ctype.h>
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 
   printf("Original string is \"%s\"\n", s);
   squeeze2(s, c);
-  printf("Squeeze + out, result is \"%s\"\n", s);
+  printf("Squenze + out, result is \"%s\"\n", s);
 
   return 0;
 }

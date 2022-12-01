@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* This is recursive method to do breadth level traversal, the logic is simple:
+/* This is recursive method to do breadth level traversel, the logic is simple:
  * we maintain two lists:
  * - first level is the Nth level nodes of the tree that we are visiting now.
  * - the second level is the N+1th level nodes of the tree.

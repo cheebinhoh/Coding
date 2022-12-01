@@ -2,7 +2,7 @@
  *
  * A simple calculator that evaluates integer expression with support of 4
  * binary operators
- * +, -, *, / and negative unary operator '-', and also parethense to override
+ * +, -, *, / and negative unary operator '-', and also parenthese to override
  * default precedence.
  *
  * It does not do syntax and semantic check.

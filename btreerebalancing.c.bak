@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   printf("\n");
 
   root = delTreeNode(root, 8);
-  printf("After deleting 8, the tree topology:\n");
+  printf("After deleing 8, the tree topology:\n");
   printf("\n");
   printTreeNodeInTreeTopology(root);
   printf("\n");
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 
   root = delTreeNodeAndRebalanceTree(root, 5);
   root = delTreeNodeAndRebalanceTree(root, 6);
-  printf("After deleting 5 and 6, the tree topology:\n");
+  printf("After deleing 5 and 6, the tree topology:\n");
   printf("\n");
   printTreeNodeInTreeTopology(root);
   printf("\n");

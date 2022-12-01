@@ -31,8 +31,8 @@ int isSorted(int list[], int size) {
  * increase the index of left element by 1.
  * --- if the left element is larger than the pivot element, we move the left
  * element to the pivot element to the left indexed element position, we move
- * the pivot element into the left position of the pivot element, and we
- * relocate original left indexed element to the right of the new pivot position
+ * the pivot element into the left position of the pivot element, and we reloate
+ * original left indexed element to the right of the new pivot position
  * --- we repeat above as long as left index is smaller than pivot position
  * - once we stop that, we know that everything to the left of the pivot will be
  * smaller, and everything to the right will be larger than pivot element.
@@ -75,7 +75,7 @@ void quickSort(int list[], int size) {
  * Shell sort is like bubble sort and compare a pair of elements and sort them
  * into proper ordering, however instead of compare adjacent elements, shell
  * sort will start off with a pair of elements separated apart by bigger gap,
- * and then repeatedly decrease the gap and then eventually sort adjacent pair,
+ * and then repeatedly decrease the gap and then eventually sort adjcent pair,
  * bubble reduces the # of swap that happened.
  */
 void shellSort(int list[], int size) {

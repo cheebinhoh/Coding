@@ -31,10 +31,10 @@ void treeRebalanceRecursive(struct TreeNode **parent, struct TreeNode *root) {
   //   reordering left and right branches have similar logic, but different
   //   pointer reference (left or right) and relational operator < or >
   //
-  // - we can remove that "duplicate" by combining both blocks into one
+  // - we can remove that "duplicate" by combinining both blocks into one
   //   generic method that driven by a pass in boolean (left or right)
   //
-  // - or we can use macro for text substitution, including >, <, left and right
+  // - or we can use macro for text substutition, including >, <, left and right
   // text.
   //
   // - or we just left it be where it is now (duplicated), 1st approach will
@@ -46,7 +46,7 @@ void treeRebalanceRecursive(struct TreeNode **parent, struct TreeNode *root) {
   //   to read.
   //
   // In short, I prefer readability of code over saving a few lines, modern
-  // compiler is good in generating efficient code.
+  // compiler is good in generating effecient code.
 
   if ((rightLevel - leftLevel) >= 2) // reorder right branch
   {
@@ -122,7 +122,7 @@ struct TreeNode *addTreeNodeAndRebalanceTree(struct TreeNode *root, int val) {
 }
 
 struct TreeNode *delTreeNodeAndRebalanceTree(struct TreeNode *root, int val) {
-  // we do a general tree deletion of node and then we re-balancing the tree.
+  // we do a general tree deletion of node and then we re-balanancing the tree.
   // However re-balancing is not always needed if the delete does not change
   // the height of subtree of the parent node of the to be deleted node does not
   // change.
