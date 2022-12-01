@@ -1,4 +1,4 @@
-/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
  *
  * Find the least common ancestor of two nodes.
  */

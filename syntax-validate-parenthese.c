@@ -1,4 +1,4 @@
-/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
  *
  * Validate that a C or C like program has right number of open and close
  * parathenses.

@@ -1,4 +1,4 @@
-/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
  *
  * Quick short, shell sort, insertion sort, bubble sort and binary search
  */

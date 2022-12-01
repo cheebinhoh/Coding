@@ -1,4 +1,4 @@
-/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
  *
  * A simple hand-craft scanner (not a token) that will remove C styles of
  * comment, interestingly C style does not allow nested forwardslash asterisk

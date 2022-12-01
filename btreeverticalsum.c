@@ -1,4 +1,4 @@
-/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
  *
  * Find the vertical sum of a binary tree. Assume that the left and right child
  * of a node makes 45 degree angle with the parent.
