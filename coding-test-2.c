@@ -644,13 +644,13 @@ void runRemoveVowelFromStrings(void) {
   printf("After moving vowels is \"%s\"\n", s2);
 }
 
-
 /*
  * Test 10:
  *
- * Return the k number of numbers that adds up to maximum value, assuming output is preallocated.
+ * Return the k number of numbers that adds up to maximum value, assuming output
+ * is preallocated.
  */
-int* maxSubsequence(int* nums, int numsSize, int k, int* returnSize){
+int *maxSubsequence(int *nums, int numsSize, int k, int *returnSize) {
   int outputSize;
   int i;
   int j;
@@ -669,7 +669,7 @@ int* maxSubsequence(int* nums, int numsSize, int k, int* returnSize){
     if (outputSize < k) {
       output[outputSize++] = nums[i];
     } else {
-      /* output is full, so if there is one in output that is 
+      /* output is full, so if there is one in output that is
        * smaller than input[i], we shift the output list to left
        * to free up space at the end and add new input[i] at end.
        */
@@ -692,49 +692,52 @@ int* maxSubsequence(int* nums, int numsSize, int k, int* returnSize){
       }
     }
   }
- 
+
   *returnSize = outputSize;
 
   return output;
 }
 
 void runGetMaxNumberOfElements(void) {
-  int array1[] = { 3, 1, -3, -4, 2, 4, 5};
+  int array1[] = {3, 1, -3, -4, 2, 4, 5};
   int *output;
   int outputSize;
   int i;
- 
+
   printf("\n");
   printf("Test 10: find k elements added up to max value\n");
   printIntegerArray(array1, sizeof(array1) / sizeof(array1[0]));
 
   printf("\n");
   printf("2 max elements: ");
-  output = maxSubsequence(array1, sizeof(array1) / sizeof(array1[0]), 2, &outputSize);
+  output = maxSubsequence(array1, sizeof(array1) / sizeof(array1[0]), 2,
+                          &outputSize);
   printIntegerArray(output, outputSize);
   free(output);
 
   printf("\n");
   printf("3 max elements: ");
-  output = maxSubsequence(array1, sizeof(array1) / sizeof(array1[0]), 3, &outputSize);
+  output = maxSubsequence(array1, sizeof(array1) / sizeof(array1[0]), 3,
+                          &outputSize);
   printIntegerArray(output, outputSize);
   free(output);
 
   printf("\n");
   printf("1 max elements: ");
-  output = maxSubsequence(array1, sizeof(array1) / sizeof(array1[0]), 1, &outputSize);
+  output = maxSubsequence(array1, sizeof(array1) / sizeof(array1[0]), 1,
+                          &outputSize);
   printIntegerArray(output, outputSize);
   free(output);
 
   printf("\n");
   printf("6 max elements: ");
-  output = maxSubsequence(array1, sizeof(array1) / sizeof(array1[0]), 6, &outputSize);
+  output = maxSubsequence(array1, sizeof(array1) / sizeof(array1[0]), 6,
+                          &outputSize);
   printIntegerArray(output, outputSize);
   free(output);
- 
+
   printf("\n");
 }
-
 
 // the starting point...
 int main(int argc, char *argv[]) {

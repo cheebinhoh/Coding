@@ -10,7 +10,7 @@
  * I found it interesting enough that I would like to solve it, here is my
  * answer to it.
  *
- * However, my program doees not transform the string in minimum move in ALL 
+ * However, my program doees not transform the string in minimum move in ALL
  * cases, the logic only look one move ahead at time and find the best move
  * among characters to move to front, it does not do backtracking or consider
  * more than one consecutive moves at a time.
@@ -52,7 +52,7 @@ char *programName = NULL;
  *
  * A source can be translated into target if they meet the following
  * conditions:
- * 
+ *
  * - they have same # of characters
  * - they have same # of each of the ASCII characters (we assume ASCII C
  *   string).
@@ -68,7 +68,6 @@ int isTransformable(char source[], char target[]) {
 
     i++;
   }
-
 
   if (source[i] != target[i]) {
     return 0;
@@ -138,8 +137,8 @@ int simulateMoveAndScore(char source[], char target[], int pivot) {
   return score;
 }
 
-/* This is the main function that determines if we can reshuffle 
- * source into target by moving one character to the front at a 
+/* This is the main function that determines if we can reshuffle
+ * source into target by moving one character to the front at a
  * time and how many moves are needed to do so.
  *
  * It returns -1 if there is no move possible to reshuffle source

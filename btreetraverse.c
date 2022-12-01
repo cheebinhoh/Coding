@@ -3,8 +3,8 @@
  * Depth first search, preorder, inorder and postorder in iterative way.
  */
 
-#include "btree.h"
 #include "btreetraverse.h"
+#include "btree.h"
 #include <stdio.h>
 #include <stdlib.h>
 

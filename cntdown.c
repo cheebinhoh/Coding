@@ -37,10 +37,10 @@ int main(int argc, char *argv[]) {
   time_t targetTime;
   struct tm targetTm;
   struct tm localTm;
-  char   defaultFormat[] = "%Y-%m-%d %H:%M:%S";
-  char * format = defaultFormat;
-  char * stop;
-  int    opt;
+  char defaultFormat[] = "%Y-%m-%d %H:%M:%S";
+  char *format = defaultFormat;
+  char *stop;
+  int opt;
 
   baseProgName = basename(argv[0]);
 
@@ -51,15 +51,15 @@ int main(int argc, char *argv[]) {
       break;
 
     default:
-      fprintf(stderr, "Usage: %s [-f \"%s\"] \"2022-01-21 12:00:00\"\n", baseProgName,
-              defaultFormat);
+      fprintf(stderr, "Usage: %s [-f \"%s\"] \"2022-01-21 12:00:00\"\n",
+              baseProgName, defaultFormat);
       exit(1);
     }
   }
 
   if (optind >= argc) {
-    fprintf(stderr, "Usage: %s [-f \"%s\"] \"2022-01-21 12:00:00\"\n", baseProgName,
-            defaultFormat);
+    fprintf(stderr, "Usage: %s [-f \"%s\"] \"2022-01-21 12:00:00\"\n",
+            baseProgName, defaultFormat);
     exit(1);
   }
 

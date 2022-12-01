@@ -25,8 +25,8 @@
 /* Test 1:
  *
  * Given an array of integers and a sum value, determine if there are any three
- * integers in the array whose sum up equals the given sum value. And assume that
- * the integers positive numbers and unique.
+ * integers in the array whose sum up equals the given sum value. And assume
+ * that the integers positive numbers and unique.
  *
  * If the array of integers are unsorted, a simple but inefficient way to find
  * if there are integers add up to the sum is to have 3 loops as below.
@@ -60,13 +60,13 @@ found:
  * (assume that all our numbers are positive value) as we are not going to find
  * a sum of i + j + i that is equal to sum.
  *
- * The solution is still made up of 3 nested loops, but traverse backward to find
- * a value at i (1st loop) where after minus it from sum, we have remaining sum that
- * is greater than 0.
+ * The solution is still made up of 3 nested loops, but traverse backward to
+ * find a value at i (1st loop) where after minus it from sum, we have remaining
+ * sum that is greater than 0.
  *
- * Then in the j (2nd loop), we start the j with index 1 smaller than i (as we the 
- * next number add up to sum will be smaller than where ith value), and remaining
- * sum minus the value at jth should be 1 or more.
+ * Then in the j (2nd loop), we start the j with index 1 smaller than i (as we
+ * the next number add up to sum will be smaller than where ith value), and
+ * remaining sum minus the value at jth should be 1 or more.
  */
 int determineIf3NumberSumToValueBySort(int array[], int size, int sum) {
   int i;
@@ -111,12 +111,13 @@ found:
 // smaller than sum, we use binary search to quickly do so (based on the fact
 // that the list of numbers are > 0 and unique).
 //
-// in the 2nd loop, we find the index in the array (from 0 up to 1st loop current
-// index) for the largest value that is smaller than sum - 1st loop' value,
-// we use binary search to do so.
+// in the 2nd loop, we find the index in the array (from 0 up to 1st loop
+// current index) for the largest value that is smaller than sum - 1st loop'
+// value, we use binary search to do so.
 //
-// in the 3rd loop, we find the index in the array (from 0 up to 2nd loop index) 
-// for the value that is matching to the sum - (1st loop' value + 2nd loop' value).
+// in the 3rd loop, we find the index in the array (from 0 up to 2nd loop index)
+// for the value that is matching to the sum - (1st loop' value + 2nd loop'
+// value).
 //
 // This is much efficient approach if we have a long list of array and where the
 // values are unique, spread apart, example, [1, 5, 100, 2000, 2001, 2002, ...
@@ -125,8 +126,7 @@ found:
 // A binary search to locate the largest value smaller than the remaining value
 // allows us to quickly slide down the search space in next loop.
 //
-int determineLargestValueSmallerThanN(int array[], int size, 
-                                      int n) {
+int determineLargestValueSmallerThanN(int array[], int size, int n) {
   int start;
   int mid;
   int end;
@@ -138,12 +138,12 @@ int determineLargestValueSmallerThanN(int array[], int size,
     if (array[mid] == n) {
       return mid - 1;
     } else if (array[mid] < n) {
-      start = mid + 1; 
+      start = mid + 1;
     } else {
       end = mid - 1;
     }
   }
-  
+
   return mid;
 }
 
@@ -157,7 +157,8 @@ int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size,
 
   quickSort(array, size);
 
-  largestValueSmallerThanN = determineLargestValueSmallerThanN(array, size, sum);
+  largestValueSmallerThanN =
+      determineLargestValueSmallerThanN(array, size, sum);
   if (largestValueSmallerThanN == -1) {
     return 0;
   }
@@ -165,7 +166,8 @@ int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size,
   for (i = largestValueSmallerThanN; i >= 0; i--) {
     remaining = sum - array[i];
 
-    largestValueSmallerThanN = determineLargestValueSmallerThanN(array, i, remaining);
+    largestValueSmallerThanN =
+        determineLargestValueSmallerThanN(array, i, remaining);
     if (largestValueSmallerThanN == -1) {
       continue;
     }
@@ -178,7 +180,7 @@ int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size,
           return 1;
         }
       }
-      
+
       remaining += array[j];
     }
   }
