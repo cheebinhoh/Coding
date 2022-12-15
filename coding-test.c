@@ -188,6 +188,41 @@ int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size,
   return 0;
 }
 
+// Brute force in recursive approach is simple to understand:
+//
+// if nNum is 1, the exit condition is to find an element that
+// matches the sum.
+//
+// if nNum is more than 1, then we reduce sum by the current
+// element, and search to determine if there are elements add up
+// to sum - current element for the remaining nNum -1.
+//
+int determineIfnNumSumToValueRecursive(int array[], int size, int sum,
+                                       int nNum) {
+  int i;
+
+  assert(nNum > 0);
+
+  for (i = 0; i < size; i++) {
+    if (nNum == 1) {
+      if (sum == array[i]) {
+        return 1;
+      }
+    } else {
+      if (determineIfnNumSumToValueRecursive(&array[i + 1], size - (i + 1),
+                                             sum - array[i], nNum - 1)) {
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+}
+
+int deteremineIf3NumberSumToValueRecursive(int array[], int size, int sum) {
+  return determineIfnNumSumToValueRecursive(array, size, sum, 3);
+}
+
 void runDeteremineIf3NumberSumToValue(void) {
   int number[] = {3, 7, 1, 2, 8, 4, 5};
   int found;
@@ -251,6 +286,26 @@ void runDeteremineIf3NumberSumToValue(void) {
   }
 
   found = deteremineIf3NumberSumToValueInDivAndConquer(
+      number, sizeof(number) / sizeof(number[0]), 21);
+
+  if (found) {
+    printf("There are 3 numbers sum up to %d\n", 21);
+  } else {
+    printf("There are no 3 numbers sum up to %d\n", 21);
+  }
+
+  printf("\n");
+  printf("Use brute force but simple recursive method\n");
+  found = deteremineIf3NumberSumToValueRecursive(
+      number, sizeof(number) / sizeof(number[0]), 20);
+
+  if (found) {
+    printf("There are 3 numbers sum up to %d\n", 20);
+  } else {
+    printf("There are no 3 numbers sum up to %d\n", 20);
+  }
+
+  found = deteremineIf3NumberSumToValueRecursive(
       number, sizeof(number) / sizeof(number[0]), 21);
 
   if (found) {
