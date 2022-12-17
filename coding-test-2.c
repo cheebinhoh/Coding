@@ -16,6 +16,7 @@
 #include "btree.h"
 #include "llist.h"
 #include "search-sort.h"
+#include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,8 +44,40 @@ int findMissingNumberInTheArray(int array[], int size, int n) {
   return (expectedSum - sum);
 }
 
+/* Assume that the array is sorted and numbers are 1 or above. This
+ * function will return 0 if no missing number.
+ *
+ * A simple recursive approach that divides the search space and
+ * locate the missing number.
+ */
+int findMissingNumberInTheSortedArray(int array[], int size) {
+  int mid;
+  int res;
+
+  assert(size > 0);
+
+  if (size <= 1 || ((array[0] + size - 1) == array[size - 1])) {
+    return 0;
+  }
+
+  mid = (size / 2) - 1;
+  assert(mid >= 0 && mid < size - 1);
+
+  if (array[mid] + 1 != array[mid + 1]) {
+    return array[mid] + 1;
+  }
+
+  res = findMissingNumberInTheSortedArray(&array[0], mid + 1);
+  if (0 == res) {
+    res = findMissingNumberInTheSortedArray(&array[mid + 1], size - (mid + 1));
+  }
+
+  return res;
+}
+
 void runFindMissingNumberInTheArray(void) {
   int array1[] = {3, 7, 1, 2, 8, 4, 5};
+  int array2[] = {1, 2, 3, 4, 5, 7, 8};
 
   printf("Test 1: find the missing number in the array.\n");
   printf("\n");
@@ -55,6 +88,12 @@ void runFindMissingNumberInTheArray(void) {
          findMissingNumberInTheArray(array1, sizeof(array1) / sizeof(array1[0]),
                                      8));
   printf("\n");
+
+  printf("The integer array is sorted: ");
+  printIntegerArray(array2, sizeof(array2) / sizeof(array2[0]));
+  printf("The missing integer is %d\n",
+         findMissingNumberInTheSortedArray(array2,
+                                           sizeof(array2) / sizeof(array2[0])));
 }
 
 /*
