@@ -15,6 +15,10 @@ Use Divide & Conquer and Binary way of brute force method
 There are 3 numbers sum up to 20
 There are no 3 numbers sum up to 21
 
+Use brute force but simple recursive method
+There are 3 numbers sum up to 20
+There are no 3 numbers sum up to 21
+
 
 Test 2 description: given a list of intervals, merge all the overlapping intervals to produce a list
 that has only mutually exclusive intervals.

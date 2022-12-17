@@ -3,6 +3,8 @@ Test 1: find the missing number in the array.
 The integer array is 3, 7, 1, 2, 8, 4, 5
 The missing integer is 6
 
+The integer array is sorted: 1, 2, 3, 4, 5, 7, 8
+The missing integer is 6
 
 Test 2: determine if the sum of two integers is equal to the given value.
 
