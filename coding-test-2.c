@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 /* Test 1:
  *
@@ -858,6 +859,9 @@ long getNumberOfCombination(int numCells, int numColors) {
 }
 
 void runGetMaxNumberOfCombinationFillupMatrixEvenly(void) {
+  time_t m;
+
+  m = time(NULL);
 
   printf("Test 10: matrix 3 x 3 and 3 colors has %ld combination\n",
          getNumberOfCombination(9, 3));
@@ -867,6 +871,8 @@ void runGetMaxNumberOfCombinationFillupMatrixEvenly(void) {
 
   printf("Test 10: matrix 2 x 2 and 2 colors has %ld combination\n",
          getNumberOfCombination(4, 2));
+
+  printf("Total time %lu\n", time(NULL) - m);
 
   printf("\n");
 }
