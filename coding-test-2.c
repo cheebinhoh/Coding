@@ -791,7 +791,8 @@ int getSumOfDigit(long value) {
   while (value > 0) {
     sum = sum + (value % 10);
 
-    value = value / 10;
+    //  value = value / 10;
+    value = (value >> 4) << 3;
   }
 
   return sum;
