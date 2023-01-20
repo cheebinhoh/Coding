@@ -778,6 +778,99 @@ void runGetMaxNumberOfElements(void) {
   printf("\n");
 }
 
+/*
+ * Test 11: return number of valid combination that fills up a matrix
+ * evenly.
+ */
+
+/* Sum up decimal value of each digit.
+ */
+int getSumOfDigit(long value) {
+  int sum = 0;
+
+  while (value > 0) {
+    sum = sum + (value % 10);
+
+    value = value / 10;
+  }
+
+  return sum;
+}
+
+/* Return the possible maximum value of the valid combination.
+ */
+long getMaxValueOfCombination(int numCells, int numColors) {
+  int cellPerColor;
+  int i;
+  int j;
+  long maxvalue;
+
+  maxvalue = 0;
+  cellPerColor = numCells / numColors;
+  for (i = numColors - 1; i >= 0; i--) {
+    for (j = 0; j < cellPerColor; j++) {
+      maxvalue = (maxvalue * 10) + i;
+    }
+  }
+
+  return maxvalue;
+}
+
+/* Return the possible minimum value of the valid combination.
+ */
+long getMinValueOfCombination(int numCells, int numColors) {
+  int cellPerColor;
+  int i;
+  int j;
+  long maxvalue;
+
+  maxvalue = 0;
+  cellPerColor = numCells / numColors;
+  for (i = 0; i < numColors; i++) {
+    for (j = 0; j < cellPerColor; j++) {
+      maxvalue = (maxvalue * 10) + i;
+    }
+  }
+
+  return maxvalue;
+}
+
+/* Return number of valid combinations of matrix (as numCells)
+ * and number of colors to fill up the cells evently.
+ */
+long getNumberOfCombination(int numCells, int numColors) {
+  long result;
+  long maxvalue;
+  long minvalue;
+  long i;
+
+  maxvalue = getMaxValueOfCombination(numCells, numColors);
+  minvalue = getMinValueOfCombination(numCells, numColors);
+  result = 0;
+
+  for (i = minvalue; i < maxvalue; i++) {
+    if (getSumOfDigit(i) == numCells) {
+      result++;
+    }
+  }
+
+  return result;
+}
+
+void runGetMaxNumberOfCombinationFillupMatrixEvenly(void) {
+
+  printf("Test 10: matrix 3 x 3 and 3 colors has %ld combination\n",
+         getNumberOfCombination(9, 3));
+
+  printf("Test 10: matrix 4 x 2 and 3 colors has %ld combination\n",
+         getNumberOfCombination(8, 2));
+
+  printf("Test 10: matrix 2 x 2 and 2 colors has %ld combination\n",
+         getNumberOfCombination(4, 2));
+
+  printf("\n");
+}
+
 // the starting point...
 int main(int argc, char *argv[]) {
   runFindMissingNumberInTheArray();
@@ -808,6 +901,9 @@ int main(int argc, char *argv[]) {
   printf("\n");
 
   runGetMaxNumberOfElements();
+  printf("\n");
+
+  runGetMaxNumberOfCombinationFillupMatrixEvenly();
   printf("\n");
 
   return 0;
