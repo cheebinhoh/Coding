@@ -788,11 +788,19 @@ void runGetMaxNumberOfElements(void) {
  */
 int getSumOfDigit(long value) {
   int sum = 0;
+  int quotient;
 
   while (value > 0) {
-    sum = sum + (value % 10);
+    /* on the machine I have, divide and then multiple and minus
+     * is cheaper than %.
+     *
+     * sum = sum + (value % 10);
+     * value = value / 10;
+     */
 
-    value = value / 10;
+    quotient = value / 10;
+    sum = sum + (value - quotient * 10);
+    value = quotient;
   }
 
   return sum;
