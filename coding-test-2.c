@@ -792,7 +792,8 @@ int getSumOfDigit(long value) {
 
   while (value > 0) {
     /* on the machine I have, divide and then multiple and minus
-     * is cheaper than %.
+     * the result from original value is cheaper than % to derive
+     * remainder.
      *
      * sum = sum + (value % 10);
      * value = value / 10;
@@ -804,6 +805,34 @@ int getSumOfDigit(long value) {
   }
 
   return sum;
+}
+
+/* Sum up decimal value of each digit
+ */
+int isSumOfDigitOfValueEqualToNum(long value, int num) {
+  int sum = 0;
+  int quotient;
+
+  while (value > 0) {
+    /* on the machine I have, divide and then multiple and minus
+     * the result from original value is cheaper than % to derive
+     * remainder.
+     *
+     * sum = sum + (value % 10);
+     * value = value / 10;
+     */
+
+    quotient = value / 10;
+
+    sum = sum + (value - quotient * 10);
+    if (sum > num) {
+      return 0;
+    }
+
+    value = quotient;
+  }
+
+  return sum == num;
 }
 
 /* Return the possible maximum value of the valid combination.
@@ -858,7 +887,7 @@ long getNumberOfCombination(int numCells, int numColors) {
   result = 0;
 
   for (i = minvalue; i < maxvalue; i++) {
-    if (getSumOfDigit(i) == numCells) {
+    if (isSumOfDigitOfValueEqualToNum(i, numCells)) {
       result++;
     }
   }
