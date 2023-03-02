@@ -12,9 +12,7 @@ int main(int argc, char *argv[]) {
   l.push_back(2);
 
   std::sort(l.begin(), l.end(),
-            [=](const int &i1, const int &i2) {
-    return i1 > i2;
-  });
+            [=](const int &i1, const int &i2) { return i1 > i2; });
 
   i = l.begin();
   while (i != l.end()) {
