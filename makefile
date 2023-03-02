@@ -3,15 +3,15 @@
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
 all : libbtree.a libllist.a libsearch-sort.a libdgraph.a btreepathsum.out btreebltraverse.out btreemaxminlevel.out \
-        btreesymmetriccheck.out btreetraverse.out btreemirrorswap.out btreeidentical.out \
-	btreebuild.out btreelca.out tree2btreebuild.out btreerebalancing.out btreemaxpathsum.out \
-        btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out btreemaxsumpathtoleaf.out \
-        btreemaxsumpathbetween2leaves.out btreesubtree.out btree-test.out \
-        search-sort.out remove-c-comment.out string-utility.out calculator.out shrink-space.out \
-        trim-space.out replace-tab-with-space.out syntax-validate-parenthese.out fold-line.out \
-        find2ndMaxNumber.out transformStr2Str.out trafficdemand.out coding-test.out \
-        coding-test-2.out llist-test.out dgraph-test.out cntdown.out
-
+          btreesymmetriccheck.out btreetraverse.out btreemirrorswap.out btreeidentical.out \
+  	  btreebuild.out btreelca.out tree2btreebuild.out btreerebalancing.out btreemaxpathsum.out \
+          btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out btreemaxsumpathtoleaf.out \
+          btreemaxsumpathbetween2leaves.out btreesubtree.out btree-test.out \
+          search-sort.out remove-c-comment.out string-utility.out calculator.out shrink-space.out \
+          trim-space.out replace-tab-with-space.out syntax-validate-parenthese.out fold-line.out \
+          find2ndMaxNumber.out transformStr2Str.out trafficdemand.out coding-test.out \
+          coding-test-2.out llist-test.out dgraph-test.out cntdown.out
+	cd C++ && make all
 
 # libraries
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.h llist-internal.h llist.c

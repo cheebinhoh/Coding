@@ -1,13 +1,23 @@
 /**
- * The purpose of this program is to demonstrate use of smart pointer to
+ * The purpose of this program is to demonstrate the use of smart pointer to
  * build object graph that consists of:
  *
- * A University
+ * A university
  * A number of courses offerred from the University
- * A number of students taken one or more course from the University
+ * A number of students taken one or more courses from the University
  *
- * The object graph is defined to represent simple view of real life scenario
- * of a university context.
+ * The object graph is defined to represent simple view of real life scenario,
+ * and purposely designed to enable the use of std::unique_ptr, std::shared_ptr
+ * and std::weak_ptr.
+ *
+ * The other alternative solution will be that:
+ * A University object stores (via std::unique_ptr) a numbers of Student
+ * and Course objects.
+ *
+ * The relationship between Students with a set of Course takens can be
+ * represented as a std::vector<std::string> where it is a set of names of
+ * courses taken by the Student.
+ *
  */
 
 #include <iostream>
