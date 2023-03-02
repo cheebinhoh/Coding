@@ -17,6 +17,8 @@ public:
     std::cout << "Deinitializwe Course object with name: " << m_name << "\n";
   }
 
+  std::string_view getName() const { return m_name; }
+
 private:
   std::string m_name{};
 };
@@ -40,8 +42,27 @@ public:
     std::cout << "Deinitializwe Student object with name: " << m_name << "\n";
   }
 
+  void add(std::shared_ptr<Course> course) {
+    auto course_found = std::find_if(
+        m_courses.begin(), m_courses.end(),
+        [course_name = course->getName()](std::weak_ptr<Course> course) {
+          return (!course.expired()) && course.lock()->getName() == course_name;
+        });
+
+    if (course_found == m_courses.end()) {
+      std::cout << "add Course (" << course->getName() << ") to student ("
+                << m_name << ")\n";
+
+      std::weak_ptr<Course> new_course{course};
+      m_courses.push_back(new_course);
+    } else {
+      std::cout << "Course (" << course->getName() << ") already taken\n";
+    }
+  }
+
 private:
   std::string m_name{};
+  std::vector<std::weak_ptr<Course>> m_courses{};
 };
 
 class University {
@@ -56,16 +77,34 @@ public:
     std::cout << "Deinitialize University object with name: " << m_name << "\n";
   }
 
-  void add(std::unique_ptr<Student> student) {
+  void add(std::unique_ptr<Student> student, std::string_view course_name) {
     // delete: we want to keep a list of students than one.
     // m_student = std::move(student);
 
+    auto course_found =
+        std::find_if(m_courses.begin(), m_courses.end(),
+                     [course_name](std::shared_ptr<Course> course) {
+                       return course->getName() == course_name;
+                     });
+
+    if (course_found != m_courses.end()) {
+      std::cout << "Course (" << (*course_found)->getName() << ") found\n";
+      student->add(*course_found);
+    } else {
+      std::cout << "Course (" << course_name << ") not found\n";
+    }
+
     m_students.push_back(std::move(student));
+  }
+
+  void add(std::shared_ptr<Course> course) {
+    m_courses.push_back(std::move(course));
   }
 
 private:
   std::string m_name{};
   std::vector<std::unique_ptr<Student>> m_students{};
+  std::vector<std::shared_ptr<Course>> m_courses{};
 
   // delete: we want to keep a list of students than one.
   // std::unique_ptr<Student> m_student;
@@ -77,14 +116,24 @@ int main(int argc, char *argv[]) {
   std::cout << "\n"
             << "Enter inner block\n";
   {
+    auto compscience{std::make_shared<Course>("compscience")};
+    auto education{std::make_shared<Course>("education")};
+
     auto cb{std::make_unique<Student>("Chee Bin HOH")};
     auto cs{std::make_unique<Student>("Miow Miow")};
 
-    uni.add(std::move(cb));
-    std::cout << "After add student (cb)\n";
+    std::cout << "\n";
+    std::cout << "After add course (" << compscience->getName() << ")\n";
+    uni.add(std::move(compscience));
+    std::cout << "After add course (" << education->getName() << ")\n";
+    uni.add(std::move(education));
 
-    uni.add(std::move(cs));
-    std::cout << "After add student (cs)\n";
+    std::cout << "\n";
+    std::cout << "After add student (Chee Bin HOH) with compscience\n";
+    uni.add(std::move(cb), "compscience");
+
+    std::cout << "After add student (Miow Miow) with compscience\n";
+    uni.add(std::move(cs), "compscience");
   }
   std::cout << "Exit inner block\n\n";
 
