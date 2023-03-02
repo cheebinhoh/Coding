@@ -3,6 +3,24 @@
 #include <string>
 #include <vector>
 
+class Course {
+public:
+  Course(std::string_view name) : m_name{name} {
+    std::cout << "Initialize Course object with name: " << m_name << "\n";
+  }
+
+  Course() : Course("unknown") {
+    std::cout << "Initialize (default) Course object with name: unknown\n";
+  }
+
+  ~Course() {
+    std::cout << "Deinitializwe Course object with name: " << m_name << "\n";
+  }
+
+private:
+  std::string m_name{};
+};
+
 class Student {
 public:
   Student(std::string_view name) : m_name{name} {
