@@ -1,3 +1,15 @@
+/**
+ * The purpose of this program is to demonstrate use of smart pointer to
+ * build object graph that consists of:
+ *
+ * A University
+ * A number of courses offerred from the University
+ * A number of students taken one or more course from the University
+ *
+ * The object graph is defined to represent simple view of real life scenario
+ * of a university context.
+ */
+
 #include <iostream>
 #include <memory>
 #include <string>
@@ -39,8 +51,19 @@ public:
   }
 
   ~Student() {
-    std::cout << "Deinitializwe Student object with name: " << m_name << "\n";
+    std::cout << "Deinitializwe Student object with name: " << m_name;
+    for (auto course : m_courses) {
+      if (!course.expired()) {
+        std::cout << ", course: " << course.lock()->getName();
+      } else {
+        std::cout << ", course: unknown";
+      }
+    }
+
+    std::cout << "\n";
   }
+
+  std::string_view getName() const { return m_name; }
 
   void add(std::shared_ptr<Course> course) {
     auto course_found = std::find_if(
@@ -97,6 +120,22 @@ public:
     m_students.push_back(std::move(student));
   }
 
+  void delStudent(std::string_view student_name) {
+    std::cout << "Before deleting, # of students: " << m_students.size()
+              << "\n";
+
+    auto found =
+        std::find_if(m_students.begin(), m_students.end(),
+                     [student_name](std::unique_ptr<Student> &student) {
+                       return (student->getName() == student_name);
+                     });
+    if (found != m_students.end()) {
+      m_students.erase(found);
+    }
+
+    std::cout << "After deleting, # of students: " << m_students.size() << "\n";
+  }
+
   void add(std::shared_ptr<Course> course) {
     m_courses.push_back(std::move(course));
   }
@@ -121,6 +160,7 @@ int main(int argc, char *argv[]) {
 
     auto cb{std::make_unique<Student>("Chee Bin HOH")};
     auto cs{std::make_unique<Student>("Miow Miow")};
+    auto other{std::make_unique<Student>("Miss X")};
 
     std::cout << "\n";
     std::cout << "After add course (" << compscience->getName() << ")\n";
@@ -134,8 +174,15 @@ int main(int argc, char *argv[]) {
 
     std::cout << "After add student (Miow Miow) with compscience\n";
     uni.add(std::move(cs), "compscience");
+
+    std::cout << "After add student (Miss X) with education\n";
+    uni.add(std::move(other), "education");
   }
   std::cout << "Exit inner block\n\n";
+
+  std::cout << "deleting student \"Miss X\"\n";
+  uni.delStudent("Miss X");
+  std::cout << "\n";
 
   return 0;
 }
