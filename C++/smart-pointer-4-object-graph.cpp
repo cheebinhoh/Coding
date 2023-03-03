@@ -1,4 +1,6 @@
 /**
+ * Copyright © 2023 Chee Bin HOH. All rights reserved.
+ *
  * The purpose of this program is to demonstrate the use of smart pointer to
  * build object graph that consists of:
  *
