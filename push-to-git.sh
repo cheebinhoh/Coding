@@ -8,7 +8,12 @@
 # - it git commit changes
 # - it git push changes
 
+echo "make clean"
+make clean # so that we do not commit binary
+
 if which clang-format &>/dev/null; then
+  echo "clang-format source files"
+
   IFS_PREV=$IFS
   IFS=$'\n'
 
@@ -40,8 +45,7 @@ if which clang-format &>/dev/null; then
   IFS=$IFS_PREV
 fi
 
-make clean # so that we do not commit binary
-
+echo "git add, commit and push"
 git add .
 git commit -m "${1:-"no comment"}"
 git push origin master --force
