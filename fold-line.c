@@ -1,4 +1,4 @@
-/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
  * It splits a long lines into multiple line according to max limit per line.
  */

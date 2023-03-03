@@ -1,5 +1,7 @@
 #!/bin/sh
 #
+# Copyright © 2023 Chee Bin HOH. All rights reserved.
+#
 # it does 4 things:
 # - it clang-format files in extension mentioned in DIRS file;
 # - it git add changes
@@ -37,6 +39,8 @@ if which clang-format &>/dev/null; then
 
   IFS=$IFS_PREV
 fi
+
+make clean # so that we do not commit binary
 
 git add .
 git commit -m "${1:-"no comment"}"

@@ -1,7 +1,6 @@
-/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
  * Test program for c++ snippest to try to out some features.
- *
  */
 
 #include <cstdio>

@@ -1,4 +1,4 @@
-/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
  * A simple calculator that evaluates integer expression with support of 4
  * binary operators

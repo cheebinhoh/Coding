@@ -19,7 +19,6 @@
  * The relationship between Students with a set of Course takens can be
  * represented as a std::vector<std::string> where it is a set of names of
  * courses taken by the Student.
- *
  */
 
 #include <iostream>

@@ -1,5 +1,6 @@
 #!/bin/sh
-
+#
+# Copyright © 2023 Chee Bin HOH. All rights reserved.
 
 PATH=$PATH:.
 

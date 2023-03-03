@@ -1,4 +1,4 @@
-/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
  * Given the root node of a binary tree, swap the ‘left’ and ‘right’ children
  * for each node.

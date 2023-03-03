@@ -1,4 +1,4 @@
-/* Copyright © 2021-2022 Chee Bin HOH. All rights reserved.
+/* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
  * Check if tree is symmetric that right branch of root is mirror of left branch
  * in layout of the tree (not the values of node).

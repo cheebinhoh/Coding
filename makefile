@@ -1,3 +1,5 @@
+# Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
+#
 # old good makefile to help compiling
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.

@@ -1,4 +1,4 @@
-/* Copyright © 2022 Chee Bin HOH. All rights reserved.
+/* Copyright © 2022-2023 Chee Bin HOH. All rights reserved.
  *
  * A program that returns number of seconds until target date time.
  * it is toy program created in respond to a friend leaving a bad company
