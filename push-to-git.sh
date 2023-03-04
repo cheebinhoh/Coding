@@ -34,7 +34,7 @@ if which clang-format &>/dev/null; then
         rm ${f}_tmp
       done
 
-      cd -
+      cd - >/dev/null
 
     else
       echo "$dir not exist" >&2
