@@ -1,2 +1,3 @@
 .:*.c *.h
 C++:*.cpp
+Linux:*.c *.h
