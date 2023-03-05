@@ -15,8 +15,48 @@
  * - std::optional<std::unique_ptr<Student>>
  *     University.delStudentWithOptional(std::string_view name);
  *   where it deletes student from Univeristy object graph and return its
- * pointer reference (smart pointer) via std::optional which is empty if such
- * student is not found.
+ * pointer reference (smart pointer) via std::optional, otherwise it returns
+ * {} for std::optional when the student is not found.
+ *
+ * Different context and different purpose of the code will warrant use of
+ * either way, let assume that we are  writting a layer of code base to store
+ * object graph of University, Student, Course and other data model that
+ * mrrors real life university' data model, and delStudent method is passed
+ * in student name to delete a student record from the data model, and there
+ * are a few conditions that prevents that deleting from happening:
+ *
+ * - the student does not exist in the data model.
+ * - the student still owes money that prevent it from deleting her/his record.
+ * - the other rules are violated that prevents the student from deleting.
+ *
+ * The context is that the layer of code base is to model the University data
+ * model and it does not include business logic (or soft rules) that governs
+ * the application layer functionality, like if student has paid all fees
+ * and her/his record is allowed to be deleted, such rules are considered soft
+ * rules governed by outer layer of code base, and hence we follow the following
+ * approach:
+ *
+ * - all soft rules violation should be handled outside of the data model than
+ *   being checked and enforced through exception after deleting request is
+ *   initialized, example is that we should have an application layer that
+ *   will query the student record and validate that it has paid all fees
+ *   prior to initializing the deletion, hence such rules should not be enforced
+ *   as exception in the University data model.
+ *
+ * - on other hand, if a student record does not exist in the data model, but
+ * the deletion request is received, we should throw exception than use null
+ * (false) (std::optional), the rational is that the layer initializing the
+ * deleting request can pass the exception up the stack to other layer to
+ * handle, either an error prompt on UI or a properly wrapper error code to
+ * cloud api that initializes the delete request
+ *
+ * on other hand, we might use a layered approach where we have
+ * delStudentWithOptional as private method that is not exposed to public, so
+ * that internal logic of the University data model will use
+ * delStudentWithOptional to query if the student record prior to deleting, but
+ * public will use delStudentWithException that initializes deletion through
+ * delStudentWithOptional, and throws exception if the it returns the
+ * std::optional<std::unique_ptr<Student>> as null (false).
  */
 
 #include <algorithm>
