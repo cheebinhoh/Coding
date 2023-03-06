@@ -11,7 +11,9 @@
 
 class IDGenerator {
 public:
-  IDGenerator(long start) : next{start} {}
+  IDGenerator(
+      long start, long (*func)(long) = [](long curr) { return curr + 1; })
+      : next{start}, nextIDFunc{func} {}
 
   IDGenerator() : IDGenerator{0} {}
 
@@ -23,12 +25,11 @@ public:
     return id;
   }
 
-  long operator()() {
-    return (*this)([](long curr) { return curr + 1; });
-  }
+  long operator()() { return (*this)(nextIDFunc); }
 
 private:
   long next{0};
+  long (*nextIDFunc)(long){};
 };
 
 int main(int argc, char *argv[]) {

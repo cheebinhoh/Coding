@@ -3,10 +3,10 @@
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
 all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
-	exception-vs-std-optional.out singleton-design-pattern.out closure-functor.out
+	exception-vs-std-optional.out singleton-design-pattern.out lambda-functor.out
 
-closure-functor.out : closure-functor.cpp
-	g++ -std=c++14 -o $@ closure-functor.cpp
+lambda-functor.out : lambda-functor.cpp
+	g++ -std=c++14 -o $@ lambda-functor.cpp
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
