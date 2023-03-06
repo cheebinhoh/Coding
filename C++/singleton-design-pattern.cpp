@@ -1,6 +1,13 @@
 /**
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
+ * This program demonstrates the class creational design pattern, Singleton.
+ *
+ * Note that we make use of smart pointer std::unique_ptr as a placeholder to
+ * to release the Singleton object that is defined in global scope where
+ * destructor is not called in default if the instance is dynamically allocated
+ * (via new) as we do not provide a delete (at_exit will be the good place to do
+ * so, but it assumes certain platform.
  */
 
 #include <iostream>
