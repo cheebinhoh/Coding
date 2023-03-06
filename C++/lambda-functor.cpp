@@ -1,9 +1,9 @@
 /**
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
- * This program demonstrates the use of closure to create a functor object
+ * This program demonstrates the use of lambda to create a functor object
  * IDGenerator that will keep a running counter and return next id available
- * and the functor allows us to pass in customized closure that generate next
+ * and the functor allows us to pass in customized lambda that generate next
  * id after return one.
  */
 
