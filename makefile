@@ -1,6 +1,6 @@
 # Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
 #
-# old good makefile to help compiling
+# Old good makefile to help compiling
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
@@ -13,7 +13,10 @@ all : libbtree.a libllist.a libsearch-sort.a libdgraph.a btreepathsum.out btreeb
           trim-space.out replace-tab-with-space.out syntax-validate-parenthese.out fold-line.out \
           find2ndMaxNumber.out transformStr2Str.out trafficdemand.out coding-test.out \
           coding-test-2.out llist-test.out dgraph-test.out cntdown.out
+	@echo
 	cd C++ && make all
+	@echo
+	cd Linux && make all
 
 # libraries
 libbtree.a : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.h llist-internal.h llist.c
@@ -146,6 +149,7 @@ cntdown.out : cntdown.c
 clean:
 	rm -f *.out *.o lib*.a
 	rm -f C++/*.out
+	rm -f Linux/*.out
 
 test: all
 	@echo
