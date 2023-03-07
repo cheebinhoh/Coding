@@ -4,7 +4,7 @@
 
 all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
 	exception-vs-std-optional.out singleton-design-pattern.out lambda-functor.out \
-	std-array.out std-pair.out
+	std-array.out std-pair.out std-tuple.out
 
 lambda-functor.out : lambda-functor.cpp
 	g++ -std=c++14 -o $@ lambda-functor.cpp
@@ -23,6 +23,9 @@ std-array.out : std-array.cpp
 
 std-pair.out : std-pair.cpp
 	g++ -std=c++14 -o $@ std-pair.cpp
+
+std-tuple.out : std-tuple.cpp
+	g++ -std=c++14 -o $@ std-tuple.cpp
 
 std-reference-in-std-container.out : std-reference-in-std-container.cpp
 	g++ -std=c++14 -o $@ std-reference-in-std-container.cpp
