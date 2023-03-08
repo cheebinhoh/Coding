@@ -4,7 +4,7 @@
 
 all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
 	exception-vs-std-optional.out singleton-design-pattern.out lambda-functor.out \
-	std-array.out std-pair.out std-tuple.out std-vector-and-algorithms.out
+	std-array.out std-pair.out std-tuple.out std-containers-and-algorithms.out
 
 lambda-functor.out : lambda-functor.cpp
 	g++ -std=c++14 -o $@ lambda-functor.cpp
@@ -30,8 +30,8 @@ std-tuple.out : std-tuple.cpp
 std-reference-in-std-container.out : std-reference-in-std-container.cpp
 	g++ -std=c++14 -o $@ std-reference-in-std-container.cpp
 
-std-vector-and-algorithms.out : std-vector-and-algorithms.cpp
-	g++ -std=c++14 -o $@ std-vector-and-algorithms.cpp
+std-containers-and-algorithms.out : std-containers-and-algorithms.cpp
+	g++ -std=c++14 -o $@ std-containers-and-algorithms.cpp
 
 # miscallenous
 clean:
