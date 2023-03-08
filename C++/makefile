@@ -31,7 +31,7 @@ std-reference-in-std-container.out : std-reference-in-std-container.cpp
 	g++ -std=c++14 -o $@ std-reference-in-std-container.cpp
 
 std-containers-and-algorithms.out : std-containers-and-algorithms.cpp
-	g++ -std=c++14 -o $@ std-containers-and-algorithms.cpp
+	g++ -std=c++17 -o $@ std-containers-and-algorithms.cpp
 
 # miscallenous
 clean:
