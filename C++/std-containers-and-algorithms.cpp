@@ -78,8 +78,12 @@ int main(int argc, char *argv[]) {
     return i == 3;
   });
 
-  // is it a bug that std::remove_if does not shrink the vector to reflect new
-  // size of elements? we purposely resize it after calling std::remove_if().
+  // Quote from https://cplusplus.com/reference/algorithm/ that
+  // the algorithm never affects the size or storage allocation of the
+  // container). hence we need to delete the extra element left from deleting 3
+  // out of 1, 3, 5 otherwise, it will have result 1, 5, 5 (left over as 5 in
+  // 3rd position is moved up to 2nd position as we delete 3.
+
   v1.resize(cnt);
   std::cout << "Remove 3 from vector, it has " << cnt << " elements left: ";
   printVector(v1);
