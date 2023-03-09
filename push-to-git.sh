@@ -11,6 +11,12 @@
 echo "make clean"
 make clean # so that we do not commit binary
 
+oldpwd=$PWD
+rootdir=`dirname $0`
+if [ $rootdir != "" ]; then
+  cd $rootdir
+fi
+
 if which clang-format &>/dev/null; then
   echo "clang-format source files"
 
@@ -49,3 +55,9 @@ echo "git add, commit and push"
 git add .
 git commit -m "${1:-"no comment"}"
 git push origin master --force
+
+if [ $rootdir != "" ]; then
+  cd $oldpwd;
+fi
+
+
