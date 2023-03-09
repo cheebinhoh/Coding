@@ -183,18 +183,18 @@ int main(int argc, char *argv[]) {
   printVector(v2);
   std::cout << "\n";
 
-  // a crucial part is that v2_even must be preallocated with number of 
+  // a crucial part is that v2_even must be preallocated with number of
   // elements that std::copy_if will eventually copy values into it, else
   // segmentation fault.
-  int num_of_even = std::count_if(v2.begin(), v2.end(),
-                                  [](int i) { return i % 2 == 0; });
+  int num_of_even =
+      std::count_if(v2.begin(), v2.end(), [](int i) { return i % 2 == 0; });
   std::vector<int> v2_even(num_of_even);
 
-  std::copy_if(v2.begin(), v2.end(), v2_even.begin(), 
+  std::copy_if(v2.begin(), v2.end(), v2_even.begin(),
                [](int i) { return i % 2 == 0; });
   std::cout << "Copied of v2 with even numbers: ";
   printVector(v2_even);
-  std::cout << "\n";  
+  std::cout << "\n";
 
   return 0;
 }
