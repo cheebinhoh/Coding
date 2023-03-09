@@ -60,4 +60,5 @@ if [ $rootdir != "" ]; then
   cd $oldpwd;
 fi
 
+echo Done.
 
