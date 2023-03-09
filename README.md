@@ -1,9 +1,9 @@
 # Coding
 
-A repository to store my practice of coding. It is mostly in C which is just a convenient 
-choice because I spent signifiant amount of time on Unix, GNU/Linux and C. But it can be
-in any programming language, once you master the art of programming, a programming language
-is a tool.
+A repository to store my practice of coding. It is mostly in C (or C++) which is just a convenient 
+choice because I spent signifiant amount of time on Unix, GNU/Linux and C (some extent of C++). 
+But it can be in any programming language, once you master the art of programming, a programming
+language is a tool.
 
 Most of the coding test are interview questions (answers are mine :)) from big tech companies,
 like Apple or Amazon that I found online to practice my coding skill before my next move, 
