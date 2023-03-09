@@ -162,21 +162,16 @@ int main(int argc, char *argv[]) {
   std::cout << "Remove 3 from list, it has " << l1.size() << " elements left: ";
   printList(l1);
 
-  bool is_all_odd = std::all_of(l1.begin(), l1.end(),
-                                [](int i) {
-                                  return i % 2 != 0;
-                                });
+  bool is_all_odd =
+      std::all_of(l1.begin(), l1.end(), [](int i) { return i % 2 != 0; });
   if (is_all_odd) {
     std::cout << "All values are odd number\n";
   } else {
     std::cout << "Not all values are odd number\n";
   }
- 
+
   int total = 0;
-  std::for_each(l1.begin(), l1.end(),
-                [&total](int i) {
-                  total += i;
-                });
+  std::for_each(l1.begin(), l1.end(), [&total](int i) { total += i; });
 
   std::cout << "Sum of list of values is " << total << "\n";
   std::cout << "\n";
