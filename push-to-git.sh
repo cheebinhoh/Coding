@@ -8,14 +8,14 @@
 # - it git commit changes
 # - it git push changes
 
-echo "make clean"
-make clean # so that we do not commit binary
-
 oldpwd=$PWD
 rootdir=`dirname $0`
 if [ $rootdir != "" ]; then
   cd $rootdir
 fi
+
+echo "make clean"
+make clean # so that we do not commit binary
 
 if which clang-format &>/dev/null; then
   echo "clang-format source files"
