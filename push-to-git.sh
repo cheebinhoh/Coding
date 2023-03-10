@@ -18,6 +18,7 @@ echo "make clean"
 make clean # so that we do not commit binary
 
 if which clang-format &>/dev/null; then
+  echo
   echo "clang-format source files"
 
   IFS_PREV=$IFS
@@ -51,6 +52,7 @@ if which clang-format &>/dev/null; then
   IFS=$IFS_PREV
 fi
 
+echo
 echo "git add, commit and push"
 git add .
 git commit -m "${1:-"no comment"}"
