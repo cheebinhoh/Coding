@@ -102,14 +102,8 @@ int main(int argc, char *argv[]) {
   printVector(v1);
   std::cout << "\n";
 
-  cnt = 0;
-  std::remove_if(v1.begin(), v1.end(), [&cnt](int i) mutable {
-    if (i != 3) {
-      cnt++;
-    }
-
-    return i == 3;
-  });
+  std::vector<int>::iterator v1_new_end = std::remove_if(
+      v1.begin(), v1.end(), [&cnt](int i) mutable { return i == 3; });
 
   // Quote from https://cplusplus.com/reference/algorithm/ that
   // the algorithm never affects the size or storage allocation of the
@@ -117,7 +111,7 @@ int main(int argc, char *argv[]) {
   // out of 1, 3, 5 otherwise, it will have result 1, 5, 5 (left over as 5 in
   // 3rd position is moved up to 2nd position as we delete 3.
 
-  v1.resize(cnt);
+  v1.resize(std::distance(v1.begin(), v1_new_end));
   std::cout << "Remove 3 from vector, it has " << cnt << " elements left: ";
   printVector(v1);
   std::cout << "\n";
@@ -149,16 +143,10 @@ int main(int argc, char *argv[]) {
   printList(l1);
   std::cout << "\n";
 
-  cnt = 0;
-  std::remove_if(l1.begin(), l1.end(), [&cnt](int i) mutable {
-    if (i != 3) {
-      cnt++;
-    }
+  std::list<int>::iterator l1_new_end = std::remove_if(
+      l1.begin(), l1.end(), [&cnt](int i) mutable { return i == 3; });
 
-    return i == 3;
-  });
-
-  l1.resize(cnt);
+  l1.resize(std::distance(l1.begin(), l1_new_end));
   std::cout << "Remove 3 from list, it has " << l1.size() << " elements left: ";
   printList(l1);
 
