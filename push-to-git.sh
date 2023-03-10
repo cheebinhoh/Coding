@@ -59,6 +59,3 @@ git push origin master --force
 if [ $rootdir != "" ]; then
   cd $oldpwd;
 fi
-
-echo Done.
-
