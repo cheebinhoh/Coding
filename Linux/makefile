@@ -1,4 +1,6 @@
-# old good makefile to help compiling
+# Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
+#
+# Old good makefile to help manage compilation.
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
@@ -7,15 +9,14 @@ all : listdir.out copy.out copystdio.out
 copy.out : copy.c
 	gcc -o $@ copy.c
 
-listdir.out : listdir.c
-	gcc -o $@ listdir.c
-
 copystdio.out : copystdio.c
 	gcc -o $@ copystdio.c
 
+listdir.out : listdir.c
+	gcc -o $@ listdir.c
+
 # miscallenous
 clean:
-	rm -f *.out *.o
+	rm -f *.out *.o lib*.a
 
 test: all
-	@echo
