@@ -3,11 +3,12 @@
 # Copyright © 2023 Chee Bin HOH. All rights reserved.
 #
 # It combines 5 steps into one shell script:
-# - It makes clean, so we do not commit binary object files
-# - It clang-format files in extension mentioned in DIRS file
-# - It git add changes
-# - It git commit changes
-# - It git push changes
+# - make clean to remove binary object and executable files 
+# - clang-format files to be committed (in directory and file extension
+#   configured via DIRS file)
+# - git add changes
+# - git commit changes
+# - git push changes
 
 oldpwd=$PWD
 rootdir=`dirname $0`
@@ -15,8 +16,10 @@ if [ $rootdir != "" ]; then
   cd $rootdir
 fi
 
+
 echo "make clean"
 make clean
+
 
 if which clang-format &>/dev/null; then
   echo
@@ -50,11 +53,13 @@ if which clang-format &>/dev/null; then
   IFS=$IFS_PREV
 fi
 
+
 echo
 echo "git add, commit and push"
 git add .
 git commit -m "${1:-"no comment"}"
 git push origin master --force
+
 
 if [ $rootdir != "" ]; then
   cd $oldpwd;
