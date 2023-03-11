@@ -2,11 +2,12 @@
 #
 # Copyright © 2023 Chee Bin HOH. All rights reserved.
 #
-# it does 4 things:
-# - it clang-format files in extension mentioned in DIRS file;
-# - it git add changes
-# - it git commit changes
-# - it git push changes
+# It combines 5 steps into one shell script:
+# - It makes clean, so we do not commit binary object files
+# - It clang-format files in extension mentioned in DIRS file
+# - It git add changes
+# - It git commit changes
+# - It git push changes
 
 oldpwd=$PWD
 rootdir=`dirname $0`
@@ -15,7 +16,7 @@ if [ $rootdir != "" ]; then
 fi
 
 echo "make clean"
-make clean # so that we do not commit binary
+make clean
 
 if which clang-format &>/dev/null; then
   echo
@@ -29,7 +30,6 @@ if which clang-format &>/dev/null; then
     f_glob=`echo $dir_line | sed -e 's/.*://g'`
 
     if [ -d $dir ]; then
-
       cd $dir
 
       for f in `eval "ls $f_glob 2>/dev/null"`; do
@@ -42,11 +42,9 @@ if which clang-format &>/dev/null; then
       done
 
       cd - >/dev/null
-
     else
       echo "$dir not exist" >&2
     fi 
-    
   done
 
   IFS=$IFS_PREV
