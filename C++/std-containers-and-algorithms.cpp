@@ -110,6 +110,11 @@ int main(int argc, char *argv[]) {
   // container). hence we need to delete the extra element left from deleting 3
   // out of 1, 3, 5 otherwise, it will have result 1, 5, 5 (left over as 5 in
   // 3rd position is moved up to 2nd position as we delete 3.
+  //
+  // the otherway is to loop through vector and delete it using vector::erase,
+  // however, such deletion can be expensive like standard std::remove_if() if
+  // the deletion is on middle of the vector' array and it occurs frequently,
+  // instead using std::list.
 
   v1.resize(std::distance(v1.begin(), v1_new_end));
   std::cout << "Remove 3 from vector, it has " << cnt << " elements left: ";
