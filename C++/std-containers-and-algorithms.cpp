@@ -151,6 +151,11 @@ int main(int argc, char *argv[]) {
   std::list<int>::iterator l1_new_end = std::remove_if(
       l1.begin(), l1.end(), [&cnt](int i) mutable { return i == 3; });
 
+  // This is only needed if we use algorith std::remove_if as it does not
+  // alter the size of the underlying container.
+  //
+  // If we use std::list::remove_if() then we do not need to resize after
+  // removing.
   l1.resize(std::distance(l1.begin(), l1_new_end));
   std::cout << "Remove 3 from list, it has " << l1.size() << " elements left: ";
   printList(l1);
