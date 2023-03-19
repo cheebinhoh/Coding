@@ -65,7 +65,6 @@ int main(int argc, char *argv[]) {
   }
 
   std::cout << "\n";
-
   std::cout << "Inserting value for key 2 through std::map::insert\n";
   auto retp = m.insert(std::pair<int, std::string>(2, "two"));
   if (retp.second == false) {
@@ -77,6 +76,13 @@ int main(int argc, char *argv[]) {
   std::cout << "Inserting value for key 2 through []\n";
   m[2] = "two";
   std::cout << "key 2 has value " << m[2] << "\n";
+
+  // std::map::emplace has same behavior as insert where it is only inserted
+  // if key is not found.
+  std::cout << "\n";
+  std::cout << "Inserting value \"four\" for key 4 through emplace\n";
+  m.emplace(4, "four");
+  printMap(m);
 
   std::cout << "\n";
 
