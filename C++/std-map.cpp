@@ -66,5 +66,19 @@ int main(int argc, char *argv[]) {
 
   std::cout << "\n";
 
+  std::cout << "Inserting value for key 2 through std::map::insert\n";
+  auto retp = m.insert(std::pair<int, std::string>(2, "two"));
+  if (retp.second == false) {
+    std::cout << "map already have key 2 with value " << retp.first->second
+              << "\n";
+  }
+
+  std::cout << "\n";
+  std::cout << "Inserting value for key 2 through []\n";
+  m[2] = "two";
+  std::cout << "key 2 has value " << m[2] << "\n";
+
+  std::cout << "\n";
+
   return 0;
 }
