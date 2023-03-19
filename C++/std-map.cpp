@@ -56,8 +56,8 @@ int main(int argc, char *argv[]) {
   std::cout << "\n";
 
   auto rp = m.equal_range(1);
-  // map is not kept in contiguous storage, so we can not
-  // use rp.second - rp.first to figure out the distance.
+  // map is not kept in contiguous storage (array or vector),
+  // so we can not  use rp.second - rp.first to figure out the distance.
   if (std::distance(rp.first, rp.second) >= 1) {
     std::cout << "key 1 is found through map::range()\n";
   } else {

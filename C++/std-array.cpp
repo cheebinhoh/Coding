@@ -45,6 +45,9 @@ int main(int argc, char *argv[]) {
   }
 
   std::cout << "\n";
+
+  std::cout << "Size by end() - begin() = " << arr1.end() - arr1.begin()
+            << "\n";
   std::cout << "\n";
 
   return 0;
