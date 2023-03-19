@@ -6,7 +6,8 @@
 
 all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
 	exception-vs-std-optional.out singleton-design-pattern.out lambda-functor.out \
-	std-array.out std-pair.out std-tuple.out std-containers-and-algorithms.out
+	std-array.out std-pair.out std-tuple.out std-containers-and-algorithms.out \
+	std-map.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
@@ -25,6 +26,9 @@ std-array.out : std-array.cpp
 
 std-containers-and-algorithms.out : std-containers-and-algorithms.cpp
 	g++ -std=c++17 -o $@ std-containers-and-algorithms.cpp
+
+std-map.out : std-map.cpp
+	g++ -std=c++14 -o $@ std-map.cpp
 
 std-pair.out : std-pair.cpp
 	g++ -std=c++14 -o $@ std-pair.cpp
