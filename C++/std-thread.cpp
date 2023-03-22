@@ -2,9 +2,19 @@
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
  * This program demonstrates some features of std::thread.
+ *
+ * The WorkerTask is a task wrapped under an object and
+ * added to the WorkerExecution' queue, and WorkerExecution
+ * will have certain # of threads that runs and executes the
+ * task.
+ *
+ * We will maintain a multiple producer (adding WorkerTask) and
+ * multiple consumer (thread) implementation.
  */
 
 #include <chrono>
+#include <ctime>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -72,17 +82,39 @@ private:
   int m_num_workers{};
 };
 
-void doWorkerExecution(WorkerExecution *we) { std::cout << "worker is run\n"; }
+void doWorkerExecution(WorkerExecution *we) {
+  int seconds_to_sleep = (static_cast<unsigned int>(std::rand()) >> 16) % 5;
+
+  std::cout << "worker is run\n";
+  std::cout << "it will sleep for " << seconds_to_sleep << " seconds\n";
+
+  std::this_thread::sleep_for(std::chrono::seconds(seconds_to_sleep));
+}
 
 int main(int argc, char *argv[]) {
-  std::unique_ptr<WorkerTask> t1 = std::make_unique<WorkerTask>(
-      "first", [](void *data) { std::cout << "first task"; }, 5);
-  std::unique_ptr<WorkerTask> t2 = std::make_unique<WorkerTask>(
-      "second", [](void *data) { std::cout << "second task"; }, 3);
-  WorkerExecution exec{2};
+  using std::chrono::system_clock;
 
-  exec.addWorkerTask(std::move(t1));
-  exec.addWorkerTask(std::move(t2));
+  std::time_t tt = system_clock::to_time_t(system_clock::now());
+  struct std::tm *ptm = std::localtime(&tt);
+  std::cout << "Current time is " << std::put_time(ptm, "%X") << "\n";
+
+  std::srand(std::time(nullptr));
+
+  {
+    std::unique_ptr<WorkerTask> t1 = std::make_unique<WorkerTask>(
+        "first", [](void *data) { std::cout << "first task"; }, 5);
+    std::unique_ptr<WorkerTask> t2 = std::make_unique<WorkerTask>(
+        "second", [](void *data) { std::cout << "second task"; }, 3);
+    WorkerExecution exec{2};
+
+    exec.addWorkerTask(std::move(t1));
+    exec.addWorkerTask(std::move(t2));
+  }
+
+  tt = system_clock::to_time_t(system_clock::now());
+  ptm = std::localtime(&tt);
+  std::cout << "Current time before end is " << std::put_time(ptm, "%X")
+            << "\n";
 
   return 0;
 }
