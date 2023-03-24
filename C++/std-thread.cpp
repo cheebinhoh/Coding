@@ -17,6 +17,7 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
@@ -49,11 +50,14 @@ void doWorkerExecution(WorkerExecution *we);
 
 class WorkerExecution {
 public:
+  enum State { Initialized, Stop };
+
   friend void doWorkerExecution(WorkerExecution *we);
 
   WorkerExecution(int num_workers = 1) : m_num_workers{num_workers} {
     int i;
 
+    m_state = State::Initialized;
     for (i = 0; i < m_num_workers; i++) {
       m_workers.emplace_back(doWorkerExecution, this);
     }
@@ -61,6 +65,10 @@ public:
 
   ~WorkerExecution() {
     int i;
+
+    m_mutex.lock();
+    m_state = Stop;
+    m_mutex.unlock();
 
     for (i = 0; i < m_num_workers; i++) {
       m_workers[i].join();
@@ -80,15 +88,20 @@ private:
   std::vector<std::unique_ptr<WorkerTask>> m_queue{};
   std::vector<std::thread> m_workers{};
   int m_num_workers{};
+  State m_state{};
+  std::mutex m_mutex{};
 };
 
 void doWorkerExecution(WorkerExecution *we) {
-  int seconds_to_sleep = (static_cast<unsigned int>(std::rand()) >> 16) % 5;
-
-  std::cout << "worker is run\n";
-  std::cout << "it will sleep for " << seconds_to_sleep << " seconds\n";
-
-  std::this_thread::sleep_for(std::chrono::seconds(seconds_to_sleep));
+  while (1) {
+    we->m_mutex.lock();
+    if (WorkerExecution::State::Stop == we->m_state) {
+      we->m_mutex.unlock();
+      break;
+    }
+    we->m_mutex.unlock();
+    std::this_thread::yield();
+  }
 }
 
 int main(int argc, char *argv[]) {
