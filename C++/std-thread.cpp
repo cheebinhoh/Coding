@@ -13,7 +13,9 @@
  */
 
 #include <chrono>
+#include <condition_variable>
 #include <ctime>
+#include <deque>
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -66,18 +68,27 @@ public:
   ~WorkerExecution() {
     int i;
 
+    // we do not use lock_guard here as we want to explicitly unlock
+    // to let child threads to be able to run prior join the child
+    // threads prior exit the block (which will then unlock if we use
+    // lock_guard.
     m_mutex.lock();
     m_state = Stop;
+    m_condv.notify_all();
     m_mutex.unlock();
 
+    std::cout << "main thread joins the child thread\n";
     for (i = 0; i < m_num_workers; i++) {
       m_workers[i].join();
     }
   }
 
   bool addWorkerTask(std::unique_ptr<WorkerTask> t) {
-    m_queue.push_back(std::move(t));
-    std::cout << "# of queue size: " << m_queue.size() << "\n";
+    std::unique_lock<std::mutex> lck(m_mutex);
+    m_tasks.push_back(std::move(t));
+    m_condv.notify_all();
+
+    std::this_thread::yield();
 
     return true;
   }
@@ -85,22 +96,44 @@ public:
 private:
   void func() { std::cout << "calling func\n"; }
 
-  std::vector<std::unique_ptr<WorkerTask>> m_queue{};
+  std::deque<std::unique_ptr<WorkerTask>> m_tasks{};
   std::vector<std::thread> m_workers{};
   int m_num_workers{};
   State m_state{};
   std::mutex m_mutex{};
+  std::condition_variable m_condv{};
 };
 
 void doWorkerExecution(WorkerExecution *we) {
-  while (1) {
-    we->m_mutex.lock();
-    if (WorkerExecution::State::Stop == we->m_state) {
-      we->m_mutex.unlock();
-      break;
+  while (true) {
+    std::unique_ptr<WorkerTask> tsk{};
+
+    {
+      std::unique_lock<std::mutex> lck(we->m_mutex);
+
+      while (we->m_tasks.empty() &&
+             WorkerExecution::State::Stop != we->m_state) {
+        we->m_condv.wait(lck);
+      }
+
+      if (WorkerExecution::State::Stop == we->m_state) {
+        break; // break out of while
+      }
+
+      std::cout << "before tasks size = " << we->m_tasks.size() << "\n";
+      tsk = std::move(we->m_tasks.front());
+      we->m_tasks.pop_front();
+      std::cout << "after tasks size = " << we->m_tasks.size() << "\n";
     }
-    we->m_mutex.unlock();
-    std::this_thread::yield();
+
+    // do work
+    int seconds_to_sleep = (static_cast<unsigned int>(std::rand()) >> 16) % 5;
+
+    std::cout << "child thread (" << std::this_thread::get_id()
+              << ") will sleep for " << seconds_to_sleep << " seconds\n";
+    std::this_thread::sleep_for(std::chrono::seconds(seconds_to_sleep));
+    std::cout << "child thread (" << std::this_thread::get_id()
+              << ") resume exeuction\n";
   }
 }
 
@@ -118,10 +151,28 @@ int main(int argc, char *argv[]) {
         "first", [](void *data) { std::cout << "first task"; }, 5);
     std::unique_ptr<WorkerTask> t2 = std::make_unique<WorkerTask>(
         "second", [](void *data) { std::cout << "second task"; }, 3);
+    std::unique_ptr<WorkerTask> t3 = std::make_unique<WorkerTask>(
+        "third", [](void *data) { std::cout << "third task"; }, 4);
     WorkerExecution exec{2};
 
+    std::cout << "main thread sleeps 3 seconds prior adding first task\n";
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cout << "main thread resumes execution to add first task after 3 "
+                 "seconds sleep\n";
     exec.addWorkerTask(std::move(t1));
+
+    std::cout
+        << "main thread sleeps 5 seconds prior adding second and third tasks\n";
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::cout << "main thread resumes execution to add second and third task "
+                 "after 5 seconds sleep\n";
     exec.addWorkerTask(std::move(t2));
+    exec.addWorkerTask(std::move(t3));
+
+    std::cout << "main thread sleeps 10 seconds prior exit\n";
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::cout
+        << "main thread resumes execution to exit after 10 seconds sleep\n";
   }
 
   tt = system_clock::to_time_t(system_clock::now());
