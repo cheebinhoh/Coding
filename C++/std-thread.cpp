@@ -8,8 +8,10 @@
  * will have certain # of threads that runs and executes the
  * task.
  *
- * We will maintain a multiple producer (adding WorkerTask) and
- * multiple consumer (thread) implementation.
+ * It is to demonstrate that:
+ * - certain # of worker threads are able to execute tasks
+ *   concurrently.
+ * - a queue of tasks are maintained for those worker threads.
  */
 
 #include <chrono>
