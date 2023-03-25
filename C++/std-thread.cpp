@@ -29,20 +29,19 @@ public:
   WorkerTask(
       std::string name,
       void (*fn)(void *) =
-          [](void *data) { std::cout << "default noop for task\n"; },
-      int sleep = 0)
-      : m_name{name}, m_fn{fn}, m_sleep{sleep} {}
+          [](void *data) { std::cout << "default noop for task\n"; })
+      : m_name{name}, m_fn{fn} {}
 
   WorkerTask() : WorkerTask{"unknown"} {}
-
   ~WorkerTask() { std::cout << "Delete workertask: " << m_name << "\n"; }
 
   WorkerTask(const WorkerTask &copy) = delete;
   WorkerTask &operator=(const WorkerTask &copy) = delete;
 
+  void execute() { m_fn(NULL); }
+
 private:
   std::string m_name{};
-  int m_sleep{};
   void (*m_fn)(void *){};
 };
 
@@ -120,20 +119,12 @@ void doWorkerExecution(WorkerExecution *we) {
         break; // break out of while
       }
 
-      std::cout << "before tasks size = " << we->m_tasks.size() << "\n";
       tsk = std::move(we->m_tasks.front());
       we->m_tasks.pop_front();
-      std::cout << "after tasks size = " << we->m_tasks.size() << "\n";
     }
 
     // do work
-    int seconds_to_sleep = (static_cast<unsigned int>(std::rand()) >> 16) % 5;
-
-    std::cout << "child thread (" << std::this_thread::get_id()
-              << ") will sleep for " << seconds_to_sleep << " seconds\n";
-    std::this_thread::sleep_for(std::chrono::seconds(seconds_to_sleep));
-    std::cout << "child thread (" << std::this_thread::get_id()
-              << ") resume exeuction\n";
+    tsk->execute();
   }
 }
 
@@ -147,26 +138,37 @@ int main(int argc, char *argv[]) {
   std::srand(std::time(nullptr));
 
   {
-    std::unique_ptr<WorkerTask> t1 = std::make_unique<WorkerTask>(
-        "first", [](void *data) { std::cout << "first task"; }, 5);
-    std::unique_ptr<WorkerTask> t2 = std::make_unique<WorkerTask>(
-        "second", [](void *data) { std::cout << "second task"; }, 3);
-    std::unique_ptr<WorkerTask> t3 = std::make_unique<WorkerTask>(
-        "third", [](void *data) { std::cout << "third task"; }, 4);
+    std::unique_ptr<WorkerTask> t1 =
+        std::make_unique<WorkerTask>("first", [](void *data) {
+          std::cout << "first task starts, sleep 5 seconds.\n";
+          std::this_thread::sleep_for(std::chrono::seconds(5));
+          std::cout << "first task ends.\n";
+        });
+    std::unique_ptr<WorkerTask> t2 =
+        std::make_unique<WorkerTask>("second", [](void *data) {
+          std::cout << "second task starts, sleep 4 seconds.\n";
+          std::this_thread::sleep_for(std::chrono::seconds(4));
+          std::cout << "second task ends.\n";
+        });
+    std::unique_ptr<WorkerTask> t3 =
+        std::make_unique<WorkerTask>("third", [](void *data) {
+          std::cout << "third task starts, sleep 3 seconds.\n";
+          std::this_thread::sleep_for(std::chrono::seconds(3));
+          std::cout << "third task ends.\n";
+        });
     WorkerExecution exec{2};
 
     std::cout << "main thread sleeps 3 seconds prior adding first task\n";
     std::this_thread::sleep_for(std::chrono::seconds(3));
-    std::cout << "main thread resumes execution to add first task after 3 "
-                 "seconds sleep\n";
+    std::cout << "main thread adds first task\n";
     exec.addWorkerTask(std::move(t1));
 
     std::cout
-        << "main thread sleeps 5 seconds prior adding second and third tasks\n";
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    std::cout << "main thread resumes execution to add second and third task "
-                 "after 5 seconds sleep\n";
+        << "main thread sleeps 1 seconds prior adding second and third tasks\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << "main thread adds second task\n";
     exec.addWorkerTask(std::move(t2));
+    std::cout << "main thread adds third task\n";
     exec.addWorkerTask(std::move(t3));
 
     std::cout << "main thread sleeps 10 seconds prior exit\n";
