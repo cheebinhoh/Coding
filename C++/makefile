@@ -7,7 +7,8 @@
 all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
 	exception-vs-std-optional.out singleton-design-pattern.out lambda-functor.out \
 	std-array.out std-pair.out std-tuple.out std-containers-and-algorithms.out \
-	std-map.out std-priority-queue.out std-thread-with-multiple-worker-threads.out
+	std-map.out std-priority-queue.out std-thread-with-multiple-worker-threads.out \
+        std-thread-with-multiple-reader-n-one-writer.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
@@ -41,6 +42,9 @@ std-reference-in-std-container.out : std-reference-in-std-container.cpp
 
 std-thread-with-multiple-worker-threads.out : std-thread-with-multiple-worker-threads.cpp
 	g++ -std=c++14 -o $@ std-thread-with-multiple-worker-threads.cpp
+
+std-thread-with-multiple-reader-n-one-writer.out : std-thread-with-multiple-reader-n-one-writer.cpp
+	g++ -std=c++14 -o $@ std-thread-with-multiple-reader-n-one-writer.cpp
 
 std-tuple.out : std-tuple.cpp
 	g++ -std=c++14 -o $@ std-tuple.cpp
