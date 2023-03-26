@@ -62,7 +62,7 @@ public:
 
     m_state = State::Initialized;
     for (i = 0; i < m_num_workers; i++) {
-      m_workers.emplace_back(doWorkerExecution, this);
+      m_workers.emplace_back(&WorkerExecution::execute, this);
     }
   }
 
@@ -95,7 +95,30 @@ public:
   }
 
 private:
-  void func() { std::cout << "calling func\n"; }
+  static void execute(WorkerExecution *we) {
+    while (true) {
+      std::unique_ptr<WorkerTask> tsk{};
+
+      {
+        std::unique_lock<std::mutex> lck(we->m_mutex);
+
+        while (we->m_tasks.empty() &&
+               WorkerExecution::State::Stop != we->m_state) {
+          we->m_condv.wait(lck);
+        }
+
+        if (WorkerExecution::State::Stop == we->m_state) {
+          break; // break out of while
+        }
+
+        tsk = std::move(we->m_tasks.front());
+        we->m_tasks.pop_front();
+      }
+
+      // do work
+      tsk->execute();
+    }
+  }
 
   std::deque<std::unique_ptr<WorkerTask>> m_tasks{};
   std::vector<std::thread> m_workers{};
@@ -104,31 +127,6 @@ private:
   std::mutex m_mutex{};
   std::condition_variable m_condv{};
 };
-
-void doWorkerExecution(WorkerExecution *we) {
-  while (true) {
-    std::unique_ptr<WorkerTask> tsk{};
-
-    {
-      std::unique_lock<std::mutex> lck(we->m_mutex);
-
-      while (we->m_tasks.empty() &&
-             WorkerExecution::State::Stop != we->m_state) {
-        we->m_condv.wait(lck);
-      }
-
-      if (WorkerExecution::State::Stop == we->m_state) {
-        break; // break out of while
-      }
-
-      tsk = std::move(we->m_tasks.front());
-      we->m_tasks.pop_front();
-    }
-
-    // do work
-    tsk->execute();
-  }
-}
 
 int main(int argc, char *argv[]) {
   using std::chrono::system_clock;
