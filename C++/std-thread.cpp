@@ -1,17 +1,13 @@
 /**
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
- * This program demonstrates some features of std::thread.
+ * This program demonstrates some features of std::thread that
+ * - implements asynchronouos task execution through multiple
+ *   and asynchronous worker threads.
  *
- * The WorkerTask is a task wrapped under an object and
- * added to the WorkerExecution' queue, and WorkerExecution
- * will have certain # of threads that runs and executes the
- * task.
- *
- * It is to demonstrate that:
- * - certain # of worker threads are able to execute tasks
- *   concurrently.
- * - a queue of tasks are maintained for those worker threads.
+ * - is a classic consumer + producer problem, task is added
+ *   to a queue where worker threads will consume and execute
+ *   the task.
  */
 
 #include <chrono>
