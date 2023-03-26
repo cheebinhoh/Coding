@@ -8,6 +8,11 @@
  * - is a classic consumer + producer problem, task is added
  *   to a queue where worker threads will consume and execute
  *   the task.
+ *
+ * - it uses mutex and conditional variable than atomic, so when
+ *   a thread is waiting for its condition (there is task to be
+ *   executed), it can be put into sleep, but for atomic lock, a
+ *   constant pooling (yield and regain CPU time is needed).
  */
 
 #include <chrono>
