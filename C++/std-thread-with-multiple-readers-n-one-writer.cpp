@@ -76,13 +76,13 @@ int main(int argc, char *argv[]) {
               condv.wait(lck);
             }
 
-            // one of the problems in multiple reads and single write is that a
+            // One of the problems in multiple reads and single write is that a
             // stream of continuous read lock will push out pending wait lock,
             // this might not happen in many configuration because read lock
             // will execute actions that blocking it after it gives up the
             // read-write lock and giving the write thread a chance to run.
             //
-            // but in the case that a continuous run of read threads is to just
+            // But in the case that a continuous run of read threads is to just
             // crunch some number without context switching, the write thread
             // will be pushed out and keep waiting for read thread count to
             // reach zero, which might not happen often and depend on the mercy
