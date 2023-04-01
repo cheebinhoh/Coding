@@ -1,5 +1,9 @@
 /**
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
+ *
+ * This program demonstrates simple implementation of multiple read
+ * and single write lock (part of POSIX pthread in C) in c++ std::thread,
+ * std::condition_variable and std::mutex.
  */
 
 #include <array>
