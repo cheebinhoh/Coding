@@ -84,9 +84,9 @@ int main(int argc, char *argv[]) {
             //
             // but in the case that a continuous run of read threads is to just
             // crunch some number without context switching, the write thread
-            // will be pushed out and keep waiting read thread count to reach
-            // zero, which might not happen often and depend on the mercy of CPU
-            // scheduling.
+            // will be pushed out and keep waiting for read thread count to
+            // reach zero, which might not happen often and depend on the mercy
+            // of CPU scheduling.
             //
             // the extra condition (write_is_waiting) is a simple trick to
             // prevrent that.
