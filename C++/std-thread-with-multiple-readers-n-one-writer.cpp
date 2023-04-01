@@ -36,7 +36,7 @@ using fn_t = std::function<void()>;
 // thread does not block on any syscall for context switching or lock state.
 
 const int run_duration_second{5};
-const int write_stagnant_avoidance{false};
+const int write_stagnant_avoidance{true};
 const int num_of_reads{16};
 
 void do_func(int seconds, fn_t prefn, fn_t fn, fn_t postfn) {
