@@ -19,6 +19,26 @@
 using std::chrono::system_clock;
 using fn_t = std::function<void()>;
 
+// write_stagnant_avoidance { true } will help avoid write stagnant when
+// a continuous stream of read threads is accessing the data and push out
+// the write thread.
+//
+// on my machine (macOS), the std::thread::hardware_concurrency() = 16.
+//
+// if num of read threads are 16 and write stagnant avoidance is enable, write
+// thread has about 8 runs, and all other read thread has average between 10 -
+// 15 runs. If write stagnant avoidance is disable, write thread has 1 run, and
+// the all other read threads have average 47 run.
+//
+// As the number of read threads increased and catching to available underlying
+// concurrent threads, the important of write stagnant avoidance is increased,
+// as otherwise write thread might got an execution chance especially when read
+// thread does not block on any syscall for context switching or lock state.
+
+const int run_duration_second{5};
+const int write_stagnant_avoidance{false};
+const int num_of_reads{16};
+
 void do_func(int seconds, fn_t prefn, fn_t fn, fn_t postfn) {
   int mins{seconds / 60};
 
@@ -52,27 +72,28 @@ void do_func(int seconds, fn_t prefn, fn_t fn, fn_t postfn) {
 }
 
 int main(int argc, char *argv[]) {
+  int i{0};
   int write_cnt{0};
+  int read_in_progress_cnt{0};
+  bool read_has_data{false};
   bool write_in_progress{false};
   bool write_is_waiting{false};
-  int read_in_progress_cnt{0};
   std::condition_variable condv{};
   std::mutex mutex{};
-  int i{0};
 
   std::cout << "# of hardware concurrency = "
             << std::thread::hardware_concurrency() << "\n";
 
-  std::array<std::thread, 5> readers;
-  std::array<int, 5> reader_cnt{0};
+  std::array<std::thread, num_of_reads> readers;
+  std::array<int, num_of_reads> reader_cnt{0};
   for (i = 0; i < readers.size(); i++) {
     readers[i] = std::thread(
-        do_func, 5, [&reader_cnt, i]() { reader_cnt[i] = 0; },
+        do_func, run_duration_second, [&reader_cnt, i]() { reader_cnt[i] = 0; },
         [&reader_cnt, i, &mutex, &condv, &write_in_progress, &write_is_waiting,
-         &read_in_progress_cnt]() {
+         &read_in_progress_cnt, &read_has_data]() {
           {
             std::unique_lock<std::mutex> lck(mutex);
-            while (write_in_progress) {
+            while (write_in_progress || !read_has_data) {
               condv.wait(lck);
             }
 
@@ -90,7 +111,7 @@ int main(int argc, char *argv[]) {
             //
             // the extra condition (write_is_waiting) is a simple trick to
             // prevrent that.
-            while (write_is_waiting) {
+            while (write_is_waiting && write_stagnant_avoidance) {
               condv.wait(lck);
             }
 
@@ -110,7 +131,13 @@ int main(int argc, char *argv[]) {
   }
 
   do_func(
-      5, [&write_cnt]() { write_cnt = 0; },
+      run_duration_second,
+      [&write_cnt, &mutex, &condv, &read_has_data]() {
+        write_cnt = 0;
+        std::unique_lock<std::mutex> lck(mutex);
+        read_has_data = true;
+        condv.notify_all();
+      },
       [&write_cnt, &mutex, &condv, &write_in_progress, &write_is_waiting,
        &read_in_progress_cnt]() {
         {
