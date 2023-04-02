@@ -20,20 +20,22 @@ using std::chrono::system_clock;
 using fn_t = std::function<void()>;
 
 // write_stagnant_avoidance { true } will help avoid write stagnant when
-// a continuous stream of read threads is accessing the data and push out
-// the write thread.
+// a continuous stream of read threads occurs and push out the waiting write
+// thread. An example is illustrated below.
 //
 // on my machine (macOS), the std::thread::hardware_concurrency() = 16.
 //
 // if num of read threads are 16 and write stagnant avoidance is enable, write
 // thread has about 8 runs, and all other read thread has average between 10 -
 // 15 runs. If write stagnant avoidance is disable, write thread has 1 run, and
-// the all other read threads have average 47 run.
+// the all other read threads have average 47 run. As the # of read threads
+// decreased in relative to the hardware concurrency, there is more chance that
+// write thread got to execute even we do not have write stagnant avoidance be
+// true.
 //
-// As the number of read threads increased and catching to available underlying
-// concurrent threads, the important of write stagnant avoidance is increased,
-// as otherwise write thread might got an execution chance especially when read
-// thread does not block on any syscall for context switching or lock state.
+// As the number of read threads increased and catching up to the hardware
+// concurrency, the important of write stagnant avoidance become significant
+// to prevent any form of stagnant.
 
 const int run_duration_second{5};
 const int write_stagnant_avoidance{true};
