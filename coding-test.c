@@ -53,8 +53,7 @@ found:
   return 1;
 }
 
-/*
- * How do we improve the performance from previous code? one way is to keep the
+/* How do we improve the performance from previous code? one way is to keep the
  * array in sorted, so we traverse from start (smaller number), if the current
  * value at i and j already add up exceeding sum, then we can skip the k loop
  * (assume that all our numbers are positive value) as we are not going to find
@@ -104,28 +103,28 @@ found:
   return 1;
 }
 
-// In this approach, we have 3 loops too, but we do not search through the
-// whole list of array in each loop (which is O(n^3), instead we do this:
-//
-// in 1st loop, we find the index in the array for the largest value that is
-// smaller than sum, we use binary search to quickly do so (based on the fact
-// that the list of numbers are > 0 and unique).
-//
-// in the 2nd loop, we find the index in the array (from 0 up to 1st loop
-// current index) for the largest value that is smaller than sum - 1st loop'
-// value, we use binary search to do so.
-//
-// in the 3rd loop, we find the index in the array (from 0 up to 2nd loop index)
-// for the value that is matching to the sum - (1st loop' value + 2nd loop'
-// value).
-//
-// This is much efficient approach if we have a long list of array and where the
-// values are unique, spread apart, example, [1, 5, 100, 2000, 2001, 2002, ...
-// 4000, 4020, ... 5000].
-//
-// A binary search to locate the largest value smaller than the remaining value
-// allows us to quickly slide down the search space in next loop.
-//
+/* In this approach, we have 3 loops too, but we do not search through the
+ * whole list of array in each loop (which is O(n^3), instead we do this:
+ *
+ * in 1st loop, we find the index in the array for the largest value that is
+ * smaller than sum, we use binary search to quickly do so (based on the fact
+ * that the list of numbers are > 0 and unique).
+ *
+ * in the 2nd loop, we find the index in the array (from 0 up to 1st loop
+ * current index) for the largest value that is smaller than sum - 1st loop'
+ * value, we use binary search to do so.
+ *
+ * in the 3rd loop, we find the index in the array (from 0 up to 2nd loop index)
+ * for the value that is matching to the sum - (1st loop' value + 2nd loop'
+ * value).
+ *
+ * This is much efficient approach if we have a long list of array and where the
+ * values are unique, spread apart, example, [1, 5, 100, 2000, 2001, 2002, ...
+ * 4000, 4020, ... 5000].
+ *
+ * A binary search to locate the largest value smaller than the remaining value
+ * allows us to quickly slide down the search space in next loop.
+ */
 int determineLargestValueSmallerThanN(int array[], int size, int n) {
   int start;
   int mid;
@@ -188,15 +187,15 @@ int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size,
   return 0;
 }
 
-// Brute force in recursive approach is simple to understand:
-//
-// if nNum is 1, the exit condition is to find an element that
-// matches the sum.
-//
-// if nNum is more than 1, then we reduce sum by the current
-// element, and search to determine if there are elements add up
-// to sum - current element for the remaining nNum -1.
-//
+/* Brute force in recursive approach is simple to understand:
+ *
+ * if nNum is 1, the exit condition is to find an element that
+ * matches the sum.
+ *
+ * if nNum is more than 1, then we reduce sum by the current
+ * element, and search to determine if there are elements add up
+ * to sum - current element for the remaining nNum -1.
+ */
 int determineIfnNumSumToValueRecursive(int array[], int size, int sum,
                                        int nNum) {
   int i;
@@ -458,7 +457,6 @@ void runBinarySearchOnRotatedSortedList(void) {
  * 1, 2, 1, 1
  * 1, 1, 1, 1, 1
  */
-
 void findAllSumCombinationRecursive(int target, int start, int remaining) {
   int i;
 
@@ -702,7 +700,6 @@ void runAllWayToThrowDiceEqualToSum() {
  * 1.5 ^  3 = 3.375
  *   2 ^ -2 = 0.25
  */
-
 double power(double value, int power) {
   double result;
   int isNegativeExponent;
@@ -851,7 +848,6 @@ void runPermutationsOfString(void) {
 
 /* Test 10: implementing AVL (Adelson-Velsky and Landis) self-balancing tree
  */
-
 void runAVLSelfbalanceTree(void) {
   int array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
   struct TreeNode *root = NULL;
@@ -878,7 +874,6 @@ void runAVLSelfbalanceTree(void) {
  * of a contiguous subarray, within a given one-dimensional array A[1…n] of
  * numbers
  */
-
 void printMaximumSubarrayNumber(int array[], int size) {
   int i;
   int j;
@@ -938,7 +933,6 @@ void runMaximumSubarrayNumber(void) {
  * Find the rotating point of an array that is sorted, but the starting point
  * can be in middle.
  */
-
 int findRotatingPointInArray(int array[], int size) {
   int start;
   int end;
@@ -1000,7 +994,6 @@ void findRotatingPointInIntegerArray(void) {
  *
  * Check if a binary tree is binary search tree.
  */
-
 struct checkBinarySearchTreeData {
   int isValid;
   int lastValue;

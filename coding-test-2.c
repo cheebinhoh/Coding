@@ -104,7 +104,6 @@ void runFindMissingNumberInTheArray(void) {
  * integers in the array whose sum is equal to the given value. Return true if
  * the sum exists and return false if it does not.
  */
-
 void print2NumberSumToValue(int array[], int size, int val) {
   int i;
   int remaining;
@@ -165,7 +164,6 @@ void runDeteremineIf2NumberSumToValue(void) {
  * whether the input string can be completely segmented into the words of a
  * given dictionary.
  */
-
 int determineIfStringCanBeSegmented(char *dictionary[], char *s) {
   int i;
   int len;
@@ -604,7 +602,6 @@ void runMergeTwoLists(void) {
  *
  * Remove vowels from String
  */
-
 void removeVowelsFromString1(char s[]) {
   int len;
   int i;
