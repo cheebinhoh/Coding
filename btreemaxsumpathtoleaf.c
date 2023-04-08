@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * Find the maximum sum path to a leaf value in a binary tree
+ * Find the maximum sum path to a leaf value in a binary tree.
  */
 
 #include "btree.h"

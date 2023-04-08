@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * Quick short, shell sort, insertion sort, bubble sort and binary search
+ * Quick short, shell sort, insertion sort, bubble sort and binary search.
  */
 
 #include "search-sort.h"

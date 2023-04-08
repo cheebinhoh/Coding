@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * AVL self-balancing tree
+ * AVL self-balancing tree.
  */
 
 #include "btree.h"

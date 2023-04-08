@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * Test linked list (single)
+ * Test linked list (single).
  */
 
 #include "llist.h"

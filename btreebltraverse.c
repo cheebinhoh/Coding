@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * Breadth first search, both recursive and iterative way
+ * Breadth first search, both recursive and iterative way.
  */
 
 #include "btree.h"

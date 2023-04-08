@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * ADT binary search tree (with AVL self-balancing functionality)
+ * ADT binary search tree (with AVL self-balancing functionality).
  */
 
 #include "btree-internal.h"

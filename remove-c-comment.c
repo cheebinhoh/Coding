@@ -2,7 +2,7 @@
  *
  * A simple hand-craft scanner (not a token) that will remove C styles of
  * comment, interestingly C style does not allow nested forwardslash asterisk
- * comment, so do this scanner, I shall add nested support sometimes later. :)
+ * comment, so do this scanner, I shall add nested support sometimes later. :).
  */
 
 #include <stdio.h>
