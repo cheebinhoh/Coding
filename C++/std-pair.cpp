@@ -1,7 +1,8 @@
 /**
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
- * Pair is a special case of Tuple.
+ * This program demonstrates std::pair, a special case
+ * of std::tuple.
  */
 
 #include <iostream>

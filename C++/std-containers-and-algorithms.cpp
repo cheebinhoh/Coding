@@ -1,6 +1,7 @@
 /**
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
+ * This program demonstrates std::vector.
  */
 
 #include <algorithm>
