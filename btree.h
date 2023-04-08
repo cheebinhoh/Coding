@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * ADT binary search tree
+ * ADT binary search tree.
  */
 
 #ifndef BTREE_H_HAS_INCLUDED

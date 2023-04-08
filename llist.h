@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * A linked list (single) internal
+ * A linked list (single) internal.
  */
 
 #ifndef LLIST_H_HAS_INCLUDED

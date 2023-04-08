@@ -1,6 +1,6 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * Directed graph
+ * Directed graph.
  */
 
 #ifndef DGRAPH_INTERNAL_H_HAS_INCLUDED

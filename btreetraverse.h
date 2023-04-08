@@ -1,7 +1,7 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
  * Depth first search, preorder, inorder and postorder, both recursive and
- * iterative way
+ * iterative way.
  */
 
 #ifndef TREETRAVERSE_H_HAS_INCLUDED
