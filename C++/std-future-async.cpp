@@ -73,8 +73,6 @@ int main(int argc, char *argv[]) {
 
   std::future<bool> sort_process =
       std::async(doSortIntArray, array.data(), array.size());
-  // std::sort(array.begin(), array.end());
-  // doSortIntArray(array.data(), array.size());
 
   std::cout << "sorting, please wait ";
   std::chrono::milliseconds span(100);
