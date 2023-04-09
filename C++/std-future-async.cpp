@@ -8,6 +8,11 @@
  *
  * - the main thread will wait for the sorting to be done and
  *   periodically wake up and print "." to indicate the progress.
+ *
+ * the relationship between various key parts of std::future can
+ * be viewed as following:
+ *
+ * std::promise -> std::packaged_task -> std::async
  */
 
 #include <array>
