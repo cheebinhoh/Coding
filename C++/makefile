@@ -9,7 +9,7 @@ all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
 	std-array.out std-pair.out std-tuple.out std-containers-and-algorithms.out \
 	std-map.out std-priority-queue.out std-thread-with-multiple-worker-threads.out \
         std-thread-with-multiple-readers-n-one-writer.out std-future-async.out \
-	std-future-promise.out
+	std-future-promise.out std-future-packaged-task.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
@@ -31,6 +31,9 @@ std-containers-and-algorithms.out : std-containers-and-algorithms.cpp
 
 std-future-async.out : std-future-async.cpp
 	g++ -std=c++17 -o $@ std-future-async.cpp
+
+std-future-packaged-task.out : std-future-packaged-task.cpp
+	g++ -std=c++17 -o $@ std-future-packaged-task.cpp
 
 std-future-promise.out : std-future-promise.cpp
 	g++ -std=c++17 -o $@ std-future-promise.cpp
