@@ -8,7 +8,8 @@ all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
 	exception-vs-std-optional.out singleton-design-pattern.out lambda-functor.out \
 	std-array.out std-pair.out std-tuple.out std-containers-and-algorithms.out \
 	std-map.out std-priority-queue.out std-thread-with-multiple-worker-threads.out \
-        std-thread-with-multiple-readers-n-one-writer.out std-future-async.out
+        std-thread-with-multiple-readers-n-one-writer.out std-future-async.out \
+	std-future-promise.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
@@ -30,6 +31,9 @@ std-containers-and-algorithms.out : std-containers-and-algorithms.cpp
 
 std-future-async.out : std-future-async.cpp
 	g++ -std=c++17 -o $@ std-future-async.cpp
+
+std-future-promise.out : std-future-promise.cpp
+	g++ -std=c++17 -o $@ std-future-promise.cpp
 
 std-map.out : std-map.cpp
 	g++ -std=c++14 -o $@ std-map.cpp
