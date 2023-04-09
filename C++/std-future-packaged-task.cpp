@@ -1,10 +1,11 @@
 /**
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
- * This program demonstrates std::future and std::promise:
+ * This program demonstrates std::future and std::packaged_task:
  * - a asynchronous thread is explicitly created to do expensive
- *   sorting in background, and synchronous its sorting through
- *   std::packaged_task object.
+ *   sorting in background through std::packaged_task, and the
+ *   synchronization through std::future is done implicitly through
+ *   std::packaged_task.
  *
  * - the main thread will wait for the sorting to be done and
  *   periodically wake up and print "." to indicate the progress
