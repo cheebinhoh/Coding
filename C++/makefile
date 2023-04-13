@@ -9,7 +9,8 @@ all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
 	std-array.out std-pair.out std-tuple.out std-containers-and-algorithms.out \
 	std-map.out std-priority-queue.out std-thread-with-multiple-worker-threads.out \
         std-thread-with-multiple-readers-n-one-writer.out std-future-async.out \
-	std-future-promise.out std-future-packaged-task.out
+	std-future-promise.out std-future-packaged-task.out \
+	ring-bufer-for-multiple-writers-n-one-reader.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
@@ -22,6 +23,9 @@ singleton-design-pattern.out : singleton-design-pattern.cpp
 
 smart-pointer-with-object-graph.out : smart-pointer-with-object-graph.cpp
 	g++ -std=c++14 -o $@ smart-pointer-with-object-graph.cpp
+
+ring-bufer-for-multiple-writers-n-one-reader.out : ring-bufer-for-multiple-writers-n-one-reader.cpp
+	g++ -std=c++14 -o $@ ring-bufer-for-multiple-writers-n-one-reader.cpp
 
 std-array.out : std-array.cpp
 	g++ -std=c++14 -o $@ std-array.cpp
