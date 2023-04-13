@@ -71,6 +71,8 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
 
     initial_value++;
     tt = system_clock::to_time_t(system_clock::now());
+
+    std::this_thread::yield();
   }
 
 end:
