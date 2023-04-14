@@ -146,11 +146,13 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
     tt = system_clock::to_time_t(system_clock::now());
   }
 
-end : {
-  std::unique_lock<std::mutex> lck(ringbuffer->mutex);
-  std::cout << "writer thread id = " << std::this_thread::get_id()
-            << ", last value = " << initial_value - 1 << "\n";
-}
+end:
+  // always lock prior std::cout, so the message is not messed up
+  {
+    std::unique_lock<std::mutex> lck(ringbuffer->mutex);
+    std::cout << "writer thread id = " << std::this_thread::get_id()
+              << ", last value = " << initial_value - 1 << "\n";
+  }
 }
 
 int main(int argc, char *argv[]) {
