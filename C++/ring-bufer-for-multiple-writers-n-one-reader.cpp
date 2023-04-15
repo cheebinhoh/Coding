@@ -56,7 +56,7 @@ struct ringbuffer_t {
   std::vector<int> buffer{std::vector<int>(50, 0)};
   std::size_t size{buffer.size()};
   std::size_t stepup_size{20};
-  std::size_t max_size{1000};
+  std::size_t max_size{500};
 
   int r_index{0};
   int w_index{0};
