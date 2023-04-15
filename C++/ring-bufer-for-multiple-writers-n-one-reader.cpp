@@ -25,14 +25,14 @@
  * 1. the writer is paused while waiting reader to consumed previous
  *    data and free up the slot in ringbuffer.
  *
- * 2. the writer will extend the ringbuffer, and continue to write into
- *    the extended ringbuffer without pausing. This will allow slow reader
- *    to catch up without slowing writer, and to prevent over-run
- *    ringbuffer' size, we can impose hardlimit of the ringbuffer size,
- *    when it reaches that hard max size, it will stop growing and pause
- *    the writer, and some logging will then help diagnose if we have
- *    the right configuration in term of max size, grow size and processing
- *    time of both reader and writer.
+ * 2. the writer will extend the ringbuffer, and continue to write
+ *    into the extended ringbuffer without pausing. This will allow
+ *    slow reader to catch up without slowing writer, and to prevent
+ *    over-run ringbuffer' size, we can impose hardlimit of the
+ *    ringbuffer size, when it reaches that hard max size, it will stop
+ *    growing and pause the writer, and some logging will then help
+ *    diagnose if we have the right configuration in term of max size,
+ *    grow size and processing time of both reader and writer.
  */
 
 #include <algorithm>
