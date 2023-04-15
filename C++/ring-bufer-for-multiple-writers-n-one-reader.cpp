@@ -23,7 +23,6 @@
  */
 
 #include <algorithm>
-#include <array>
 #include <chrono>
 #include <condition_variable>
 #include <ctime>
@@ -153,16 +152,16 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
                     << " extends ringbuffer size from " << ringbuffer->size
                     << " to " << new_size << "\n";
           ringbuffer->buffer.resize(new_size, 0);
-          int n_to_move = ringbuffer->size - ringbuffer->r_index;
+          int nr_to_move = ringbuffer->size - ringbuffer->r_index;
 
           // important to move from backward in case that the newly added nr of
-          // elements is smaller than n_to_move.
-          for (int i = 0; i < n_to_move; i++) {
+          // elements is smaller than nr_to_move.
+          for (int i = 0; i < nr_to_move; i++) {
             ringbuffer->buffer[new_size - 1 - i] =
                 ringbuffer->buffer[ringbuffer->size - 1 - i];
           }
 
-          ringbuffer->r_index = new_size - n_to_move;
+          ringbuffer->r_index = new_size - nr_to_move;
           ringbuffer->size = new_size;
         }
       }
