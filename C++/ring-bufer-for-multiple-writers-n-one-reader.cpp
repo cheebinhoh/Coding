@@ -155,26 +155,41 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
           // this can be expensive if the reader thread is too slow, example is
           // that we have a ringbuffer of 50, and reader next read is at index
           // 4, and this writer thread next write is 4, and we have to move 4 to
-          // 49 toward to newly added buffer at the end.
+          // 49 toward to newly added buffer at the end to free up space for
+          // next_w_index.
+          //
+          // A more sophisticated approach is that we figure out if it is
+          // cheaper to move 0, 1, 2, 3 that prior to next_r_index backward
+          // toward the new extended region and then adjust next_w_index.
 
           std::size_t new_size{
               std::min(ringbuffer->max_size,
                        ringbuffer->size + ringbuffer->stepup_size)};
 
+          ringbuffer->buffer.resize(new_size, 0);
+
           std::cout << "writer thread " << std::this_thread::get_id()
                     << " extends ringbuffer size from " << ringbuffer->size
                     << " to " << new_size << "\n";
-          ringbuffer->buffer.resize(new_size, 0);
           int nr_to_move = ringbuffer->size - ringbuffer->r_index;
 
-          // important to move from backward in case that the newly added nr of
-          // elements is smaller than nr_to_move.
-          for (int i = 0; i < nr_to_move; i++) {
-            ringbuffer->buffer[new_size - 1 - i] =
-                ringbuffer->buffer[ringbuffer->size - 1 - i];
+          if (nr_to_move > ringbuffer->r_index) {
+            next_w_index = ringbuffer->size;
+            for (int i = 0; i < ringbuffer->r_index; i++) {
+              ringbuffer->buffer[next_w_index] = ringbuffer->buffer[i];
+              next_w_index = (next_w_index + 1) % new_size;
+            }
+          } else {
+            // important to move from backward in case that the newly added nr
+            // of elements is smaller than nr_to_move.
+            for (int i = 0; i < nr_to_move; i++) {
+              ringbuffer->buffer[new_size - 1 - i] =
+                  ringbuffer->buffer[ringbuffer->size - 1 - i];
+            }
+
+            ringbuffer->r_index = new_size - nr_to_move;
           }
 
-          ringbuffer->r_index = new_size - nr_to_move;
           ringbuffer->size = new_size;
         }
       }
