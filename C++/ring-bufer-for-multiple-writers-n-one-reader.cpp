@@ -4,20 +4,22 @@
  * This program demonstrates the implementation of
  * ring buffer that:
  *
- * - the ring buffer can store 500 ints at a time.
+ * - the ring buffer can store 50 ints at the beginning.
  *
- * - there are 3 writers running continuously in background
+ * - there are 2 writers running continuously in background
  *   to write a sequence of numbers into the ring buffer. Each
- *   writer will run for 60s and it takes 200ms to generate
- *   the next number to write to ring buffer
+ *   writer will run for 60s and it takes 500ms to generate
+ *   the next number to write to ring buffer.
  *
  * - there is one reader running continouusly in background
  *   to read a sequence of numbers from the ring buffer. The
- *   reader will run for 120s, and it takes 400ms second to
- *   process the number it reads from ring buffer.
+ *   reader will run for 280 or no data to read for 10s,
+ *   it takes 1 second to process the number it reads from ring buffer.
  *
- * - in this version if the ring buffer is fill without free
- *   slot, the writer will pause and wait for reader to catch up.
+ * the above setup allows the ringbuffer to be filled relative quick,
+ * and the writer will step up the ringbuffer size instead of wait
+ * for free slot after reader thread consumes existing data, this allow
+ * writer thread to continue to write without pause.
  */
 
 #include <algorithm>
