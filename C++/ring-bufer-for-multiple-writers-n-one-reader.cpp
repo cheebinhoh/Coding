@@ -16,10 +16,10 @@
  *   reader will run for 280 or no data to read for 10s,
  *   it takes 1 second to process the number it reads from ring buffer.
  *
- * the above setup allows the ringbuffer to be filled relative quick,
+ * the above setup allows the ringbuffer to be filled relative quickly,
  * and the writer will step up the ringbuffer size instead of wait
- * for free slot after reader thread consumes existing data, this allow
- * writer thread to continue to write without pause.
+ * for free slot, this allow writer thread to continue to write without
+ * pausing.
  */
 
 #include <algorithm>
