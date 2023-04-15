@@ -2,37 +2,36 @@
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
  * This program demonstrates the implementation of
- * ring buffer that:
+ * ring buffer with the following characteristics:
  *
  * - the ring buffer can store 50 ints at the beginning.
  *
  * - there are 2 writers running continuously in background
  *   to write a sequence of numbers into the ring buffer. Each
  *   writer will run for 60s and it takes 500ms to generate
- *   the next number to write to ring buffer.
+ *   the next number to write to ring buffer. The writer threads
+ *   will run for 60s.
  *
  * - there is one reader running continouusly in background
- *   to read a sequence of numbers from the ring buffer. The
- *   reader will run for 280 or no data to read for more than 10s.
- *   It takes 1 second to process the number it reads from ring
- *   buffer.
+ *   to read the sequence of numbers from the ring buffer. The
+ *   reader will run for 280s or quit after pause for more than
+ *   10s but no data comes in. The reader thread will spend 500
+ *   milliseconds to process the data read prior to reading the
+ *   the next number.
  *
  * In this setup, writer threads will fill up the available
- * ringbuffer slow before data is consumed by reader, there are
- * two designs to counter without data lost (overwritten by
- * writer before reader consumes it).
+ * ringbuffer quickly than reader thread can consume the data,
+ * there are way to prevent overrun by writer threads:
  *
- * 1. the writer is paused while waiting reader to consumed previous
- *    data and free up the slot in ringbuffer.
+ * 1. the writer is paused while waiting reader to consume previous
+ *    data and free up the slot in ringbuffer for next writing.
  *
  * 2. the writer will extend the ringbuffer, and continue to write
  *    into the extended ringbuffer without pausing. This will allow
- *    slow reader to catch up without slowing writer, and to prevent
- *    over-run ringbuffer' size, we can impose hardlimit of the
- *    ringbuffer size, when it reaches that hard max size, it will stop
- *    growing and pause the writer, and some logging will then help
- *    diagnose if we have the right configuration in term of max size,
- *    grow size and processing time of both reader and writer.
+ *    slow reader to catch up without pausing writer, and to prevent
+ *    over-run ringbuffer' size, we can impose hard max size of the
+ *    ringbuffer size, when it reaches that hard max size, the buffer
+ *    will stop growing and the writer threads will pause instead.
  */
 
 #include <algorithm>
@@ -160,7 +159,21 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
           //
           // A more sophisticated approach is that we figure out if it is
           // cheaper to move 0, 1, 2, 3 that prior to next_r_index backward
-          // toward the new extended region and then adjust next_w_index.
+          // to the new extended region and then adjust next_w_index than moving
+          // slots after r_index to old end to new end.
+          //
+          // For example, if we have 10 slots: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.
+          // and that following indexes represents state of slot before
+          // extending to two slots 0 ... 19
+          //
+          // example: r_index is 4, w_index is 3, and next_w_index is 4, it will
+          // be be cheaper to move data at slot 0, 1, 2 and 3 to new slot 10,
+          // 11, 12 and and 13, and then set next_w_index to be 14.
+          //
+          // the other way is to move data at slot 4, 5, 6, 7, 8, 9 toward the
+          // extended slots at 14, 15, 16, 17, 18 and 19 and set the next
+          // r_index to be 14. This will have to move 6 slots than 4 slots, so
+          // more expensive.
 
           std::size_t new_size{
               std::min(ringbuffer->max_size,
@@ -180,8 +193,9 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
               next_w_index = (next_w_index + 1) % new_size;
             }
           } else {
-            // important to move from backward in case that the newly added nr
-            // of elements is smaller than nr_to_move.
+            // we move it backward, so if number of slots to move
+            // is larger extended number of new slots, aka overlap
+            // region, no data is lost during the move.
             for (int i = 0; i < nr_to_move; i++) {
               ringbuffer->buffer[new_size - 1 - i] =
                   ringbuffer->buffer[ringbuffer->size - 1 - i];
