@@ -13,13 +13,26 @@
  *
  * - there is one reader running continouusly in background
  *   to read a sequence of numbers from the ring buffer. The
- *   reader will run for 280 or no data to read for 10s,
- *   it takes 1 second to process the number it reads from ring buffer.
+ *   reader will run for 280 or no data to read for more than 10s.
+ *   It takes 1 second to process the number it reads from ring
+ *   buffer.
  *
- * the above setup allows the ringbuffer to be filled relative quickly,
- * and the writer will step up the ringbuffer size instead of wait
- * for free slot, this allow writer thread to continue to write without
- * pausing.
+ * In this setup, writer threads will fill up the available
+ * ringbuffer slow before data is consumed by reader, there are
+ * two designs to counter without data lost (overwritten by
+ * writer before reader consumes it).
+ *
+ * 1. the writer is paused while waiting reader to consumed previous
+ *    data and free up the slot in ringbuffer.
+ *
+ * 2. the writer will extend the ringbuffer, and continue to write into
+ *    the extended ringbuffer without pausing. This will allow slow reader
+ *    to catch up without slowing writer, and to prevent over-run
+ *    ringbuffer' size, we can impose hardlimit of the ringbuffer size,
+ *    when it reaches that hard max size, it will stop growing and pause
+ *    the writer, and some logging will then help diagnose if we have
+ *    the right configuration in term of max size, grow size and processing
+ *    time of both reader and writer.
  */
 
 #include <algorithm>
