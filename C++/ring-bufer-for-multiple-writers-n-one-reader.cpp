@@ -94,7 +94,7 @@ void reader_fn(struct ringbuffer_t *ringbuffer, int seconds) {
       num = ringbuffer->buffer[ringbuffer->r_index];
       ringbuffer->r_index = (ringbuffer->r_index + 1) % ringbuffer->size;
 
-      ringbuffer->w_cv.notify_all();
+      ringbuffer->w_cv.notify_one();
     }
 
     try {
@@ -118,12 +118,13 @@ end:
     std::unique_lock<std::mutex> lck(ringbuffer->mutex);
 
     std::cout << "reader thread id = " << std::this_thread::get_id()
-              << ", last value = " << count << "\n";
+              << ", read count = " << count << "\n";
   }
 }
 
 void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
                int seconds) {
+  long count{0};
   std::time_t tt = system_clock::to_time_t(system_clock::now());
   struct std::tm *ptm = std::localtime(&tt);
 
@@ -184,18 +185,20 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
           std::cout << "writer thread " << std::this_thread::get_id()
                     << " extends ringbuffer size from " << ringbuffer->size
                     << " to " << new_size << "\n";
+
           int nr_to_move = ringbuffer->size - ringbuffer->r_index;
 
           if (nr_to_move > ringbuffer->r_index) {
             next_w_index = ringbuffer->size;
+
             for (int i = 0; i < ringbuffer->r_index; i++) {
               ringbuffer->buffer[next_w_index] = ringbuffer->buffer[i];
               next_w_index = (next_w_index + 1) % new_size;
             }
           } else {
-            // we move it backward, so if number of slots to move
-            // is larger extended number of new slots, aka overlap
-            // region, no data is lost during the move.
+            // we move it backward, so if the number of slots to move
+            // is larger than extended number of new slots (aka overlap),
+            // no data is lost during the move.
             for (int i = 0; i < nr_to_move; i++) {
               ringbuffer->buffer[new_size - 1 - i] =
                   ringbuffer->buffer[ringbuffer->size - 1 - i];
@@ -215,6 +218,7 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
     }
 
     initial_value++;
+    count++;
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     tt = system_clock::to_time_t(system_clock::now());
   }
@@ -224,7 +228,7 @@ end:
   {
     std::unique_lock<std::mutex> lck(ringbuffer->mutex);
     std::cout << "writer thread id = " << std::this_thread::get_id()
-              << ", last value = " << initial_value - 1 << "\n";
+              << ", write count = " << count << "\n";
   }
 }
 
