@@ -6,19 +6,16 @@
 #
 # Happy coding!  .... note that I am always a C programmer before 
 # I am anything else in computing, so the habit of declaring variable
-# in the proper scope even bourne shell has a loose scope definition 
-# and variable just spawn into existence in outer scope if it is 
-# assigned value in inner scope.
-
+# in the proper scope even thought bourne shell has a loose scope
+# definition and variable just spawn into existence in outer scope
+# if it is assigned value in inner scope.
 
 displayHelp()
 {
     echo "Usage: `basename $0` [-H hours -M minutes -S seconds -b -s -m \"message at end\" -f \"%Y-%m-%d %H:%M:%S\"] \"2022-01-21 12:00:00\""
 }
 
-
 # parameters parsing
-
 silent=""
 beep=""
 adjustHour=""
@@ -56,14 +53,17 @@ while getopts "H:M:S:bm:sf:h" opt; do
     esac
 done
 
-# FIXME: put up an autoconf system to detect version of date and then customize the file, 
-# the other way is to use more platform independent language, like python, but who need 
-# python when you have bourne shell.
+# FIXME: put up an autoconf system to detect version of date and then
+# customize the script file accordingly, the other way is to use more
+# platform independent language, like python, but who need python when
+# you have bourne shell.
 #
-# for some reason if we try to run "date" as a command inside the "if", like "if date -v +1H 2>dev/null; then ..."
-# two instances of the command is spawned in ubuntu shell for WSL that I test, something that I do not quite
-# experience before, so I change it to capture output to force shell to wait for the command to run and only
-# one instance is run. I plan to look into that, but this is not needed if I put it into autoconf
+# for some reason if we try to run "date" as a command inside the "if",
+# like "if date -v +1H 2>dev/null; then ..." two instances of the command
+# is spawned in ubuntu shell for WSL that I test, something that I do not
+# quite experience before, so I change it to capture output to force shell
+# to wait for the command to run and only one instance is run. I plan to
+# look into that, but this is not needed if I put it into autoconf
 
 dateResult=$(date -v +1H 2>/dev/null)
 
@@ -75,7 +75,6 @@ fi
 
 adjustDateTimeParams=""
 if [ "$adjustHour" != "" ]; then
-
     if [ "$linuxDate" = "yes" ]; then
        while [ "$adjustHour" -gt "0" ]; do
            adjustDateTimeParams="${adjustDateTimeParams} next hour"
@@ -87,18 +86,15 @@ if [ "$adjustHour" != "" ]; then
 fi
 
 if [ "$adjustMin" != "" ]; then
-
     adjustDateTimeParams="$adjustDateTimeParams -v +${adjustMin}M"
 fi
 
 if [ "$adjustSecond" != "" ]; then
-
     adjustDateTimeParams="$adjustDateTimeParams -v +${adjustSecond}S"
 fi
 
 dateTimeVal=""
 if [ "$adjustDateTimeParams" != ""  ]; then
-
     if [ "$linuxDate" = "yes" ]; then
        dateTimeVal=`date --date="$adjustDateTimeParams" +"%Y-%m-%d %H:%M:%S"`
     else
@@ -109,28 +105,23 @@ fi
 shift $((OPTIND-1))
 
 if [ "$#" -eq "1" ]; then
- 
     dateTimeVal="$*"
 fi
 
 if [ "$dateTimeVal" = "" ]; then
- 
     displayHelp
     exit 1
 fi
 
 # main body
-
 remain=`./cntdown.out ${formatOption+"$formatOption"} "$dateTimeVal"`
 runResult=$?
 
 if [ "$runResult" -ne "0" ]; then
-
     exit $runResult
 fi
 
 while [ "${remain}" -gt "0" ]; do
-
     if [ "${silent}" != "yes" ]; then
 
         echo "\r                        \c" # a quick hack :)
@@ -143,7 +134,6 @@ while [ "${remain}" -gt "0" ]; do
 done
 
 if [ "${remain}" -eq "0" ]; then
-
     if [ "${silent}" != "yes" ]; then
 
         echo ${msg:-0}
