@@ -10,7 +10,7 @@ all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
 	std-map.out std-priority-queue.out std-thread-with-multiple-worker-threads.out \
         std-thread-with-multiple-readers-n-one-writer.out std-future-async.out \
 	std-future-promise.out std-future-packaged-task.out \
-	ring-bufer-for-multiple-writers-n-one-reader.out
+	ring-bufer-for-multiple-writers-n-one-reader.out std-function-object.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
@@ -32,6 +32,9 @@ std-array.out : std-array.cpp
 
 std-containers-and-algorithms.out : std-containers-and-algorithms.cpp
 	g++ -std=c++17 -o $@ std-containers-and-algorithms.cpp
+
+std-function-object.out : std-function-object.cpp
+	g++ -std=c++17 -o $@ std-function-object.cpp
 
 std-future-async.out : std-future-async.cpp
 	g++ -std=c++17 -o $@ std-future-async.cpp

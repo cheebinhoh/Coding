@@ -94,7 +94,7 @@ void reader_fn(struct ringbuffer_t *ringbuffer, int seconds) {
       num = ringbuffer->buffer[ringbuffer->r_index];
       ringbuffer->r_index = (ringbuffer->r_index + 1) % ringbuffer->size;
 
-      ringbuffer->w_cv.notify_one();
+      ringbuffer->w_cv.notify_all();
     }
 
     try {
