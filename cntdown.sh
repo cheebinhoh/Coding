@@ -10,10 +10,12 @@
 # definition and variable just spawn into existence in outer scope
 # if it is assigned value in inner scope.
 
+
 displayHelp()
 {
     echo "Usage: `basename $0` [-H hours -M minutes -S seconds -b -s -m \"message at end\" -f \"%Y-%m-%d %H:%M:%S\"] \"2022-01-21 12:00:00\""
 }
+
 
 # parameters parsing
 silent=""
@@ -52,6 +54,7 @@ while getopts "H:M:S:bm:sf:h" opt; do
             exit 1
     esac
 done
+
 
 # FIXME: put up an autoconf system to detect version of date and then
 # customize the script file accordingly, the other way is to use more
@@ -113,6 +116,7 @@ if [ "$dateTimeVal" = "" ]; then
     exit 1
 fi
 
+
 # main body
 remain=`./cntdown.out ${formatOption+"$formatOption"} "$dateTimeVal"`
 runResult=$?
@@ -123,7 +127,6 @@ fi
 
 while [ "${remain}" -gt "0" ]; do
     if [ "${silent}" != "yes" ]; then
-
         echo "\r                        \c" # a quick hack :)
         echo "\r${remain}\c";
     fi
@@ -135,12 +138,10 @@ done
 
 if [ "${remain}" -eq "0" ]; then
     if [ "${silent}" != "yes" ]; then
-
         echo ${msg:-0}
     fi
 
     if [ "${beep}" == "yes" ]; then
-
         echo '\007\c'
     fi
 fi
