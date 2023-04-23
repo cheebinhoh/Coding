@@ -4,7 +4,7 @@
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : listdir.out copy.out copystdio.out
+all : listdir.out copy.out copystdio.out generateNumbers.out readGeneratedNumbers.out
 
 copy.out : copy.c
 	gcc -o $@ copy.c
@@ -14,6 +14,12 @@ copystdio.out : copystdio.c
 
 listdir.out : listdir.c
 	gcc -o $@ listdir.c
+
+generateNumbers.out : generateNumbers.c
+	gcc -o $@ generateNumbers.c
+
+readGeneratedNumbers.out : readGeneratedNumbers.c
+	gcc -o $@ readGeneratedNumbers.c
 
 # miscallenous
 clean:
