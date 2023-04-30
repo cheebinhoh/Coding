@@ -9,6 +9,18 @@
 #include <iostream>
 #include <thread>
 
+std::ostream &printDateTime(std::ostream &cout, std::time_t time,
+                            long long nanosecond_fraction) {
+  char buffer[1024] = "";
+  std::tm *tm;
+
+  tm = std::localtime(&time);
+  std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
+  cout << buffer << "." << nanosecond_fraction;
+
+  return cout;
+}
+
 int main(int argc, char *argv[]) {
   using std::chrono::high_resolution_clock;
   using std::chrono::system_clock;
@@ -59,10 +71,22 @@ int main(int argc, char *argv[]) {
                    .time_since_epoch()
                    .count()
             << "\n";
+  std::cout << "Time since epoch (nanoseconds fraction) for start: "
+            << std::chrono::time_point_cast<std::chrono::nanoseconds>(now)
+                       .time_since_epoch()
+                       .count() %
+                   1000000000L
+            << "\n";
   std::cout << "Time since epoch (in nanoseconds) for done: "
             << std::chrono::time_point_cast<std::chrono::nanoseconds>(done_1)
                    .time_since_epoch()
                    .count()
+            << "\n";
+  std::cout << "Time since epoch (nanoseconds fraction) for done: "
+            << std::chrono::time_point_cast<std::chrono::nanoseconds>(done_1)
+                       .time_since_epoch()
+                       .count() %
+                   1000000000L
             << "\n";
   std::cout << "Duration (in nanoseconds) between start to done: "
             << std::chrono::time_point_cast<std::chrono::nanoseconds>(done_1)
@@ -73,7 +97,26 @@ int main(int argc, char *argv[]) {
                        .count()
             << "\n";
 
-  // system clock
+  std::time_t now_t = system_clock::to_time_t(now);
+  std::time_t done_1_t = system_clock::to_time_t(done_1);
+
+  std::cout << "The work starts at ";
+  printDateTime(std::cout, now_t,
+                std::chrono::time_point_cast<std::chrono::nanoseconds>(now)
+                        .time_since_epoch()
+                        .count() %
+                    1000000000L)
+      << "\n";
+
+  std::cout << "The work ends at ";
+  printDateTime(std::cout, done_1_t,
+                std::chrono::time_point_cast<std::chrono::nanoseconds>(done_1)
+                        .time_since_epoch()
+                        .count() %
+                    1000000000L)
+      << "\n";
+
+  // high resolution clock
   std::cout << "\n";
   std::cout << "Using high resolution clock:\n";
   sum = 0;
