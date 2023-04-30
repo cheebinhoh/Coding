@@ -166,5 +166,9 @@ int main(int argc, char *argv[]) {
                  .count()
       << "\n";
 
+  // high resolution clock has no to_time_t as it has nothing to do with
+  // calendar time, but mostly used for measuring the difference between
+  // two time points in high resolution unit.
+
   return 0;
 }
