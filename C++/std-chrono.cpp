@@ -10,6 +10,7 @@
 #include <thread>
 
 int main(int argc, char *argv[]) {
+  using std::chrono::high_resolution_clock;
   using std::chrono::system_clock;
 
   std::chrono::minutes span(5);
@@ -23,8 +24,11 @@ int main(int argc, char *argv[]) {
   std::cout << "Add the duration: " << span.count() << "\n\n";
 
   tt = system_clock::to_time_t(after_5_min);
-  std::cout << "After 5 min is " << ctime(&tt) << "\n";
+  std::cout << "After 5 min is " << ctime(&tt); // ctime adds "\n";
 
+  // system clock
+  std::cout << "\n";
+  std::cout << "Using system clock:\n";
   long sum = 0;
   now = system_clock::now();
   for (long i = 0; i < 10000; i++) {
@@ -68,6 +72,56 @@ int main(int argc, char *argv[]) {
                        .time_since_epoch()
                        .count()
             << "\n";
+
+  // system clock
+  std::cout << "\n";
+  std::cout << "Using high resolution clock:\n";
+  sum = 0;
+  high_resolution_clock::time_point hsc_now = high_resolution_clock::now();
+  for (long i = 0; i < 10000; i++) {
+    for (long j = 0; j < 100000; j++) {
+      sum = sum + i + j;
+    }
+  }
+
+  high_resolution_clock::time_point hsc_done_1 = high_resolution_clock::now();
+  std::cout << "Duration (in seconds): "
+            << std::chrono::duration_cast<std::chrono::seconds>(hsc_done_1 -
+                                                                hsc_now)
+                   .count()
+            << "\n";
+  std::cout << "Duration (in milliseconds): "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(
+                   hsc_done_1 - hsc_now)
+                   .count()
+            << "\n";
+  std::cout << "Duration (in nanoseconds): "
+            << std::chrono::duration_cast<std::chrono::nanoseconds>(hsc_done_1 -
+                                                                    hsc_now)
+                   .count()
+            << "\n";
+
+  std::cout << "\n";
+  std::cout << "Time since epoch (in nanoseconds) for start: "
+            << std::chrono::time_point_cast<std::chrono::nanoseconds>(hsc_now)
+                   .time_since_epoch()
+                   .count()
+            << "\n";
+  std::cout << "Time since epoch (in nanoseconds) for done: "
+            << std::chrono::time_point_cast<std::chrono::nanoseconds>(
+                   hsc_done_1)
+                   .time_since_epoch()
+                   .count()
+            << "\n";
+  std::cout
+      << "Duration (in nanoseconds) between start to done: "
+      << std::chrono::time_point_cast<std::chrono::nanoseconds>(hsc_done_1)
+                 .time_since_epoch()
+                 .count() -
+             std::chrono::time_point_cast<std::chrono::nanoseconds>(hsc_now)
+                 .time_since_epoch()
+                 .count()
+      << "\n";
 
   return 0;
 }
