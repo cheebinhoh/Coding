@@ -186,29 +186,33 @@ void writer_fn(struct ringbuffer_t *ringbuffer, long initial_value,
                     << " extends ringbuffer size from " << ringbuffer->size
                     << " to " << new_size << "\n";
 
-          int nr_to_move = ringbuffer->size - ringbuffer->r_index;
+          if (0 == ringbuffer->r_index) {
 
-          if (nr_to_move > ringbuffer->r_index) {
-            next_w_index = ringbuffer->size;
+          } else if (ringbuffer->r_index > (ringbuffer->size / 2)) {
+            std::size_t nr_of_slots_to_move =
+                ringbuffer->size - ringbuffer->r_index;
 
-            for (int i = 0; i < ringbuffer->r_index; i++) {
-              ringbuffer->buffer[next_w_index] = ringbuffer->buffer[i];
-              next_w_index = (next_w_index + 1) % new_size;
-            }
-          } else {
-            // we move it backward, so if the number of slots to move
-            // is larger than extended number of new slots (aka overlap),
-            // no data is lost during the move.
-            for (int i = 0; i < nr_to_move; i++) {
+            for (std::size_t i = 0; i < nr_of_slots_to_move; i++) {
               ringbuffer->buffer[new_size - 1 - i] =
                   ringbuffer->buffer[ringbuffer->size - 1 - i];
             }
 
-            ringbuffer->r_index = new_size - nr_to_move;
+            ringbuffer->r_index = new_size - nr_of_slots_to_move;
+          } else {
+
+            std::size_t nr_of_slots_to_move = ringbuffer->r_index - 1;
+
+            ringbuffer->w_index = ringbuffer->size;
+            for (std::size_t i = 0; i < nr_of_slots_to_move; i++) {
+              ringbuffer->buffer[ringbuffer->w_index] = ringbuffer->buffer[i];
+              ringbuffer->w_index = (ringbuffer->w_index + 1) % new_size;
+            }
           }
 
           ringbuffer->size = new_size;
         }
+
+        next_w_index = (ringbuffer->w_index + 1) % ringbuffer->size;
       }
 
       ringbuffer->buffer[ringbuffer->w_index] = initial_value;
