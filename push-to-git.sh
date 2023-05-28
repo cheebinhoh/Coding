@@ -2,7 +2,8 @@
 #
 # Copyright © 2023 Chee Bin HOH. All rights reserved.
 #
-# It combines 5 steps into one shell script:
+# It combines 6 steps into one shell script:
+# - it removes padding space and detect files with tab at start of lines
 # - make clean to remove binary object and executable files
 # - clang-format files to be committed (in directory and file extension
 #   configured via DIRS file)
