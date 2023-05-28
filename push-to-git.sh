@@ -56,10 +56,8 @@ make >/dev/null || exit 1
 echo "clean up build..."
 make clean >/dev/null
 
-echo "perform clang-format..."
 if which clang-format &>/dev/null; then
-  echo
-  echo "clang-format source files"
+  echo "perform clang-format..."
 
   IFS_PREV=$IFS
   IFS=$'\n'
@@ -90,8 +88,7 @@ if which clang-format &>/dev/null; then
 fi
 
 
-echo
-echo "git add, commit and push"
+echo "git add, commit and push..."
 git add .
 git commit -m "${1:-"no comment"}"
 git push origin master --force
