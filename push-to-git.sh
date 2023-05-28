@@ -16,6 +16,17 @@ if [ $rootdir != "" ]; then
   cd $rootdir
 fi
 
+make trim-space.out >/dev/null
+if [ ! -x trim-space.out ]; then
+   echo "trim-space.out fails to be built"
+   exit 1
+fi
+
+for f in `git diff --name-only`; do 
+   if [ ! -x $f ]; then
+       trim-space.sh $f
+   fi
+done
 
 echo "make clean"
 make clean

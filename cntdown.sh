@@ -4,11 +4,11 @@
 #
 # A front end to cntdown
 #
-# Happy coding!  .... note that I am always a C programmer before 
+# Happy coding!  .... note that I am always a C programmer before
 # I am anything else in computing, so the habit of declaring variable
 # in the proper scope even thought bourne shell has a loose scope
 # definition and variable just spawn into existence in outer scope
-# if it is assigned value in inner scope.
+# if it is assigned value in inner scope. 
 
 
 displayHelp()
@@ -28,7 +28,7 @@ while getopts "H:M:S:bm:sf:h" opt; do
     H)
       adjustHour="${OPTARG}"
       ;;
-    M)  
+    M)
       adjustMin="${OPTARG}"
       ;;
     S)
