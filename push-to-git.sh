@@ -22,11 +22,25 @@ if [ ! -x trim-space.out ]; then
    exit 1
 fi
 
+# Tab at the beginning of lines are not consistent cross IDE, it is particular
+# annoying for source files saved in visual studio kind of IDE and reopen in 
+# vi.
+has_invalid_tab=""
 for f in `git diff --name-only`; do 
    if [ ! -x $f ]; then
-       trim-space.sh $f
+       ./trim-space.sh $f
+   fi
+
+   invalid_tab_lines=`sed -n -e '/^\t/=' $f`
+   if [ "$invalid_tab_lines" != "" ] ; then
+      has_invalid_tab="yes"
+      echo $f has invalid tab at beginning of the lines: `echo $invalid_tab_lines | sed -e 's/ /, /g'`
    fi
 done
+
+if [ "$has_invalid_tab" == "yes" ]; then
+   exit 1
+fi
 
 echo "make clean"
 make clean
