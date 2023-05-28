@@ -27,6 +27,9 @@ fi
 # Tab at the beginning of lines are not consistent cross IDE, it is particular
 # annoying for source files saved in visual studio kind of IDE and reopen in
 # vi.
+
+echo "Trim space and check tab at the start of lines..."
+
 has_invalid_tab=""
 for f in `git diff --name-only`; do
    if [ ! -x $f ]; then
@@ -50,10 +53,10 @@ echo "build check..."
 make >/dev/null || exit 1
 
 
-echo "make clean"
-make clean
+echo "clean up build..."
+make clean >/dev/null
 
-
+echo "perform clang-format..."
 if which clang-format &>/dev/null; then
   echo
   echo "clang-format source files"
