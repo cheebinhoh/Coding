@@ -89,6 +89,8 @@ fi
 
 
 echo "git add, commit and push..."
+echo
+
 git add .
 git commit -m "${1:-"no comment"}"
 git push origin master --force
