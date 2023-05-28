@@ -3,7 +3,7 @@
 # Copyright © 2023 Chee Bin HOH. All rights reserved.
 #
 # It combines 5 steps into one shell script:
-# - make clean to remove binary object and executable files 
+# - make clean to remove binary object and executable files
 # - clang-format files to be committed (in directory and file extension
 #   configured via DIRS file)
 # - git add changes
@@ -22,11 +22,13 @@ if [ ! -x trim-space.out ]; then
    exit 1
 fi
 
+# extra space following newline are never intended to be checked in, so trim it.
+#
 # Tab at the beginning of lines are not consistent cross IDE, it is particular
-# annoying for source files saved in visual studio kind of IDE and reopen in 
+# annoying for source files saved in visual studio kind of IDE and reopen in
 # vi.
 has_invalid_tab=""
-for f in `git diff --name-only`; do 
+for f in `git diff --name-only`; do
    if [ ! -x $f ]; then
        ./trim-space.sh $f
    fi
@@ -34,13 +36,18 @@ for f in `git diff --name-only`; do
    invalid_tab_lines=`sed -n -e '/^\t/=' $f`
    if [ "$invalid_tab_lines" != "" ] ; then
       has_invalid_tab="yes"
-      echo $f has invalid tab at beginning of the lines: `echo $invalid_tab_lines | sed -e 's/ /, /g'`
+      echo Error: $f has invalid tab at beginning of the lines: `echo $invalid_tab_lines | sed -e 's/ /, /g'`
    fi
 done
 
 if [ "$has_invalid_tab" == "yes" ]; then
    exit 1
 fi
+
+
+# test build, we do not want to check in things that break
+make >/dev/null || exit 1
+
 
 echo "make clean"
 make clean
@@ -61,7 +68,7 @@ if which clang-format &>/dev/null; then
       cd $dir
 
       for f in `eval "ls $f_glob 2>/dev/null"`; do
-        clang-format ${f} > ${f}_tmp 
+        clang-format ${f} > ${f}_tmp
         if ! diff $f ${f}_tmp &>/dev/null; then
           cp ${f}_tmp ${f}
         fi
@@ -72,7 +79,7 @@ if which clang-format &>/dev/null; then
       cd - >/dev/null
     else
       echo "$dir not exist" >&2
-    fi 
+    fi
   done
 
   IFS=$IFS_PREV
