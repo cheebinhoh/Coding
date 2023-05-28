@@ -46,6 +46,7 @@ fi
 
 
 # test build, we do not want to check in things that break
+echo "build check..."
 make >/dev/null || exit 1
 
 
