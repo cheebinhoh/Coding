@@ -3,7 +3,7 @@
 # Copyright © 2023 Chee Bin HOH. All rights reserved.
 #
 # It combines 6 steps into one shell script:
-# - it removes padding space and detect files with tab at start of lines
+# - remove padding space and detect files with tab at start of lines
 # - make clean to remove binary object and executable files
 # - clang-format files to be committed (in directory and file extension
 #   configured via DIRS file)
@@ -23,7 +23,7 @@ if [ ! -x trim-space.out ]; then
    exit 1
 fi
 
-# extra space following newline are never intended to be checked in, so trim it.
+# extra space following newline is never intended to be checked in, so we trim it.
 #
 # Tab at the beginning of lines are not consistent cross IDE, it is particular
 # annoying for source files saved in visual studio kind of IDE and reopen in
