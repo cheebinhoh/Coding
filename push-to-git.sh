@@ -23,6 +23,27 @@ if [ ! -x trim-space.out ]; then
    exit 1
 fi
 
+function source_files
+{
+    IFS_PREV=$IFS
+    IFS=$'\n'
+
+    for l in `cat DIRS`; do 
+       IFS=$IFS_PREV
+
+       dir=`echo $l | sed -e 's/\(.*\):.*/\1/g'`
+       exts=`echo $l | sed -e 's/.*://g'`
+
+       cd $dir
+       for file in $exts; do
+           echo $dir/$file
+       done
+       cd - >/dev/null
+    done
+
+    IFS=$IFS_PREV
+}
+
 # extra space following newline is never intended to be checked in, so we trim it.
 #
 # Tab at the beginning of lines are not consistent cross IDE, it is particular
@@ -32,7 +53,7 @@ fi
 echo "Trim space and check tab at the start of lines..."
 
 has_invalid_tab=""
-for f in `git diff --name-only`; do
+for f in `source_files`; do
    if [ ! -x $f ]; then
        ./trim-space.sh $f
    fi
@@ -48,7 +69,6 @@ if [ "$has_invalid_tab" == "yes" ]; then
    exit 1
 fi
 
-
 # test build, we do not want to check in things that break
 echo "build check..."
 make >/dev/null || exit 1
@@ -58,34 +78,16 @@ echo "clean up build..."
 make clean >/dev/null
 
 if which clang-format &>/dev/null; then
-  echo "perform clang-format..."
+    echo "perform clang-format..."
 
-  IFS_PREV=$IFS
-  IFS=$'\n'
-
-  for dir_line in `cat DIRS`; do
-    dir=`echo $dir_line | sed -e 's/:.*//g'`
-    f_glob=`echo $dir_line | sed -e 's/.*://g'`
-
-    if [ -d $dir ]; then
-      cd $dir
-
-      for f in `eval "ls $f_glob 2>/dev/null"`; do
+    for f in `source_files`; do
         clang-format ${f} > ${f}_tmp
         if ! diff $f ${f}_tmp &>/dev/null; then
-          cp ${f}_tmp ${f}
+            cp ${f}_tmp ${f}
         fi
-
+  
         rm ${f}_tmp
-      done
-
-      cd - >/dev/null
-    else
-      echo "$dir not exist" >&2
-    fi
-  done
-
-  IFS=$IFS_PREV
+    done
 fi
 
 
