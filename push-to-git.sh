@@ -28,7 +28,7 @@ function source_files
     IFS_PREV=$IFS
     IFS=$'\n'
 
-    for l in `cat DIRS`; do 
+    for l in `cat DIRS`; do
        IFS=$IFS_PREV
 
        dir=`echo $l | sed -e 's/\(.*\):.*/\1/g'`
@@ -73,10 +73,11 @@ fi
 echo "build check..."
 make >/dev/null || exit 1
 
-
+# clean up build, we do not want to check in binary
 echo "clean up build..."
 make clean >/dev/null
 
+# clang-format the source files
 if which clang-format &>/dev/null; then
     echo "perform clang-format..."
 
@@ -85,12 +86,12 @@ if which clang-format &>/dev/null; then
         if ! diff $f ${f}_tmp &>/dev/null; then
             cp ${f}_tmp ${f}
         fi
-  
+ 
         rm ${f}_tmp
     done
 fi
 
-
+# git activities
 echo "git add, commit and push..."
 echo
 
