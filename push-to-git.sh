@@ -15,34 +15,36 @@
 oldpwd=$PWD
 rootdir=`dirname $0`
 if [ $rootdir != "" ]; then
-    cd $rootdir
+  cd $rootdir
 fi
 
 make trim-space.out >/dev/null
 if [ ! -x trim-space.out ]; then
-    echo "trim-space.out fails to be built"
-    exit 1
+  echo "trim-space.out fails to be built"
+  exit 1
 fi
 
 function source_files
 {
-    IFS_PREV=$IFS
-    IFS=$'\n'
+  IFS_PREV=$IFS
+  IFS=$'\n'
 
-    for l in `cat DIRS`; do
-        IFS=$IFS_PREV
+  for l in `cat DIRS`; do
+    IFS=$IFS_PREV
 
-        dir=`echo $l | sed -e 's/\(.*\):.*/\1/g'`
-        exts=`echo $l | sed -e 's/.*://g'`
+    dir=`echo $l | sed -e 's/\(.*\):.*/\1/g'`
+    exts=`echo $l | sed -e 's/.*://g'`
 
-        cd $dir
-        for file in $exts; do
-            echo $dir/$file
-        done
-        cd - >/dev/null
+    cd $dir
+
+    for file in $exts; do
+      echo $dir/$file
     done
 
-    IFS=$IFS_PREV
+    cd - >/dev/null
+  done
+
+  IFS=$IFS_PREV
 }
 
 # extra space following newline is never intended to be checked in, so we trim it.
@@ -55,19 +57,19 @@ echo "Trim space and check tab at the start of lines..."
 
 has_invalid_tab=""
 for f in `source_files`; do
-   if [ ! -x $f ]; then
-       ./trim-space.sh $f
-   fi
+  if [ ! -x $f ]; then
+    ./trim-space.sh $f
+  fi
 
-   invalid_tab_lines=`sed -n -e '/^\t/=' $f`
-   if [ "$invalid_tab_lines" != "" ] ; then
-      has_invalid_tab="yes"
-      echo Error: $f has invalid tab at beginning of the lines: `echo $invalid_tab_lines | sed -e 's/ /, /g'`
-   fi
+  invalid_tab_lines=`sed -n -e '/^\t/=' $f`
+  if [ "$invalid_tab_lines" != "" ] ; then
+    has_invalid_tab="yes"
+    echo Error: $f has invalid tab at beginning of the lines: `echo $invalid_tab_lines | sed -e 's/ /, /g'`
+  fi
 done
 
 if [ "$has_invalid_tab" == "yes" ]; then
-    exit 1
+  exit 1
 fi
 
 # test build, we do not want to check in things that break
@@ -80,16 +82,16 @@ make clean >/dev/null
 
 # clang-format the source files
 if which clang-format &>/dev/null; then
-    echo "perform clang-format..."
+  echo "perform clang-format..."
 
-    for f in `source_files`; do
-        clang-format ${f} > ${f}_tmp
-        if ! diff $f ${f}_tmp &>/dev/null; then
-            cp ${f}_tmp ${f}
-        fi
- 
-        rm ${f}_tmp
-    done
+  for f in `source_files`; do
+    clang-format ${f} > ${f}_tmp
+    if ! diff $f ${f}_tmp &>/dev/null; then
+      cp ${f}_tmp ${f}
+    fi
+
+    rm ${f}_tmp
+  done
 fi
 
 # git activities
@@ -102,5 +104,5 @@ git push origin master --force
 
 
 if [ $rootdir != "" ]; then
-    cd $oldpwd;
+  cd $oldpwd;
 fi
