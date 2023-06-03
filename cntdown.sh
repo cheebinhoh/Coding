@@ -24,32 +24,32 @@ adjustHour=""
 adjustMin=""
 adjustSecond=""
 while getopts "H:M:S:bm:sf:h" opt; do
-  case "$opt" in
-    H)
-      adjustHour="${OPTARG}"
-      ;;
-    M)
-      adjustMin="${OPTARG}"
-      ;;
-    S)
-      adjustSecond="${OPTARG}"
-      ;;
-    b)
-      beep="yes"
-      ;;
-    s)
-      silent="yes"
-      ;;
-    f)
-      formatOption="-f ${OPTARG}"
-      ;;
-    m)
-      msg=${OPTARG}
-      ;;
-    *)
-      displayHelp
-      exit 1
-  esac
+    case "$opt" in
+        H)
+            adjustHour="${OPTARG}"
+            ;;
+        M)
+            adjustMin="${OPTARG}"
+            ;;
+       S)
+            adjustSecond="${OPTARG}"
+            ;;
+       b)
+            beep="yes"
+            ;;
+       s)
+            silent="yes"
+            ;;
+       f)
+            formatOption="-f ${OPTARG}"
+            ;;
+       m)
+            msg=${OPTARG}
+            ;;
+       *)
+            displayHelp
+            exit 1
+    esac
 done
 
 
@@ -68,29 +68,29 @@ done
 dateResult=$(date -v +1H 2>/dev/null)
 
 if [ "$dateResult" = "" ]; then
-  linuxDate="yes"
+    linuxDate="yes"
 else
-  linuxDate=""
+    linuxDate=""
 fi
 
 adjustDateTimeParams=""
 if [ "$adjustHour" != "" ]; then
-  if [ "$linuxDate" = "yes" ]; then
-    while [ "$adjustHour" -gt "0" ]; do
-      adjustDateTimeParams="${adjustDateTimeParams} next hour"
-      adjustHour=$((adjustHour -  1))
-    done
-  else
-    adjustDateTimeParams="-v +${adjustHour}H"
-  fi
+    if [ "$linuxDate" = "yes" ]; then
+        while [ "$adjustHour" -gt "0" ]; do
+            adjustDateTimeParams="${adjustDateTimeParams} next hour"
+           adjustHour=$((adjustHour -  1))
+        done
+    else
+        adjustDateTimeParams="-v +${adjustHour}H"
+    fi
 fi
 
 if [ "$adjustMin" != "" ]; then
-  adjustDateTimeParams="$adjustDateTimeParams -v +${adjustMin}M"
+    adjustDateTimeParams="$adjustDateTimeParams -v +${adjustMin}M"
 fi
 
 if [ "$adjustSecond" != "" ]; then
-  adjustDateTimeParams="$adjustDateTimeParams -v +${adjustSecond}S"
+    adjustDateTimeParams="$adjustDateTimeParams -v +${adjustSecond}S"
 fi
 
 dateTimeVal=""
@@ -105,12 +105,12 @@ fi
 shift $((OPTIND-1))
 
 if [ "$#" -eq "1" ]; then
-  dateTimeVal="$*"
+    dateTimeVal="$*"
 fi
 
 if [ "$dateTimeVal" = "" ]; then
-  displayHelp
-  exit 1
+    displayHelp
+    exit 1
 fi
 
 
@@ -119,26 +119,26 @@ remain=`./cntdown.out ${formatOption+"$formatOption"} "$dateTimeVal"`
 runResult=$?
 
 if [ "$runResult" -ne "0" ]; then
-  exit $runResult
+    exit $runResult
 fi
 
 while [ "${remain}" -gt "0" ]; do
-  if [ "${silent}" != "yes" ]; then
-    echo "\r                        \c" # a quick hack :)
-    echo "\r${remain}\c";
-  fi
+    if [ "${silent}" != "yes" ]; then
+        echo "\r                        \c" # a quick hack :)
+       echo "\r${remain}\c";
+    fi
 
-  sleep 1;
+    sleep 1;
 
-  remain=`./cntdown.out ${formatOption+"$formatOption"} "$dateTimeVal"`
+    remain=`./cntdown.out ${formatOption+"$formatOption"} "$dateTimeVal"`
 done
 
 if [ "${remain}" -eq "0" ]; then
-  if [ "${silent}" != "yes" ]; then
-    echo "\r${msg:-0}"
-  fi
+    if [ "${silent}" != "yes" ]; then
+        echo "\r${msg:-0}"
+    fi
 
-  if [ "${beep}" == "yes" ]; then
-    echo '\007\c'
-  fi
+    if [ "${beep}" == "yes" ]; then
+        echo '\007\c'
+    fi
 fi

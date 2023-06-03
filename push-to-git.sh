@@ -2,8 +2,9 @@
 #
 # Copyright © 2023 Chee Bin HOH. All rights reserved.
 #
-# It combines 6 steps into one shell script:
+# It combines the following steps into one shell script:
 # - remove padding space and detect files with tab at start of lines
+# - make all to catch build error
 # - make clean to remove binary object and executable files
 # - clang-format files to be committed (in directory and file extension
 #   configured via DIRS file)
@@ -14,13 +15,13 @@
 oldpwd=$PWD
 rootdir=`dirname $0`
 if [ $rootdir != "" ]; then
-  cd $rootdir
+    cd $rootdir
 fi
 
 make trim-space.out >/dev/null
 if [ ! -x trim-space.out ]; then
-   echo "trim-space.out fails to be built"
-   exit 1
+    echo "trim-space.out fails to be built"
+    exit 1
 fi
 
 function source_files
@@ -29,16 +30,16 @@ function source_files
     IFS=$'\n'
 
     for l in `cat DIRS`; do
-       IFS=$IFS_PREV
+        IFS=$IFS_PREV
 
-       dir=`echo $l | sed -e 's/\(.*\):.*/\1/g'`
-       exts=`echo $l | sed -e 's/.*://g'`
+        dir=`echo $l | sed -e 's/\(.*\):.*/\1/g'`
+        exts=`echo $l | sed -e 's/.*://g'`
 
-       cd $dir
-       for file in $exts; do
-           echo $dir/$file
-       done
-       cd - >/dev/null
+        cd $dir
+        for file in $exts; do
+            echo $dir/$file
+        done
+        cd - >/dev/null
     done
 
     IFS=$IFS_PREV
@@ -66,7 +67,7 @@ for f in `source_files`; do
 done
 
 if [ "$has_invalid_tab" == "yes" ]; then
-   exit 1
+    exit 1
 fi
 
 # test build, we do not want to check in things that break
@@ -101,5 +102,5 @@ git push origin master --force
 
 
 if [ $rootdir != "" ]; then
-  cd $oldpwd;
+    cd $oldpwd;
 fi
