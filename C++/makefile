@@ -4,14 +4,11 @@
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : smart-pointer-with-object-graph.out std-reference-in-std-container.out \
-	exception-vs-std-optional.out singleton-design-pattern.out lambda-functor.out \
-	std-array.out std-pair.out std-tuple.out std-containers-and-algorithms.out \
-	std-map.out std-priority-queue.out std-thread-with-multiple-worker-threads.out \
-        std-thread-with-multiple-readers-n-one-writer.out std-future-async.out \
-	std-future-promise.out std-future-packaged-task.out \
-	ring-bufer-for-multiple-writers-n-one-reader.out std-function-object.out \
-	std-chrono.out
+all : exception-vs-std-optional.out lambda-functor.out ring-bufer-for-multiple-writers-n-one-reader.out \
+	singleton-design-pattern.out smart-pointer-with-object-graph.out std-array.out std-chrono.out \
+	std-containers-and-algorithms.out std-function-object.out std-future-async.out std-future-packaged-task.out \
+	std-future-promise.out std-map.out std-pair.out std-priority-queue.out std-reference-in-std-container.out \
+	std-thread-with-multiple-readers-n-one-writer.out std-thread-with-multiple-worker-threads.out std-tuple.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
