@@ -4,15 +4,14 @@
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : libbtree.a libllist.a libsearch-sort.a libdgraph.a btreepathsum.out btreebltraverse.out btreemaxminlevel.out \
-          btreesymmetriccheck.out btreetraverse.out btreemirrorswap.out btreeidentical.out \
-  	  btreebuild.out btreelca.out tree2btreebuild.out btreerebalancing.out btreemaxpathsum.out \
-          btreeisbalanced.out btreemaxnodeinlevel.out btreeverticalsum.out btreemaxsumpathtoleaf.out \
-          btreemaxsumpathbetween2leaves.out btreesubtree.out btree-test.out \
-          search-sort.out remove-c-comment.out string-utility.out calculator.out shrink-space.out \
-          trim-space.out replace-tab-with-space.out syntax-validate-parenthese.out fold-line.out \
-          find2ndMaxNumber.out transformStr2Str.out trafficdemand.out coding-test.out \
-          coding-test-2.out llist-test.out dgraph-test.out cntdown.out
+all : btree-test.out btreebltraverse.out btreebuild.out btreeidentical.out btreeisbalanced.out btreelca.out \
+	btreemaxminlevel.out btreemaxnodeinlevel.out btreemaxpathsum.out btreemaxsumpathbetween2leaves.out \
+	btreemaxsumpathtoleaf.out btreemirrorswap.out btreepathsum.out btreerebalancing.out btreesubtree.out \
+	btreesymmetriccheck.out btreetraverse.out btreeverticalsum.out calculator.out cntdown.out coding-test-2.out \
+	coding-test.out dgraph-test.out find2ndMaxNumber.out fold-line.out libbtree.a libdgraph.a libllist.a \
+	libsearch-sort.a llist-test.out remove-c-comment.out replace-tab-with-space.out search-sort.out \
+	shrink-space.out string-utility.out syntax-validate-parenthese.out trafficdemand.out transformStr2Str.out \
+	tree2btreebuild.out trim-space.out
 	@echo
 	cd C++ && make all
 	@echo
