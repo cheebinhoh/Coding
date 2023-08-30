@@ -4,7 +4,7 @@
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : exception-vs-std-optional.out lambda-functor.out ring-bufer-for-multiple-writers-n-one-reader.out \
+all : exception-vs-std-optional.out lambda-functor.out ring-buffer-for-multiple-writers-n-one-reader.out \
 	singleton-design-pattern.out smart-pointer-with-object-graph.out std-array.out std-chrono.out \
 	std-containers-and-algorithms.out std-function-object.out std-future-async.out std-future-packaged-task.out \
 	std-future-promise.out std-map.out std-pair.out std-priority-queue.out std-reference-in-std-container.out \
@@ -22,8 +22,8 @@ singleton-design-pattern.out : singleton-design-pattern.cpp
 smart-pointer-with-object-graph.out : smart-pointer-with-object-graph.cpp
 	g++ -std=c++14 -o $@ smart-pointer-with-object-graph.cpp
 
-ring-bufer-for-multiple-writers-n-one-reader.out : ring-bufer-for-multiple-writers-n-one-reader.cpp
-	g++ -std=c++14 -o $@ ring-bufer-for-multiple-writers-n-one-reader.cpp
+ring-buffer-for-multiple-writers-n-one-reader.out : ring-buffer-for-multiple-writers-n-one-reader.cpp
+	g++ -std=c++14 -o $@ ring-buffer-for-multiple-writers-n-one-reader.cpp
 
 std-array.out : std-array.cpp
 	g++ -std=c++14 -o $@ std-array.cpp
