@@ -32,7 +32,9 @@ int main(int argc, char *argv[])
   Hal_Proc ext_input {"ext input"};
 
   // parameters to tune
+  bool input_to_sleep_use_ns = true; /* nano or milliseconds */
   int input_to_sleep_milliseconds = 1;
+  int input_to_sleep_nanoseconds = 500000; /* 0.5 milliseconds */
   int input_to_run_seconds = 5;
 
   Hal_Pipe<std::string> out_pipe {"out_pipe", [&input_cnt](std::string item) {
@@ -56,7 +58,7 @@ int main(int argc, char *argv[])
     filter_pipe.push(item);
   } };
 
-  gpr_input.exec([&staging_pipe, input_to_sleep_milliseconds, input_to_run_seconds]() {
+  gpr_input.exec([&staging_pipe, input_to_sleep_use_ns, input_to_sleep_nanoseconds, input_to_sleep_milliseconds, input_to_run_seconds]() {
     int i {0};
 
     system_clock::time_point start = system_clock::now();
@@ -67,7 +69,11 @@ int main(int argc, char *argv[])
 
        i++;
 
-       std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
+       if (input_to_sleep_use_ns) {
+       	 std::this_thread::sleep_for(std::chrono::nanoseconds(input_to_sleep_nanoseconds));
+       } else {
+         std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
+       }
        system_clock::time_point wakeup = system_clock::now();
        if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= input_to_run_seconds) {
           break;
@@ -77,7 +83,7 @@ int main(int argc, char *argv[])
     safethread_log(std::cout << "gpr input: end: " << i << "\n");
   } );
 
-  gps_input.exec([&staging_pipe, input_to_sleep_milliseconds, input_to_run_seconds]() {
+  gps_input.exec([&staging_pipe, input_to_sleep_use_ns, input_to_sleep_nanoseconds, input_to_sleep_milliseconds, input_to_run_seconds]() {
     int i {0};
 
     system_clock::time_point start = system_clock::now();
@@ -88,7 +94,12 @@ int main(int argc, char *argv[])
 
        i++;
 
-       std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
+       if (input_to_sleep_use_ns) {
+       	 std::this_thread::sleep_for(std::chrono::nanoseconds(input_to_sleep_nanoseconds));
+       } else {
+         std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
+       }
+
        system_clock::time_point wakeup = system_clock::now();
        if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= input_to_run_seconds) {
           break;
@@ -98,7 +109,7 @@ int main(int argc, char *argv[])
     safethread_log(std::cout << "gps_input: end: " << i << "\n");
   } );
 
-  imu_input.exec([&staging_pipe, input_to_sleep_milliseconds, input_to_run_seconds]() {
+  imu_input.exec([&staging_pipe, input_to_sleep_use_ns, input_to_sleep_nanoseconds, input_to_sleep_milliseconds, input_to_run_seconds]() {
     int i {0};
 
     system_clock::time_point start = system_clock::now();
@@ -109,7 +120,12 @@ int main(int argc, char *argv[])
 
        i++;
 
-       std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
+       if (input_to_sleep_use_ns) {
+       	 std::this_thread::sleep_for(std::chrono::nanoseconds(input_to_sleep_nanoseconds));
+       } else {
+         std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
+       }
+
        system_clock::time_point wakeup = system_clock::now();
        if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= input_to_run_seconds) {
           break;
@@ -119,7 +135,7 @@ int main(int argc, char *argv[])
     safethread_log(std::cout << "imu_input: end: " << i << "\n");
   } );
 
-  ext_input.exec([&staging_pipe, input_to_sleep_milliseconds, input_to_run_seconds]() {
+  ext_input.exec([&staging_pipe, input_to_sleep_use_ns, input_to_sleep_nanoseconds, input_to_sleep_milliseconds, input_to_run_seconds]() {
     int i {0};
 
     system_clock::time_point start = system_clock::now();
@@ -130,7 +146,12 @@ int main(int argc, char *argv[])
 
        i++;
 
-       std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
+       if (input_to_sleep_use_ns) {
+       	 std::this_thread::sleep_for(std::chrono::nanoseconds(input_to_sleep_nanoseconds));
+       } else {
+         std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
+       }
+
        system_clock::time_point wakeup = system_clock::now();
        if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= input_to_run_seconds) {
           break;
