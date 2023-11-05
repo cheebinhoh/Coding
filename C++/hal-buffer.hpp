@@ -11,20 +11,40 @@ class Hal_Buffer
 {
   public:
     Hal_Buffer() {
+      int err {};
 
+      err = pthread_mutex_init(&m_mutex, NULL);
+      if (err) {
+         throw std::runtime_error(strerror(err));
+      }
+
+      err = pthread_cond_init(&m_cond, NULL);
+      if (err) {
+         throw std::runtime_error(strerror(err));
+      }
     }
 
     void push(T item) {
       int err {};
 
       err = pthread_mutex_lock(&m_mutex);
-      assert(err);
+      if (err) {
+         throw std::runtime_error(strerror(err));
+      }
+
       m_queue.push_back(item);
    
       err = pthread_cond_signal(&m_cond);
-      assert(err);
+      if (err) {
+         pthread_mutex_unlock(&m_mutex);
+
+         throw std::runtime_error(strerror(err));
+      }
+
       err = pthread_mutex_unlock(&m_mutex);
-      assert(err);
+      if (err) {
+         throw std::runtime_error(strerror(err));
+      }
     }
 
   protected:
@@ -32,16 +52,25 @@ class Hal_Buffer
       int err {};
 
       err = pthread_mutex_lock(&m_mutex);
+      if (err) {
+         throw std::runtime_error(strerror(err));
+      }
       
       while (m_queue.empty()) {
-         pthread_cond_wait(&m_cond, &m_mutex);
+         err = pthread_cond_wait(&m_cond, &m_mutex);
+         if (err) {
+             throw std::runtime_error(strerror(err));
+         }
       }
 
       T val = m_queue.front();
       m_queue.pop_front();
 
       err = pthread_mutex_unlock(&m_mutex);
-
+      if (err) {
+         throw std::runtime_error(strerror(err));
+      }
+ 
       return val;
     }
 
