@@ -29,6 +29,10 @@ int main(int argc, char *argv[])
   Hal_Proc gpr_input {"gpr input"};
   Hal_Proc ext_input {"ext input"};
 
+  // parameters to tune
+  int input_to_sleep_milliseconds = 1;
+  int input_to_run_seconds = 5;
+
   Hal_Pipe<std::string> out_pipe {"out_pipe", [&input_cnt](std::string item) {
     std::size_t found = item.find(": ");
     if (found != std::string::npos) {
@@ -42,20 +46,20 @@ int main(int argc, char *argv[])
     out_pipe.push(item);
   } };
 
-  gpr_input.exec([&out_pipe]() {
+  gpr_input.exec([&staging_pipe, input_to_sleep_milliseconds, input_to_run_seconds]() {
     int i {0};
 
     system_clock::time_point start = system_clock::now();
 
     while (true) {
        std::string item = "gpr_input: " + std::to_string(i) + ": data";
-       out_pipe.push(item);
+       staging_pipe.push(item);
 
        i++;
 
-       std::this_thread::sleep_for(std::chrono::milliseconds(1));
+       std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
        system_clock::time_point wakeup = system_clock::now();
-       if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= 5) {
+       if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= input_to_run_seconds) {
           break;
        }
     }
@@ -63,20 +67,20 @@ int main(int argc, char *argv[])
     safethread_log(std::cout << "gpr input: end: " << i << "\n");
   } );
 
-  ext_input.exec([&out_pipe]() {
+  ext_input.exec([&staging_pipe, input_to_sleep_milliseconds, input_to_run_seconds]() {
     int i {0};
 
     system_clock::time_point start = system_clock::now();
 
     while (true) {
        std::string item = "ext_input: " + std::to_string(i) + ": data";
-       out_pipe.push(item);
+       staging_pipe.push(item);
 
        i++;
 
-       std::this_thread::sleep_for(std::chrono::milliseconds(1));
+       std::this_thread::sleep_for(std::chrono::milliseconds(input_to_sleep_milliseconds));
        system_clock::time_point wakeup = system_clock::now();
-       if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= 5) {
+       if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= input_to_run_seconds) {
           break;
        }
     }
@@ -92,7 +96,11 @@ int main(int argc, char *argv[])
        for (auto & pair : input_cnt) {
           safethread_log(std::cout << "source: " << pair.first << ", cnt: " << pair.second << "\n");
        }
+
+       break;
   }
+
+  // Hal_Proc and Hal_Pipe will be destroyed and display statistics
 
   return 0;
 }
