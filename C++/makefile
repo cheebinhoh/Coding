@@ -8,10 +8,14 @@ all : exception-vs-std-optional.out lambda-functor.out ring-buffer-for-multiple-
 	singleton-design-pattern.out smart-pointer-with-object-graph.out std-array.out std-chrono.out \
 	std-containers-and-algorithms.out std-function-object.out std-future-async.out std-future-packaged-task.out \
 	std-future-promise.out std-map.out std-pair.out std-priority-queue.out std-reference-in-std-container.out \
-	std-thread-with-multiple-readers-n-one-writer.out std-thread-with-multiple-worker-threads.out std-tuple.out
+	std-thread-with-multiple-readers-n-one-writer.out std-thread-with-multiple-worker-threads.out std-tuple.out \
+	hal-io.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
+
+hal-io.out : hal-io.cpp hal-proc.hpp hal-proc.cpp hal-pipe.hpp hal-buffer.hpp
+	g++ -std=c++17 -o $@ hal-io.cpp hal-proc.cpp
 
 lambda-functor.out : lambda-functor.cpp
 	g++ -std=c++14 -o $@ lambda-functor.cpp
