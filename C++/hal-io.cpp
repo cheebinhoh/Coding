@@ -20,9 +20,16 @@ int main(int argc, char *argv[])
 {
   Hal_Proc gpr_input {"gpr input"};
   Hal_Proc ext_input {"ext input"};
-  Hal_Pipe<std::string> out_pipe {"to_lgpr", [](std::string item) {std::cout << "pop item: " << item << "\n"; } };
 
   std::srand(std::time(NULL));
+
+  Hal_Pipe<std::string> out_pipe {"out_pipe", [](std::string item) {
+     std::cout << "out_pipe: pop: " << item << "\n";
+  } };
+
+  Hal_Pipe<std::string> staging_pipe {"staging_input", [&out_pipe](std::string item) {
+    out_pipe.push(item);
+  } };
 
   gpr_input.exec([&out_pipe]() {
     for (int i = 0; i < 10; i++) {
