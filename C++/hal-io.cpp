@@ -1,7 +1,9 @@
 #include <cstdlib>
 #include <ctime>
+#include <cstring>
 #include <chrono>
 #include <iostream>
+#include <map>
 #include <mutex>
 
 #include <thread>
@@ -20,13 +22,15 @@ std::mutex log_mutex {};
 
 int main(int argc, char *argv[])
 {
+  using std::chrono::high_resolution_clock;
+  using std::chrono::system_clock;
+
+  std::map<std::string, long long> input_cnt {};
   Hal_Proc gpr_input {"gpr input"};
   Hal_Proc ext_input {"ext input"};
 
-  std::srand(std::time(NULL));
-
   Hal_Pipe<std::string> out_pipe {"out_pipe", [](std::string item) {
-     safethread_log(std::cout << "out_pipe: pop: " << item << "\n");
+      safethread_log(std::cout << "pop: " << item << "\n");
   } };
 
   Hal_Pipe<std::string> staging_pipe {"staging_input", [&out_pipe](std::string item) {
@@ -34,37 +38,51 @@ int main(int argc, char *argv[])
   } };
 
   gpr_input.exec([&out_pipe]() {
-    for (int i = 0; i < 10; i++) {
-       std::string item = "gpr_input " + std::to_string(i);
+    int i {0};
+
+    system_clock::time_point start = system_clock::now();
+
+    while (true) {
+       std::string item = "gpr_input: " + std::to_string(i) + ": data";
        out_pipe.push(item);
 
-       int to_sleep = ((std::rand() % 10) + 1) * 100;
+       i++;
 
-       safethread_log(std::cout << "gpr input: milliseconds:" << to_sleep << "\n");
-       std::this_thread::sleep_for(std::chrono::milliseconds(to_sleep));
+       std::this_thread::sleep_for(std::chrono::milliseconds(1));
+       system_clock::time_point wakeup = system_clock::now();
+       if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= 5) {
+          break;
+       }
     }
 
     safethread_log(std::cout << "gpr input: end\n");
   } );
 
   ext_input.exec([&out_pipe]() {
-    for (int i = 0; i < 10; i++) {
-       std::string item = "ext_input " + std::to_string(i);
+    int i {0};
+
+    system_clock::time_point start = system_clock::now();
+
+    while (true) {
+       std::string item = "ext_input: " + std::to_string(i) + ": data";
        out_pipe.push(item);
 
-       int to_sleep = ((std::rand() % 10) + 1) * 100;
+       i++;
 
-       safethread_log(std::cout << "ext input: milliseconds:" << to_sleep << "\n");
-       std::this_thread::sleep_for(std::chrono::milliseconds(to_sleep));
+       std::this_thread::sleep_for(std::chrono::milliseconds(1));
+       system_clock::time_point wakeup = system_clock::now();
+       if (std::chrono::duration_cast<std::chrono::seconds>(wakeup - start).count() >= 5) {
+          break;
+       }
     }
 
-    safethread_log(std::cout << "ext input: end\n");
+    safethread_log(std::cout << "ext_input: end\n");
   } );
 
   safethread_log(std::cout << "Before mainloop\n");
   while (true) {
-       int to_sleep = ((std::rand() % 10) + 1) * 100;
-       std::this_thread::sleep_for(std::chrono::milliseconds(to_sleep));
+       std::this_thread::sleep_for(std::chrono::seconds(10));
+       safethread_log(std::cout << "mainloop wakeup\n");
   }
 
   return 0;

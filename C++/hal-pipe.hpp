@@ -17,7 +17,7 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
           while (true) {
             std::string item = this->pop();
 
-            fn(item);
+            fn(std::move(item));
           }
         });
       } 
