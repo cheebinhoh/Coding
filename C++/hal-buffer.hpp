@@ -4,39 +4,52 @@
 
 #include <cassert>
 #include <deque>
-#include <condition_variable>
-#include <mutex>
+#include <pthread.h>
 
 template <typename T>
 class Hal_Buffer
 {
   public:
+    Hal_Buffer() {
+
+    }
+
     void push(T item) {
-      std::unique_lock<std::mutex> lck(m_mutex);
+      int err {};
+
+      err = pthread_mutex_lock(&m_mutex);
+      assert(err);
       m_queue.push_back(item);
    
-      m_cond.notify_all();
+      err = pthread_cond_signal(&m_cond);
+      assert(err);
+      err = pthread_mutex_unlock(&m_mutex);
+      assert(err);
     }
 
   protected:
     T pop() {
+      int err {};
 
-      std::unique_lock<std::mutex> lck(m_mutex);
+      err = pthread_mutex_lock(&m_mutex);
       
       while (m_queue.empty()) {
-          m_cond.wait(lck);
+         pthread_cond_wait(&m_cond, &m_mutex);
       }
 
       T val = m_queue.front();
       m_queue.pop_front();
+
+      err = pthread_mutex_unlock(&m_mutex);
 
       return val;
     }
 
   private:
     std::deque<T>           m_queue {};
-    std::mutex              m_mutex {};
-    std::condition_variable m_cond {};
+
+    pthread_mutex_t m_mutex {};
+    pthread_cond_t m_cond {};
 };
 
 #endif /* HAL_BUFFER_HPP_HAVE_SEEN */

@@ -3,7 +3,10 @@
 #include <chrono>
 #include <iostream>
 #include <mutex>
+
 #include <thread>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "hal-pipe.hpp"
 #include "hal-proc.hpp"
@@ -11,9 +14,8 @@
 std::mutex log_mutex {};
 
 #define safethread_log(stmt) do { \
-  log_mutex.lock(); \
+  std::lock_guard<std::mutex> lck(log_mutex); \
   stmt; \
-  log_mutex.unlock(); \
 } while (0)
 
 int main(int argc, char *argv[])
@@ -24,7 +26,7 @@ int main(int argc, char *argv[])
   std::srand(std::time(NULL));
 
   Hal_Pipe<std::string> out_pipe {"out_pipe", [](std::string item) {
-     std::cout << "out_pipe: pop: " << item << "\n";
+     safethread_log(std::cout << "out_pipe: pop: " << item << "\n");
   } };
 
   Hal_Pipe<std::string> staging_pipe {"staging_input", [&out_pipe](std::string item) {
@@ -38,7 +40,7 @@ int main(int argc, char *argv[])
 
        int to_sleep = ((std::rand() % 10) + 1) * 100;
 
-       //safethread_log(std::cout << "gpr input: milliseconds:" << to_sleep << "\n");
+       safethread_log(std::cout << "gpr input: milliseconds:" << to_sleep << "\n");
        std::this_thread::sleep_for(std::chrono::milliseconds(to_sleep));
     }
 
@@ -52,17 +54,17 @@ int main(int argc, char *argv[])
 
        int to_sleep = ((std::rand() % 10) + 1) * 100;
 
-       //safethread_log(std::cout << "ext input: milliseconds:" << to_sleep << "\n");
+       safethread_log(std::cout << "ext input: milliseconds:" << to_sleep << "\n");
        std::this_thread::sleep_for(std::chrono::milliseconds(to_sleep));
     }
 
     safethread_log(std::cout << "ext input: end\n");
   } );
 
-
   safethread_log(std::cout << "Before mainloop\n");
   while (true) {
-    std::this_thread::yield();
+       int to_sleep = ((std::rand() % 10) + 1) * 100;
+       std::this_thread::sleep_for(std::chrono::milliseconds(to_sleep));
   }
 
   return 0;

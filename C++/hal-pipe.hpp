@@ -20,7 +20,7 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
             fn(item);
           }
         });
-      }
+      } 
     }
 
   private:
