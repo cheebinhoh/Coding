@@ -182,7 +182,7 @@ int main(int argc, char *argv[]) {
 
   safethread_log(std::cout << "Before mainloop\n");
   while (true) {
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(30));
     safethread_log(std::cout << "\nmainloop wakeup\n");
 
     for (auto &pair : input_cnt) {

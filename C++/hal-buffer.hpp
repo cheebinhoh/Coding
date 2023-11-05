@@ -30,8 +30,8 @@ class Hal_Buffer
 
     ~Hal_Buffer() {
        std::cout << "queue peak size: " << m_queue_peak_size << "\n";
-       std::cout << "last pop to first push time (milliseconds): " << 
-         std::chrono::duration_cast<std::chrono::milliseconds>(m_last_pop_time - m_first_push_time).count() << "\n";
+       std::cout << "last pop to first push time (nanoseconds): " << 
+         std::chrono::duration_cast<std::chrono::nanoseconds>(m_last_pop_time - m_first_push_time).count() << "\n";
     }
 
     void push(T& item) {

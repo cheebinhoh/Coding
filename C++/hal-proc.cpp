@@ -17,12 +17,12 @@ Hal_Proc::~Hal_Proc() {
   std::cout << "~Hal_Proc(): " << m_name << " cancel thread and destroy\n";
   err = pthread_cancel(m_th);
   if (err) {
-    std::cerr << strerror(err);
+    std::cerr << strerror(err) << "\n";
   }
 
   err = pthread_join(m_th, &retptr);
   if (err) {
-    std::cerr << strerror(err);
+    std::cerr << strerror(err) << "\n";
   }
 }
 

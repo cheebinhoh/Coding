@@ -1,0 +1,9 @@
+all : hal-io.out
+
+hal-io.out : hal-io.cpp hal-proc.hpp hal-proc.cpp hal-pipe.hpp hal-buffer.hpp
+	g++ -std=c++17 -o $@ hal-io.cpp hal-proc.cpp
+
+# miscallenous
+clean:
+	rm -f *.out *.o lib*.a
+
