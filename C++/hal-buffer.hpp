@@ -24,7 +24,7 @@ class Hal_Buffer
       }
     }
 
-    void push(T item) {
+    void push(T& item) {
       int err {};
 
       err = pthread_mutex_lock(&m_mutex);
@@ -32,7 +32,7 @@ class Hal_Buffer
          throw std::runtime_error(strerror(err));
       }
 
-      m_queue.push_back(item);
+      m_queue.push_back(std::move(item));
    
       err = pthread_cond_signal(&m_cond);
       if (err) {
@@ -63,7 +63,7 @@ class Hal_Buffer
          }
       }
 
-      T val = m_queue.front();
+      T val = std::move(m_queue.front());
       m_queue.pop_front();
 
       err = pthread_mutex_unlock(&m_mutex);
@@ -71,7 +71,7 @@ class Hal_Buffer
          throw std::runtime_error(strerror(err));
       }
  
-      return val;
+      return std::move(val);
     }
 
   private:
