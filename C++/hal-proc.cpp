@@ -1,46 +1,78 @@
+#include "hal-proc.hpp"
+
+#include <cassert>
 #include <cstring>
 #include <exception>
 #include <iostream>
-#include <string>
-
 #include <pthread.h>
+#include <sched.h>
+#include <stdexcept>
+#include <string>
+#include <string_view>
 
-#include "hal-proc.hpp"
+Hal_Proc::Hal_Proc(std::string_view name, Hal_ProcTask fn) : m_name{name} {
+  setState(Hal_ProcState::New);
 
-Hal_Proc::Hal_Proc(std::string name, std::function<void()> fn)
-    : m_fn{fn}, m_name{name} {}
+  if (fn) {
+    setTask(fn);
+  }
+}
 
 Hal_Proc::~Hal_Proc() {
-  int err{};
-  void *retptr{};
-
-  std::cout << "~Hal_Proc(): " << m_name << " cancel thread and destroy\n";
-  err = pthread_cancel(m_th);
-  if (err) {
-    std::cerr << strerror(err) << "\n";
+  if (getState() == Hal_ProcState::Running) {
+    stopExec();
   }
 
-  err = pthread_join(m_th, &retptr);
-  if (err) {
-    std::cerr << strerror(err) << "\n";
-  }
+  setState(Hal_ProcState::Invalid);
 }
 
-bool Hal_Proc::exec(std::function<void()> fn) {
+bool Hal_Proc::exec(Hal_ProcTask fn) {
   if (fn) {
-    m_fn = fn;
+    setTask(fn);
   }
 
-  if (m_fn) {
-    run_exec(m_fn);
-  } else {
-    throw std::runtime_error("no fn for Hal_proc");
-  }
-
-  return true;
+  return runExec();
 }
 
-void *Hal_Proc::thread_fn_helper(void *context) {
+Hal_ProcState Hal_Proc::getState() const { return m_state; }
+
+Hal_ProcState Hal_Proc::setState(Hal_ProcState state) {
+  Hal_ProcState oldstate = this->m_state;
+
+  this->m_state = state;
+
+  return oldstate;
+}
+
+void Hal_Proc::setTask(Hal_ProcTask fn) {
+  assert(getState() == Hal_ProcState::New ||
+         getState() == Hal_ProcState::Ready);
+
+  this->m_fn = fn;
+  setState(Hal_ProcState::Ready);
+}
+
+bool Hal_Proc::wait() {
+  int err{};
+  void *pRet{};
+
+  if (getState() != Hal_ProcState::Running) {
+    throw std::runtime_error("No task is exec");
+  }
+
+  err = pthread_join(m_th, &pRet);
+  if (err) {
+    std::cerr << strerror(err) << "\n";
+  }
+
+  setState(Hal_ProcState::Ready);
+
+  return 0 == err;
+}
+
+void Hal_Proc::yield() { sched_yield(); }
+
+void *Hal_Proc::runFnInThreadHelper(void *context) {
   Hal_Proc *proc{};
   int oldstate{};
   int err;
@@ -50,7 +82,7 @@ void *Hal_Proc::thread_fn_helper(void *context) {
     throw std::runtime_error(strerror(err));
   }
 
-  err = pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldstate);
+  err = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &oldstate);
   if (err) {
     throw std::runtime_error(strerror(err));
   }
@@ -61,11 +93,36 @@ void *Hal_Proc::thread_fn_helper(void *context) {
   return NULL;
 }
 
-void Hal_Proc::run_exec(std::function<void()> fn) {
+bool Hal_Proc::stopExec() {
   int err{};
 
-  err = pthread_create(&m_th, NULL, &(Hal_Proc::thread_fn_helper), this);
-  if (err) {
-    throw std::runtime_error(strerror(err));
+  if (getState() != Hal_ProcState::Running) {
+    throw std::runtime_error("No task is exec");
   }
+
+  err = pthread_cancel(m_th);
+  if (err) {
+    std::cerr << strerror(err) << "\n";
+  }
+
+  return wait();
+}
+
+bool Hal_Proc::runExec() {
+  int err{};
+  Hal_ProcState oldstate;
+
+  if (getState() != Hal_ProcState::Ready) {
+    throw std::runtime_error("No task is assigned to the Hal_Proc (" + m_name +
+                             ")");
+  }
+
+  oldstate = setState(Hal_ProcState::Running);
+  err = pthread_create(&m_th, NULL, &(Hal_Proc::runFnInThreadHelper), this);
+  if (err) {
+    setState(oldstate);
+    return false;
+  }
+
+  return true;
 }

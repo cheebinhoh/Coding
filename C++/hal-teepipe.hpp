@@ -1,0 +1,333 @@
+#ifndef HAL_TEEPIPE_HPP_HAVE_SEEN
+
+#define HAL_TEEPIPE_HPP_HAVE_SEEN
+
+#include "hal-limit-buffer.hpp"
+#include "hal-pipe.hpp"
+#include "hal-proc.hpp"
+
+#include <algorithm>
+#include <functional>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <string_view>
+#include <thread>
+#include <type_traits>
+#include <vector>
+
+template <typename T>
+class Hal_TeePipe : private Hal_Pipe<T>
+{
+  using Hal_TeePipeTask = std::function<void(T)>;
+  using Hal_TeePipeSortingTask = std::function<void(std::vector<T> &)>;
+
+  class Hal_TeePipeSource : private Hal_LimitBuffer<T>
+  {
+    friend class Hal_TeePipe<T>;
+
+   public:
+    Hal_TeePipeSource(size_t capacity, Hal_TeePipe *tp)
+        : Hal_LimitBuffer<T>{capacity}, m_teePipe(tp)
+    {
+    }
+
+    void push(T &rItem)
+    {
+      assert(m_teePipe);
+
+      Hal_LimitBuffer<T>::push(rItem);
+
+      int err = pthread_mutex_lock(&(m_teePipe->m_mutex));
+      if (err)
+      {
+        throw std::runtime_error(strerror(err));
+      }
+
+      pthread_testcancel();
+      m_teePipe->m_fillBufferCount++;
+
+      err = pthread_cond_signal(&(m_teePipe->m_cond));
+      if (err)
+      {
+        pthread_mutex_unlock(&(m_teePipe->m_mutex));
+
+        throw std::runtime_error(strerror(err));
+      }
+
+      err = pthread_mutex_unlock(&(m_teePipe->m_mutex));
+      if (err)
+      {
+        throw std::runtime_error(strerror(err));
+      }
+    }
+
+   private:
+    T pop() { return Hal_LimitBuffer<T>::pop(); }
+
+    Hal_TeePipe *m_teePipe{};
+  };
+
+ public:
+  Hal_TeePipe(std::string_view name, Hal_TeePipeTask fn = {},
+             Hal_TeePipeSortingTask sfn = {})
+      : Hal_Pipe<T>{name, fn},
+        m_conveyor{std::make_unique<Hal_Proc>(std::string(name) + "-conveyor")},
+        m_sortingTaskFn{sfn}
+  {
+    int err{};
+
+    err = pthread_mutex_init(&m_mutex, NULL);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    err = pthread_cond_init(&m_cond, NULL);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    err = pthread_cond_init(&m_emptyCond, NULL);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    runConveyorExec();
+  }
+
+  ~Hal_TeePipe()
+  {
+    // this is important as the conveyor thread uses the conditional variable
+    // and mutex, so we need to stop the thread before destroying both objects
+    // at the end of life of the Hal_TeePipe object, as otherwise, those threads
+    // will fail to be awaken from the conditional variable state, and leak to
+    // system wide leak of available thread resource.
+    m_conveyor = {};
+
+    pthread_cond_destroy(&m_cond);
+    pthread_cond_destroy(&m_emptyCond);
+    pthread_mutex_destroy(&m_mutex);
+  }
+
+  std::shared_ptr<Hal_TeePipeSource> addHalTeePipeSource()
+  {
+    std::shared_ptr<Hal_TeePipeSource> sp_tpSource{
+        std::make_shared<Hal_TeePipeSource>(1, this)};
+
+    int err = pthread_mutex_lock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    pthread_testcancel();
+
+    m_buffers.push_back(sp_tpSource);
+
+    err = pthread_cond_signal(&m_cond);
+    if (err)
+    {
+      pthread_mutex_unlock(&m_mutex);
+
+      throw std::runtime_error(strerror(err));
+    }
+
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    return sp_tpSource;
+  }
+
+  void removeHalTeePipeSource(std::shared_ptr<Hal_TeePipeSource> &sp_tps)
+  {
+    assert(nullptr != sp_tps);
+    assert(this == sp_tps->m_teePipe);
+
+    int err = pthread_mutex_lock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    pthread_testcancel();
+
+    auto iter =
+        std::find_if(m_buffers.begin(), m_buffers.end(),
+                     [sp_tps](std::shared_ptr<Hal_TeePipeSource> sp_iterTps) {
+                       return sp_tps.get() == sp_iterTps.get();
+                     });
+
+    if (iter != m_buffers.end())
+    {
+      while (sp_tps->size() > 0)
+      {
+        err = pthread_cond_wait(&m_emptyCond, &m_mutex);
+        if (err)
+        {
+          throw std::runtime_error(strerror(err));
+        }
+
+        pthread_testcancel();
+      }
+
+      m_buffers.erase(iter);
+      sp_tps = {};
+    }
+
+    err = pthread_cond_signal(&m_cond);
+    if (err)
+    {
+      pthread_mutex_unlock(&m_mutex);
+
+      throw std::runtime_error(strerror(err));
+    }
+
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+  }
+
+  void wait() { wait(true); }
+
+  void waitForEmpty() { wait(false); }
+
+ private:
+  void wait(bool noOpenSource)
+  {
+    int err = pthread_mutex_lock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    pthread_testcancel();
+
+    // only returns if no other object owns the Hal_TeePipeSource than
+    // Hal_TeePipe
+    while (noOpenSource && m_buffers.size() > 0 &&
+           std::count_if(m_buffers.begin(), m_buffers.end(),
+                         [](auto &item) { return item.use_count() > 1; }) > 0)
+    {
+      err = pthread_cond_wait(&m_cond, &m_mutex);
+      if (err)
+      {
+        throw std::runtime_error(strerror(err));
+      }
+
+      pthread_testcancel();
+    }
+
+    // only returns if no data in buffer from Hal_TeePipeSource to conveyor
+    while (m_fillBufferCount > 0)
+    {
+      err = pthread_cond_wait(&m_emptyCond, &m_mutex);
+      if (err)
+      {
+        throw std::runtime_error(strerror(err));
+      }
+
+      pthread_testcancel();
+    }
+
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    Hal_Pipe<T>::waitForEmpty();
+  }
+
+  void push(T &rItem) { Hal_Pipe<T>::push(rItem); }
+
+  void runConveyorExec()
+  {
+    m_conveyor->exec([this]() {
+      while (true)
+      {
+        int err{};
+
+        err = pthread_mutex_lock(&m_mutex);
+        if (err)
+        {
+          throw std::runtime_error(strerror(err));
+        }
+
+        pthread_testcancel();
+
+        while (m_buffers.empty() || m_fillBufferCount < m_buffers.size())
+        {
+          err = pthread_cond_wait(&m_cond, &m_mutex);
+          if (err)
+          {
+            throw std::runtime_error(strerror(err));
+          }
+
+          pthread_testcancel();
+        }
+
+        std::vector<T> sortingBuffers{};
+
+        for (auto sp_tps : m_buffers)
+        {
+          m_fillBufferCount--;
+
+          T data = sp_tps->pop();
+          sortingBuffers.push_back(std::move(data));
+        }
+
+        if (m_sortingTaskFn != nullptr)
+        {
+          m_sortingTaskFn(sortingBuffers);
+        }
+
+        for (auto &data : sortingBuffers)
+        {
+          push(data);
+        }
+
+        sortingBuffers.clear();
+
+        err = pthread_cond_signal(&m_emptyCond);
+        if (err)
+        {
+          pthread_mutex_unlock(&m_mutex);
+
+          throw std::runtime_error(strerror(err));
+        }
+
+        err = pthread_mutex_unlock(&m_mutex);
+        if (err)
+        {
+          throw std::runtime_error(strerror(err));
+        }
+      }
+    });
+  }
+
+  std::unique_ptr<Hal_Proc> m_conveyor{};
+
+  pthread_mutex_t m_mutex{};
+
+  pthread_cond_t m_cond{};
+
+  pthread_cond_t m_emptyCond{};
+
+  size_t m_fillBufferCount{};
+
+  std::vector<std::shared_ptr<Hal_TeePipeSource>> m_buffers{};
+
+  Hal_TeePipeSortingTask m_sortingTaskFn{};
+};
+
+#endif /* HAL_TEEPIPE_HPP_HAVE_SEEN */
+

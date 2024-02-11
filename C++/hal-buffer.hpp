@@ -2,108 +2,175 @@
 
 #define HAL_BUFFER_HPP_HAVE_SEEN
 
+#include <pthread.h>
 #include <algorithm>
 #include <cassert>
+#include <cstring>
 #include <deque>
-#include <pthread.h>
-
-using std::chrono::high_resolution_clock;
-using std::chrono::system_clock;
 
 template <typename T>
 class Hal_Buffer
 {
-  public:
-    Hal_Buffer() {
-      int err {};
+ public:
+  Hal_Buffer()
+  {
+    int err{};
 
-      err = pthread_mutex_init(&m_mutex, NULL);
-      if (err) {
-         throw std::runtime_error(strerror(err));
-      }
-
-      err = pthread_cond_init(&m_cond, NULL);
-      if (err) {
-         throw std::runtime_error(strerror(err));
-      }
+    err = pthread_mutex_init(&m_mutex, NULL);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
     }
 
-    ~Hal_Buffer() {
-       std::cout << "queue peak size: " << m_queue_peak_size << "\n";
-       std::cout << "last pop to first push time (nanoseconds): " << 
-         std::chrono::duration_cast<std::chrono::nanoseconds>(m_last_pop_time - m_first_push_time).count() << "\n";
+    err = pthread_cond_init(&m_cond, NULL);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
     }
 
-    void push(T& item) {
-      int err {};
+    err = pthread_cond_init(&m_emptyCond, NULL);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+  }
 
-      err = pthread_mutex_lock(&m_mutex);
-      if (err) {
-         throw std::runtime_error(strerror(err));
-      }
+  ~Hal_Buffer()
+  {
+    pthread_cond_destroy(&m_emptyCond);
+    pthread_cond_destroy(&m_cond);
+    pthread_mutex_destroy(&m_mutex);
+  }
 
-      std::call_once(m_first_push_flag, [this]() {
-        this->m_first_push_time = system_clock::now();
-      });
+  Hal_Buffer(const Hal_Buffer<T> &rCopy) = delete;
+  const Hal_Buffer<T> &operator=(const Hal_Buffer<T> &rCopy) = delete;
 
-      m_queue.push_back(std::move(item));
+  void push(T &rItem)
+  {
+    int err{};
 
-      m_queue_peak_size = std::max(m_queue_peak_size,
-                                   m_queue.size());
-
-      err = pthread_cond_signal(&m_cond);
-      if (err) {
-         pthread_mutex_unlock(&m_mutex);
-
-         throw std::runtime_error(strerror(err));
-      }
-
-      err = pthread_mutex_unlock(&m_mutex);
-      if (err) {
-         throw std::runtime_error(strerror(err));
-      }
+    err = pthread_mutex_lock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
     }
 
-  protected:
-    T pop() {
-      int err {};
+    pthread_testcancel();
 
-      err = pthread_mutex_lock(&m_mutex);
-      if (err) {
-         throw std::runtime_error(strerror(err));
-      }
-      
-      while (m_queue.empty()) {
-         err = pthread_cond_wait(&m_cond, &m_mutex);
-         if (err) {
-             throw std::runtime_error(strerror(err));
-         }
-      }
+    m_queue.push_back(std::move(rItem));
 
-      T val = std::move(m_queue.front());
-      m_queue.pop_front();
+    ++m_pushCount;
 
-      this->m_last_pop_time = system_clock::now();
+    err = pthread_cond_signal(&m_cond);
+    if (err)
+    {
+      pthread_mutex_unlock(&m_mutex);
 
-      err = pthread_mutex_unlock(&m_mutex);
-      if (err) {
-         throw std::runtime_error(strerror(err));
-      }
- 
-      return std::move(val);
+      throw std::runtime_error(strerror(err));
     }
 
-  private:
-    std::deque<T> m_queue {};
-    pthread_mutex_t m_mutex {};
-    pthread_cond_t m_cond {};
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+  }
 
-    // statistics
-    size_t m_queue_peak_size {};
- 
-    std::once_flag m_first_push_flag {};
-    system_clock::time_point m_first_push_time {};
-    system_clock::time_point m_last_pop_time {};
+  long long waitForEmpty()
+  {
+    int err{};
+    long long count{};
+
+    err = pthread_mutex_lock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    pthread_testcancel();
+
+    while (!m_queue.empty())
+    {
+      err = pthread_cond_wait(&m_emptyCond, &m_mutex);
+      if (err)
+      {
+        throw std::runtime_error(strerror(err));
+      }
+
+      pthread_testcancel();
+    }
+
+    assert(m_popCount == m_pushCount);
+    count = m_popCount;
+
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    return count;
+  }
+
+ protected:
+  T pop()
+  {
+    int err{};
+
+    err = pthread_mutex_lock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    pthread_testcancel();
+
+    while (m_queue.empty())
+    {
+      err = pthread_cond_wait(&m_cond, &m_mutex);
+      if (err)
+      {
+        throw std::runtime_error(strerror(err));
+      }
+
+      pthread_testcancel();
+    }
+
+    T val = std::move(m_queue.front());
+    m_queue.pop_front();
+
+    ++m_popCount;
+
+    err = pthread_cond_signal(&m_emptyCond);
+    if (err)
+    {
+      pthread_mutex_unlock(&m_mutex);
+
+      throw std::runtime_error(strerror(err));
+    }
+
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    return val;  // val is local variable, hence rvalue and hence move semantic
+                 // by default for efficient copy.
+  }
+
+ private:
+  std::deque<T> m_queue{};
+
+  pthread_mutex_t m_mutex{};
+
+  pthread_cond_t m_cond{};
+
+  pthread_cond_t m_emptyCond{};
+
+  long long m_pushCount{};
+
+  long long m_popCount{};
 };
 
 #endif /* HAL_BUFFER_HPP_HAVE_SEEN */

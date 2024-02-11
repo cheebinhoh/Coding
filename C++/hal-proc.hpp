@@ -1,28 +1,54 @@
-#ifndef HAL_PROC_H_HPP_HAVE_SEEN
+#ifndef HAL_PROC_HPP_HAVE_SEEN
 
-#define HAL_PROC_H_HPP_HAVE_SEEN
-
-#include <functional>
-#include <string>
+#define HAL_PROC_HPP_HAVE_SEEN
 
 #include <pthread.h>
 
-class Hal_Proc
+#include <functional>
+#include <string>
+#include <string_view>
+
+using Hal_ProcTask = std::function<void()>;
+
+enum class Hal_ProcState
 {
-  public:
-    Hal_Proc(std::string name, std::function<void()> fn = {});
-    ~Hal_Proc();
-    bool exec(std::function<void()> fn = {});
-
-    static void * thread_fn_helper(void *context);
-
-  protected:
-    void run_exec(std::function<void()> fn);
-
-  private:
-    std::function<void()> m_fn {};
-    std::string           m_name {};
-    pthread_t             m_th {};
+  Invalid,
+  New,     
+  Ready,  
+  Running
 };
 
-#endif /* HAL_PROC_H_HPP_HAVE_SEEN */
+class Hal_Proc
+{
+ public:
+  Hal_Proc(std::string_view name, Hal_ProcTask fn = {});
+  ~Hal_Proc();
+
+  Hal_Proc(const Hal_Proc &rCopy) = delete;
+  const Hal_Proc &operator=(const Hal_Proc &rCopy) = delete;
+
+  bool exec(Hal_ProcTask fn = {});
+  bool wait();
+  Hal_ProcState getState() const;
+  static void yield();
+
+ protected:
+  bool stopExec();
+  bool runExec();
+  Hal_ProcState setState(Hal_ProcState state);
+  void setTask(Hal_ProcTask fn);
+
+ private:
+  static void *runFnInThreadHelper(void *context);
+
+  std::string m_name{};
+
+  Hal_ProcTask m_fn{};
+
+  pthread_t m_th{};
+
+  Hal_ProcState m_state{};
+};
+
+#endif /* HAL_PROC_HPP_HAVE_SEEN */
+

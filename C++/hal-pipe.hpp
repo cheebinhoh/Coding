@@ -2,28 +2,121 @@
 
 #define HAL_PIPE_HPP_HAVE_SEEN
 
-#include <functional>
 #include "hal-buffer.hpp"
 #include "hal-proc.hpp"
+
+#include <pthread.h>
+#include <cstring>
+#include <functional>
 
 template <typename T>
 class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
 {
-  public:
-    Hal_Pipe(std::string name, std::function<void(T)> fn = {}) : Hal_Proc { name } {
+  using Hal_PipeTask = std::function<void(T)>;
 
-      if (fn) {
-        exec([this, &fn]() { 
-          while (true) {
-            std::string item = this->pop();
-
-            fn(std::move(item));
-          }
-        });
-      } 
+ public:
+  Hal_Pipe(std::string_view name, Hal_PipeTask fn = {}) : Hal_Proc{name}
+  {
+    int err = pthread_mutex_init(&m_mutex, NULL);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
     }
 
-  private:
+    err = pthread_cond_init(&m_emptyCond, NULL);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    exec([this, fn]() {
+      while (true)
+      {
+        T &&item = this->pop();
+
+        int errInLoop = pthread_mutex_lock(&m_mutex);
+        if (errInLoop)
+        {
+          throw std::runtime_error(strerror(errInLoop));
+        }
+
+        pthread_testcancel();
+
+        if (fn)
+        {
+          fn(std::move(item));
+        }
+
+        ++m_count;
+
+        errInLoop = pthread_cond_signal(&m_emptyCond);
+        if (errInLoop)
+        {
+          pthread_mutex_unlock(&m_mutex);
+
+          throw std::runtime_error(strerror(errInLoop));
+        }
+
+        pthread_testcancel();
+
+        errInLoop = pthread_mutex_unlock(&m_mutex);
+        if (errInLoop)
+        {
+          throw std::runtime_error(strerror(errInLoop));
+        }
+      }
+    });
+  }
+
+  ~Hal_Pipe()
+  {
+    Hal_Proc::stopExec();
+    pthread_cond_destroy(&m_emptyCond);
+    pthread_mutex_destroy(&m_mutex);
+  }
+
+  Hal_Pipe(const Hal_Pipe<T> &arg) = delete;
+  const Hal_Pipe<T> &operator=(const Hal_Pipe<T> &arg) = delete;
+
+  void waitForEmpty()
+  {
+    long long inboundCount{};
+
+    inboundCount = Hal_Buffer<T>::waitForEmpty();
+
+    int err = pthread_mutex_lock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+
+    pthread_testcancel();
+
+    while (m_count < inboundCount)
+    {
+      err = pthread_cond_wait(&m_emptyCond, &m_mutex);
+      if (err)
+      {
+        throw std::runtime_error(strerror(err));
+      }
+
+      pthread_testcancel();
+    }
+
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err)
+    {
+      throw std::runtime_error(strerror(err));
+    }
+  }
+
+ private:
+  pthread_mutex_t m_mutex{};
+
+  pthread_cond_t m_emptyCond{};
+
+  long long m_count{};
 };
+
 
 #endif /* HAL_PIPE_HPP_HAVE_SEEN */

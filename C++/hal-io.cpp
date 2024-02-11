@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
   using std::chrono::system_clock;
 
   std::map<std::string, long long> input_cnt{};
-  Hal_Proc gpr_input{"gpr input"};
+  Hal_Proc sensor_input{"sensor input"};
   Hal_Proc gps_input{"gps input"};
   Hal_Proc imu_input{"imu input"};
   Hal_Proc ext_input{"ext input"};
@@ -56,16 +56,16 @@ int main(int argc, char *argv[]) {
       "staging_input",
       [&filter_pipe](std::string item) { filter_pipe.push(item); }};
 
-  gpr_input.exec([&staging_pipe, input_to_sleep_use_ns,
-                  input_to_sleep_nanoseconds, input_to_sleep_milliseconds,
-                  input_to_run_seconds]() {
+  sensor_input.exec([&staging_pipe, input_to_sleep_use_ns,
+                     input_to_sleep_nanoseconds, input_to_sleep_milliseconds,
+                     input_to_run_seconds]() {
     int i{0};
 
     system_clock::time_point start = system_clock::now();
 
     while (true) {
       std::string item =
-          "gpr_input: " + std::to_string(i) + ": " + std::string(2000, 'x');
+          "sensor_input: " + std::to_string(i) + ": " + std::string(2000, 'x');
       staging_pipe.push(item);
 
       i++;
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    safethread_log(std::cout << "gpr input: end: " << i << "\n");
+    safethread_log(std::cout << "sensor input: end: " << i << "\n");
   });
 
   gps_input.exec([&staging_pipe, input_to_sleep_use_ns,

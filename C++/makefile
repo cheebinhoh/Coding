@@ -9,10 +9,13 @@ all : exception-vs-std-optional.out lambda-functor.out ring-buffer-for-multiple-
 	std-containers-and-algorithms.out std-function-object.out std-future-async.out std-future-packaged-task.out \
 	std-future-promise.out std-map.out std-pair.out std-priority-queue.out std-reference-in-std-container.out \
 	std-thread-with-multiple-readers-n-one-writer.out std-thread-with-multiple-worker-threads.out std-tuple.out \
-	hal-io.out
+	hal-test.out hal-io.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
+
+hal-test.out : hal-test.cpp hal-proc.cpp hal-proc.hpp hal-buffer.hpp hal-limit-buffer.hpp
+	g++ -std=c++17 -o $@ hal-test.cpp hal-proc.cpp -lpthread
 
 hal-io.out : hal-io.cpp hal-proc.hpp hal-proc.cpp hal-pipe.hpp hal-buffer.hpp
 	g++ -std=c++17 -o $@ hal-io.cpp hal-proc.cpp
