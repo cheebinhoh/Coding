@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
       [](std::vector<int> list) { std::sort(list.begin(), list.end()); }};
 
   std::vector<int> s1{1, 3, 5, 7, 9};
-  auto p1 = sortPipe.addHalTeePipeSource();
+  auto p1 = sortPipe.addHal_TeePipeSource();
   Hal_Proc proc1{"s1", [&p1, &s1]() {
                    for (auto &v : s1) {
                      p1->push(v);
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
                  }};
 
   std::vector<int> s2{2, 4, 6, 8, 10};
-  auto p2 = sortPipe.addHalTeePipeSource();
+  auto p2 = sortPipe.addHal_TeePipeSource();
   Hal_Proc proc2{"s2", [&p2, &s2]() {
                    for (auto &v : s2) {
                      p2->push(v);
@@ -33,8 +33,8 @@ int main(int argc, char *argv[]) {
   proc1.wait();
   proc2.wait();
 
-  sortPipe.removeHalTeePipeSource(p1);
-  sortPipe.removeHalTeePipeSource(p2);
+  sortPipe.removeHal_TeePipeSource(p1);
+  sortPipe.removeHal_TeePipeSource(p2);
 
   sortPipe.waitForEmpty();
 

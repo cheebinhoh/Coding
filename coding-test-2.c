@@ -27,7 +27,7 @@
  *
  * you are given an array of positive numbers from 1 to n, such that all numbers
  * from 1 to n are present except one number x. You have to find x. The input
- * array is not sorted.
+ * array is not sorted, O(n).
  */
 int findMissingNumberInTheArray(int array[], int size, int n) {
   int sum;
@@ -49,7 +49,7 @@ int findMissingNumberInTheArray(int array[], int size, int n) {
  * function will return 0 if no missing number.
  *
  * A simple recursive approach that divides the search space and
- * locate the missing number.
+ * locate the missing number, O(log n).
  */
 int findMissingNumberInTheSortedArray(int array[], int size) {
   int mid;
@@ -58,7 +58,7 @@ int findMissingNumberInTheSortedArray(int array[], int size) {
   assert(size > 0);
 
   if (size <= 1 || ((array[0] + size - 1) == array[size - 1])) {
-    return 0;
+    return -1;
   }
 
   mid = (size / 2) - 1;
@@ -66,10 +66,12 @@ int findMissingNumberInTheSortedArray(int array[], int size) {
 
   if (array[mid] + 1 != array[mid + 1]) {
     return array[mid] + 1;
+  } else if (mid > 0 && array[mid - 1] + 1 != array[mid]) {
+    return array[mid - 1] + 1;
   }
 
   res = findMissingNumberInTheSortedArray(&array[0], mid + 1);
-  if (0 == res) {
+  if (-1 == res) {
     res = findMissingNumberInTheSortedArray(&array[mid + 1], size - (mid + 1));
   }
 

@@ -113,7 +113,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
     pthread_mutex_destroy(&m_mutex);
   }
 
-  std::shared_ptr<Hal_TeePipeSource> addHalTeePipeSource()
+  std::shared_ptr<Hal_TeePipeSource> addHal_TeePipeSource()
   {
     std::shared_ptr<Hal_TeePipeSource> sp_tpSource{
         std::make_shared<Hal_TeePipeSource>(1, this)};
@@ -145,7 +145,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
     return sp_tpSource;
   }
 
-  void removeHalTeePipeSource(std::shared_ptr<Hal_TeePipeSource> &sp_tps)
+  void removeHal_TeePipeSource(std::shared_ptr<Hal_TeePipeSource> &sp_tps)
   {
     assert(nullptr != sp_tps);
     assert(this == sp_tps->m_teePipe);
