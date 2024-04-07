@@ -308,9 +308,9 @@ int findLowHighIndex(int array[], int size, int val, int *low, int *high) {
   while (s < e) {
     mid = (e - s) / 2;
     if (val <= array[mid])
-      e = mid - 1;
+      s = mid - 1;
     else
-      s = mid + 1;
+      e = mid + 1;
   }
 
   *low = e + 1;
@@ -319,7 +319,7 @@ int findLowHighIndex(int array[], int size, int val, int *low, int *high) {
   s = foundIndex + 1;
   e = size - 1;
   startIndex = s;
-  while (e > s) {
+  while (s < e) {
     mid = s + ((e - s) / 2);
     if (val >= array[mid])
       s = mid + 1;
