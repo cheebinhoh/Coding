@@ -26,7 +26,7 @@ int isSorted(int list[], int size) {
  * The algorithm is that:
  * - the right most element is picked as a pivot.
  * - then we compare pivot element to the left indexed element (start from the
- * left).
+ * left at zero index).
  * --- if the left element is smaller than the pivot element (from right), we
  * increase the index of left element by 1.
  * --- if the left element is larger than the pivot element, we move the left
