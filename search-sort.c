@@ -28,16 +28,23 @@ int isSorted(int list[], int size) {
  * - then we compare pivot element to the left indexed element (start from the
  * left at zero index).
  * --- if the left element is smaller than the pivot element (from right), we
- * increase the index of left element by 1.
+ *     increase the index of left element by 1.
  * --- if the left element is larger than the pivot element, we move the left
- * element to the pivot element to the left indexed element position, we move
- * the pivot element into the left position of the pivot element, and we
- * relocate original left indexed element to the right of the new pivot position
+ *     element to the pivot element to the left indexed element position, we
+ * move the pivot element into the left position of the pivot element, and we
+ *     relocate original left indexed element to the right of the new pivot
+ * position
  * --- we repeat above as long as left index is smaller than pivot position
  * - once we stop that, we know that everything to the left of the pivot will be
- * smaller, and everything to the right will be larger than pivot element.
+ *   smaller, and everything to the right will be larger than pivot element.
  * - then we recursively invoke quick sort on left and right elements of the
- * pivot.
+ *   pivot.
+ *
+ * Big(O) notation:
+ * - for best and average case, it is O(n log n) when the selected pivot element
+ *   can divide the array averagely into half.
+ * - for worst case that the pivot element is the largest value or smallest
+ * value, we will have unevenly divided subarray for further sorting.
  */
 void quickSort(int list[], int size) {
   int pivot = size - 1;
@@ -142,6 +149,27 @@ void bubbleSort(int list[], int size) {
 
         count++;
       }
+    }
+  }
+}
+
+void selectionSort(int list[], int size) {
+  int i;
+
+  for (i = 0; i < size; i++) {
+    int smallestIndex = i;
+    int j;
+
+    for (j = i + 1; j < size; j++) {
+      if (list[smallestIndex] > list[j]) {
+        smallestIndex = j;
+      }
+    }
+
+    if (smallestIndex != i) {
+      int tmp = list[smallestIndex];
+      list[smallestIndex] = list[i];
+      list[i] = tmp;
     }
   }
 }

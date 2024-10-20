@@ -74,6 +74,7 @@ int determineIf3NumberSumToValueBySort(int array[], int size, int sum) {
   int remaining;
 
   quickSort(array, size);
+  // selectionSort(array, size);
 
   remaining = sum;
   for (i = size - 1; i > 1; i--) {
@@ -155,6 +156,7 @@ int deteremineIf3NumberSumToValueInDivAndConquer(int array[], int size,
   int largestValueSmallerThanN;
 
   quickSort(array, size);
+  // selectionSort(array, size);
 
   largestValueSmallerThanN =
       determineLargestValueSmallerThanN(array, size, sum);
