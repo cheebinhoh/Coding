@@ -51,6 +51,9 @@ void quickSort(int list[], int size) {
       // pivot is moved to position pivot - 1
       // original item at position pivot - 1 is moved to the position ith
       // original item at position ith is moved to the original pivot position
+      //
+      // at the end of this iteration, the ith element will be sorted in related
+      // to pivot element
 
       tmp = list[i];
       list[i] = list[pivot - 1];
