@@ -153,6 +153,8 @@ void bubbleSort(int list[], int size) {
   }
 }
 
+/* It is a simple O(n^2) sorting algorithm
+ */
 void selectionSort(int list[], int size) {
   int i;
 
