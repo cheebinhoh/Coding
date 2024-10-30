@@ -68,7 +68,7 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
     });
   }
 
-  ~Hal_Pipe()
+  virtual ~Hal_Pipe()
   {
     Hal_Proc::stopExec();
     pthread_cond_destroy(&m_emptyCond);

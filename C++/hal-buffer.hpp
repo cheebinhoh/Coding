@@ -35,7 +35,7 @@ class Hal_Buffer
     }
   }
 
-  ~Hal_Buffer()
+  virtual ~Hal_Buffer()
   {
     pthread_cond_destroy(&m_emptyCond);
     pthread_cond_destroy(&m_cond);

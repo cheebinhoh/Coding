@@ -99,7 +99,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
     runConveyorExec();
   }
 
-  ~Hal_TeePipe()
+  virtual ~Hal_TeePipe()
   {
     // this is important as the conveyor thread uses the conditional variable
     // and mutex, so we need to stop the thread before destroying both objects

@@ -40,7 +40,7 @@ class Hal_LimitBuffer : private Hal_Buffer<T>
     }
   }
 
-  ~Hal_LimitBuffer()
+  virtual ~Hal_LimitBuffer()
   {
     pthread_cond_destroy(&m_pushCond);
     pthread_cond_destroy(&m_popCond);

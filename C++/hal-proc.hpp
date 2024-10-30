@@ -22,7 +22,7 @@ class Hal_Proc
 {
  public:
   Hal_Proc(std::string_view name, Hal_ProcTask fn = {});
-  ~Hal_Proc();
+  virtual ~Hal_Proc();
 
   Hal_Proc(const Hal_Proc &rCopy) = delete;
   const Hal_Proc &operator=(const Hal_Proc &rCopy) = delete;
