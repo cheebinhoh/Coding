@@ -4,7 +4,7 @@
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : btree-test.out btreebltraverse.out btreebuild.out btreeidentical.out btreeisbalanced.out btreelca.out \
+all : bigo-sample.out btree-test.out btreebltraverse.out btreebuild.out btreeidentical.out btreeisbalanced.out btreelca.out \
 	btreemaxminlevel.out btreemaxnodeinlevel.out btreemaxpathsum.out btreemaxsumpathbetween2leaves.out \
 	btreemaxsumpathtoleaf.out btreemirrorswap.out btreepathsum.out btreerebalancing.out btreesubtree.out \
 	btreesymmetriccheck.out btreetraverse.out btreeverticalsum.out calculator.out cntdown.out coding-test-2.out \
@@ -41,6 +41,9 @@ libsearch-sort.a : search-sort.c search-sort.h
 	ar -rc libsearch-sort.a search-sort.o
 
 # programs
+bigo-sample.out : bigo-sample.c
+	gcc -o $@ bigo-sample.c
+
 btreebltraverse.out : btreebltraverse.c btree.h libbtree.so
 	gcc -o $@ btreebltraverse.c -L. -lbtree
 

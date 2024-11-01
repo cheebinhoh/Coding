@@ -913,54 +913,42 @@ void runGetMaxNumberOfCombinationFillupMatrixEvenly(void) {
   printf("\n");
 }
 
-/* Test 12:
- *
- * print the package and observe dependencies, this is not a sorting algorith,
- * but move left to right to print the package while adhere to dependencies.
- */
-void arrangeDependencies(char packages[], char *dependencies[], int size,
-                         int lastIndex) {
-  int i;
+void arrangeDependencies(char packages[], char *dependencies[], int size, int lastIndex)
+{
+   int i;
 
-  for (i = 0; (i < size) && (i < lastIndex); i++) {
-    if (0x0 == packages[i]) {
-      // do nothing
-    } else {
-      if (0 == strlen(dependencies[i])) {
-      } else {
-        char *p = dependencies[i];
+   for (i = 0; (i < size) && (i < lastIndex); i++) {
+       if (0x0 == packages[i]) {
+           // do nothing
+       } else {
+           if (0 == strlen(dependencies[i])) {
+           } else {
+               char *p = dependencies[i];
 
-        while ('\0' != *p) {
-          int j;
+               while ('\0' != *p) {
+                   int j;
 
-          for (j = i + 1; j < size; j++) {
-            if (*p == packages[j]) {
-              arrangeDependencies(&packages[j], &dependencies[j], size - j, 1);
-              packages[j] = 0x0;
-            }
-          }
+                   for (j = i + 1; j < size; j++) {
+                       if (*p == packages[j]) {
+                          arrangeDependencies(&packages[j], &dependencies[j], 1);
+                          packages[j] = 0x0;
+                       }                  
+                   }
 
-          p++;
-        }
-      }
+                   p++;
+               }
+           }
 
-      printf("%c ", packages[i]);
-    }
-  }
+           printf("%c ", packages[i]);
+       }
+   }
 }
 
 void runArrangeDependencies(void) {
-  char packages1[] = {'a', 'b', 'c', 'd'};
-  char *dependencies1[] = {"b", "c", "d", ""};
+   char packages[] = {'a', 'b', 'c', 'd'};
+   char* dependencies[] = {"b", "c", "d", ""};  
 
-  arrangeDependencies(packages1, dependencies1, 4, 4);
-  printf("\n");
-
-  char packages2[] = {'a', 'b', 'c', 'd'};
-  char *dependencies2[] = {"bc", "", "d", ""};
-
-  arrangeDependencies(packages2, dependencies2, 4, 4);
-  printf("\n");
+   arrangeDependencies(packages, dependencies, 4);
 }
 
 // the starting point...

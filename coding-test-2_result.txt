@@ -96,3 +96,6 @@ Test 10: matrix 4 x 2 and 3 colors has 4007 combination
 Test 10: matrix 2 x 2 and 2 colors has 18 combination
 
 
+d c b a 
+b d c a 
+
