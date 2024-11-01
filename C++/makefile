@@ -9,7 +9,7 @@ all : exception-vs-std-optional.out lambda-functor.out ring-buffer-for-multiple-
 	std-containers-and-algorithms.out std-function-object.out std-future-async.out std-future-packaged-task.out \
 	std-future-promise.out std-map.out std-pair.out std-priority-queue.out std-reference-in-std-container.out \
 	std-thread-with-multiple-readers-n-one-writer.out std-thread-with-multiple-worker-threads.out std-tuple.out \
-	hal-test.out hal-io.out
+	hal-test.out hal-io.out test-template-class.out
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
@@ -73,6 +73,9 @@ std-thread-with-multiple-readers-n-one-writer.out : std-thread-with-multiple-rea
 
 std-tuple.out : std-tuple.cpp
 	g++ -std=c++14 -o $@ std-tuple.cpp
+
+test-template-class.out : test-template-class.cpp template-class.cpp
+	g++ -std=c++14 -o $@ test-template-class.cpp template-class.cpp
 
 # miscallenous
 clean:
