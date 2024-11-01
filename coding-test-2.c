@@ -915,12 +915,13 @@ void runGetMaxNumberOfCombinationFillupMatrixEvenly(void) {
 
 /* Test 12:
  *
- * print the package and observe dependencies, this is not a sorting algorith,
- * but move left to right to print the package while adhere to dependencies.
+ * print the package and observe its dependencies, this is not a sorting
+ * algorithm, but move left to right in the packages list to print the package
+ * while adhering to its dependencies.
  *
  * The time complexity is
- * - linear O(n) if no dependencies between any package.
- * - quadratic O(n^3) if there are dependencies between packages
+ * - linear O(n): if no dependencies between any package.
+ * - worst case: quadratic O(n^3) if there are dependencies between packages
  */
 void arrangeDependencies(char packages[], char *dependencies[], int size,
                          int lastIndex) {
