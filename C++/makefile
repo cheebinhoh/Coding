@@ -4,7 +4,7 @@
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : exception-vs-std-optional.out lambda-functor.out ring-buffer-for-multiple-writers-n-one-reader.out \
+all : exception-vs-std-optional.out lambda-functor.out pointer-to-member.out ring-buffer-for-multiple-writers-n-one-reader.out \
 	singleton-design-pattern.out smart-pointer-with-object-graph.out std-array.out std-chrono.out \
 	std-containers-and-algorithms.out std-function-object.out std-future-async.out std-future-packaged-task.out \
 	std-future-promise.out std-map.out std-pair.out std-priority-queue.out std-reference-in-std-container.out \
@@ -22,6 +22,9 @@ hal-io.out : hal-io.cpp hal-proc.hpp hal-proc.cpp hal-pipe.hpp hal-buffer.hpp
 
 lambda-functor.out : lambda-functor.cpp
 	g++ -std=c++14 -o $@ lambda-functor.cpp
+
+pointer-to-member.out : pointer-to-member.cpp
+	g++ -std=c++20 -o $@ pointer-to-member.cpp
 
 singleton-design-pattern.out : singleton-design-pattern.cpp
 	g++ -std=c++14 -o $@ singleton-design-pattern.cpp
