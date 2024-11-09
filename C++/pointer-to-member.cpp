@@ -23,5 +23,10 @@ int main(int argc, char *argv[]) {
   std::cout << "x: " << p.x << "\n";
   std::cout << "y: " << p.y << "\n";
 
+  Point *pPtr{&p};
+  pPtr->*memberPtr = 300;
+  std::cout << "x: " << p.x << "\n";
+  std::cout << "y: " << p.y << "\n";
+
   return 0;
 }
