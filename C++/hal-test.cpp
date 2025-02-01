@@ -1,3 +1,4 @@
+#include "hal-async.hpp"
 #include "hal-buffer.hpp"
 #include "hal-limit-buffer.hpp"
 #include "hal-pipe.hpp"
@@ -37,6 +38,14 @@ int main(int argc, char *argv[]) {
   sortPipe.removeHal_TeePipeSource(p2);
 
   sortPipe.waitForEmpty();
+
+  Hal_Async ha{"Test"};
+  std::function<void()> functor{
+      []() { std::cout << "Executing the functor\n"; }};
+
+  ha.push(functor);
+  ha.waitForEmpty();
+  std::cout << "End of Hal test\n";
 
   return 0;
 }

@@ -14,7 +14,7 @@ all : exception-vs-std-optional.out lambda-functor.out pointer-to-member.out rin
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
 
-hal-test.out : hal-test.cpp hal-proc.cpp hal-proc.hpp hal-buffer.hpp hal-limit-buffer.hpp
+hal-test.out : hal-test.cpp hal-proc.cpp hal-proc.hpp hal-buffer.hpp hal-limit-buffer.hpp hal-async.hpp
 	g++ -std=c++17 -o $@ hal-test.cpp hal-proc.cpp -lpthread
 
 hal-io.out : hal-io.cpp hal-proc.hpp hal-proc.cpp hal-pipe.hpp hal-buffer.hpp
