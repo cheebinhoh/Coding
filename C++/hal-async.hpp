@@ -9,11 +9,11 @@
 
 #define HAL_ASYNC_CALL(block) do { \
                                 std::function<void()> functor{ \
-                                                               [&]() { \
+                                                               [&]() mutable { \
                                                                  (block); \
                                                                } \
                                                              }; \
-                                this->push(functor); \
+                                this->push(std::ref(functor)); \
                               } while(false)
 
 using Hal_AsyncTask = std::function<void()>;

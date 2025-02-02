@@ -8,13 +8,21 @@
 #include <iostream>
 #include <string>
 
+/* An example of hal async where we can wrap the api body within
+ * hal async call to serialize multiple api calls, and always have
+ * one thread responsible to run api call that changes the object,
+ * this will de-couple caller and callee and avoid mutex delay
+ */
 class Hal_Event : public Hal_Async {
 public:
   Hal_Event() : Hal_Async{"event manager"} {}
 
   void post(std::string event) {
-    HAL_ASYNC_CALL(std::cout << "Event: call" << event << "\n");
+    HAL_ASYNC_CALL(std::cout << "Event: " << count++ << ": " << event << "\n");
   }
+
+private:
+  long count{};
 };
 
 int main(int argc, char *argv[]) {
