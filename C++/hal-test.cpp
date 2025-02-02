@@ -6,6 +6,16 @@
 #include "hal-teepipe.hpp"
 #include <algorithm>
 #include <iostream>
+#include <string>
+
+class Hal_Event : public Hal_Async {
+public:
+  Hal_Event() : Hal_Async{"event manager"} {}
+
+  void post(std::string event) {
+    HAL_ASYNC_CALL(std::cout << "Event: call" << event << "\n");
+  }
+};
 
 int main(int argc, char *argv[]) {
   Hal_TeePipe<int> sortPipe{
@@ -45,6 +55,17 @@ int main(int argc, char *argv[]) {
 
   ha.push(functor);
   ha.waitForEmpty();
+
+  using namespace std::string_literals;
+
+  Hal_Event e{};
+  e.post("Hello event 1"s);
+  e.post("Hello event 2"s);
+  e.post("Hello event 3"s);
+
+  std::cout << "after post event\n";
+  e.waitForEmpty();
+
   std::cout << "End of Hal test\n";
 
   return 0;

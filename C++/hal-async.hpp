@@ -7,6 +7,15 @@
 #include <functional>
 #include <string_view>
 
+#define HAL_ASYNC_CALL(block) do { \
+                                std::function<void()> functor{ \
+                                                               [=]() { \
+                                                                 (block); \
+                                                               } \
+                                                             }; \
+                                this->push(functor); \
+                              } while(false)
+
 using Hal_AsyncTask = std::function<void()>;
 class Hal_Async : public Hal_Pipe<Hal_AsyncTask>
 {
@@ -18,6 +27,8 @@ class Hal_Async : public Hal_Pipe<Hal_AsyncTask>
    {
    }
  
+ protected:
+    
  private:
 };
 
