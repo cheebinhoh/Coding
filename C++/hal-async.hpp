@@ -9,7 +9,7 @@
 
 #define HAL_ASYNC_CALL(block) do { \
                                 std::function<void()> functor{ \
-                                                               [=]() { \
+                                                               [&]() { \
                                                                  (block); \
                                                                } \
                                                              }; \
@@ -17,6 +17,7 @@
                               } while(false)
 
 using Hal_AsyncTask = std::function<void()>;
+
 class Hal_Async : public Hal_Pipe<Hal_AsyncTask>
 {
  public:
@@ -26,11 +27,6 @@ class Hal_Async : public Hal_Pipe<Hal_AsyncTask>
                                               }
    {
    }
- 
- protected:
-    
- private:
 };
-
 
 #endif /* HAL_ASYNC_HPP_HAVE_SEEN */
