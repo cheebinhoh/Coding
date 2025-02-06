@@ -4,7 +4,7 @@
 #
 # TODO: move into automake, libtool and autoconf for more scalability and proper dependency.
 
-all : exception-vs-std-optional.out lambda-functor.out pointer-to-member.out ring-buffer-for-multiple-writers-n-one-reader.out \
+all : exception-vs-std-optional.out lambda-functor.out lOrRValue.out pointer-to-member.out ring-buffer-for-multiple-writers-n-one-reader.out \
 	singleton-design-pattern.out smart-pointer-with-object-graph.out std-array.out std-chrono.out \
 	std-containers-and-algorithms.out std-function-object.out std-future-async.out std-future-packaged-task.out \
 	std-future-promise.out std-map.out std-pair.out std-priority-queue.out std-reference-in-std-container.out \
@@ -13,6 +13,9 @@ all : exception-vs-std-optional.out lambda-functor.out pointer-to-member.out rin
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
+
+lOrRValue.out : lOrRValue.cpp
+	g++ -std=c++11 -o $@ lOrRValue.cpp
 
 hal-test.out : hal-test.cpp hal-proc.cpp hal-proc.hpp hal-buffer.hpp hal-limit-buffer.hpp hal-async.hpp
 	g++ -std=c++17 -o $@ hal-test.cpp hal-proc.cpp -lpthread
