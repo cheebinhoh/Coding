@@ -1,3 +1,10 @@
+/**
+ * This module wraps the native thread behind an object-oriented class with
+ * delegation protocol where variance of thread functionality is achieved
+ * by passing a closure (functor) that the thread runs than using inherittance
+ * which always results in proliferation of subclass and hard to be maintained. 
+ */
+
 #ifndef HAL_PROC_HPP_HAVE_SEEN
 
 #define HAL_PROC_HPP_HAVE_SEEN
@@ -10,7 +17,9 @@
 
 using Hal_ProcTask = std::function<void()>;
 
-enum class Hal_ProcState
+class Hal_Proc
+{
+enum State
 {
   Invalid,
   New,     
@@ -18,8 +27,6 @@ enum class Hal_ProcState
   Running
 };
 
-class Hal_Proc
-{
  public:
   Hal_Proc(std::string_view name, Hal_ProcTask fn = {});
   virtual ~Hal_Proc();
@@ -29,13 +36,13 @@ class Hal_Proc
 
   bool exec(Hal_ProcTask fn = {});
   bool wait();
-  Hal_ProcState getState() const;
+  State getState() const;
   static void yield();
 
  protected:
   bool stopExec();
   bool runExec();
-  Hal_ProcState setState(Hal_ProcState state);
+  State setState(State state);
   void setTask(Hal_ProcTask fn);
 
  private:
@@ -47,7 +54,7 @@ class Hal_Proc
 
   pthread_t m_th{};
 
-  Hal_ProcState m_state{};
+  State m_state{};
 };
 
 #endif /* HAL_PROC_HPP_HAVE_SEEN */

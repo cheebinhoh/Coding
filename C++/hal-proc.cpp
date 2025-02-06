@@ -11,7 +11,7 @@
 #include <string_view>
 
 Hal_Proc::Hal_Proc(std::string_view name, Hal_ProcTask fn) : m_name{name} {
-  setState(Hal_ProcState::New);
+  setState(State::New);
 
   if (fn) {
     setTask(fn);
@@ -19,11 +19,11 @@ Hal_Proc::Hal_Proc(std::string_view name, Hal_ProcTask fn) : m_name{name} {
 }
 
 Hal_Proc::~Hal_Proc() {
-  if (getState() == Hal_ProcState::Running) {
+  if (getState() == State::Running) {
     stopExec();
   }
 
-  setState(Hal_ProcState::Invalid);
+  setState(State::Invalid);
 }
 
 bool Hal_Proc::exec(Hal_ProcTask fn) {
@@ -34,10 +34,10 @@ bool Hal_Proc::exec(Hal_ProcTask fn) {
   return runExec();
 }
 
-Hal_ProcState Hal_Proc::getState() const { return m_state; }
+Hal_Proc::State Hal_Proc::getState() const { return m_state; }
 
-Hal_ProcState Hal_Proc::setState(Hal_ProcState state) {
-  Hal_ProcState oldstate = this->m_state;
+Hal_Proc::State Hal_Proc::setState(State state) {
+  State oldstate = this->m_state;
 
   this->m_state = state;
 
@@ -45,18 +45,17 @@ Hal_ProcState Hal_Proc::setState(Hal_ProcState state) {
 }
 
 void Hal_Proc::setTask(Hal_ProcTask fn) {
-  assert(getState() == Hal_ProcState::New ||
-         getState() == Hal_ProcState::Ready);
+  assert(getState() == State::New || getState() == State::Ready);
 
   this->m_fn = fn;
-  setState(Hal_ProcState::Ready);
+  setState(State::Ready);
 }
 
 bool Hal_Proc::wait() {
   int err{};
   void *pRet{};
 
-  if (getState() != Hal_ProcState::Running) {
+  if (getState() != State::Running) {
     throw std::runtime_error("No task is exec");
   }
 
@@ -65,7 +64,7 @@ bool Hal_Proc::wait() {
     std::cerr << strerror(err) << "\n";
   }
 
-  setState(Hal_ProcState::Ready);
+  setState(State::Ready);
 
   return 0 == err;
 }
@@ -96,7 +95,7 @@ void *Hal_Proc::runFnInThreadHelper(void *context) {
 bool Hal_Proc::stopExec() {
   int err{};
 
-  if (getState() != Hal_ProcState::Running) {
+  if (getState() != State::Running) {
     throw std::runtime_error("No task is exec");
   }
 
@@ -110,14 +109,14 @@ bool Hal_Proc::stopExec() {
 
 bool Hal_Proc::runExec() {
   int err{};
-  Hal_ProcState oldstate;
+  State oldstate;
 
-  if (getState() != Hal_ProcState::Ready) {
+  if (getState() != State::Ready) {
     throw std::runtime_error("No task is assigned to the Hal_Proc (" + m_name +
                              ")");
   }
 
-  oldstate = setState(Hal_ProcState::Running);
+  oldstate = setState(State::Running);
   err = pthread_create(&m_th, NULL, &(Hal_Proc::runFnInThreadHelper), this);
   if (err) {
     setState(oldstate);
