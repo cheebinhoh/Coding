@@ -19,13 +19,13 @@ using Hal_ProcTask = std::function<void()>;
 
 class Hal_Proc
 {
-enum State
-{
-  Invalid,
-  New,     
-  Ready,  
-  Running
-};
+  enum State
+  {
+    Invalid,
+    New,     
+    Ready,  
+    Running
+  };
 
  public:
   Hal_Proc(std::string_view name, Hal_ProcTask fn = {});
