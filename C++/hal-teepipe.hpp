@@ -20,8 +20,8 @@
 template <typename T>
 class Hal_TeePipe : private Hal_Pipe<T>
 {
-  using Hal_TeePipeTask = std::function<void(T)>;
-  using Hal_TeePipeSortingTask = std::function<void(std::vector<T> &)>;
+  using Task = std::function<void(T)>;
+  using SortingTask = std::function<void(std::vector<T> &)>;
 
   class Hal_TeePipeSource : private Hal_LimitBuffer<T>
   {
@@ -70,8 +70,8 @@ class Hal_TeePipe : private Hal_Pipe<T>
   };
 
  public:
-  Hal_TeePipe(std::string_view name, Hal_TeePipeTask fn = {},
-             Hal_TeePipeSortingTask sfn = {})
+  Hal_TeePipe(std::string_view name, Hal_TeePipe::Task fn = {},
+             Hal_TeePipe::SortingTask sfn = {})
       : Hal_Pipe<T>{name, fn},
         m_conveyor{std::make_unique<Hal_Proc>(std::string(name) + "-conveyor")},
         m_sortingTaskFn{sfn}
@@ -326,7 +326,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
 
   std::vector<std::shared_ptr<Hal_TeePipeSource>> m_buffers{};
 
-  Hal_TeePipeSortingTask m_sortingTaskFn{};
+  Hal_TeePipe::SortingTask m_sortingTaskFn{};
 };
 
 #endif /* HAL_TEEPIPE_HPP_HAVE_SEEN */

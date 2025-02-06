@@ -12,10 +12,10 @@
 template <typename T>
 class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
 {
-  using Hal_PipeTask = std::function<void(T)>;
+  using Task = std::function<void(T)>;
 
  public:
-  Hal_Pipe(std::string_view name, Hal_PipeTask fn = {}) : Hal_Proc{name}
+  Hal_Pipe(std::string_view name, Hal_Pipe::Task fn = {}) : Hal_Proc{name}
   {
     int err = pthread_mutex_init(&m_mutex, NULL);
     if (err)
