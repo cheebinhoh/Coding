@@ -10,7 +10,7 @@
 #include <string>
 #include <string_view>
 
-Hal_Proc::Hal_Proc(std::string_view name, Hal_ProcTask fn) : m_name{name} {
+Hal_Proc::Hal_Proc(std::string_view name, Hal_Proc::Task fn) : m_name{name} {
   setState(State::New);
 
   if (fn) {
@@ -26,7 +26,7 @@ Hal_Proc::~Hal_Proc() {
   setState(State::Invalid);
 }
 
-bool Hal_Proc::exec(Hal_ProcTask fn) {
+bool Hal_Proc::exec(Hal_Proc::Task fn) {
   if (fn) {
     setTask(fn);
   }
@@ -44,7 +44,7 @@ Hal_Proc::State Hal_Proc::setState(State state) {
   return oldstate;
 }
 
-void Hal_Proc::setTask(Hal_ProcTask fn) {
+void Hal_Proc::setTask(Hal_Proc::Task fn) {
   assert(getState() == State::New || getState() == State::Ready);
 
   this->m_fn = fn;

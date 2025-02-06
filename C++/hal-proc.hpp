@@ -15,10 +15,10 @@
 #include <string>
 #include <string_view>
 
-using Hal_ProcTask = std::function<void()>;
-
 class Hal_Proc
 {
+  using Task = std::function<void()>;
+
   enum State
   {
     Invalid,
@@ -28,33 +28,33 @@ class Hal_Proc
   };
 
  public:
-  Hal_Proc(std::string_view name, Hal_ProcTask fn = {});
+  Hal_Proc(std::string_view name, Hal_Proc::Task fn = {});
   virtual ~Hal_Proc();
 
   Hal_Proc(const Hal_Proc &rCopy) = delete;
   const Hal_Proc &operator=(const Hal_Proc &rCopy) = delete;
 
-  bool exec(Hal_ProcTask fn = {});
+  bool exec(Hal_Proc::Task fn = {});
   bool wait();
-  State getState() const;
+  Hal_Proc::State getState() const;
   static void yield();
 
  protected:
   bool stopExec();
   bool runExec();
-  State setState(State state);
-  void setTask(Hal_ProcTask fn);
+  Hal_Proc::State setState(Hal_Proc::State state);
+  void setTask(Hal_Proc::Task fn);
 
  private:
   static void *runFnInThreadHelper(void *context);
 
   std::string m_name{};
 
-  Hal_ProcTask m_fn{};
+  Hal_Proc::Task m_fn{};
 
   pthread_t m_th{};
 
-  State m_state{};
+  Hal_Proc::State m_state{};
 };
 
 #endif /* HAL_PROC_HPP_HAVE_SEEN */
