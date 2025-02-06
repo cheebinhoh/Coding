@@ -27,6 +27,9 @@ class Hal_Async : public Hal_Pipe<Hal_AsyncTask>
                                               }
    {
    }
+
+   Hal_Async(const Hal_Async &halAsync) = delete;
+   const Hal_Async &operator=(const Hal_Async &halAsync) = delete;
 };
 
 #endif /* HAL_ASYNC_HPP_HAVE_SEEN */

@@ -8,10 +8,11 @@
 #include <iostream>
 #include <string>
 
-/* An example of hal async where we can wrap the api body within
- * hal async call to serialize multiple api calls, and always have
- * one thread responsible to run api call that changes the object,
- * this will de-couple caller and callee and avoid mutex delay
+/* An example usage of hal async where we can wrap the api body within
+ * hal async call to serialize multiple api called from different threads,
+ * and converging those calls into one thread ad and always have one
+ * thread responsible to run api call that changes the object, this will
+ * de-couple caller and callee and avoid mutex delay
  */
 class Hal_Event : public Hal_Async {
 public:
