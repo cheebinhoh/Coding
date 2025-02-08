@@ -21,16 +21,15 @@
 int main(int argc, char *argv[]) {
   std::vector<std::string> files{"./teepipe-test-data-1.txt",
                                  "./teepipe-test-data-2.txt"};
-
   Hal_TeePipe<long> tpipe{
       "teepipe", [](long val) { std::cout << val << "\n"; },
       [](std::vector<long> list) { std::sort(list.begin(), list.end()); }};
-
   std::vector<std::unique_ptr<Hal_Proc>> proclist{};
 
   for (auto &filename : files) {
+    auto tpipeSource = tpipe.addHal_TeePipeSource();
     auto proc = std::make_unique<Hal_Proc>(
-        filename, [&tpipe, filename, prog = argv[0]]() {
+        filename, [&tpipe, tpipeSource, filename, prog = argv[0]]() {
           int fd{};
           FILE *file{};
           char buf[BUFSIZ]{};
@@ -47,14 +46,6 @@ int main(int argc, char *argv[]) {
             exit(1);
           }
 
-          auto tpipeSource = tpipe.addHal_TeePipeSource();
-
-          // This is important as we want to make sure that both threads
-          // has established itself as source to teepipe, so that data from
-          // one thread will be hold and pending for other thread data before
-          // being pushed through the outbound pipe.
-          std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
           while (fgets(buf, sizeof(buf), file) != NULL) {
             if ('\n' == buf[strlen(buf) - 1]) {
               buf[strlen(buf) - 1] = '\0';
@@ -67,8 +58,6 @@ int main(int argc, char *argv[]) {
 
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
           }
-
-          tpipe.removeHal_TeePipeSource(tpipeSource);
 
           if (ferror(file)) {
             perror(prog);
@@ -91,6 +80,8 @@ int main(int argc, char *argv[]) {
   for (auto &proc : proclist) {
     proc->wait();
   }
+
+  tpipe.waitForEmpty();
 
   return 0;
 }
