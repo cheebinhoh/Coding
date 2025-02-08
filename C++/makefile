@@ -9,7 +9,7 @@ all : exception-vs-std-optional.out lambda-functor.out lOrRValue.out pointer-to-
 	std-containers-and-algorithms.out std-function-object.out std-future-async.out std-future-packaged-task.out \
 	std-future-promise.out std-map.out std-pair.out std-priority-queue.out std-reference-in-std-container.out \
 	std-thread-with-multiple-readers-n-one-writer.out std-thread-with-multiple-worker-threads.out std-tuple.out \
-	hal-test.out hal-io.out test-template-class.out
+	hal-test.out hal-teepipe-test.out hal-io.out test-template-class.out 
 
 exception-vs-std-optional.out : exception-vs-std-optional.cpp
 	g++ -std=c++17 -o $@ exception-vs-std-optional.cpp
@@ -17,8 +17,15 @@ exception-vs-std-optional.out : exception-vs-std-optional.cpp
 lOrRValue.out : lOrRValue.cpp
 	g++ -std=c++11 -o $@ lOrRValue.cpp
 
+libhal.so : hal-proc.cpp hal-proc.hpp hal-buffer.hpp hal-limit-buffer.hpp hal-async.hpp
+	g++ -std=c++17 -c -fPIC hal-proc.cpp
+	g++ -std=c++17 hal-proc.o -shared -o libhal.so -lpthread
+
 hal-test.out : hal-test.cpp hal-proc.cpp hal-proc.hpp hal-buffer.hpp hal-limit-buffer.hpp hal-async.hpp
 	g++ -std=c++17 -o $@ hal-test.cpp hal-proc.cpp -lpthread
+
+hal-teepipe-test.out : hal-teepipe-test.cpp hal-teepipe.hpp libhal.so
+	g++ -std=c++17 -o $@ hal-teepipe-test.cpp -L. -lhal
 
 hal-io.out : hal-io.cpp hal-proc.hpp hal-proc.cpp hal-pipe.hpp hal-buffer.hpp
 	g++ -std=c++17 -o $@ hal-io.cpp hal-proc.cpp
@@ -85,6 +92,6 @@ test-template-class.out : test-template-class.cpp template-class.cpp
 
 # miscallenous
 clean:
-	rm -f *.out *.o lib*.a
+	rm -f *.out *.o lib*.a lib*.so
 
 test: all
