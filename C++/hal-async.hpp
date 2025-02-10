@@ -16,12 +16,10 @@
                                 this->push(std::ref(functor)); \
                               } while(false)
 
-using Hal_AsyncTask = std::function<void()>;
-
-class Hal_Async : public Hal_Pipe<Hal_AsyncTask>
+class Hal_Async : public Hal_Pipe<std::function<void()>>
 {
  public:
-   Hal_Async(std::string_view name) : Hal_Pipe{name, [](Hal_AsyncTask task){
+   Hal_Async(std::string_view name) : Hal_Pipe{name, [](std::function<void()> task){
                                                        task();
                                                      }
                                               }
