@@ -72,7 +72,10 @@ bool Hal_Proc::wait() {
   return 0 == err;
 }
 
-void Hal_Proc::yield() { sched_yield(); }
+void Hal_Proc::yield() {
+  pthread_testcancel();
+  sched_yield();
+}
 
 bool Hal_Proc::stopExec() {
   int err{};

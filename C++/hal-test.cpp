@@ -77,5 +77,16 @@ int main(int argc, char *argv[]) {
 
   std::cout << "End of Hal test\n";
 
+  {
+    Hal_Proc nonestop{"none-stop", []() {
+                        std::cout << "start none-stop\n";
+                        while (true) {
+                          Hal_Proc::yield();
+                        }
+                      }};
+    nonestop.exec();
+    Hal_Proc::yield();
+  }
+
   return 0;
 }

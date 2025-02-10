@@ -21,6 +21,7 @@ class Hal_Async : public Hal_Pipe<std::function<void()>>
  public:
    Hal_Async(std::string_view name) : Hal_Pipe{name, [](std::function<void()> task){
                                                        task();
+                                                       Hal_Proc::yield();
                                                      }
                                               }
    {
