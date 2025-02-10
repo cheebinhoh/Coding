@@ -4,11 +4,12 @@
 #include <cstring>
 #include <exception>
 #include <iostream>
-#include <pthread.h>
-#include <sched.h>
 #include <stdexcept>
 #include <string>
 #include <string_view>
+
+#include <pthread.h>
+#include <sched.h>
 
 Hal_Proc::Hal_Proc(std::string_view name, Hal_Proc::Task fn) : m_name{name} {
   setState(State::New);
@@ -71,27 +72,6 @@ bool Hal_Proc::wait() {
 
 void Hal_Proc::yield() { sched_yield(); }
 
-void *Hal_Proc::runFnInThreadHelper(void *context) {
-  Hal_Proc *proc{};
-  int oldstate{};
-  int err;
-
-  err = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &oldstate);
-  if (err) {
-    throw std::runtime_error(strerror(err));
-  }
-
-  err = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &oldstate);
-  if (err) {
-    throw std::runtime_error(strerror(err));
-  }
-
-  proc = (Hal_Proc *)context;
-  proc->m_fn();
-
-  return NULL;
-}
-
 bool Hal_Proc::stopExec() {
   int err{};
 
@@ -109,7 +89,7 @@ bool Hal_Proc::stopExec() {
 
 bool Hal_Proc::runExec() {
   int err{};
-  State oldstate;
+  State oldstate{};
 
   if (getState() != State::Ready) {
     throw std::runtime_error("No task is assigned to the Hal_Proc (" + m_name +
@@ -124,4 +104,25 @@ bool Hal_Proc::runExec() {
   }
 
   return true;
+}
+
+void *Hal_Proc::runFnInThreadHelper(void *context) {
+  Hal_Proc *proc{};
+  int oldstate{};
+  int err{};
+
+  err = pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &oldstate);
+  if (err) {
+    throw std::runtime_error(strerror(err));
+  }
+
+  err = pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &oldstate);
+  if (err) {
+    throw std::runtime_error(strerror(err));
+  }
+
+  proc = (Hal_Proc *)context;
+  proc->m_fn();
+
+  return NULL;
 }

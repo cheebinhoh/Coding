@@ -21,7 +21,7 @@ template <typename T>
 class Hal_TeePipe : private Hal_Pipe<T>
 {
   using Task = std::function<void(T)>;
-  using SortingTask = std::function<void(std::vector<T> &)>;
+  using PostProcessingTask = std::function<void(std::vector<T> &)>;
 
   class Hal_TeePipeSource : private Hal_LimitBuffer<T>
   {
@@ -32,6 +32,8 @@ class Hal_TeePipe : private Hal_Pipe<T>
         : Hal_LimitBuffer<T>{capacity}, m_teePipe(tp)
     {
     }
+
+    ~Hal_TeePipeSource() = default;
 
     void push(T &rItem)
     {
@@ -71,10 +73,10 @@ class Hal_TeePipe : private Hal_Pipe<T>
 
  public:
   Hal_TeePipe(std::string_view name, Hal_TeePipe::Task fn = {},
-             Hal_TeePipe::SortingTask sfn = {})
+             Hal_TeePipe::PostProcessingTask pfn = {})
       : Hal_Pipe<T>{name, fn},
         m_conveyor{std::make_unique<Hal_Proc>(std::string(name) + "-conveyor")},
-        m_sortingTaskFn{sfn}
+        m_postProcessingTaskFn{pfn}
   {
     int err{};
 
@@ -112,6 +114,11 @@ class Hal_TeePipe : private Hal_Pipe<T>
     pthread_cond_destroy(&m_emptyCond);
     pthread_mutex_destroy(&m_mutex);
   }
+
+  Hal_TeePipe(const Hal_TeePipe<T> &halTeePipe) = delete;
+  const Hal_TeePipe<T> &operator=(const Hal_TeePipe<T> &halTeePipe) = delete;
+  Hal_TeePipe(const Hal_TeePipe<T> &&halTeePipe) = delete;
+  Hal_TeePipe<T> &operator=(Hal_TeePipe<T> &&halTeePipe) = delete;
 
   std::shared_ptr<Hal_TeePipeSource> addHal_TeePipeSource()
   {
@@ -275,27 +282,27 @@ class Hal_TeePipe : private Hal_Pipe<T>
           pthread_testcancel();
         }
 
-        std::vector<T> sortingBuffers{};
+        std::vector<T> postProcessingBuffers{};
 
         for (auto sp_tps : m_buffers)
         {
           m_fillBufferCount--;
 
           T data = sp_tps->pop();
-          sortingBuffers.push_back(std::move(data));
+          postProcessingBuffers.push_back(std::move(data));
         }
 
-        if (m_sortingTaskFn != nullptr)
+        if (m_postProcessingTaskFn != nullptr)
         {
-          m_sortingTaskFn(sortingBuffers);
+          m_postProcessingTaskFn(postProcessingBuffers);
         }
 
-        for (auto &data : sortingBuffers)
+        for (auto &data : postProcessingBuffers)
         {
           push(data);
         }
 
-        sortingBuffers.clear();
+        postProcessingBuffers.clear();
 
         err = pthread_cond_signal(&m_emptyCond);
         if (err)
@@ -314,19 +321,13 @@ class Hal_TeePipe : private Hal_Pipe<T>
     });
   }
 
-  std::unique_ptr<Hal_Proc> m_conveyor{};
-
-  pthread_mutex_t m_mutex{};
-
-  pthread_cond_t m_cond{};
-
-  pthread_cond_t m_emptyCond{};
-
-  size_t m_fillBufferCount{};
-
+  std::unique_ptr<Hal_Proc>                       m_conveyor{};
+  pthread_mutex_t                                 m_mutex{};
+  pthread_cond_t                                  m_cond{};
+  pthread_cond_t                                  m_emptyCond{};
+  size_t                                          m_fillBufferCount{};
   std::vector<std::shared_ptr<Hal_TeePipeSource>> m_buffers{};
-
-  Hal_TeePipe::SortingTask m_sortingTaskFn{};
+  Hal_TeePipe::PostProcessingTask                 m_postProcessingTaskFn{};
 };
 
 #endif /* HAL_TEEPIPE_HPP_HAVE_SEEN */

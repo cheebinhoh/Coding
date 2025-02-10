@@ -2,11 +2,12 @@
 
 #define HAL_BUFFER_HPP_HAVE_SEEN
 
-#include <pthread.h>
 #include <algorithm>
 #include <cassert>
 #include <cstring>
 #include <deque>
+
+#include <pthread.h>
 
 template <typename T>
 class Hal_Buffer
@@ -42,8 +43,10 @@ class Hal_Buffer
     pthread_mutex_destroy(&m_mutex);
   }
 
-  Hal_Buffer(const Hal_Buffer<T> &rCopy) = delete;
-  const Hal_Buffer<T> &operator=(const Hal_Buffer<T> &rCopy) = delete;
+  Hal_Buffer(const Hal_Buffer<T> &halBuffer) = delete;
+  const Hal_Buffer<T> &operator=(const Hal_Buffer<T> &halBuffer) = delete;
+  Hal_Buffer(const Hal_Buffer<T> &&halBuffer) = delete;
+  Hal_Buffer<T> &operator=(Hal_Buffer<T> &&halBuffer) = delete;
 
   void push(T &rItem)
   {
@@ -160,17 +163,12 @@ class Hal_Buffer
   }
 
  private:
-  std::deque<T> m_queue{};
-
+  std::deque<T>   m_queue{};
   pthread_mutex_t m_mutex{};
-
-  pthread_cond_t m_cond{};
-
-  pthread_cond_t m_emptyCond{};
-
-  long long m_pushCount{};
-
-  long long m_popCount{};
+  pthread_cond_t  m_cond{};
+  pthread_cond_t  m_emptyCond{};
+  long long       m_pushCount{};
+  long long       m_popCount{};
 };
 
 #endif /* HAL_BUFFER_HPP_HAVE_SEEN */

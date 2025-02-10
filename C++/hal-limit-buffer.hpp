@@ -4,14 +4,14 @@
 
 #include "hal-buffer.hpp"
 
-#include <pthread.h>
-
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstring>
 #include <deque>
 #include <optional>
+
+#include <pthread.h>
 
 template <typename T>
 class Hal_LimitBuffer : private Hal_Buffer<T>
@@ -47,8 +47,10 @@ class Hal_LimitBuffer : private Hal_Buffer<T>
     pthread_mutex_destroy(&m_mutex);
   }
 
-  Hal_LimitBuffer(const Hal_LimitBuffer<T> &rCopy) = delete;
-  const Hal_LimitBuffer<T> &operator=(const Hal_LimitBuffer<T> &rCopy) = delete;
+  Hal_LimitBuffer(const Hal_LimitBuffer<T> &halLimitBuffer) = delete;
+  const Hal_LimitBuffer<T> &operator=(const Hal_LimitBuffer<T> &halLimitBuffer) = delete;
+  Hal_LimitBuffer(Hal_LimitBuffer<T> &&halLimitBuffer) = delete;
+  Hal_LimitBuffer<T> &&operator=(Hal_LimitBuffer<T> &&halLimitBuffer) = delete;
 
   void push(T &rItem)
   {
@@ -182,15 +184,11 @@ class Hal_LimitBuffer : private Hal_Buffer<T>
   }
 
  private:
-  size_t m_maxCapacity{1};
-
-  size_t m_size{0};
-
+  size_t          m_maxCapacity{1};
+  size_t          m_size{0};
   pthread_mutex_t m_mutex{};
-
-  pthread_cond_t m_popCond{};
-
-  pthread_cond_t m_pushCond{};
+  pthread_cond_t  m_popCond{};
+  pthread_cond_t  m_pushCond{};
 };
 
 #endif /* HAL_LIMITBUFFER_HPP_HAVE_SEEN */

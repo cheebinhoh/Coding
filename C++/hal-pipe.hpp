@@ -75,8 +75,10 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
     pthread_mutex_destroy(&m_mutex);
   }
 
-  Hal_Pipe(const Hal_Pipe<T> &arg) = delete;
-  const Hal_Pipe<T> &operator=(const Hal_Pipe<T> &arg) = delete;
+  Hal_Pipe(const Hal_Pipe<T> &halPipe) = delete;
+  const Hal_Pipe<T> &operator=(const Hal_Pipe<T> &halPipe) = delete;
+  Hal_Pipe(Hal_Pipe<T> &&halPipe) = delete;
+  Hal_Pipe<T> &operator=(Hal_Pipe<T> &&halPipe) = delete;
 
   void waitForEmpty()
   {
