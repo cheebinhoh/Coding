@@ -19,12 +19,14 @@ Hal_Proc::Hal_Proc(std::string_view name, Hal_Proc::Task fn) : m_name{name} {
   }
 }
 
-Hal_Proc::~Hal_Proc() {
+Hal_Proc::~Hal_Proc() try {
   if (getState() == State::Running) {
     stopExec();
   }
 
   setState(State::Invalid);
+} catch (...) {
+  return;
 }
 
 bool Hal_Proc::exec(Hal_Proc::Task fn) {
