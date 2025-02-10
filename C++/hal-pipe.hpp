@@ -44,7 +44,7 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
 
         if (fn)
         {
-          fn(std::move(item));
+          fn(std::move_if_noexcept(item));
         }
 
         ++m_count;

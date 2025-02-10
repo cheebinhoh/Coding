@@ -289,7 +289,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
           m_fillBufferCount--;
 
           T data = sp_tps->pop();
-          postProcessingBuffers.push_back(std::move(data));
+          postProcessingBuffers.push_back(std::move_if_noexcept(data));
         }
 
         if (m_postProcessingTaskFn != nullptr)

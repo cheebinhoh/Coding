@@ -60,7 +60,7 @@ class Hal_Buffer
 
     pthread_testcancel();
 
-    m_queue.push_back(std::move(rItem));
+    m_queue.push_back(std::move_if_noexcept(rItem));
 
     ++m_pushCount;
 
