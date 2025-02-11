@@ -68,11 +68,16 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
     });
   }
 
-  virtual ~Hal_Pipe()
+  virtual ~Hal_Pipe() noexcept try 
   {
+    // stopExec is not noexcept, so we need to resolve it in destructor
     Hal_Proc::stopExec();
     pthread_cond_destroy(&m_emptyCond);
     pthread_mutex_destroy(&m_mutex);
+  }
+  catch (...) {
+    // explicit return to resolve exception as destructor must be noexcept
+    return;
   }
 
   Hal_Pipe(const Hal_Pipe<T> &halPipe) = delete;

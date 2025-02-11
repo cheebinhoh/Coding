@@ -19,13 +19,14 @@ Hal_Proc::Hal_Proc(std::string_view name, Hal_Proc::Task fn) : m_name{name} {
   }
 }
 
-Hal_Proc::~Hal_Proc() try {
+Hal_Proc::~Hal_Proc() noexcept try {
   if (getState() == State::Running) {
     stopExec();
   }
 
   setState(State::Invalid);
 } catch (...) {
+  // explicit return to resolve exception as destructor must be noexcept
   return;
 }
 

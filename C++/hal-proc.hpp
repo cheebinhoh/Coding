@@ -30,7 +30,7 @@ class Hal_Proc
 
  public:
   Hal_Proc(std::string_view name, Hal_Proc::Task fn = {});
-  virtual ~Hal_Proc();
+  virtual ~Hal_Proc() noexcept;
 
   Hal_Proc(const Hal_Proc &halProc) = delete;
   const Hal_Proc &operator=(const Hal_Proc &halProc) = delete;

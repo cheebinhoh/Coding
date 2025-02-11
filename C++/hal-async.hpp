@@ -27,6 +27,14 @@ class Hal_Async : public Hal_Pipe<std::function<void()>>
    {
    }
 
+   ~Hal_Async() noexcept try
+   {
+   }
+   catch (...) {
+     // explicit return to resolve exception as destructor must be noexcept
+     return;
+   }
+
    Hal_Async(const Hal_Async &halAsync) = delete;
    const Hal_Async &operator=(const Hal_Async &halAsync) = delete;
    Hal_Async(Hal_Async &&halAsync) = delete;

@@ -101,7 +101,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
     runConveyorExec();
   }
 
-  virtual ~Hal_TeePipe()
+  virtual ~Hal_TeePipe() noexcept try
   {
     // this is important as the conveyor thread uses the conditional variable
     // and mutex, so we need to stop the thread before destroying both objects
@@ -113,6 +113,10 @@ class Hal_TeePipe : private Hal_Pipe<T>
     pthread_cond_destroy(&m_cond);
     pthread_cond_destroy(&m_emptyCond);
     pthread_mutex_destroy(&m_mutex);
+  }
+  catch (...) {
+    // explicit return to resolve exception as destructor must be noexcept
+    return;
   }
 
   Hal_TeePipe(const Hal_TeePipe<T> &halTeePipe) = delete;
