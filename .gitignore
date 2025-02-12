@@ -3,3 +3,4 @@ a.out
 *.o 
 .*.swp
 lib*.a
+lib*.so

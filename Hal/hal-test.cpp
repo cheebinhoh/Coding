@@ -4,6 +4,7 @@
 #include "hal-pipe.hpp"
 #include "hal-proc.hpp"
 #include "hal-teepipe.hpp"
+#include "hal.hpp"
 #include <algorithm>
 #include <iostream>
 #include <string>
