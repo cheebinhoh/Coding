@@ -1,9 +1,9 @@
 /**
- * This module wraps the native thread behind an object-oriented class with
+ * This module wraps the native pthread behind an object-oriented class with
  * delegation protocol where variance of thread functionality is achieved
  * by passing a closure (functor) that the thread runs than using inherittance
  * to varying the different functionalities and which always results in
- * proliferation of subclass and hard to be maintained. 
+ * proliferation of subclass and hard to be maintained.
  */
 
 #ifndef HAL_PROC_HPP_HAVE_SEEN
@@ -16,6 +16,15 @@
 
 #include <pthread.h>
 
+/**
+ * Hal_Proc thread cancellation via (StopExec) is synchronous, so if the functor
+ * runs infinitely without any pthread cancellation point, we should voluntarily
+ * call Hal_Proc::yield() at different point in time in the loop.
+ *
+ * It is RAII model where in destruction of Hal_Proc object, it will try to
+ * cancel the thread and join it to free resource, so the thread should respond to
+ * pthread cancellation.
+ */
 class Hal_Proc
 {
   using Task = std::function<void()>;
@@ -23,8 +32,8 @@ class Hal_Proc
   enum State
   {
     Invalid,
-    New,     
-    Ready,  
+    New,
+    Ready,
     Running
   };
 
