@@ -85,6 +85,11 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
   Hal_Pipe(Hal_Pipe<T> &&halPipe) = delete;
   Hal_Pipe<T> &operator=(Hal_Pipe<T> &&halPipe) = delete;
 
+  void write(T &rItem)
+  {
+      Hal_Buffer<T>::push(rItem);
+  }
+
   void waitForEmpty()
   {
     long long inboundCount{};
@@ -118,12 +123,14 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
   }
 
  private:
+  using Hal_Buffer<T>::pop;
+  using Hal_Buffer<T>::push;
+
   pthread_mutex_t m_mutex{};
 
   pthread_cond_t m_emptyCond{};
 
   long long m_count{};
 };
-
 
 #endif /* HAL_PIPE_HPP_HAVE_SEEN */

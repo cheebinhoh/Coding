@@ -13,7 +13,7 @@
                                                                  (block); \
                                                                } \
                                                              }; \
-                                this->push(std::ref(functor)); \
+                                this->write(std::ref(functor)); \
                               } while(false)
 
 class Hal_Async : public Hal_Pipe<std::function<void()>>

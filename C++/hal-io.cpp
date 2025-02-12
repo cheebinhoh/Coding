@@ -47,14 +47,14 @@ int main(int argc, char *argv[]) {
                                  }};
 
   Hal_Pipe<std::string> cal_pipe{
-      "cal_input", [&out_pipe](std::string item) { out_pipe.push(item); }};
+      "cal_input", [&out_pipe](std::string item) { out_pipe.write(item); }};
 
   Hal_Pipe<std::string> filter_pipe{
-      "filter_input", [&cal_pipe](std::string item) { cal_pipe.push(item); }};
+      "filter_input", [&cal_pipe](std::string item) { cal_pipe.write(item); }};
 
   Hal_Pipe<std::string> staging_pipe{
       "staging_input",
-      [&filter_pipe](std::string item) { filter_pipe.push(item); }};
+      [&filter_pipe](std::string item) { filter_pipe.write(item); }};
 
   sensor_input.exec([&staging_pipe, input_to_sleep_use_ns,
                      input_to_sleep_nanoseconds, input_to_sleep_milliseconds,
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     while (true) {
       std::string item =
           "sensor_input: " + std::to_string(i) + ": " + std::string(2000, 'x');
-      staging_pipe.push(item);
+      staging_pipe.write(item);
 
       i++;
 
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 
     while (true) {
       std::string item = "gps_input: " + std::to_string(i) + ": data";
-      staging_pipe.push(item);
+      staging_pipe.write(item);
 
       i++;
 
@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
 
     while (true) {
       std::string item = "imu_input: " + std::to_string(i) + ": data";
-      staging_pipe.push(item);
+      staging_pipe.write(item);
 
       i++;
 
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
 
     while (true) {
       std::string item = "ext_input: " + std::to_string(i) + ": data";
-      staging_pipe.push(item);
+      staging_pipe.write(item);
 
       i++;
 

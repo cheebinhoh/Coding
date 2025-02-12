@@ -115,7 +115,6 @@ class Hal_Buffer
     return count;
   }
 
- protected:
   T pop()
   {
     int err{};

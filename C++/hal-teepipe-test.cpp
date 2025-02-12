@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
             long val{};
             val = strtol(buf, NULL, 10);
 
-            tpipeSource->push(val);
+            tpipeSource->write(val);
 
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
           }

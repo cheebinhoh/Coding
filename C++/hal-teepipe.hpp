@@ -35,7 +35,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
 
     ~Hal_TeePipeSource() = default;
 
-    void push(T &rItem)
+    void write(T &rItem)
     {
       assert(m_teePipe);
 
@@ -66,7 +66,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
     }
 
    private:
-    T pop() { return Hal_LimitBuffer<T>::pop(); }
+    T read() { return Hal_LimitBuffer<T>::pop(); }
 
     Hal_TeePipe *m_teePipe{};
   };
@@ -258,7 +258,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
     Hal_Pipe<T>::waitForEmpty();
   }
 
-  void push(T &rItem) { Hal_Pipe<T>::push(rItem); }
+  void write(T &rItem) { Hal_Pipe<T>::write(rItem); }
 
   void runConveyorExec()
   {
@@ -292,7 +292,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
         {
           m_fillBufferCount--;
 
-          T data = sp_tps->pop();
+          T data = sp_tps->read();
           postProcessingBuffers.push_back(std::move_if_noexcept(data));
         }
 
@@ -303,7 +303,7 @@ class Hal_TeePipe : private Hal_Pipe<T>
 
         for (auto &data : postProcessingBuffers)
         {
-          push(data);
+          write(data);
         }
 
         postProcessingBuffers.clear();

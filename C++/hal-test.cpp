@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   auto p1 = sortPipe.addHal_TeePipeSource();
   Hal_Proc proc1{"s1", [&p1, &s1]() {
                    for (auto &v : s1) {
-                     p1->push(v);
+                     p1->write(v);
                    }
                  }};
 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
   auto p2 = sortPipe.addHal_TeePipeSource();
   Hal_Proc proc2{"s2", [&p2, &s2]() {
                    for (auto &v : s2) {
-                     p2->push(v);
+                     p2->write(v);
                    }
                  }};
 
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
   std::function<void()> functor{
       []() { std::cout << "Executing the functor\n"; }};
 
-  ha.push(functor);
+  ha.write(functor);
   ha.waitForEmpty();
 
   using namespace std::string_literals;
