@@ -12,7 +12,7 @@
 template <typename T>
 class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
 {
-  using Task = std::function<void(T)>;
+  using Task = std::function<void(T &&)>;
 
  public:
   Hal_Pipe(std::string_view name, Hal_Pipe::Task fn = {}) : Hal_Proc{name}
@@ -29,43 +29,14 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
       throw std::runtime_error(strerror(err));
     }
 
-    exec([this, fn]() {
-      while (true)
-      {
-        T &&item = this->pop();
-
-        int errInLoop = pthread_mutex_lock(&m_mutex);
-        if (errInLoop)
+    if (fn) {
+      exec([this, fn]() {
+        while (true)
         {
-          throw std::runtime_error(strerror(errInLoop));
+          readAndProcess(fn);
         }
-
-        pthread_testcancel();
-
-        if (fn)
-        {
-          fn(std::move_if_noexcept(item));
-        }
-
-        ++m_count;
-
-        errInLoop = pthread_cond_signal(&m_emptyCond);
-        if (errInLoop)
-        {
-          pthread_mutex_unlock(&m_mutex);
-
-          throw std::runtime_error(strerror(errInLoop));
-        }
-
-        pthread_testcancel();
-
-        errInLoop = pthread_mutex_unlock(&m_mutex);
-        if (errInLoop)
-        {
-          throw std::runtime_error(strerror(errInLoop));
-        }
-      }
-    });
+      });
+    }
   }
 
   virtual ~Hal_Pipe() noexcept try 
@@ -84,6 +55,38 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
   const Hal_Pipe<T> &operator=(const Hal_Pipe<T> &halPipe) = delete;
   Hal_Pipe(Hal_Pipe<T> &&halPipe) = delete;
   Hal_Pipe<T> &operator=(Hal_Pipe<T> &&halPipe) = delete;
+
+  void readAndProcess(Hal_Pipe::Task fn) {
+    T &&item = this->pop();
+
+    int errInLoop = pthread_mutex_lock(&m_mutex);
+    if (errInLoop)
+    {
+        throw std::runtime_error(strerror(errInLoop));
+    }
+
+    pthread_testcancel();
+
+    fn(std::move_if_noexcept(item));
+
+    ++m_count;
+
+    errInLoop = pthread_cond_signal(&m_emptyCond);
+    if (errInLoop)
+    {
+      pthread_mutex_unlock(&m_mutex);
+
+      throw std::runtime_error(strerror(errInLoop));
+    }
+
+    pthread_testcancel();
+
+    errInLoop = pthread_mutex_unlock(&m_mutex);
+    if (errInLoop)
+    {
+      throw std::runtime_error(strerror(errInLoop));
+    }
+  }
 
   void write(T &rItem)
   {
