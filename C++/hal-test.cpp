@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 
   pipeInt.write(valToPipe);
   pipeInt.readAndProcess(
-      [&valFromPipe](std::string val) { valFromPipe = val; });
+      [&valFromPipe](std::string &&val) { valFromPipe = val; });
   std::cout << "value from Pipe: " << valFromPipe
             << ", value to Pipe: " << valToPipe << "\n";
 
