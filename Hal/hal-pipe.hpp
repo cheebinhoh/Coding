@@ -5,48 +5,40 @@
 #include "hal-buffer.hpp"
 #include "hal-proc.hpp"
 
-#include <pthread.h>
 #include <cstring>
 #include <functional>
+#include <pthread.h>
 
-template <typename T>
-class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
-{
+template <typename T> class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc {
   using Task = std::function<void(T &&)>;
 
- public:
-  Hal_Pipe(std::string_view name, Hal_Pipe::Task fn = {}) : Hal_Proc{name}
-  {
+public:
+  Hal_Pipe(std::string_view name, Hal_Pipe::Task fn = {}) : Hal_Proc{name} {
     int err = pthread_mutex_init(&m_mutex, NULL);
-    if (err)
-    {
+    if (err) {
       throw std::runtime_error(strerror(err));
     }
 
     err = pthread_cond_init(&m_emptyCond, NULL);
-    if (err)
-    {
+    if (err) {
       throw std::runtime_error(strerror(err));
     }
 
     if (fn) {
       exec([this, fn]() {
-        while (true)
-        {
+        while (true) {
           readAndProcess(fn);
         }
       });
     }
   }
 
-  virtual ~Hal_Pipe() noexcept try 
-  {
+  virtual ~Hal_Pipe() noexcept try {
     // stopExec is not noexcept, so we need to resolve it in destructor
     Hal_Proc::stopExec();
     pthread_cond_destroy(&m_emptyCond);
     pthread_mutex_destroy(&m_mutex);
-  }
-  catch (...) {
+  } catch (...) {
     // explicit return to resolve exception as destructor must be noexcept
     return;
   }
@@ -60,9 +52,8 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
     T &&item = this->pop();
 
     int errInLoop = pthread_mutex_lock(&m_mutex);
-    if (errInLoop)
-    {
-        throw std::runtime_error(strerror(errInLoop));
+    if (errInLoop) {
+      throw std::runtime_error(strerror(errInLoop));
     }
 
     pthread_testcancel();
@@ -72,8 +63,7 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
     ++m_count;
 
     errInLoop = pthread_cond_signal(&m_emptyCond);
-    if (errInLoop)
-    {
+    if (errInLoop) {
       pthread_mutex_unlock(&m_mutex);
 
       throw std::runtime_error(strerror(errInLoop));
@@ -82,36 +72,28 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
     pthread_testcancel();
 
     errInLoop = pthread_mutex_unlock(&m_mutex);
-    if (errInLoop)
-    {
+    if (errInLoop) {
       throw std::runtime_error(strerror(errInLoop));
     }
   }
 
-  void write(T &rItem)
-  {
-      Hal_Buffer<T>::push(rItem);
-  }
+  void write(T &rItem) { Hal_Buffer<T>::push(rItem); }
 
-  void waitForEmpty()
-  {
+  void waitForEmpty() {
     long long inboundCount{};
 
     inboundCount = Hal_Buffer<T>::waitForEmpty();
 
     int err = pthread_mutex_lock(&m_mutex);
-    if (err)
-    {
+    if (err) {
       throw std::runtime_error(strerror(err));
     }
 
     pthread_testcancel();
 
-    while (m_count < inboundCount)
-    {
+    while (m_count < inboundCount) {
       err = pthread_cond_wait(&m_emptyCond, &m_mutex);
-      if (err)
-      {
+      if (err) {
         throw std::runtime_error(strerror(err));
       }
 
@@ -119,13 +101,12 @@ class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc
     }
 
     err = pthread_mutex_unlock(&m_mutex);
-    if (err)
-    {
+    if (err) {
       throw std::runtime_error(strerror(err));
     }
   }
 
- private:
+private:
   using Hal_Buffer<T>::pop;
   using Hal_Buffer<T>::push;
 

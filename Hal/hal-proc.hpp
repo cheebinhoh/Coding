@@ -22,22 +22,15 @@
  * call Hal_Proc::yield() at different point in time in the loop.
  *
  * It is RAII model where in destruction of Hal_Proc object, it will try to
- * cancel the thread and join it to free resource, so the thread should respond to
- * pthread cancellation.
+ * cancel the thread and join it to free resource, so the thread should respond
+ * to pthread cancellation.
  */
-class Hal_Proc
-{
+class Hal_Proc {
   using Task = std::function<void()>;
 
-  enum State
-  {
-    Invalid,
-    New,
-    Ready,
-    Running
-  };
+  enum State { Invalid, New, Ready, Running };
 
- public:
+public:
   Hal_Proc(std::string_view name, Hal_Proc::Task fn = {});
   virtual ~Hal_Proc() noexcept;
 
@@ -51,7 +44,7 @@ class Hal_Proc
 
   static void yield();
 
- protected:
+protected:
   Hal_Proc::State getState() const;
   Hal_Proc::State setState(Hal_Proc::State state);
   void setTask(Hal_Proc::Task fn);
@@ -59,14 +52,13 @@ class Hal_Proc
   bool stopExec();
   bool runExec();
 
- private:
+private:
   static void *runFnInThreadHelper(void *context);
 
   const std::string m_name{};
-  Hal_Proc::Task    m_fn{};
-  Hal_Proc::State   m_state{};
-  pthread_t         m_th{};
+  Hal_Proc::Task m_fn{};
+  Hal_Proc::State m_state{};
+  pthread_t m_th{};
 };
 
 #endif /* HAL_PROC_HPP_HAVE_SEEN */
-
