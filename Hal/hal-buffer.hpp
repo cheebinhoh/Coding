@@ -41,7 +41,9 @@ public:
   Hal_Buffer(const Hal_Buffer<T> &&halBuffer) = delete;
   Hal_Buffer<T> &operator=(Hal_Buffer<T> &&halBuffer) = delete;
 
-  void push(T &rItem) {
+  void push(T &rItem) { push(std::move(rItem)); }
+
+  void push(T &&rItem) {
     int err{};
 
     err = pthread_mutex_lock(&m_mutex);
