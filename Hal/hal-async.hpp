@@ -1,3 +1,5 @@
+// Copyright © 2021-2025 Chee Bin HOH. All rights reserved.
+
 #ifndef HAL_ASYNC_HPP_HAVE_SEEN
 
 #define HAL_ASYNC_HPP_HAVE_SEEN

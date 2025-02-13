@@ -48,6 +48,14 @@ public:
   Hal_Pipe(Hal_Pipe<T> &&halPipe) = delete;
   Hal_Pipe<T> &operator=(Hal_Pipe<T> &&halPipe) = delete;
 
+  T read() {
+    T data{};
+
+    readAndProcess([&data](T &&item) { data = item; });
+
+    return std::move(data);
+  }
+
   void readAndProcess(Hal_Pipe::Task fn) {
     T &&item = this->pop();
 

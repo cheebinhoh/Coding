@@ -89,13 +89,19 @@ int main(int argc, char *argv[]) {
     Hal_Proc::yield();
   }
 
-  Hal_Pipe<std::string> pipeInt{"string"};
+  Hal_Pipe<std::string> pipe{"string"};
   std::string valToPipe{"Hello Pipe"};
   std::string valFromPipe{};
 
-  pipeInt.write(valToPipe);
-  pipeInt.readAndProcess(
-      [&valFromPipe](std::string &&val) { valFromPipe = val; });
+  pipe.write(valToPipe);
+  pipe.readAndProcess([&valFromPipe](std::string &&val) { valFromPipe = val; });
+  std::cout << "value from Pipe: " << valFromPipe
+            << ", value to Pipe: " << valToPipe << "\n";
+
+  valToPipe = "Hello Pipe 2";
+  valFromPipe = "";
+  pipe.write(valToPipe);
+  valFromPipe = pipe.read();
   std::cout << "value from Pipe: " << valFromPipe
             << ", value to Pipe: " << valToPipe << "\n";
 
