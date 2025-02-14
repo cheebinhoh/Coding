@@ -1,5 +1,5 @@
 /**
- * Copyright © 2021-2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
  * This class implements a fifo buffer that:
  * - push is not blocking

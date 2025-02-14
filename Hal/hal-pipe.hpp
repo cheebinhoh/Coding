@@ -1,3 +1,16 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ *
+ * This class implements a fifo pipe that:
+ * - write is not blocking
+ * - read is blocking and std::nullptr_t if fifo pipe is destroyed
+ * - readAndProcess will block and repeatedly run the functor to process each
+ * data read out of the pipe.
+ *
+ * WARNING: write will move data (ownership) into the Hal_Pipe object upon
+ * successful execution.
+ */
+
 #ifndef HAL_PIPE_HPP_HAVE_SEEN
 
 #define HAL_PIPE_HPP_HAVE_SEEN

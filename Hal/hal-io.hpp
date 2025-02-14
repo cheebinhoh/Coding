@@ -3,7 +3,7 @@
  *
  * This class implements an IO interface that
  * - read is blocking call if no data available or std::nullopt_t if
- *   end of data stream (example when pipe is removed).
+ *   end of data stream is read (example when pipe is removed).
  * - write will copy data into the destination using move semantics if possible.
  */
 
