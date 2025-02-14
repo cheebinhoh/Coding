@@ -1,4 +1,14 @@
-// Copyright © 2021-2025 Chee Bin HOH. All rights reserved.
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ *
+ * This class implements an asynchronous execution extension for event-driven
+ * model.
+ *
+ * A client class can inherit from Hal_Async or composes an Hal_Async object,
+ * and implement the client class API to pass a functor to the Hal_Async object
+ * for execution. This will help serialize the execution and avoid any explicit
+ * mutex on the client class state and simplify the code.
+ */
 
 #ifndef HAL_ASYNC_HPP_HAVE_SEEN
 
