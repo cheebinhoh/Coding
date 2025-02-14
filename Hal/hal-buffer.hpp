@@ -54,7 +54,7 @@ public:
 
   /**
    * @brief The method will push the item into buffer using move semantics
-   * unless noexcept is false.
+   *        unless noexcept is false.
    *
    * @param rItem The item to be pushed into buffer
    */
