@@ -39,7 +39,7 @@ public:
   }
 
   virtual ~Hal_Buffer() {
-    // RAII! we wake up any thread waiting for the buffer!
+    // RAII! we wake up any thread waiting for the buffer in pop method!
     pthread_cond_signal(&m_cond);
 
     pthread_cond_destroy(&m_emptyCond);
@@ -52,6 +52,12 @@ public:
   Hal_Buffer(const Hal_Buffer<T> &&halBuffer) = delete;
   Hal_Buffer<T> &operator=(Hal_Buffer<T> &&halBuffer) = delete;
 
+  /**
+   * @brief The method will push the item into buffer using move semantics
+   * unless noexcept is false.
+   *
+   * @param rItem The item to be pushed into buffer
+   */
   void push(T &&rItem) {
     T movedItem = std::move_if_noexcept(rItem);
 
@@ -60,10 +66,10 @@ public:
 
   /**
    * @brief The method will push the item into the buffer using move semantic
-   *        if move is true.
+   *        if move is true and noexcept in move.
    *
    * @param rItem The item to be pushed into buffer
-   * @param move  True to move if no except, else copy semantics
+   * @param move  True to move, else copy semantics
    */
   void push(T &rItem, bool move = true) {
     int err{};
@@ -127,6 +133,12 @@ public:
     return count;
   }
 
+  /**
+   * @brief The method will pop front item from the queue using move semantics
+   *        if noexcept, if no item, the caller is blocked!
+   *
+   * @return The item pop out from the head of the queue
+   */
   T pop() {
     int err{};
 
