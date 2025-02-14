@@ -1,9 +1,9 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This class implements a fifo buffer with a limited capacity that:
+ * This class implements a fifo queue with a limited capacity that:
  * - push is blocking if the limit of the capacity is reach
- * - pop is blocking if no data in the buffer
+ * - pop is blocking if no data (optional) in the queue
  */
 
 #ifndef HAL_LIMITBUFFER_HPP_HAVE_SEEN
@@ -43,6 +43,9 @@ public:
   }
 
   virtual ~Hal_LimitBuffer() {
+    pthread_cond_signal(&m_popCond);
+    pthread_cond_signal(&m_pushCond);
+
     pthread_cond_destroy(&m_pushCond);
     pthread_cond_destroy(&m_popCond);
     pthread_mutex_destroy(&m_mutex);
@@ -71,11 +74,11 @@ public:
   std::optional<T> popNoWait() override { return popOptional(false); }
 
   /**
-   * @brief The method will push the item into buffer using move semantics
+   * @brief The method will push the item into queue using move semantics
    *        unless noexcept is false. The caller is blocked waiting if the
    *        queue is full.
    *
-   * @param rItem The item to be pushed into buffer
+   * @param rItem The item to be pushed into queue
    */
   void push(T &&rItem) override {
     T movedItem = std::move_if_noexcept(rItem);
@@ -84,11 +87,11 @@ public:
   }
 
   /**
-   * @brief The method will push the item into buffer using move semantics
+   * @brief The method will push the item into queue using move semantics
    *        if move is true (and noexcept is true). The caller is blocked
    *        waiting if the queue is full.
    *
-   * @param rItem The item to be pushed into buffer
+   * @param rItem The item to be pushed into queue
    * @param move True to use move semantics, else copy semantic
    */
   void push(T &rItem, bool move = true) override {

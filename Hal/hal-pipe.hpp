@@ -4,11 +4,8 @@
  * This class implements a fifo pipe that:
  * - write is not blocking
  * - read is blocking and std::nullptr_t if fifo pipe is destroyed
- * - readAndProcess will block and repeatedly run the functor to process each
- * data read out of the pipe.
- *
- * WARNING: write will move data (ownership) into the Hal_Pipe object upon
- * successful execution.
+ * - readAndProcess will block and repeatedly run the functor to process
+ *   each data read out of the pipe.
  */
 
 #ifndef HAL_PIPE_HPP_HAVE_SEEN
@@ -52,6 +49,8 @@ public:
   virtual ~Hal_Pipe() noexcept try {
     // stopExec is not noexcept, so we need to resolve it in destructor
     Hal_Proc::stopExec();
+
+    pthread_cond_signal(&m_emptyCond);
     pthread_cond_destroy(&m_emptyCond);
     pthread_mutex_destroy(&m_mutex);
   } catch (...) {
@@ -64,6 +63,13 @@ public:
   Hal_Pipe(Hal_Pipe<T> &&halPipe) = delete;
   Hal_Pipe<T> &operator=(Hal_Pipe<T> &&halPipe) = delete;
 
+  /**
+   * @brief The method will read and return an item from the pipe or
+   * std::nullopt if the pipe is closed. The read is blocked waiting until data
+   * is available or the pipe is closed.
+   *
+   * @return optional item if there is data, or std::nullopt if pipe is closed
+   */
   std::optional<T> read() override {
     T data{};
 
@@ -76,6 +82,12 @@ public:
     return std::move_if_noexcept(data);
   }
 
+  /**
+   * @brief The method read data from pipe and call fn functor to process the
+   *        data, the method is blocked waiting for data from pipe.
+   *
+   * @param fn functor to process data item read out of pipe
+   */
   void readAndProcess(Hal_Pipe::Task fn) {
     T &&item = this->pop();
 
@@ -105,10 +117,30 @@ public:
     }
   }
 
+  /**
+   * @brief The method will write data into the pipe, the data is copied
+   *        than move semantic.
+   *
+   * @param rItem The data item to be copied into pipe
+   */
   void write(T &rItem) override { Hal_Buffer<T>::push(rItem, false); }
 
+  /**
+   * @brief The method will write data into the pipe, the data is moved
+   *        into pipe if noexcept.
+   *
+   * @param rItem The data item to be moved into pipe
+   */
   void write(T &&rItem) override { Hal_Buffer<T>::push(rItem, true); }
 
+  /**
+   * @brief The method will put the client on blocking wait until
+   *        the pipe is emptied, it returns number of items that
+   *        were passed through the pipe in total upon return.
+   *
+   * @return The number of items that were passed through the pipe
+   *         in total
+   */
   long long waitForEmpty() override {
     long long inboundCount{};
 
@@ -142,11 +174,8 @@ private:
   using Hal_Buffer<T>::pop;
   using Hal_Buffer<T>::popNoWait;
   using Hal_Buffer<T>::push;
-
   pthread_mutex_t m_mutex{};
-
   pthread_cond_t m_emptyCond{};
-
   long long m_count{};
 };
 

@@ -1,9 +1,12 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This class implements a fifo buffer that:
+ * This class implements an fifo queue that:
  * - push is not blocking
- * - pop is blocking (optional) if no data in the buffer
+ * - pop is blocking (optional) if no data in the queue
+ *
+ * There is no programmatic limit on the size of the queue,
+ * but memory limit.
  */
 
 #ifndef HAL_BUFFER_HPP_HAVE_SEEN
@@ -38,13 +41,16 @@ public:
     }
   }
 
-  virtual ~Hal_Buffer() {
-    // RAII! we wake up any thread waiting for the buffer in pop method!
+  virtual ~Hal_Buffer() noexcept try {
+    // RAII! we wake up any thread waiting for the queue in pop method!
     pthread_cond_signal(&m_cond);
 
     pthread_cond_destroy(&m_emptyCond);
     pthread_cond_destroy(&m_cond);
     pthread_mutex_destroy(&m_mutex);
+  } catch (...) {
+    // explicit return to resolve exception as destructor must be noexcept
+    return;
   }
 
   Hal_Buffer(const Hal_Buffer<T> &halBuffer) = delete;
@@ -62,17 +68,18 @@ public:
 
   /**
    * @brief The method will pop and return front item from the queue or the
-   *        std::nullopt if the queue is empty.
+   *        std::nullopt if the queue is empty (and caller is not blocked
+   *        waiting).
    *
    * @return optional item from the front of the queue
    */
   virtual std::optional<T> popNoWait() { return popOptional(false); }
 
   /**
-   * @brief The method will push the item into buffer using move semantics
+   * @brief The method will push the item into queue using move semantics
    *        unless noexcept is false.
    *
-   * @param rItem The item to be pushed into buffer
+   * @param rItem The item to be pushed into queue
    */
   virtual void push(T &&rItem) {
     T movedItem = std::move_if_noexcept(rItem);
@@ -81,10 +88,10 @@ public:
   }
 
   /**
-   * @brief The method will push the item into the buffer using move semantic
+   * @brief The method will push the item into the queue using move semantic
    *        if move is true and noexcept in move.
    *
-   * @param rItem The item to be pushed into buffer
+   * @param rItem The item to be pushed into queue
    * @param move  True to move, else copy semantics
    */
   virtual void push(T &rItem, bool move = true) {

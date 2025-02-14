@@ -5,7 +5,7 @@
  * - read is blocking call if no data available or std::nullopt_t if
  *   end of data stream is read (example when pipe is removed).
  * - write (with rvalue) will move data if it is possible
- * - write (with lvalue) will not move data
+ * - write (with lvalue) will not move but copy data
  */
 
 #ifndef HAL_IO_HPP_HAVE_SEEN
