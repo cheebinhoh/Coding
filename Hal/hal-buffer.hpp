@@ -4,9 +4,6 @@
  * This class implements a fifo buffer that:
  * - push is not blocking
  * - pop is blocking if no data in the buffer
- *
- * WARNING: push will move data (ownership) into the Hal_Buffer object upon
- * successful execution.
  */
 
 #ifndef HAL_BUFFER_HPP_HAVE_SEEN
@@ -58,9 +55,16 @@ public:
   void push(T &&rItem) {
     T movedItem = std::move_if_noexcept(rItem);
 
-    push(movedItem);
+    push(movedItem, true);
   }
 
+  /**
+   * @brief The method will push the item into the buffer using move semantic
+   *        if move is true.
+   *
+   * @param rItem The item to be pushed into buffer
+   * @param move  True to move if no except, else copy semantics
+   */
   void push(T &rItem, bool move = true) {
     int err{};
 
