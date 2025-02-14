@@ -8,7 +8,9 @@ class Counter : Hal_Async {
 public:
   Counter() : Hal_Async{"counter"} {}
 
-  void increment() { HAL_ASYNC_CALL(this->count++); }
+  void increment() {
+    HAL_ASYNC_CALL({ this->count++; });
+  }
 
   operator long long() { return count; }
 
