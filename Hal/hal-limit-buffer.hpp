@@ -55,8 +55,25 @@ public:
   Hal_LimitBuffer<T> &&operator=(Hal_LimitBuffer<T> &&halLimitBuffer) = delete;
 
   /**
+   * @brief The method will pop and return front item from the queue or the
+   *        caller is blocked waiting if the queue is emptied.
+   *
+   * @return front item of the queue.
+   */
+  T pop() { return *pop(true); }
+
+  /**
+   * @brief The method will pop and return front item from the queue or the
+   *        std::nullopt if the queue is emptied.
+   *
+   * @return optional item from the front of the queue
+   */
+  std::optional<T> popNoWait() { return pop(false); }
+
+  /**
    * @brief The method will push the item into buffer using move semantics
-   *        unless noexcept is false.
+   *        unless noexcept is false. The caller is blocked waiting if the
+   *        queue is full.
    *
    * @param rItem The item to be pushed into buffer
    */
@@ -66,6 +83,14 @@ public:
     push(movedItem, true);
   }
 
+  /**
+   * @brief The method will push the item into buffer using move semantics
+   *        if move is true (and noexcept is true). The caller is blocked
+   *        waiting if the queue is full.
+   *
+   * @param rItem The item to be pushed into buffer
+   * @param move True to use move semantics, else copy semantic
+   */
   void push(T &rItem, bool move = true) {
     int err{};
 
@@ -102,6 +127,11 @@ public:
     }
   }
 
+  /**
+   * @brief The method returns the number of items held in the queue now.
+   *
+   * @return The number of items held in the queue now
+   */
   size_t size() {
     int err{};
     size_t size{};
@@ -123,10 +153,14 @@ public:
     return size;
   }
 
-  T pop() { return *pop(true); }
-
-  std::optional<T> popNoWait() { return pop(false); }
-
+  /**
+   * @brief The method will put the client on blocking wait until
+   *        the queue is emptied, it returns number of items that
+   *        were passed through the queue in total.
+   *
+   * @return The number of items that were passed through the queue
+   *         in total
+   */
   long long waitForEmpty() { return Hal_Buffer<T>::waitForEmpty(); }
 
 private:
