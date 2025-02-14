@@ -109,7 +109,7 @@ public:
 
   void write(T &&rItem) override { Hal_Buffer<T>::push(rItem, true); }
 
-  void waitForEmpty() {
+  long long waitForEmpty() override {
     long long inboundCount{};
 
     inboundCount = Hal_Buffer<T>::waitForEmpty();
@@ -134,10 +134,13 @@ public:
     if (err) {
       throw std::runtime_error(strerror(err));
     }
+
+    return inboundCount;
   }
 
 private:
   using Hal_Buffer<T>::pop;
+  using Hal_Buffer<T>::popNoWait;
   using Hal_Buffer<T>::push;
 
   pthread_mutex_t m_mutex{};

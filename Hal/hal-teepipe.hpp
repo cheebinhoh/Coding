@@ -188,10 +188,10 @@ public:
 
   void wait() { wait(true); }
 
-  void waitForEmpty() { wait(false); }
+  long long waitForEmpty() override { return wait(false); }
 
 private:
-  void wait(bool noOpenSource) {
+  long long wait(bool noOpenSource) {
     int err = pthread_mutex_lock(&m_mutex);
     if (err) {
       throw std::runtime_error(strerror(err));
@@ -227,10 +227,10 @@ private:
       throw std::runtime_error(strerror(err));
     }
 
-    Hal_Pipe<T>::waitForEmpty();
+    return Hal_Pipe<T>::waitForEmpty();
   }
 
-  void write(T &rItem) { Hal_Pipe<T>::write(rItem); }
+  void write(T &rItem) override { Hal_Pipe<T>::write(rItem); }
 
   void runConveyorExec() {
     m_conveyor->exec([this]() {

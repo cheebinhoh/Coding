@@ -3,7 +3,7 @@
  *
  * This class implements a fifo buffer that:
  * - push is not blocking
- * - pop is blocking if no data in the buffer
+ * - pop is blocking (optional) if no data in the buffer
  */
 
 #ifndef HAL_BUFFER_HPP_HAVE_SEEN
@@ -53,50 +53,20 @@ public:
   Hal_Buffer<T> &operator=(Hal_Buffer<T> &&halBuffer) = delete;
 
   /**
-   * @brief The method will pop front item from the queue using move semantics
-   *        if noexcept, if no item, the caller is blocked!
+   * @brief The method will pop and return front item from the queue or the
+   *        caller is blocked waiting if the queue is empty
    *
-   * @return The item pop out from the head of the queue
+   * @return front item of the queue.
    */
-  T pop() {
-    int err{};
+  virtual T pop() { return *popOptional(true); }
 
-    err = pthread_mutex_lock(&m_mutex);
-    if (err) {
-      throw std::runtime_error(strerror(err));
-    }
-
-    pthread_testcancel();
-
-    while (m_queue.empty()) {
-      err = pthread_cond_wait(&m_cond, &m_mutex);
-      if (err) {
-        throw std::runtime_error(strerror(err));
-      }
-
-      pthread_testcancel();
-    }
-
-    T val = std::move(m_queue.front());
-    m_queue.pop_front();
-
-    ++m_popCount;
-
-    err = pthread_cond_signal(&m_emptyCond);
-    if (err) {
-      pthread_mutex_unlock(&m_mutex);
-
-      throw std::runtime_error(strerror(err));
-    }
-
-    err = pthread_mutex_unlock(&m_mutex);
-    if (err) {
-      throw std::runtime_error(strerror(err));
-    }
-
-    return val; // val is local variable, hence rvalue and hence move semantic
-                // by default for efficient copy.
-  }
+  /**
+   * @brief The method will pop and return front item from the queue or the
+   *        std::nullopt if the queue is empty.
+   *
+   * @return optional item from the front of the queue
+   */
+  virtual std::optional<T> popNoWait() { return popOptional(false); }
 
   /**
    * @brief The method will push the item into buffer using move semantics
@@ -104,7 +74,7 @@ public:
    *
    * @param rItem The item to be pushed into buffer
    */
-  void push(T &&rItem) {
+  virtual void push(T &&rItem) {
     T movedItem = std::move_if_noexcept(rItem);
 
     push(movedItem, true);
@@ -117,7 +87,7 @@ public:
    * @param rItem The item to be pushed into buffer
    * @param move  True to move, else copy semantics
    */
-  void push(T &rItem, bool move = true) {
+  virtual void push(T &rItem, bool move = true) {
     int err{};
 
     err = pthread_mutex_lock(&m_mutex);
@@ -156,9 +126,9 @@ public:
    * @return The number of items that were passed through the queue
    *         in total
    */
-  long long waitForEmpty() {
+  virtual long long waitForEmpty() {
     int err{};
-    long long count{};
+    long long inboundCount{};
 
     err = pthread_mutex_lock(&m_mutex);
     if (err) {
@@ -177,14 +147,75 @@ public:
     }
 
     assert(m_popCount == m_pushCount);
-    count = m_popCount;
+    inboundCount = m_popCount;
 
     err = pthread_mutex_unlock(&m_mutex);
     if (err) {
       throw std::runtime_error(strerror(err));
     }
 
-    return count;
+    return inboundCount;
+  }
+
+protected:
+  /**
+   * @brief The method will pop front item from the queue and return it
+   *        or block waiting for front item if the queue is empty and
+   *        wait is true.
+   *
+   * @param wait The caller is blocked waiting for item if queue is empty
+   *             and wait is true, otherwise returning std::nullopt
+   *
+   * @return optional value from front item of the queue
+   */
+  virtual std::optional<T> popOptional(bool wait) {
+    int err{};
+
+    err = pthread_mutex_lock(&m_mutex);
+    if (err) {
+      throw std::runtime_error(strerror(err));
+    }
+
+    pthread_testcancel();
+
+    if (m_queue.empty()) {
+      if (!wait) {
+        err = pthread_mutex_unlock(&m_mutex);
+        if (err) {
+          throw std::runtime_error(strerror(err));
+        }
+
+        return {};
+      }
+
+      do {
+        err = pthread_cond_wait(&m_cond, &m_mutex);
+        if (err) {
+          throw std::runtime_error(strerror(err));
+        }
+
+        pthread_testcancel();
+      } while (m_queue.empty());
+    }
+
+    T val = std::move(m_queue.front());
+    m_queue.pop_front();
+
+    ++m_popCount;
+
+    err = pthread_cond_signal(&m_emptyCond);
+    if (err) {
+      pthread_mutex_unlock(&m_mutex);
+
+      throw std::runtime_error(strerror(err));
+    }
+
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err) {
+      throw std::runtime_error(strerror(err));
+    }
+
+    return std::move_if_noexcept(val);
   }
 
 private:

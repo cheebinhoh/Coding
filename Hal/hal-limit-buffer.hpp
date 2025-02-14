@@ -56,19 +56,19 @@ public:
 
   /**
    * @brief The method will pop and return front item from the queue or the
-   *        caller is blocked waiting if the queue is emptied.
+   *        caller is blocked waiting if the queue is empty.
    *
    * @return front item of the queue.
    */
-  T pop() { return *pop(true); }
+  T pop() override { return *popOptional(true); }
 
   /**
    * @brief The method will pop and return front item from the queue or the
-   *        std::nullopt if the queue is emptied.
+   *        std::nullopt if the queue is empty.
    *
    * @return optional item from the front of the queue
    */
-  std::optional<T> popNoWait() { return pop(false); }
+  std::optional<T> popNoWait() override { return popOptional(false); }
 
   /**
    * @brief The method will push the item into buffer using move semantics
@@ -77,7 +77,7 @@ public:
    *
    * @param rItem The item to be pushed into buffer
    */
-  void push(T &&rItem) {
+  void push(T &&rItem) override {
     T movedItem = std::move_if_noexcept(rItem);
 
     push(movedItem, true);
@@ -91,7 +91,7 @@ public:
    * @param rItem The item to be pushed into buffer
    * @param move True to use move semantics, else copy semantic
    */
-  void push(T &rItem, bool move = true) {
+  void push(T &rItem, bool move = true) override {
     int err{};
 
     err = pthread_mutex_lock(&m_mutex);
@@ -111,7 +111,6 @@ public:
     }
 
     Hal_Buffer<T>::push(rItem, move);
-
     ++m_size;
 
     err = pthread_cond_signal(&m_popCond);
@@ -155,13 +154,13 @@ public:
 
   /**
    * @brief The method will put the client on blocking wait until
-   *        the queue is emptied, it returns number of items that
+   *        the queue is empty, it returns number of items that
    *        were passed through the queue in total.
    *
    * @return The number of items that were passed through the queue
    *         in total
    */
-  long long waitForEmpty() { return Hal_Buffer<T>::waitForEmpty(); }
+  long long waitForEmpty() override { return Hal_Buffer<T>::waitForEmpty(); }
 
 private:
   /**
@@ -174,7 +173,7 @@ private:
    *
    * @return optional value from front item of the queue
    */
-  std::optional<T> pop(bool wait) {
+  std::optional<T> popOptional(bool wait) override {
     int err{};
 
     err = pthread_mutex_lock(&m_mutex);
@@ -184,27 +183,7 @@ private:
 
     pthread_testcancel();
 
-    if (0 == m_size) {
-      if (!wait) {
-        err = pthread_mutex_unlock(&m_mutex);
-        if (err) {
-          throw std::runtime_error(strerror(err));
-        }
-
-        return {};
-      }
-
-      do {
-        err = pthread_cond_wait(&m_popCond, &m_mutex);
-        if (err) {
-          throw std::runtime_error(strerror(err));
-        }
-
-        pthread_testcancel();
-      } while (0 == m_size);
-    }
-
-    T val = Hal_Buffer<T>::pop();
+    auto val = Hal_Buffer<T>::popOptional(wait);
     m_size--;
 
     err = pthread_cond_signal(&m_pushCond);
