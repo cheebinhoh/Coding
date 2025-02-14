@@ -1,3 +1,14 @@
+/**
+ * Copyright © 2021-2025 Chee Bin HOH. All rights reserved.
+ *
+ * This class implements a fifo buffer that:
+ * - push is not blocking
+ * - pop is blocking if no data in the buffer
+ *
+ * WARNING: push will move data (ownership) into the Hal_Buffer object upon
+ * successful execution.
+ */
+
 #ifndef HAL_BUFFER_HPP_HAVE_SEEN
 
 #define HAL_BUFFER_HPP_HAVE_SEEN
@@ -31,6 +42,9 @@ public:
   }
 
   virtual ~Hal_Buffer() {
+    // RAII! we wake up any thread waiting for the buffer!
+    pthread_cond_signal(&m_cond);
+
     pthread_cond_destroy(&m_emptyCond);
     pthread_cond_destroy(&m_cond);
     pthread_mutex_destroy(&m_mutex);
@@ -41,7 +55,7 @@ public:
   Hal_Buffer(const Hal_Buffer<T> &&halBuffer) = delete;
   Hal_Buffer<T> &operator=(Hal_Buffer<T> &&halBuffer) = delete;
 
-  void push(T &rItem) { push(std::move(rItem)); }
+  void push(T &rItem) { push(std::move_if_noexcept(rItem)); }
 
   void push(T &&rItem) {
     int err{};

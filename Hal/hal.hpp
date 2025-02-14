@@ -3,6 +3,7 @@
 
 #include "hal-async.hpp"
 #include "hal-buffer.hpp"
+#include "hal-io.hpp"
 #include "hal-limit-buffer.hpp"
 #include "hal-pipe.hpp"
 #include "hal-proc.hpp"

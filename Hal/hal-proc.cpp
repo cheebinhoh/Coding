@@ -65,7 +65,7 @@ bool Hal_Proc::wait() {
 
   err = pthread_join(m_th, &pRet);
   if (err) {
-    std::cerr << strerror(err) << "\n";
+    throw std::runtime_error(strerror(err));
   }
 
   setState(State::Ready);
@@ -87,7 +87,7 @@ bool Hal_Proc::stopExec() {
 
   err = pthread_cancel(m_th);
   if (err) {
-    std::cerr << strerror(err) << "\n";
+    throw std::runtime_error(strerror(err));
   }
 
   return wait();

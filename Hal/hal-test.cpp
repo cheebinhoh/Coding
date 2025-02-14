@@ -99,11 +99,29 @@ int main(int argc, char *argv[]) {
             << ", value to Pipe: " << valToPipe << "\n";
 
   valToPipe = "Hello Pipe 2";
-  valFromPipe = "";
   pipe.write(valToPipe);
-  valFromPipe = pipe.read();
-  std::cout << "value from Pipe: " << valFromPipe
+  auto optionalValFromPipe = pipe.read();
+  std::cout << "value from Pipe: " << (*optionalValFromPipe)
             << ", value to Pipe: " << valToPipe << "\n";
+
+  auto pipeBlock = std::make_unique<Hal_Pipe<std::string>>("pipeBlock");
+  Hal_Proc pipeBlockProc{"pipeBlockProc", [&pipeBlock]() {
+                           std::this_thread::sleep_for(std::chrono::seconds(5));
+                           pipeBlock = {};
+                         }};
+
+  pipeBlockProc.exec();
+  Hal_Proc::yield();
+  std::this_thread::sleep_for(std::chrono::seconds(2));
+
+  std::cout << "before pipeBlock->read\n";
+  auto optVal = pipeBlock->read();
+  if (!optVal) {
+    std::cout << "no data\n";
+  }
+
+  std::this_thread::sleep_for(std::chrono::seconds(5));
+  std::cout << "end\n";
 
   return 0;
 }

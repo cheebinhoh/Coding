@@ -3,13 +3,16 @@
 #define HAL_PIPE_HPP_HAVE_SEEN
 
 #include "hal-buffer.hpp"
+#include "hal-io.hpp"
 #include "hal-proc.hpp"
 
 #include <cstring>
 #include <functional>
+#include <optional>
 #include <pthread.h>
 
-template <typename T> class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc {
+template <typename T>
+class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc, public Hal_Io<T> {
   using Task = std::function<void(T &&)>;
 
 public:
@@ -48,12 +51,16 @@ public:
   Hal_Pipe(Hal_Pipe<T> &&halPipe) = delete;
   Hal_Pipe<T> &operator=(Hal_Pipe<T> &&halPipe) = delete;
 
-  T read() {
+  std::optional<T> read() override {
     T data{};
 
-    readAndProcess([&data](T &&item) { data = item; });
+    try {
+      readAndProcess([&data](T &&item) { data = item; });
+    } catch (...) {
+      return {};
+    }
 
-    return std::move(data);
+    return std::move_if_noexcept(data);
   }
 
   void readAndProcess(Hal_Pipe::Task fn) {
@@ -85,7 +92,9 @@ public:
     }
   }
 
-  void write(T &rItem) { Hal_Buffer<T>::push(rItem); }
+  void write(T &rItem) override { write(std::move_if_noexcept(rItem)); }
+
+  void write(T &&rItem) override { Hal_Buffer<T>::push(rItem); }
 
   void waitForEmpty() {
     long long inboundCount{};

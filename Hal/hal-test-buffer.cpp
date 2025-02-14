@@ -10,7 +10,6 @@ int main(int argc, char *argv[]) {
 
   auto buf = std::make_unique<Hal_Buffer<std::string>>();
   auto proc = std::make_unique<Hal_Proc>("proc", [&buf]() {
-    std::cout << "before pop\n";
     auto s = buf->pop();
     std::cout << "value pop: " << s << "\n";
   });
@@ -34,10 +33,15 @@ int main(int argc, char *argv[]) {
   Hal_Proc::yield();
 
   std::this_thread::sleep_for(std::chrono::seconds(2));
-  buf = {};
-  std::this_thread::sleep_for(std::chrono::seconds(2));
   proc = {};
+  std::this_thread::sleep_for(std::chrono::seconds(2));
+  buf = {};
   std::this_thread::sleep_for(std::chrono::seconds(3));
+
+  Hal_Buffer<int> intBuf{};
+  intBuf.push(2);
+
+  std::cout << "pop int: " << intBuf.pop() << "\n";
 
   return 0;
 }

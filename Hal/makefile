@@ -4,7 +4,7 @@
 
 all : libhal.so hal-test.out hal-test-buffer.out hal-test-teepipe.out hal-test-io.out 
 
-libhal.so : hal-async.hpp hal-buffer.hpp hal-limit-buffer.hpp hal-pipe.hpp hal-proc.cpp \
+libhal.so : hal-async.hpp hal-buffer.hpp hal-io.hpp hal-limit-buffer.hpp hal-pipe.hpp hal-proc.cpp \
 		hal-proc.hpp hal-teepipe.hpp hal.hpp
 	g++ -std=c++17 -c -fPIC hal-proc.cpp
 	g++ -std=c++17 hal-proc.o -shared -o libhal.so -lpthread
