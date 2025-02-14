@@ -1,3 +1,11 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ *
+ * This class implements a fifo buffer with a limited capacity that:
+ * - push is blocking if the limit of the capacity is reach
+ * - pop is blocking if no data in the buffer
+ */
+
 #ifndef HAL_LIMITBUFFER_HPP_HAVE_SEEN
 
 #define HAL_LIMITBUFFER_HPP_HAVE_SEEN
@@ -46,7 +54,19 @@ public:
   Hal_LimitBuffer(Hal_LimitBuffer<T> &&halLimitBuffer) = delete;
   Hal_LimitBuffer<T> &&operator=(Hal_LimitBuffer<T> &&halLimitBuffer) = delete;
 
-  void push(T &rItem) {
+  /**
+   * @brief The method will push the item into buffer using move semantics
+   * unless noexcept is false.
+   *
+   * @param rItem The item to be pushed into buffer
+   */
+  void push(T &&rItem) {
+    T movedItem = std::move_if_noexcept(rItem);
+
+    push(movedItem, true);
+  }
+
+  void push(T &rItem, bool move = true) {
     int err{};
 
     err = pthread_mutex_lock(&m_mutex);
@@ -65,7 +85,7 @@ public:
       pthread_testcancel();
     }
 
-    Hal_Buffer<T>::push(rItem);
+    Hal_Buffer<T>::push(rItem, move);
 
     ++m_size;
 
