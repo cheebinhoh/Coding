@@ -12,7 +12,7 @@
 #include <pthread.h>
 
 template <typename T>
-class Hal_Pipe : public Hal_Buffer<T>, public Hal_Proc, public Hal_Io<T> {
+class Hal_Pipe : public Hal_Buffer<T>, public Hal_Io<T>, public Hal_Proc {
   using Task = std::function<void(T &&)>;
 
 public:

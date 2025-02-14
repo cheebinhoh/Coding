@@ -1,3 +1,12 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ *
+ * This class implements an IO interface that
+ * - read is blocking call if no data available or std::nullopt_t if
+ *   end of data stream (example when pipe is removed).
+ * - write will copy data into the destination using move semantics if possible.
+ */
+
 #ifndef HAL_IO_HPP_HAVE_SEEN
 
 #define HAL_IO_HPP_HAVE_SEEN

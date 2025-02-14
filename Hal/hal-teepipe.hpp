@@ -2,16 +2,19 @@
 
 #define HAL_TEEPIPE_HPP_HAVE_SEEN
 
+#include "hal-io.hpp"
 #include "hal-limit-buffer.hpp"
 #include "hal-pipe.hpp"
 #include "hal-proc.hpp"
 
 #include <algorithm>
+#include <cassert>
 #include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <string_view>
 #include <thread>
 #include <type_traits>
@@ -21,7 +24,7 @@ template <typename T> class Hal_TeePipe : private Hal_Pipe<T> {
   using Task = std::function<void(T)>;
   using PostProcessingTask = std::function<void(std::vector<T> &)>;
 
-  class Hal_TeePipeSource : private Hal_LimitBuffer<T> {
+  class Hal_TeePipeSource : private Hal_LimitBuffer<T>, public Hal_Io<T> {
     friend class Hal_TeePipe<T>;
 
   public:
@@ -30,7 +33,9 @@ template <typename T> class Hal_TeePipe : private Hal_Pipe<T> {
 
     ~Hal_TeePipeSource() = default;
 
-    void write(T &rItem) {
+    void write(T &rItem) override { write(std::move_if_noexcept(rItem)); }
+
+    void write(T &&rItem) override {
       assert(m_teePipe);
 
       Hal_LimitBuffer<T>::push(rItem);
@@ -57,7 +62,7 @@ template <typename T> class Hal_TeePipe : private Hal_Pipe<T> {
     }
 
   private:
-    T read() { return Hal_LimitBuffer<T>::pop(); }
+    std::optional<T> read() override { return Hal_LimitBuffer<T>::pop(); }
 
     Hal_TeePipe *m_teePipe{};
   };
@@ -253,8 +258,10 @@ private:
         for (auto sp_tps : m_buffers) {
           m_fillBufferCount--;
 
-          T data = sp_tps->read();
-          postProcessingBuffers.push_back(std::move_if_noexcept(data));
+          auto data = sp_tps->read();
+          assert(data);
+
+          postProcessingBuffers.push_back(std::move_if_noexcept(*data));
         }
 
         if (m_postProcessingTaskFn != nullptr) {
