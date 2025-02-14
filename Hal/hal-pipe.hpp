@@ -105,9 +105,9 @@ public:
     }
   }
 
-  void write(T &rItem) override { write(std::move_if_noexcept(rItem)); }
+  void write(T &rItem) override { Hal_Buffer<T>::push(rItem, false); }
 
-  void write(T &&rItem) override { Hal_Buffer<T>::push(rItem); }
+  void write(T &&rItem) override { Hal_Buffer<T>::push(rItem, true); }
 
   void waitForEmpty() {
     long long inboundCount{};

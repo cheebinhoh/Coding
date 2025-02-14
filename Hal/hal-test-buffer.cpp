@@ -43,5 +43,12 @@ int main(int argc, char *argv[]) {
 
   std::cout << "pop int: " << intBuf.pop() << "\n";
 
+  Hal_Buffer<std::string> stringNotMoveBuf{};
+  std::string stringToNotMoveBuf{"not move"};
+  stringNotMoveBuf.push(stringToNotMoveBuf, false);
+  std::string stringFromNotMoveBuf = stringNotMoveBuf.pop();
+  std::cout << "push string: " << stringToNotMoveBuf
+            << ", pop string: " << stringFromNotMoveBuf << "\n";
+
   return 0;
 }

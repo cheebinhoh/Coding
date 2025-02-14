@@ -55,9 +55,13 @@ public:
   Hal_Buffer(const Hal_Buffer<T> &&halBuffer) = delete;
   Hal_Buffer<T> &operator=(Hal_Buffer<T> &&halBuffer) = delete;
 
-  void push(T &rItem) { push(std::move_if_noexcept(rItem)); }
-
   void push(T &&rItem) {
+    T movedItem = std::move_if_noexcept(rItem);
+
+    push(movedItem);
+  }
+
+  void push(T &rItem, bool move = true) {
     int err{};
 
     err = pthread_mutex_lock(&m_mutex);
@@ -67,7 +71,11 @@ public:
 
     pthread_testcancel();
 
-    m_queue.push_back(std::move_if_noexcept(rItem));
+    if (move) {
+      m_queue.push_back(std::move_if_noexcept(rItem));
+    } else {
+      m_queue.push_back(rItem);
+    }
 
     ++m_pushCount;
 
