@@ -2,7 +2,8 @@
 #
 # Old good makefile to help manage compilation.
 
-all : libhal.so hal-test.out hal-test-async.out hal-test-buffer.out hal-test-teepipe.out hal-test-io.out 
+all : libhal.so hal-test.out hal-test-async.out hal-test-buffer.out hal-test-io.out \
+	hal-test-pipe.out hal-test-teepipe.out
 
 libhal.so : hal-async.hpp hal-buffer.hpp hal-io.hpp hal-limit-buffer.hpp hal-pipe.hpp hal-proc.cpp \
 		hal-proc.hpp hal-teepipe.hpp hal.hpp
@@ -18,11 +19,14 @@ hal-test-async.out : hal-test-async.cpp libhal.so
 hal-test-buffer.out : hal-test-buffer.cpp libhal.so
 	g++ -std=c++17 -o $@ hal-test-buffer.cpp -lpthread -L. -lhal
 
-hal-test-teepipe.out : hal-test-teepipe.cpp libhal.so
-	g++ -std=c++17 -o $@ hal-test-teepipe.cpp -L. -lhal
-
 hal-test-io.out : hal-test-io.cpp libhal.so
 	g++ -std=c++17 -o $@ hal-test-io.cpp hal-proc.cpp
+
+hal-test-pipe.out : hal-test-pipe.cpp libhal.so
+	g++ -std=c++17 -o $@ hal-test-pipe.cpp -L. -lhal
+
+hal-test-teepipe.out : hal-test-teepipe.cpp libhal.so
+	g++ -std=c++17 -o $@ hal-test-teepipe.cpp -L. -lhal
 
 # miscallenous
 clean:

@@ -1,13 +1,12 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This class implements an asynchronous execution extension for event-driven
- * model.
+ * This class implements an asynchronous execution extension model.
  *
  * A client class can inherit from Hal_Async or composes an Hal_Async object,
  * and implement the client class API to pass a functor to the Hal_Async object
- * for execution. This will help serialize the execution and avoid any explicit
- * mutex on the client class state and simplify the code.
+ * for execution of the API call. This will help serialize the execution and
+ * avoid any explicit mutex on the client class state and simplify the code.
  */
 
 #ifndef HAL_ASYNC_HPP_HAVE_SEEN
@@ -21,7 +20,7 @@
 
 #define HAL_ASYNC_CALL(block)                                                  \
   do {                                                                         \
-    std::function<void()> functor{[&]() mutable { (block); }};                 \
+    std::function<void()> functor{[&]() mutable { block; }};                   \
     this->write(std::ref(functor));                                            \
   } while (false)
 

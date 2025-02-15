@@ -18,6 +18,7 @@
 #include <cstring>
 #include <deque>
 #include <optional>
+#include <stdexcept>
 
 #include <pthread.h>
 
@@ -61,7 +62,7 @@ public:
    * @brief The method will pop and return front item from the queue or the
    *        caller is blocked waiting if the queue is empty.
    *
-   * @return front item of the queue.
+   * @return front item of the queue
    */
   T pop() override { return *popOptional(true); }
 

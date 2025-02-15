@@ -3,9 +3,13 @@
  *
  * This class implements a fifo pipe that:
  * - write is not blocking
- * - read is blocking and std::nullptr_t if fifo pipe is destroyed
- * - readAndProcess will block and repeatedly run the functor to process
- *   each data read out of the pipe.
+ * - a thread (via Hal_Proc) can be setup to process each item pop out from
+ *   the fifo pipe.
+ * - client can call read() to read the next item pop out of the fifo pipe,
+ *   or blocked waiting for one if the fifo pipe is empty.
+ * - client can call readAndProcess() to read the next item pop out of the
+ *   fifo pipe and invoke the Task to process the item or blocked waiting
+ *   for one if the fifo pipe is empty.
  */
 
 #ifndef HAL_PIPE_HPP_HAVE_SEEN
@@ -65,10 +69,11 @@ public:
 
   /**
    * @brief The method will read and return an item from the pipe or
-   * std::nullopt if the pipe is closed. The read is blocked waiting until data
-   * is available or the pipe is closed.
+   *        std::nullopt if the pipe is closed. The read is blocked waiting
+   *        for next pop out of the pipe.
    *
-   * @return optional item if there is data, or std::nullopt if pipe is closed
+   * @return optional item if there is next item from pipe, or std::nullopt
+   *         if pipe is closed
    */
   std::optional<T> read() override {
     T data{};
@@ -83,10 +88,11 @@ public:
   }
 
   /**
-   * @brief The method read data from pipe and call fn functor to process the
-   *        data, the method is blocked waiting for data from pipe.
+   * @brief The method read the next item pop out of pipe and call fn functor
+   *        to process item, the method is blocked waiting for next item
+   *        from the pipe.
    *
-   * @param fn functor to process data item read out of pipe
+   * @param fn functor to process next item pop out of pipe
    */
   void readAndProcess(Hal_Pipe::Task fn) {
     T &&item = this->pop();
@@ -135,8 +141,9 @@ public:
 
   /**
    * @brief The method will put the client on blocking wait until
-   *        the pipe is emptied, it returns number of items that
-   *        were passed through the pipe in total upon return.
+   *        the pipe is empty and all items have been pop out and processed,
+   *        it returns number of items that were passed through the pipe in
+   *        total upon return.
    *
    * @return The number of items that were passed through the pipe
    *         in total

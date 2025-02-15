@@ -1,12 +1,13 @@
 /**
- * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
  *
  * This class implements an fifo queue that:
  * - push is not blocking
  * - pop is blocking (optional) if no data in the queue
  *
  * There is no programmatic limit on the size of the queue,
- * but memory limit.
+ * but runtime memory limit or size type of the underlying
+ * STL class it uses.
  */
 
 #ifndef HAL_BUFFER_HPP_HAVE_SEEN
@@ -17,6 +18,7 @@
 #include <cassert>
 #include <cstring>
 #include <deque>
+#include <stdexcept>
 
 #include <pthread.h>
 
@@ -42,8 +44,9 @@ public:
   }
 
   virtual ~Hal_Buffer() noexcept try {
-    // RAII! we wake up any thread waiting for the queue in pop method!
+    // RAII! we wake up any thread waiting
     pthread_cond_signal(&m_cond);
+    pthread_cond_signal(&m_emptyCond);
 
     pthread_cond_destroy(&m_emptyCond);
     pthread_cond_destroy(&m_cond);
@@ -60,9 +63,9 @@ public:
 
   /**
    * @brief The method will pop and return front item from the queue or the
-   *        caller is blocked waiting if the queue is empty
+   *        caller is blocked waiting if the queue is empty.
    *
-   * @return front item of the queue.
+   * @return front item of the queue
    */
   virtual T pop() { return *popOptional(true); }
 
@@ -127,8 +130,8 @@ public:
 
   /**
    * @brief The method will put the client on blocking wait until
-   *        the queue is emptied, it returns number of items that
-   *        were passed through the queue in total.
+   *        the queue is empty, it returns number of items that
+   *        were passed through the queue in total upon returning.
    *
    * @return The number of items that were passed through the queue
    *         in total
@@ -210,11 +213,13 @@ protected:
 
     ++m_popCount;
 
-    err = pthread_cond_signal(&m_emptyCond);
-    if (err) {
-      pthread_mutex_unlock(&m_mutex);
+    if (m_queue.empty()) {
+      err = pthread_cond_signal(&m_emptyCond);
+      if (err) {
+        pthread_mutex_unlock(&m_mutex);
 
-      throw std::runtime_error(strerror(err));
+        throw std::runtime_error(strerror(err));
+      }
     }
 
     err = pthread_mutex_unlock(&m_mutex);

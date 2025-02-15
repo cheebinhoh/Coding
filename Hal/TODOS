@@ -1,0 +1,4 @@
+FIXME:
+- we test cancellation at various point, even after holding mutex, we 
+  need to setup pthread_cleanup_push(...) and pthread_cleanup_pop(...)
+  pair.
