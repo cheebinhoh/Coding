@@ -1,2 +1,0 @@
-
-#include "hal-singleton.hpp"
