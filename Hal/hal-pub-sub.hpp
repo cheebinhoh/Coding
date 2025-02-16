@@ -49,9 +49,8 @@ public:
   }
 
   void registerSubscriber(Hal_Sub *sub) {
-    // FIXME: for some reason that we can not use HAL_ASYNC_CALL and the
-    // sub variable is upcast
-    this->write([sub, this]() { this->registerSubscriberInternal(sub); });
+    HAL_ASYNC_CALL_WITH_CAPTURE((this->registerSubscriberInternal(sub)), this,
+                                sub);
   }
 
 protected:

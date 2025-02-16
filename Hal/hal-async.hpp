@@ -20,8 +20,12 @@
 
 #define HAL_ASYNC_CALL(block)                                                  \
   do {                                                                         \
-    std::function<void()> functor{[&]() mutable { block; }};                   \
-    this->write(std::ref(functor));                                            \
+    this->write([&]() mutable { block; });                                     \
+  } while (false)
+
+#define HAL_ASYNC_CALL_WITH_CAPTURE(block, ...)                                \
+  do {                                                                         \
+    this->write([__VA_ARGS__]() mutable { block; });                           \
   } while (false)
 
 class Hal_Async : public Hal_Pipe<std::function<void()>> {
