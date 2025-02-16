@@ -25,7 +25,7 @@
 
 #define HAL_ASYNC_CALL_WITH_CAPTURE(block, ...)                                \
   do {                                                                         \
-    this->write([__VA_ARGS__]() mutable { block; });                           \
+    this->write([__VA_ARGS__]() { block; });                                   \
   } while (false)
 
 class Hal_Async : public Hal_Pipe<std::function<void()>> {

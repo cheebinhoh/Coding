@@ -4,6 +4,7 @@
 
 #include "hal-async.hpp"
 
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -24,7 +25,7 @@ public:
 
   private:
     void notifyInternal(T item) {
-      HAL_ASYNC_CALL({ notify(item); });
+      HAL_ASYNC_CALL_WITH_CAPTURE({ this->notify(item); }, this, item);
     }
   };
 
@@ -34,12 +35,11 @@ public:
     return;
   }
 
-  /**
-   * @brief The method will publish a copy of item all to register subscribers.
-   *        FIXME: performance is a problem if the item is expensive to be
-   * copied.
-   */
   void publish(T item) {
+    // std::function<void()> functor {[this, item](){
+    // this->publishInternal(item); }};
+
+    //  this->write(functor);
     HAL_ASYNC_CALL_WITH_CAPTURE({ this->publishInternal(item); }, this, item);
   }
 

@@ -24,11 +24,12 @@ int main(int argc, char *argv[]) {
   Hal_Msg_Receiver rec2{"receiver 2"};
 
   pub.registerSubscriber(&rec1);
-  std::this_thread::sleep_for(std::chrono::seconds(1));
   pub.registerSubscriber(&rec2);
   pub.publish("hello pub sub");
-  std::this_thread::sleep_for(std::chrono::seconds(1));
   pub.publish("hello world");
+  pub.publish("hello world 3");
+  std::string str1{"string 1"};
+  pub.publish(str1);
 
   pub.waitForEmpty();
   rec1.waitForEmpty();
