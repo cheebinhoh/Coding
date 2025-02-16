@@ -24,10 +24,10 @@ public:
    * working with Publisher.
    *
    * Subscriber should inherit from the Hal_Sub to be notified of any
-   * data item from Hal_Pub (publisher), the Hal_Sub interface methods are
+   * data item from Hal_Pub (publisher), the Hal_Sub interface methods are 
    * called in the Hal_Sub own async thread context.
    *
-   * Subscriber subclass can override notify() method to have specific
+   * Subscriber subclass can override notify() method to have specific 
    * functionality.
    */
   class Hal_Sub : public Hal_Async {
@@ -42,8 +42,8 @@ public:
     }
 
     /**
-     * @brief The method notifies the subscriber of the data item from
-     * publisher, it is called within the subscriber's own async thread context.
+     * @brief The method notifies the subscriber of the data item from publisher,
+     *        it is called within the subscriber's own async thread context.
      *
      * @param item The data item notified by publisher
      */
@@ -84,10 +84,10 @@ public:
 
   /**
    * @brief The method copies the item and publish it to all subscribers. The
-   *        method does not publish message directly but execute it in
-   * Publisher's async thread context, this allows the method to be low-latency
-   *        regardless of the number of subscribers and amount of publishing
-   * data item.
+   *        method does not publish message directly but execute it in Publisher's
+   *        async thread context, this allows the method to be low-latency 
+   *        regardless of the number of subscribers and amount of publishing data
+   *        item.
    *
    * @param item The data item to be published to subscribers
    */
@@ -96,7 +96,7 @@ public:
   }
 
   /**
-   * @brief The method registers a subscriber and send out backtrace data items.
+   * @brief The method copies the item and publish it to all subscribers. The
    *
    * @param sub The subscriber instance to be registered
    */
@@ -120,11 +120,6 @@ public:
     }
   }
 
-  /**
-   * @brief The method de-registers a subscriber.
-   *
-   * @param sub The subscriber instance to be de-registered
-   */
   void unregisterSubscriber(Hal_Sub *sub) {
     std::lock_guard<std::mutex> lck(m_subscribersLock);
     sub->pub = nullptr;
@@ -134,11 +129,6 @@ public:
   }
 
 protected:
-  /**
-   * @brief The method publishes data item to registered subscribers.
-   *
-   * @param item The data item to be published
-   */
   void publishInternal(T item) {
     std::lock_guard<std::mutex> lck(m_subscribersLock);
 
