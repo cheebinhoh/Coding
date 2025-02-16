@@ -1,6 +1,7 @@
 /**
  * This class implements a limited form of publisher subscriber model
  */
+
 #ifndef HAL_PUB_SUB_HPP_HAVE_SEEN
 
 #define HAL_PUB_SUB_HPP_HAVE_SEEN
@@ -85,9 +86,9 @@ public:
   /**
    * @brief The method copies the item and publish it to all subscribers. The
    *        method does not publish message directly but execute it in
-   * Publisher's async thread context, this allows the method to be low-latency
-   *        regardless of the number of subscribers and amount of publishing
-   * data item.
+   *        Publisher's async thread context, this allows the method & caller
+   *        remains low-latency regardless of the number of subscribers and
+   *        amount of publishing data item.
    *
    * @param item The data item to be published to subscribers
    */
@@ -105,6 +106,12 @@ public:
     m_subscribers.push_back(sub);
     sub->pub = this;
 
+    // resend backtrace data items that the registered subscriber
+    // miss.
+    //
+    // FIXME: we might want to add a variable in subscriber to toggle
+    // this part or let subscriber instance instructs how many
+    // data items from past to be sent to it.
     if (m_next > m_first) {
       for (std::size_t n = m_first; n < m_next; n++) {
         sub->notifyInternal(m_buffer[n]);
