@@ -36,6 +36,9 @@ public:
     return;
   }
 
+  /**
+   * @brief The method copy the item and publish it to all subscribers!
+   */
   void publish(T item) {
     HAL_ASYNC_CALL_WITH_CAPTURE({ this->publishInternal(item); }, this, item);
   }
@@ -47,7 +50,9 @@ public:
 
 protected:
   void publishInternal(T item) {
-    // circular ring list
+    /* Keep the published item in circular ring buffer for
+     * efficient access to playback!
+     */
     if (m_next >= SIZE) {
       m_next = 0;
       m_first = (m_first + 1) >= SIZE ? 0 : m_first + 1;
@@ -65,6 +70,20 @@ protected:
 
   void registerSubscriberInternal(Hal_Sub *sub) {
     m_subscribers.push_back(sub);
+
+    if (m_next > m_first) {
+      for (std::size_t n = m_first; n < m_next; n++) {
+        sub->notifyInternal(m_buffer[n]);
+      }
+    } else if (m_first > 0) {
+      for (std::size_t n = m_first; n < SIZE; n++) {
+        sub->notifyInternal(m_buffer[n]);
+      }
+
+      for (std::size_t n = 0; n < m_first; n++) {
+        sub->notifyInternal(m_buffer[n]);
+      }
+    }
   }
 
 private:

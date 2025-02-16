@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
   Hal_Pub<std::string> pub{};
   Hal_Msg_Receiver rec1{"receiver 1"};
   Hal_Msg_Receiver rec2{"receiver 2"};
+  Hal_Msg_Receiver rec3{"receiver 3"};
 
   pub.registerSubscriber(&rec1);
   pub.registerSubscriber(&rec2);
@@ -35,6 +36,8 @@ int main(int argc, char *argv[]) {
   rec1.waitForEmpty();
   rec2.waitForEmpty();
 
+  pub.registerSubscriber(&rec3);
+  rec3.waitForEmpty();
   std::this_thread::sleep_for(std::chrono::seconds(3));
 
   return 0;
