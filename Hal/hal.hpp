@@ -7,6 +7,7 @@
 #include "hal-limit-buffer.hpp"
 #include "hal-pipe.hpp"
 #include "hal-proc.hpp"
+#include "hal-pub-sub.hpp"
 #include "hal-teepipe.hpp"
 
 #endif /* HAL_H_HAVE_SEEN */
