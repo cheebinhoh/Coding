@@ -37,6 +37,22 @@ int main(int argc, char *argv[]) {
   rec2.waitForEmpty();
 
   pub.registerSubscriber(&rec3);
+
+  pub.unregisterSubscriber(&rec1);
+  pub.publish("hello world last");
+
+  {
+    Hal_Msg_Receiver rec4{"receiver 4"};
+    pub.registerSubscriber(&rec4);
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    pub.publish("hello world last again");
+    pub.waitForEmpty();
+    rec4.waitForEmpty();
+  }
+
+  pub.publish("hello world last again again");
+  rec2.waitForEmpty();
   rec3.waitForEmpty();
   std::this_thread::sleep_for(std::chrono::seconds(3));
 

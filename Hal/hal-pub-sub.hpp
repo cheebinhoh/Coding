@@ -7,24 +7,35 @@
 
 #include "hal-async.hpp"
 
+#include <algorithm>
 #include <array>
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <string_view>
 #include <vector>
 
 template <typename T> class Hal_Pub : public Hal_Async {
 public:
+  /**
+   * Subscriber should inherit from the Hal_Sub to be notified of any
+   * message by Hal_Pub (publisher).
+   */
   class Hal_Sub : public Hal_Async {
   public:
     virtual ~Hal_Sub() noexcept try {
+      if (pub) {
+        pub->unregisterSubscriber(this);
+      }
     } catch (...) {
       // explicit return to resolve exception as destructor must be noexcept
       return;
     }
 
+    /**
+     */
     virtual void notify(T item) = 0;
 
     friend class Hal_Pub;
@@ -33,7 +44,10 @@ public:
     void notifyInternal(T item) {
       HAL_ASYNC_CALL_WITH_CAPTURE({ this->notify(item); }, this, item);
     }
+
+    Hal_Pub *pub{};
   };
+  // End of class Hal_Sub
 
   Hal_Pub(std::string_view name, ssize_t capacity = 2)
       : Hal_Async(name), m_name{name}, m_capacity{capacity} {
@@ -41,6 +55,11 @@ public:
   }
 
   virtual ~Hal_Pub() noexcept try {
+    std::lock_guard<std::mutex> lck(m_subscribersLock);
+
+    for (auto &sub : m_subscribers) {
+      sub->pub = nullptr;
+    }
   } catch (...) {
     // explicit return to resolve exception as destructor must be noexcept
     return;
@@ -54,12 +73,37 @@ public:
   }
 
   void registerSubscriber(Hal_Sub *sub) {
-    HAL_ASYNC_CALL_WITH_CAPTURE((this->registerSubscriberInternal(sub)), this,
-                                sub);
+    std::lock_guard<std::mutex> lck(m_subscribersLock);
+    m_subscribers.push_back(sub);
+    sub->pub = this;
+
+    if (m_next > m_first) {
+      for (std::size_t n = m_first; n < m_next; n++) {
+        sub->notifyInternal(m_buffer[n]);
+      }
+    } else if (m_first > 0) {
+      for (std::size_t n = m_first; n < m_capacity; n++) {
+        sub->notifyInternal(m_buffer[n]);
+      }
+
+      for (std::size_t n = 0; n < m_first; n++) {
+        sub->notifyInternal(m_buffer[n]);
+      }
+    }
+  }
+
+  void unregisterSubscriber(Hal_Sub *sub) {
+    std::lock_guard<std::mutex> lck(m_subscribersLock);
+    sub->pub = nullptr;
+    m_subscribers.erase(
+        std::remove(m_subscribers.begin(), m_subscribers.end(), sub),
+        m_subscribers.end());
   }
 
 protected:
   void publishInternal(T item) {
+    std::lock_guard<std::mutex> lck(m_subscribersLock);
+
     /* Keep the published item in circular ring buffer for
      * efficient access to playback!
      */
@@ -78,24 +122,6 @@ protected:
     }
   }
 
-  void registerSubscriberInternal(Hal_Sub *sub) {
-    m_subscribers.push_back(sub);
-
-    if (m_next > m_first) {
-      for (std::size_t n = m_first; n < m_next; n++) {
-        sub->notifyInternal(m_buffer[n]);
-      }
-    } else if (m_first > 0) {
-      for (std::size_t n = m_first; n < m_capacity; n++) {
-        sub->notifyInternal(m_buffer[n]);
-      }
-
-      for (std::size_t n = 0; n < m_first; n++) {
-        sub->notifyInternal(m_buffer[n]);
-      }
-    }
-  }
-
 private:
   /**
    * @brief The method will resize the capacity of the publisher's buffers.
@@ -110,9 +136,11 @@ private:
   std::string m_name{};
   ssize_t m_capacity{};
   std::vector<T> m_buffer{};
+  ssize_t m_first{};
+  ssize_t m_next{};
+
+  std::mutex m_subscribersLock{};
   std::vector<Hal_Sub *> m_subscribers{};
-  std::size_t m_first{};
-  std::size_t m_next{};
 };
 
 #endif /* HAL_PUB_SUB_HPP_HAVE_SEEN */
