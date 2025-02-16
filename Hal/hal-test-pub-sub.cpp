@@ -19,7 +19,7 @@ private:
 };
 
 int main(int argc, char *argv[]) {
-  Hal_Pub<std::string> pub{};
+  Hal_Pub<std::string> pub{"radio", 2};
   Hal_Msg_Receiver rec1{"receiver 1"};
   Hal_Msg_Receiver rec2{"receiver 2"};
   Hal_Msg_Receiver rec3{"receiver 3"};
