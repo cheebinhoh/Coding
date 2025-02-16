@@ -1,4 +1,6 @@
 /**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ *
  * This class implements a limited form of publisher subscriber model
  */
 

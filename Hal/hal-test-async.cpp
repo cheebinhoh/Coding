@@ -9,7 +9,7 @@ public:
   Counter() : Hal_Async{"counter"} {}
 
   void increment() {
-    HAL_ASYNC_CALL({ this->count++; });
+    HAL_ASYNC_CALL_WITH_REF_CAPTURE({ this->count++; });
   }
 
   operator long long() { return count; }

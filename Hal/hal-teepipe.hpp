@@ -1,3 +1,19 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ *
+ * This class implements a tee-pipe structure where multiple clients
+ * can each write data to their dedicated pipe, and data from multiple
+ * input pipes are channed and converged into an output pipe.
+ *
+ * Data from input pipe are processed and feed to output pipe in the
+ * order that it is written into input pipe. If there are two input
+ * pipes, then output pipe will receive one data from each, and the
+ * order of which data from which input file comes first can be
+ * enforced through the PostProcessingTask functor which will see
+ * one data from each input pipe in a vector prior to feeding to
+ * output pipe.
+ */
+
 #ifndef HAL_TEEPIPE_HPP_HAVE_SEEN
 
 #define HAL_TEEPIPE_HPP_HAVE_SEEN
@@ -33,12 +49,12 @@ template <typename T> class Hal_TeePipe : private Hal_Pipe<T> {
 
     ~Hal_TeePipeSource() = default;
 
-    void write(T &rItem) override { write(std::move_if_noexcept(rItem)); }
+    void write(T &item) override { write(std::move_if_noexcept(item)); }
 
-    void write(T &&rItem) override {
+    void write(T &&item) override {
       assert(m_teePipe);
 
-      Hal_LimitBuffer<T>::push(rItem);
+      Hal_LimitBuffer<T>::push(item);
 
       int err = pthread_mutex_lock(&(m_teePipe->m_mutex));
       if (err) {
@@ -65,7 +81,7 @@ template <typename T> class Hal_TeePipe : private Hal_Pipe<T> {
     std::optional<T> read() override { return Hal_LimitBuffer<T>::pop(); }
 
     Hal_TeePipe *m_teePipe{};
-  };
+  }; /* End of class Hal_TeePipeSource */
 
 public:
   Hal_TeePipe(std::string_view name, Hal_TeePipe::Task fn = {},

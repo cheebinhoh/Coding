@@ -1,5 +1,5 @@
 /**
- * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
  *
  * This class implements a fifo queue with a limited capacity that:
  * - push is blocking if the limit of the capacity is reach
@@ -79,10 +79,10 @@ public:
    *        unless noexcept is false. The caller is blocked waiting if the
    *        queue is full.
    *
-   * @param rItem The item to be pushed into queue
+   * @param item The item to be pushed into queue
    */
-  void push(T &&rItem) override {
-    T movedItem = std::move_if_noexcept(rItem);
+  void push(T &&item) override {
+    T movedItem = std::move_if_noexcept(item);
 
     push(movedItem, true);
   }
@@ -92,10 +92,10 @@ public:
    *        if move is true (and noexcept is true). The caller is blocked
    *        waiting if the queue is full.
    *
-   * @param rItem The item to be pushed into queue
+   * @param item The item to be pushed into queue
    * @param move True to use move semantics, else copy semantic
    */
-  void push(T &rItem, bool move = true) override {
+  void push(T &item, bool move = true) override {
     int err{};
 
     err = pthread_mutex_lock(&m_mutex);
@@ -114,7 +114,7 @@ public:
       pthread_testcancel();
     }
 
-    Hal_Buffer<T>::push(rItem, move);
+    Hal_Buffer<T>::push(item, move);
     ++m_size;
 
     err = pthread_cond_signal(&m_popCond);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
  *
  * This class implements a fifo pipe that:
  * - write is not blocking
@@ -97,9 +97,9 @@ public:
   void readAndProcess(Hal_Pipe::Task fn) {
     T &&item = this->pop();
 
-    int errInLoop = pthread_mutex_lock(&m_mutex);
-    if (errInLoop) {
-      throw std::runtime_error(strerror(errInLoop));
+    int err = pthread_mutex_lock(&m_mutex);
+    if (err) {
+      throw std::runtime_error(strerror(err));
     }
 
     pthread_testcancel();
@@ -108,18 +108,18 @@ public:
 
     ++m_count;
 
-    errInLoop = pthread_cond_signal(&m_emptyCond);
-    if (errInLoop) {
+    err = pthread_cond_signal(&m_emptyCond);
+    if (err) {
       pthread_mutex_unlock(&m_mutex);
 
-      throw std::runtime_error(strerror(errInLoop));
+      throw std::runtime_error(strerror(err));
     }
 
     pthread_testcancel();
 
-    errInLoop = pthread_mutex_unlock(&m_mutex);
-    if (errInLoop) {
-      throw std::runtime_error(strerror(errInLoop));
+    err = pthread_mutex_unlock(&m_mutex);
+    if (err) {
+      throw std::runtime_error(strerror(err));
     }
   }
 
@@ -129,15 +129,15 @@ public:
    *
    * @param rItem The data item to be copied into pipe
    */
-  void write(T &rItem) override { Hal_Buffer<T>::push(rItem, false); }
+  void write(T &item) override { Hal_Buffer<T>::push(item, false); }
 
   /**
    * @brief The method will write data into the pipe, the data is moved
    *        into pipe if noexcept.
    *
-   * @param rItem The data item to be moved into pipe
+   * @param item The data item to be moved into pipe
    */
-  void write(T &&rItem) override { Hal_Buffer<T>::push(rItem, true); }
+  void write(T &&item) override { Hal_Buffer<T>::push(item, true); }
 
   /**
    * @brief The method will put the client on blocking wait until

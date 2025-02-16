@@ -20,7 +20,8 @@ public:
   Hal_Event() : Hal_Async{"event manager"} {}
 
   void post(std::string event) {
-    HAL_ASYNC_CALL(std::cout << "Event: " << count++ << ": " << event << "\n");
+    HAL_ASYNC_CALL_WITH_COPY_CAPTURE(std::cout << "Event: " << count++ << ": "
+                                               << event << "\n");
   }
 
 private:

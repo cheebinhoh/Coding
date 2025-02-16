@@ -82,10 +82,10 @@ public:
    * @brief The method will push the item into queue using move semantics
    *        unless noexcept is false.
    *
-   * @param rItem The item to be pushed into queue
+   * @param item The item to be pushed into queue
    */
-  virtual void push(T &&rItem) {
-    T movedItem = std::move_if_noexcept(rItem);
+  virtual void push(T &&item) {
+    T movedItem = std::move_if_noexcept(item);
 
     push(movedItem, true);
   }
@@ -94,10 +94,10 @@ public:
    * @brief The method will push the item into the queue using move semantic
    *        if move is true and noexcept in move.
    *
-   * @param rItem The item to be pushed into queue
+   * @param item The item to be pushed into queue
    * @param move  True to move, else copy semantics
    */
-  virtual void push(T &rItem, bool move = true) {
+  virtual void push(T &item, bool move = true) {
     int err{};
 
     err = pthread_mutex_lock(&m_mutex);
@@ -108,9 +108,9 @@ public:
     pthread_testcancel();
 
     if (move) {
-      m_queue.push_back(std::move_if_noexcept(rItem));
+      m_queue.push_back(std::move_if_noexcept(item));
     } else {
-      m_queue.push_back(rItem);
+      m_queue.push_back(item);
     }
 
     ++m_pushCount;

@@ -1,4 +1,6 @@
 /**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ *
  * This module wraps the native pthread behind an object-oriented class with
  * delegation protocol where variance of thread functionality is achieved
  * by passing a closure (functor) that the thread runs than using inherittance
