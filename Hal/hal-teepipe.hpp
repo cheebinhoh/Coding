@@ -40,6 +40,10 @@ template <typename T> class Hal_TeePipe : private Hal_Pipe<T> {
   using Task = std::function<void(T)>;
   using PostProcessingTask = std::function<void(std::vector<T> &)>;
 
+  /**
+   * This implements the teepipe source that client can write data into
+   * the teepipe structure to send to outbound pipe.
+   */
   class Hal_TeePipeSource : private Hal_LimitBuffer<T>, public Hal_Io<T> {
     friend class Hal_TeePipe<T>;
 
@@ -49,12 +53,37 @@ template <typename T> class Hal_TeePipe : private Hal_Pipe<T> {
 
     ~Hal_TeePipeSource() = default;
 
-    void write(T &item) override { write(std::move_if_noexcept(item)); }
+    /**
+     * @brief The method will copy item to input source pipe to be passed
+     *        through the teepipe structure.
+     *
+     * param item The data item to be copied into input source pipe
+     */
+    void write(T &item) override { write(item, false); }
 
+    /**
+     * @brief The method will move item to input source pipe to be passed
+     *        through the teepipe structure.
+     *
+     * param item The data item to be moved into input source pipe
+     */
     void write(T &&item) override {
+      T movedItem = std::move_if_noexcept(item);
+
+      write(movedItem, true);
+    }
+
+    /**
+     * @brief The method will copy item to input source pipe to be passed
+     *        through the teepipe structure, the item is moved if move is
+     *       true
+     *
+     * param item The data item to be moved or copied into input source pipe
+     */
+    void write(T &item, bool move) {
       assert(m_teePipe);
 
-      Hal_LimitBuffer<T>::push(item);
+      Hal_LimitBuffer<T>::push(item, move);
 
       int err = pthread_mutex_lock(&(m_teePipe->m_mutex));
       if (err) {
@@ -130,6 +159,12 @@ public:
   Hal_TeePipe(const Hal_TeePipe<T> &&halTeePipe) = delete;
   Hal_TeePipe<T> &operator=(Hal_TeePipe<T> &&halTeePipe) = delete;
 
+  /**
+   * @brief The method will create a teepipe source pipe and return it to
+   *        the client to be used to provide data into the teepipe structure.
+   *
+   * @return a shared pointer to newly created teepipe source pipe
+   */
   std::shared_ptr<Hal_TeePipeSource> addHal_TeePipeSource() {
     std::shared_ptr<Hal_TeePipeSource> sp_tpSource{
         std::make_shared<Hal_TeePipeSource>(1, this)};
@@ -158,9 +193,16 @@ public:
     return sp_tpSource;
   }
 
-  void removeHal_TeePipeSource(std::shared_ptr<Hal_TeePipeSource> &sp_tps) {
-    assert(nullptr != sp_tps);
-    assert(this == sp_tps->m_teePipe);
+  /**
+   * @brief The method will remove and delete a teepipe source pipe, all data
+   *        written to the source pipe will be flushed out to the teepipe
+   *        structure outbound pipe.
+   *
+   * @param tps a shared pointer to the teepipe source pipe
+   */
+  void removeHal_TeePipeSource(std::shared_ptr<Hal_TeePipeSource> &tps) {
+    assert(nullptr != tps);
+    assert(this == tps->m_teePipe);
 
     int err = pthread_mutex_lock(&m_mutex);
     if (err) {
@@ -171,12 +213,12 @@ public:
 
     auto iter =
         std::find_if(m_buffers.begin(), m_buffers.end(),
-                     [sp_tps](std::shared_ptr<Hal_TeePipeSource> sp_iterTps) {
-                       return sp_tps.get() == sp_iterTps.get();
+                     [tps](std::shared_ptr<Hal_TeePipeSource> sp_iterTps) {
+                       return tps.get() == sp_iterTps.get();
                      });
 
     if (iter != m_buffers.end()) {
-      while (sp_tps->size() > 0) {
+      while (tps->size() > 0) {
         err = pthread_cond_wait(&m_emptyCond, &m_mutex);
         if (err) {
           throw std::runtime_error(strerror(err));
@@ -186,7 +228,7 @@ public:
       }
 
       m_buffers.erase(iter);
-      sp_tps = {};
+      tps = {};
     }
 
     err = pthread_cond_signal(&m_cond);
@@ -246,8 +288,18 @@ private:
     return Hal_Pipe<T>::waitForEmpty();
   }
 
-  void write(T &rItem) override { Hal_Pipe<T>::write(rItem); }
+  /**
+   * @brief The method moves and writes the data item through teepipe structure
+   *        outbound pipe.
+   *
+   * @param item The data item to be moved through outbound pipe
+   */
+  void write(T &item) override { Hal_Pipe<T>::write(item); }
 
+  /**
+   * @brief The method acts as a conveyorbelt to move data item from all
+   *        input source pipes to outbound pipe.
+   */
   void runConveyorExec() {
     m_conveyor->exec([this]() {
       while (true) {
@@ -271,10 +323,10 @@ private:
 
         std::vector<T> postProcessingBuffers{};
 
-        for (auto sp_tps : m_buffers) {
+        for (auto tps : m_buffers) {
           m_fillBufferCount--;
 
-          auto data = sp_tps->read();
+          auto data = tps->read();
           assert(data);
 
           postProcessingBuffers.push_back(std::move_if_noexcept(*data));
