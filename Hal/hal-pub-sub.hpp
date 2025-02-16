@@ -34,18 +34,13 @@ public:
     return;
   }
 
-  void publish(T &&item) {
-    HAL_ASYNC_CALL({ publishInternal(std::move(item)); });
-  }
-
-  void publish(T &item, bool move = true) {
-    if (move) {
-      HAL_ASYNC_CALL({ publishInternal(std::move_if_noexcept(item)); });
-    } else {
-      T data = item;
-
-      HAL_ASYNC_CALL({ publishInternal(std::move_if_noexcept(data)); });
-    }
+  /**
+   * @brief The method will publish a copy of item all to register subscribers.
+   *        FIXME: performance is a problem if the item is expensive to be
+   * copied.
+   */
+  void publish(T item) {
+    HAL_ASYNC_CALL_WITH_CAPTURE({ this->publishInternal(item); }, this, item);
   }
 
   void registerSubscriber(Hal_Sub *sub) {
@@ -54,7 +49,7 @@ public:
   }
 
 protected:
-  void publishInternal(T &&item) {
+  void publishInternal(T item) {
     for (auto &sub : m_subscribers) {
       sub->notifyInternal(item);
     }
