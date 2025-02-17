@@ -14,12 +14,12 @@
 int main(int argc, char *argv[]) {
   auto inst = Hal_Singleton::createInstance<Hal_Event_Manager>();
 
-  Hal_Proc proc{"exitMainLoop", [inst]() {
-                  std::this_thread::sleep_for(std::chrono::seconds(3));
-                  inst->exitMainLoop();
-                }};
+  // Hal_Proc proc{"exitMainLoop", [inst]() {
+  //                 std::this_thread::sleep_for(std::chrono::seconds(3));
+  //                 inst->exitMainLoop();
+  //               }};
 
-  proc.exec();
+  // proc.exec();
 
   inst->enterMainLoop();
 
