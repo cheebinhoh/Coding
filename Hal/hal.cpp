@@ -9,5 +9,19 @@
 #include "hal.hpp"
 
 #include <iostream>
+#include <thread>
 
-int main(int argc, char *argv[]) { return 0; }
+int main(int argc, char *argv[]) {
+  auto inst = Hal_Singleton::createInstance<Hal_Event_Manager>();
+
+  Hal_Proc proc{"exitMainLoop", [inst]() {
+                  std::this_thread::sleep_for(std::chrono::seconds(3));
+                  inst->exitMainLoop();
+                }};
+
+  proc.exec();
+
+  inst->enterMainLoop();
+
+  return 0;
+}
