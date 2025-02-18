@@ -11,5 +11,6 @@
 #include "hal-pub-sub.hpp"
 #include "hal-singleton.hpp"
 #include "hal-teepipe.hpp"
+#include "hal-timer.hpp"
 
 #endif /* HAL_H_HAVE_SEEN */

@@ -3,11 +3,12 @@
 # Old good makefile to help manage compilation.
 
 all : libhal.so hal.out hal-test.out hal-test-async.out hal-test-buffer.out hal-test-io.out \
-	 hal-test-pipe.out hal-test-pub-sub.out hal-test-singleton.out hal-test-teepipe.out
+	 hal-test-pipe.out hal-test-pub-sub.out hal-test-singleton.out hal-test-teepipe.out \
+         hal-test-timer.out
 
 libhal.so : hal-async.hpp hal-buffer.hpp hal-event.hpp hal-event.cpp hal-io.hpp hal-limit-buffer.hpp \
                 hal-pipe.hpp hal-proc.cpp hal-proc.hpp hal-pub-sub.hpp hal-singleton.hpp \
-                hal-teepipe.hpp hal.hpp
+                hal-teepipe.hpp hal-timer.hpp hal.hpp
 	g++ -std=c++17 -c -fPIC hal-proc.cpp
 	g++ -std=c++17 -c -fPIC hal-event.cpp
 	g++ -std=c++17 hal-proc.o hal-event.o -shared -o libhal.so -lpthread
@@ -38,6 +39,9 @@ hal-test-singleton.out : hal-test-singleton.cpp libhal.so
 
 hal-test-teepipe.out : hal-test-teepipe.cpp libhal.so
 	g++ -std=c++17 -o $@ hal-test-teepipe.cpp -L. -lhal
+
+hal-test-timer.out : hal-test-timer.cpp libhal.so
+	g++ -std=c++17 -o $@ hal-test-timer.cpp -L. -lhal
 
 # miscallenous
 clean:
