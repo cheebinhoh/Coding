@@ -1,3 +1,10 @@
 This repository contains a small hardware abstraction layer
-in c++.
+in c++/c.
 
+The ultimate goal is to implement a cross-platform multicast
+messaging protocol that layered on top of tcp, ip or multicast
+message for application service discovery, message exchanging
+between nodes in a distributed manner.
+
+In a way that done correctly in c++ with good design in code, 
+architecture design, etc.
