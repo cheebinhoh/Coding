@@ -3,23 +3,22 @@
  */
 
 #include "hal-event.hpp"
-
 #include "hal-async.hpp"
-
 #include "hal-proc.hpp"
 
 #include <csignal>
 #include <memory>
 
-sigset_t Hal_Event_Manager::s_mask{};
-std::once_flag Hal_Event_Manager::s_InitOnce{};
+std::once_flag Hal_Event_Manager::s_initOnce{};
 std::shared_ptr<Hal_Event_Manager> Hal_Event_Manager::s_instance{};
+sigset_t Hal_Event_Manager::s_mask{};
 
 Hal_Event_Manager::Hal_Event_Manager()
     : Hal_Singleton{}, Hal_Async{"Hal_Event_Manager"},
       m_mask{Hal_Event_Manager::s_mask} {
   // default and to be overridden if needed
   m_signalHandlers[SIGTERM] = [this](int signo) { this->exitMainLoop(); };
+  m_signalHandlers[SIGINT] = [this](int signo) { this->exitMainLoop(); };
 
   m_signalWaitProc.exec([this]() {
     while (true) {
@@ -34,7 +33,7 @@ Hal_Event_Manager::Hal_Event_Manager()
 
       auto handler = m_signalHandlers.find(signo);
       if (m_signalHandlers.end() == handler) {
-        std::cerr << "Signal number: " << signo << " has no handler\n";
+        // throw exception?
       } else {
         handler->second(signo);
       }
@@ -43,6 +42,7 @@ Hal_Event_Manager::Hal_Event_Manager()
 }
 
 Hal_Event_Manager::~Hal_Event_Manager() noexcept try {
+  this->stopExec();
 } catch (...) {
   // explicit return to resolve exception as destructor must be noexcept
   return;
@@ -75,7 +75,7 @@ void Hal_Event_Manager::enterMainLoop() {
 }
 
 /**
- * @brief The method register signal handler for the signal number. Note that
+ * @brief The method registers signal handler for the signal number. Note that
  *        SIGKILL and SIGSTOP can NOT be handled.
  *
  * @param signo   The POSIX signal number
@@ -89,7 +89,7 @@ void Hal_Event_Manager::registerSignalHandler(int signo,
 }
 
 /**
- * @brief The method register signal handler for the signal number. Note that
+ * @brief The method registers signal handler for the signal number. Note that
  *        SIGKILL and SIGSTOP can NOT be handled. This is private method to be
  *        called in the Hal_Event_Manager instance asynchronous thread context.
  *

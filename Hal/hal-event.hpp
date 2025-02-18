@@ -14,7 +14,6 @@
 
 #include <csignal>
 #include <functional>
-#include <iostream>
 #include <map>
 #include <mutex>
 
@@ -31,24 +30,21 @@ public:
   Hal_Event_Manager(Hal_Event_Manager &&halEventMgr) = delete;
   Hal_Event_Manager &operator=(Hal_Event_Manager &&halEventManager) = delete;
 
-  void exitMainLoop();
-
   void enterMainLoop();
-
+  void exitMainLoop();
   void registerSignalHandler(int signo, SignalHandler handler);
 
   friend class Hal_Singleton;
 
 private:
   void exitMainLoopPrivate();
-
   void registerSignalHandlerPrivate(int signo, SignalHandler handler);
 
   template <class... U>
   static std::shared_ptr<Hal_Event_Manager> createInstanceInternal(U &&...u) {
     if (!Hal_Event_Manager::s_instance) {
       std::call_once(
-          s_InitOnce,
+          s_initOnce,
           [](U &&...arg) {
             // We need to mask off signals before any thread is created, so that
             // all created threads will inherit the same signal mask, and block
@@ -87,9 +83,9 @@ private:
   std::map<int, SignalHandler> m_signalHandlers{};
 
   // static variables for the global singleton instance
+  static std::once_flag s_initOnce;
   static std::shared_ptr<Hal_Event_Manager> s_instance;
   static sigset_t s_mask;
-  static std::once_flag s_InitOnce;
 };
 
 #endif /* HAL_EVENT_HPP_HAVE_SEEN */
