@@ -14,12 +14,22 @@
 int main(int argc, char *argv[]) {
   auto inst = Hal_Singleton::createInstance<Hal_Event_Manager>();
 
-  // Hal_Proc proc{"exitMainLoop", [inst]() {
-  //                 std::this_thread::sleep_for(std::chrono::seconds(3));
-  //                 inst->exitMainLoop();
-  //               }};
+  // for TESTING
+  Hal_Proc proc{
+      "exitMainLoop", [&inst]() {
+        std::cout
+            << "sleep 10 seconds before setting handler for SIGTERM to exit\n";
+        std::this_thread::sleep_for(std::chrono::seconds(10));
+        std::cout << "set signal handler to exit mainloop in respond to "
+                  << SIGTERM << "\n";
 
-  // proc.exec();
+        inst->registerSignalHandler(SIGTERM, [&inst](int signo) {
+          std::cout << "exit mainloop\n";
+          inst->exitMainLoop();
+        });
+      }};
+
+  proc.exec();
 
   inst->enterMainLoop();
 

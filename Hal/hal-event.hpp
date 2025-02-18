@@ -1,8 +1,12 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ *
+ * This class implements singleton instance to manage POSIX signal, timer
+ * and programatic events in general.
  */
 
 #ifndef HAL_EVENT_HPP_HAVE_SEEN
+
 #define HAL_EVENT_HPP_HAVE_SEEN
 
 #include "hal-async.hpp"
@@ -15,18 +19,30 @@
 #include <mutex>
 
 class Hal_Event_Manager : public Hal_Singleton, Hal_Async {
+  using SignalHandler = std::function<void(int signo)>;
+
 public:
   Hal_Event_Manager();
-  virtual ~Hal_Event_Manager();
+  virtual ~Hal_Event_Manager() noexcept;
+
+  Hal_Event_Manager(const Hal_Event_Manager &halEventMgr) = delete;
+  const Hal_Event_Manager &
+  operator=(const Hal_Event_Manager &halEventMgr) = delete;
+  Hal_Event_Manager(Hal_Event_Manager &&halEventMgr) = delete;
+  Hal_Event_Manager &operator=(Hal_Event_Manager &&halEventManager) = delete;
 
   void exitMainLoop();
 
   void enterMainLoop();
 
+  void registerSignalHandler(int signo, SignalHandler handler);
+
   friend class Hal_Singleton;
 
 private:
   void exitMainLoopPrivate();
+
+  void registerSignalHandlerPrivate(int signo, SignalHandler handler);
 
   template <class... U>
   static std::shared_ptr<Hal_Event_Manager> createInstanceInternal(U &&...u) {
@@ -34,18 +50,24 @@ private:
       std::call_once(
           s_InitOnce,
           [](U &&...arg) {
-            // FIXME: duplicated code
+            // We need to mask off signals before any thread is created, so that
+            // all created threads will inherit the same signal mask, and block
+            // the signals.
+            //
+            // We can NOT sigmask the signals in Hal_Event_Manager constructor
+            // as its parent class Hal_Async thread has been created by the time
+            // the Hal_Event_Manager constructor is run.
             sigset_t oldmask{};
-            sigset_t mask{};
             int err{};
 
-            sigemptyset(&mask);
-            sigaddset(&mask, SIGINT);
-            sigaddset(&mask, SIGTERM);
-            sigaddset(&mask, SIGQUIT);
-            sigaddset(&mask, SIGHUP);
+            sigemptyset(&Hal_Event_Manager::s_mask);
+            sigaddset(&Hal_Event_Manager::s_mask, SIGINT);
+            sigaddset(&Hal_Event_Manager::s_mask, SIGTERM);
+            sigaddset(&Hal_Event_Manager::s_mask, SIGQUIT);
+            sigaddset(&Hal_Event_Manager::s_mask, SIGHUP);
 
-            err = pthread_sigmask(SIG_BLOCK, &mask, &oldmask);
+            err = pthread_sigmask(SIG_BLOCK, &Hal_Event_Manager::s_mask,
+                                  &oldmask);
             if (0 != err) {
               throw std::runtime_error("Error in pthread_sigmask: " +
                                        std::string(strerror(errno)));
@@ -62,9 +84,11 @@ private:
 
   Hal_Proc m_signalWaitProc{"HalEventManager_SignalWait"};
   sigset_t m_mask{};
-  std::map<int, std::function<void()>> m_signalHandlers{};
+  std::map<int, SignalHandler> m_signalHandlers{};
 
+  // static variables for the global singleton instance
   static std::shared_ptr<Hal_Event_Manager> s_instance;
+  static sigset_t s_mask;
   static std::once_flag s_InitOnce;
 };
 

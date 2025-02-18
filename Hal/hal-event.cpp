@@ -11,24 +11,15 @@
 #include <csignal>
 #include <memory>
 
+sigset_t Hal_Event_Manager::s_mask{};
 std::once_flag Hal_Event_Manager::s_InitOnce{};
 std::shared_ptr<Hal_Event_Manager> Hal_Event_Manager::s_instance{};
 
 Hal_Event_Manager::Hal_Event_Manager()
-    : Hal_Singleton{}, Hal_Async{"Hal_Event_Manager"} {
-  sigset_t oldmask{};
-  int err{};
-
-  sigemptyset(&m_mask);
-  sigaddset(&m_mask, SIGINT);
-  sigaddset(&m_mask, SIGTERM);
-  sigaddset(&m_mask, SIGQUIT);
-  sigaddset(&m_mask, SIGHUP);
-
-  m_signalHandlers[SIGTERM] = [this]() {
-    std::cout << "exit main loop\n";
-    this->exitMainLoop();
-  };
+    : Hal_Singleton{}, Hal_Async{"Hal_Event_Manager"},
+      m_mask{Hal_Event_Manager::s_mask} {
+  // default and to be overridden if needed
+  m_signalHandlers[SIGTERM] = [this](int signo) { this->exitMainLoop(); };
 
   m_signalWaitProc.exec([this]() {
     while (true) {
@@ -45,21 +36,67 @@ Hal_Event_Manager::Hal_Event_Manager()
       if (m_signalHandlers.end() == handler) {
         std::cerr << "Signal number: " << signo << " has no handler\n";
       } else {
-        handler->second();
+        handler->second(signo);
       }
     }
   });
 }
 
-Hal_Event_Manager::~Hal_Event_Manager() {}
+Hal_Event_Manager::~Hal_Event_Manager() noexcept try {
+} catch (...) {
+  // explicit return to resolve exception as destructor must be noexcept
+  return;
+}
 
+/**
+ * @brief The method will exit the Hal_Event_Manager mainloop, returns control
+ *        (usually the mainthread) to the main() function to be continued.
+ */
 void Hal_Event_Manager::exitMainLoop() {
   HAL_ASYNC_CALL_WITH_REF_CAPTURE({ this->exitMainLoopPrivate(); });
 }
 
+/**
+ * @brief The method will exit the Hal_Event_Manager mainloop, returns control
+ *        (usually the mainthread) to the main() function to be continued.
+ *        This is private method to be called in the Hal_Event_Manager instance
+ *        asynchronous thread context.
+ */
+void Hal_Event_Manager::exitMainLoopPrivate() { this->stopExec(); }
+
+/**
+ * @brief The method will enter the Hal_Event_Manager mainloop, and wait
+ *        for event loop to be exited. this is usually called by the main()
+ *        method.
+ */
 void Hal_Event_Manager::enterMainLoop() {
   Hal_Proc::yield();
   this->wait();
 }
 
-void Hal_Event_Manager::exitMainLoopPrivate() { this->stopExec(); }
+/**
+ * @brief The method register signal handler for the signal number. Note that
+ *        SIGKILL and SIGSTOP can NOT be handled.
+ *
+ * @param signo   The POSIX signal number
+ * @param handler The signal handler to be called when the signal is raised.
+ */
+void Hal_Event_Manager::registerSignalHandler(int signo,
+                                              SignalHandler handler) {
+  HAL_ASYNC_CALL_WITH_CAPTURE(
+      { this->registerSignalHandlerPrivate(signo, handler); }, this, signo,
+      handler);
+}
+
+/**
+ * @brief The method register signal handler for the signal number. Note that
+ *        SIGKILL and SIGSTOP can NOT be handled. This is private method to be
+ *        called in the Hal_Event_Manager instance asynchronous thread context.
+ *
+ * @param signo   The POSIX signal number
+ * @param handler The signal handler to be called when the signal is raised.
+ */
+void Hal_Event_Manager::registerSignalHandlerPrivate(int signo,
+                                                     SignalHandler handler) {
+  m_signalHandlers[signo] = handler;
+}

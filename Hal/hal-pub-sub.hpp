@@ -35,6 +35,8 @@ public:
    */
   class Hal_Sub : public Hal_Async {
   public:
+    Hal_Sub() = default;
+
     virtual ~Hal_Sub() noexcept try {
       if (pub) {
         pub->unregisterSubscriber(this);
@@ -43,6 +45,11 @@ public:
       // explicit return to resolve exception as destructor must be noexcept
       return;
     }
+
+    Hal_Sub(const Hal_Sub &halSub) = delete;
+    const Hal_Sub &operator=(const Hal_Sub &halSub) = delete;
+    Hal_Sub(Hal_Sub &&halSub) = delete;
+    Hal_Sub &operator=(Hal_Sub &&halSub) = delete;
 
     /**
      * @brief The method notifies the subscriber of the data item from
@@ -84,6 +91,11 @@ public:
     // explicit return to resolve exception as destructor must be noexcept
     return;
   }
+
+  Hal_Pub(const Hal_Pub &halPub) = delete;
+  const Hal_Pub &operator=(const Hal_Pub &halPub) = delete;
+  Hal_Pub(Hal_Pub &&halPub) = delete;
+  Hal_Pub &operator=(Hal_Pub &&halPub) = delete;
 
   /**
    * @brief The method copies the item and publish it to all subscribers. The
