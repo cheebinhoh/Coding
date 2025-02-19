@@ -17,7 +17,7 @@
 #include <map>
 #include <mutex>
 
-class Hal_Event_Manager : public Hal_Singleton, Hal_Async {
+class Hal_Event_Manager : public Hal_Singleton, private Hal_Async {
   using SignalHandler = std::function<void(int signo)>;
 
 public:
