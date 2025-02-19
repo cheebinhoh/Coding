@@ -10,6 +10,28 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(hal)
 
 include(CMakeMacro.cmake)
+include(FetchContent)
+
+#FetchContent_Declare(
+#  googletest
+#  GIT_REPOSITORY https://github.com/google/googletest.git
+#  GIT_TAG        v1.14.0 # Replace with desired tag/branch/commit
+#)
+
+#FetchContent_MakeAvailable(googletest)
+
+#add_subdirectory(${googletest_SOURCE_DIR})
+
+#FetchContent_Declare(
+#  protobuf
+#  GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
+#  GIT_TAG v30.0-rc1 # Replace with desired version
+#)
+
+#FetchContent_MakeAvailable(protobuf)
+
+#find_package(protobuf REQUIRED)
+
 
 add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
