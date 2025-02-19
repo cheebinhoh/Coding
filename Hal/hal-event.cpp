@@ -17,8 +17,10 @@ Hal_Event_Manager::Hal_Event_Manager()
     : Hal_Singleton{}, Hal_Async{"Hal_Event_Manager"},
       m_mask{Hal_Event_Manager::s_mask} {
   // default and to be overridden if needed
-  m_signalHandlers[SIGTERM] = [this](int signo) { this->exitMainLoop(); };
-  m_signalHandlers[SIGINT] = [this](int signo) { this->exitMainLoop(); };
+  m_signalHandlers[SIGTERM] = [this](int signo) {
+    this->exitMainLoopPrivate();
+  };
+  m_signalHandlers[SIGINT] = [this](int signo) { this->exitMainLoopPrivate(); };
 
   m_signalWaitProc.exec([this]() {
     while (true) {
@@ -35,7 +37,9 @@ Hal_Event_Manager::Hal_Event_Manager()
       if (m_signalHandlers.end() == handler) {
         // throw exception?
       } else {
-        handler->second(signo);
+        // all handlers are called in asynct thread context
+        HAL_ASYNC_CALL_WITH_CAPTURE({ fn(signo); }, fn = handler->second,
+                                    signo);
       }
     }
   });
