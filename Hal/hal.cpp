@@ -17,16 +17,12 @@ int main(int argc, char *argv[]) {
   // for TESTING
   Hal_Proc proc{
       "exitMainLoop", [&inst]() {
-        std::cout
-            << "sleep 10 seconds before setting handler for SIGTERM to exit\n";
+        std::cout << "sleep 10 seconds before setting handler for SIGTERM\n";
         std::this_thread::sleep_for(std::chrono::seconds(10));
-        std::cout << "set signal handler to exit mainloop in respond to "
-                  << SIGTERM << "\n";
+        std::cout << "set signal handler to respond to " << SIGTERM << "\n";
 
-        inst->registerSignalHandler(SIGTERM, [&inst](int signo) {
-          std::cout << "exit mainloop\n";
-          inst->exitMainLoop();
-        });
+        inst->registerSignalHandler(
+            SIGTERM, [&inst](int signo) { std::cout << "handling SIGTERM\n"; });
       }};
 
   proc.exec();

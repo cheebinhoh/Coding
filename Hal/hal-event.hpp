@@ -39,6 +39,7 @@ public:
 private:
   void exitMainLoopPrivate();
   void registerSignalHandlerPrivate(int signo, SignalHandler handler);
+  void execSignalHandlerPrivate(int signo);
 
   template <class... U>
   static std::shared_ptr<Hal_Event_Manager> createInstanceInternal(U &&...u) {
@@ -81,6 +82,7 @@ private:
   Hal_Proc m_signalWaitProc{"HalEventManager_SignalWait"};
   sigset_t m_mask{};
   std::map<int, SignalHandler> m_signalHandlers{};
+  std::map<int, std::vector<SignalHandler>> m_extSignalHandlers{};
 
   // static variables for the global singleton instance
   static std::once_flag s_initOnce;

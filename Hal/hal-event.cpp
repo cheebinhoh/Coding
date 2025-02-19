@@ -7,6 +7,7 @@
 #include "hal-proc.hpp"
 
 #include <csignal>
+#include <iostream>
 #include <memory>
 
 std::once_flag Hal_Event_Manager::s_initOnce{};
@@ -20,6 +21,7 @@ Hal_Event_Manager::Hal_Event_Manager()
   m_signalHandlers[SIGTERM] = [this](int signo) {
     this->exitMainLoopPrivate();
   };
+
   m_signalHandlers[SIGINT] = [this](int signo) { this->exitMainLoopPrivate(); };
 
   m_signalWaitProc.exec([this]() {
@@ -33,14 +35,8 @@ Hal_Event_Manager::Hal_Event_Manager()
                                  std::string(strerror(errno)));
       }
 
-      auto handler = m_signalHandlers.find(signo);
-      if (m_signalHandlers.end() == handler) {
-        // throw exception?
-      } else {
-        // all handlers are called in asynct thread context
-        HAL_ASYNC_CALL_WITH_CAPTURE({ fn(signo); }, fn = handler->second,
-                                    signo);
-      }
+      HAL_ASYNC_CALL_WITH_CAPTURE({ this->execSignalHandlerPrivate(signo); },
+                                  this, signo);
     }
   });
 }
@@ -79,6 +75,25 @@ void Hal_Event_Manager::enterMainLoop() {
 }
 
 /**
+ * @brief The method executes the signal handlers in asynchronous thread context
+ *
+ * @param signo signal number that is raised
+ */
+void Hal_Event_Manager::execSignalHandlerPrivate(int signo) {
+  auto extHandlers = m_extSignalHandlers.find(signo);
+  if (m_extSignalHandlers.end() != extHandlers) {
+    for (auto &handler : extHandlers->second) {
+      handler(signo);
+    }
+  }
+
+  auto handler = m_signalHandlers.find(signo);
+  if (m_signalHandlers.end() != handler) {
+    handler->second(signo);
+  }
+}
+
+/**
  * @brief The method registers signal handler for the signal number. Note that
  *        SIGKILL and SIGSTOP can NOT be handled.
  *
@@ -93,14 +108,17 @@ void Hal_Event_Manager::registerSignalHandler(int signo,
 }
 
 /**
- * @brief The method registers signal handler for the signal number. Note that
- *        SIGKILL and SIGSTOP can NOT be handled. This is private method to be
- *        called in the Hal_Event_Manager instance asynchronous thread context.
+ * @brief The method registers external signal handler for the signal number.
+ * The external signal handlers are executed before default handler from
+ *        Hal_Event_Manager. Note that SIGKILL and SIGSTOP can NOT be handled.
+ *        This is private method to be called in the Hal_Event_Manager instance
+ *        asynchronous thread context.
  *
  * @param signo   The POSIX signal number
  * @param handler The signal handler to be called when the signal is raised.
  */
 void Hal_Event_Manager::registerSignalHandlerPrivate(int signo,
                                                      SignalHandler handler) {
-  m_signalHandlers[signo] = handler;
+  auto &extHandlers = m_extSignalHandlers[signo];
+  extHandlers.push_back(handler);
 }
