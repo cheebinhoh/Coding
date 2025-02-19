@@ -1,0 +1,9 @@
+ADD_TEST_EXECUTABLE(hal-test-async
+                    hal-test-buffer
+                    hal-test-io
+                    hal-test-pipe
+                    hal-test-pub-sub
+                    hal-test-singleton
+                    hal-test-teepipe
+                    hal-test-timer
+                    hal-test)

@@ -16,8 +16,6 @@ all : bigo-sample.out btree-test.out btreebltraverse.out btreebuild.out btreeide
 	cd C++ && make all
 	@echo
 	cd Linux && make all
-	@echo
-	cd Hal && make all
 
 # libraries
 libbtree.so : btree-internal.h btree.h btree.c avlbstree.h avlbstree.c llist.h llist-internal.h llist.c
@@ -161,8 +159,6 @@ clean:
 	cd C++ && make clean
 	@echo
 	cd Linux && make clean
-	@echo
-	cd Hal && make clean
 
 test: all
 	@echo

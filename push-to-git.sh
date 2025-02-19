@@ -74,6 +74,10 @@ fi
 
 # test build, we do not want to check in things that break
 echo "build check..."
+if [ -f CMakeLists.txt ] ; then
+  cmake .
+fi
+
 make >/dev/null || exit 1
 
 # clean up build, we do not want to check in binary
