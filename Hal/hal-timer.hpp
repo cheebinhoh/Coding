@@ -2,7 +2,7 @@
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
  * This module a watchdog or timer that executes a callback function
- * repeatedly.
+ * repeatedly after certain duration.
  */
 
 #ifndef HAL_TIMER_HPP_HAVE_SEEN
@@ -30,7 +30,8 @@ public:
 
   /**
    * @brief The method starts the timer that executes fn repeatedly after
-   *        every reltime interval.
+   *        every reltime interval. Any existing timer is stopped before
+   *        the new timer is started.
    *
    * @param reltime The std::chrono::duration timer
    * @param fn The functor to be run by timer

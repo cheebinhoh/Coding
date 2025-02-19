@@ -6,5 +6,5 @@ messaging protocol that layered on top of tcp, ip or multicast
 message for application service discovery, message exchanging
 between nodes in a distributed manner.
 
-In a way that done correctly in c++ with good design in code, 
-architecture design, etc.
+In a way that done correctly in c++ with good design (more delegation),
+asynchronous execution for low latency and clean code.
