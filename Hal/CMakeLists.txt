@@ -12,15 +12,15 @@ project(hal)
 include(CMakeMacro.cmake)
 include(FetchContent)
 
-#FetchContent_Declare(
-#  googletest
-#  GIT_REPOSITORY https://github.com/google/googletest.git
-#  GIT_TAG        v1.14.0 # Replace with desired tag/branch/commit
-#)
+enable_testing()
 
-#FetchContent_MakeAvailable(googletest)
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        v1.14.0
+)
 
-#add_subdirectory(${googletest_SOURCE_DIR})
+FetchContent_MakeAvailable(googletest)
 
 #FetchContent_Declare(
 #  protobuf
@@ -29,9 +29,6 @@ include(FetchContent)
 #)
 
 #FetchContent_MakeAvailable(protobuf)
-
-#find_package(protobuf REQUIRED)
-
 
 add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp

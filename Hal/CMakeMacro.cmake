@@ -7,6 +7,10 @@ macro(ADD_TEST_EXECUTABLE ...)
 
     target_link_libraries(${arg}
                           PRIVATE
+                          gtest_main
+                          gtest
                           hal)
+
+    add_test(NAME ${arg} COMMAND ${arg})
   endforeach()
 endmacro()

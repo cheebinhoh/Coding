@@ -1,5 +1,7 @@
 #include "hal-pub-sub.hpp"
 
+#include <gtest/gtest.h>
+
 #include <iostream>
 #include <string>
 #include <thread>
@@ -19,6 +21,8 @@ private:
 };
 
 int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
+
   Hal_Pub<std::string> pub{"radio", 2};
   Hal_Msg_Receiver rec1{"receiver 1"};
   Hal_Msg_Receiver rec2{"receiver 2"};
@@ -56,5 +60,5 @@ int main(int argc, char *argv[]) {
   rec3.waitForEmpty();
   std::this_thread::sleep_for(std::chrono::seconds(3));
 
-  return 0;
+  return RUN_ALL_TESTS();
 }

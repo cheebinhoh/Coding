@@ -1,6 +1,7 @@
 #include "hal-async.hpp"
 #include "hal-proc.hpp"
 
+#include <gtest/gtest.h>
 #include <iostream>
 #include <thread>
 
@@ -19,6 +20,8 @@ private:
 };
 
 int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
+
   Counter cnt{};
   Hal_Proc proc1{"proc1", [&cnt]() {
                    for (int n = 0; n < 100; n++) {
@@ -37,7 +40,7 @@ int main(int argc, char *argv[]) {
   proc1.exec();
   proc2.exec();
   std::this_thread::sleep_for(std::chrono::seconds(5));
-  std::cout << static_cast<long long>(cnt) << "\n";
+  EXPECT_TRUE(static_cast<long long>(cnt) == 200);
 
-  return 0;
+  return RUN_ALL_TESTS();
 }

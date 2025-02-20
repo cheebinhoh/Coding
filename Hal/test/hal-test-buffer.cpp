@@ -1,16 +1,22 @@
 #include "hal-pipe.hpp"
 #include "hal-proc.hpp"
 
+#include <gtest/gtest.h>
 #include <iostream>
 #include <memory>
 #include <thread>
 
 int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
   using namespace std::string_literals;
 
   auto buf = std::make_unique<Hal_Buffer<std::string>>();
   auto proc = std::make_unique<Hal_Proc>("proc", [&buf]() {
+    static std::vector<std::string> result{"hello", "abc"};
+    static int index {};
+
     auto s = buf->pop();
+    EXPECT_TRUE(s == result[index++]);
     std::cout << "value pop: " << s << "\n";
   });
 
@@ -41,14 +47,15 @@ int main(int argc, char *argv[]) {
   Hal_Buffer<int> intBuf{};
   intBuf.push(2);
 
-  std::cout << "pop int: " << intBuf.pop() << "\n";
+  EXPECT_TRUE(2 == intBuf.pop());
 
   Hal_Buffer<std::string> stringNotMoveBuf{};
   std::string stringToNotMoveBuf{"not move"};
   stringNotMoveBuf.push(stringToNotMoveBuf, false);
   std::string stringFromNotMoveBuf = stringNotMoveBuf.pop();
-  std::cout << "push string: " << stringToNotMoveBuf
-            << ", pop string: " << stringFromNotMoveBuf << "\n";
 
-  return 0;
+  EXPECT_TRUE("not move" == stringFromNotMoveBuf);
+  EXPECT_TRUE("not move" == stringToNotMoveBuf);
+
+  return RUN_ALL_TESTS();
 }

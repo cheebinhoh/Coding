@@ -1,4 +1,5 @@
-ADD_TEST_EXECUTABLE(hal-test-async
+ADD_TEST_EXECUTABLE(hal
+                    hal-test-async
                     hal-test-buffer
                     hal-test-io
                     hal-test-pipe
@@ -7,3 +8,4 @@ ADD_TEST_EXECUTABLE(hal-test-async
                     hal-test-teepipe
                     hal-test-timer
                     hal-test)
+
