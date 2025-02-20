@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ */
+
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
@@ -6,6 +10,7 @@
 #include <map>
 #include <mutex>
 
+#include <gtest/gtest.h>
 #include <pthread.h>
 #include <thread>
 #include <unistd.h>
@@ -22,6 +27,8 @@ std::mutex log_mutex{};
   } while (0)
 
 int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
+
   using std::chrono::high_resolution_clock;
   using std::chrono::system_clock;
 
@@ -56,19 +63,18 @@ int main(int argc, char *argv[]) {
       "staging_input",
       [&filter_pipe](std::string item) { filter_pipe.write(item); }};
 
+  int sensor_input_i{0};
   sensor_input.exec([&staging_pipe, input_to_sleep_use_ns,
                      input_to_sleep_nanoseconds, input_to_sleep_milliseconds,
-                     input_to_run_seconds]() {
-    int i{0};
-
+                     input_to_run_seconds, &sensor_input_i]() {
     system_clock::time_point start = system_clock::now();
 
     while (true) {
       std::string item =
-          "sensor_input: " + std::to_string(i) + ": " + std::string(2000, 'x');
+          "sensor_input: " + std::to_string(sensor_input_i) + ": " + std::string(2000, 'x');
       staging_pipe.write(item);
 
-      i++;
+      sensor_input_i++;
 
       if (input_to_sleep_use_ns) {
         std::this_thread::sleep_for(
@@ -84,21 +90,20 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    safethread_log(std::cout << "sensor input: end: " << i << "\n");
+    safethread_log(std::cout << "sensor input: end: " << sensor_input_i << "\n");
   });
 
+  int gps_input_i{0};
   gps_input.exec([&staging_pipe, input_to_sleep_use_ns,
                   input_to_sleep_nanoseconds, input_to_sleep_milliseconds,
-                  input_to_run_seconds]() {
-    int i{0};
-
+                  input_to_run_seconds, &gps_input_i]() {
     system_clock::time_point start = system_clock::now();
 
     while (true) {
-      std::string item = "gps_input: " + std::to_string(i) + ": data";
+      std::string item = "gps_input: " + std::to_string(gps_input_i) + ": data";
       staging_pipe.write(item);
 
-      i++;
+      gps_input_i++;
 
       if (input_to_sleep_use_ns) {
         std::this_thread::sleep_for(
@@ -115,21 +120,20 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    safethread_log(std::cout << "gps_input: end: " << i << "\n");
+    safethread_log(std::cout << "gps_input: end: " << gps_input_i << "\n");
   });
 
+  int imu_input_i{0};
   imu_input.exec([&staging_pipe, input_to_sleep_use_ns,
                   input_to_sleep_nanoseconds, input_to_sleep_milliseconds,
-                  input_to_run_seconds]() {
-    int i{0};
-
+                  input_to_run_seconds, &imu_input_i]() {
     system_clock::time_point start = system_clock::now();
 
     while (true) {
-      std::string item = "imu_input: " + std::to_string(i) + ": data";
+      std::string item = "imu_input: " + std::to_string(imu_input_i) + ": data";
       staging_pipe.write(item);
 
-      i++;
+      imu_input_i++;
 
       if (input_to_sleep_use_ns) {
         std::this_thread::sleep_for(
@@ -146,21 +150,21 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    safethread_log(std::cout << "imu_input: end: " << i << "\n");
+    safethread_log(std::cout << "imu_input: end: " << imu_input_i << "\n");
   });
 
+  int ext_input_i{0};
   ext_input.exec([&staging_pipe, input_to_sleep_use_ns,
                   input_to_sleep_nanoseconds, input_to_sleep_milliseconds,
-                  input_to_run_seconds]() {
-    int i{0};
+                  input_to_run_seconds, &ext_input_i]() {
 
     system_clock::time_point start = system_clock::now();
 
     while (true) {
-      std::string item = "ext_input: " + std::to_string(i) + ": data";
+      std::string item = "ext_input: " + std::to_string(ext_input_i) + ": data";
       staging_pipe.write(item);
 
-      i++;
+      ext_input_i++;
 
       if (input_to_sleep_use_ns) {
         std::this_thread::sleep_for(
@@ -177,7 +181,7 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    safethread_log(std::cout << "ext_input: end: " << i << "\n");
+    safethread_log(std::cout << "ext_input: end: " << ext_input_i << "\n");
   });
 
   safethread_log(std::cout << "Before mainloop\n");
@@ -188,12 +192,24 @@ int main(int argc, char *argv[]) {
     for (auto &pair : input_cnt) {
       safethread_log(std::cout << "source: " << pair.first
                                << ", cnt: " << pair.second << "\n");
+
+      if (pair.first == "gps_input") {
+        EXPECT_TRUE(gps_input_i == pair.second);
+      }
+      else if (pair.first == "ext_input") {
+        EXPECT_TRUE(ext_input_i == pair.second);
+      }
+      else if (pair.first == "imu_input") {
+        EXPECT_TRUE(imu_input_i == pair.second);
+      }
+      else if (pair.first == "sensor_input") {
+        EXPECT_TRUE(sensor_input_i == pair.second);
+      }
     }
 
     break;
   }
 
   // Hal_Proc and Hal_Pipe will be destroyed and display statistics
-
-  return 0;
+  return RUN_ALL_TESTS();
 }

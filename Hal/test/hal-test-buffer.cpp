@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ */
+
 #include "hal-pipe.hpp"
 #include "hal-proc.hpp"
 
@@ -23,6 +27,7 @@ int main(int argc, char *argv[]) {
   std::string value{"hello"};
 
   buf->push(value);
+  EXPECT_TRUE(value == "");
 
   proc->exec();
 

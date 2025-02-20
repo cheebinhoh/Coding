@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ */
+
 #include "hal-async.hpp"
 #include "hal-proc.hpp"
 
@@ -40,6 +44,7 @@ int main(int argc, char *argv[]) {
   proc1.exec();
   proc2.exec();
   std::this_thread::sleep_for(std::chrono::seconds(5));
+
   EXPECT_TRUE(static_cast<long long>(cnt) == 200);
 
   return RUN_ALL_TESTS();

@@ -30,6 +30,7 @@ FetchContent_MakeAvailable(googletest)
 
 #FetchContent_MakeAvailable(protobuf)
 
+# build hardware abstraction layer library
 add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.cpp
@@ -56,8 +57,10 @@ target_include_directories(hal
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# run unit test
 add_subdirectory(test)
 
+# build executable that uses hal
 add_executable(hal-dm
                hal-dm.cpp)
 

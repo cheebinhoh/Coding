@@ -1,4 +1,6 @@
 /**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ *
  * This is a test file for teepipe that two threads are reading data and feed
  * into teepipe that will sort the data and make sure that it is processed
  * in order, if the data already sorted in the source data, the teepipe will
@@ -8,6 +10,7 @@
 #include "hal-proc.hpp"
 #include "hal-teepipe.hpp"
 
+#include <gtest/gtest.h>
 #include <chrono>
 #include <iostream>
 #include <memory>
@@ -19,6 +22,7 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
   std::vector<std::string> files{"./teepipe-test-data-1.txt",
                                  "./teepipe-test-data-2.txt"};
   Hal_TeePipe<long> tpipe{
@@ -83,5 +87,5 @@ int main(int argc, char *argv[]) {
 
   tpipe.waitForEmpty();
 
-  return 0;
+  return RUN_ALL_TESTS();
 }

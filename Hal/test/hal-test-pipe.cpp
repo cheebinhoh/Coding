@@ -1,9 +1,15 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ */
+
 #include "hal-pipe.hpp"
 
+#include <gtest/gtest.h>
 #include <iostream>
 #include <thread>
 
 int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
   long cnt{};
 
   Hal_Pipe<long> pipe{"pipe", [&cnt](long val) {
@@ -18,7 +24,7 @@ int main(int argc, char *argv[]) {
 
   std::cout << "Before wait for empty\n";
   pipe.waitForEmpty();
-  std::cout << "Total count: " << cnt << "\n";
+  EXPECT_TRUE(5 == cnt);
 
-  return 0;
+  return RUN_ALL_TESTS();
 }

@@ -1,5 +1,10 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ */
+
 #include "hal-singleton.hpp"
 
+#include <gtest/gtest.h>
 #include <iostream>
 
 class Hal_A : public Hal_Singleton {
@@ -35,15 +40,16 @@ std::once_flag Hal_A::s_InitOnce{};
 std::shared_ptr<Hal_A> Hal_A::s_instances{};
 
 int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
+
   auto inst1 = Hal_A::createInstance<Hal_A>(1, 2);
   std::cout << "Value: " << inst1->getValue() << ", :" << inst1 << "\n";
 
   auto inst2 = Hal_A::createInstance<Hal_A>(1, 2);
   std::cout << "Value: " << inst2->getValue() << ", :" << inst2 << "\n";
 
-  if (inst1 == inst2) {
-    std::cout << "singleton success\n";
-  }
+  EXPECT_TRUE(inst1 == inst2);
 
-  return 0;
+  return RUN_ALL_TESTS();
 }
+

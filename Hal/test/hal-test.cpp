@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ */
+
 #include "hal-async.hpp"
 #include "hal-buffer.hpp"
 #include "hal-limit-buffer.hpp"
@@ -5,6 +9,8 @@
 #include "hal-proc.hpp"
 #include "hal-teepipe.hpp"
 #include "hal.hpp"
+
+#include <gtest/gtest.h>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -29,6 +35,8 @@ private:
 };
 
 int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
+
   Hal_TeePipe<int> sortPipe{
       "sortPipe", [](int v) { std::cout << "val: " << v << "\n"; },
       [](std::vector<int> list) { std::sort(list.begin(), list.end()); }};
@@ -124,5 +132,5 @@ int main(int argc, char *argv[]) {
   std::this_thread::sleep_for(std::chrono::seconds(5));
   std::cout << "end\n";
 
-  return 0;
+  return RUN_ALL_TESTS();
 }

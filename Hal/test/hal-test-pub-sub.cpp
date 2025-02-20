@@ -1,7 +1,10 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ */
+
 #include "hal-pub-sub.hpp"
 
 #include <gtest/gtest.h>
-
 #include <iostream>
 #include <string>
 #include <thread>
@@ -14,7 +17,11 @@ public:
 
   void notify(std::string item) override {
     std::cout << m_name << " is notified: " << item << "\n";
+
+    m_notifiedList.push_back(item);
   }
+
+  std::vector<std::string> m_notifiedList{};
 
 private:
   std::string m_name{};
@@ -39,11 +46,39 @@ int main(int argc, char *argv[]) {
   pub.waitForEmpty();
   rec1.waitForEmpty();
   rec2.waitForEmpty();
+  EXPECT_TRUE(rec1.m_notifiedList.size() == 4);
+  EXPECT_TRUE(rec1.m_notifiedList[0] == "hello pub sub");
+  EXPECT_TRUE(rec1.m_notifiedList[1] == "hello world");
+  EXPECT_TRUE(rec1.m_notifiedList[2] == "hello world 3");
+  EXPECT_TRUE(rec1.m_notifiedList[3] == "string 1");
+
+  EXPECT_TRUE(rec2.m_notifiedList.size() == 4);
+  EXPECT_TRUE(rec2.m_notifiedList[0] == "hello pub sub");
+  EXPECT_TRUE(rec2.m_notifiedList[1] == "hello world");
+  EXPECT_TRUE(rec2.m_notifiedList[2] == "hello world 3");
+  EXPECT_TRUE(rec2.m_notifiedList[3] == "string 1");
 
   pub.registerSubscriber(&rec3);
+  pub.waitForEmpty();
+  rec3.waitForEmpty();
+  EXPECT_TRUE(rec3.m_notifiedList.size() == 2);
+  EXPECT_TRUE(rec3.m_notifiedList[0] == "hello world 3");
+  EXPECT_TRUE(rec3.m_notifiedList[1] == "string 1");
 
   pub.unregisterSubscriber(&rec1);
   pub.publish("hello world last");
+  pub.waitForEmpty();
+  rec1.waitForEmpty();
+  rec2.waitForEmpty();
+  rec3.waitForEmpty();
+  EXPECT_TRUE(rec1.m_notifiedList.size() == 4);
+  EXPECT_TRUE(rec1.m_notifiedList[3] == "string 1");
+
+  EXPECT_TRUE(rec2.m_notifiedList.size() == 5);
+  EXPECT_TRUE(rec2.m_notifiedList[4] == "hello world last");
+
+  EXPECT_TRUE(rec3.m_notifiedList.size() == 3);
+  EXPECT_TRUE(rec3.m_notifiedList[2] == "hello world last");
 
   {
     Hal_Msg_Receiver rec4{"receiver 4"};
@@ -53,11 +88,17 @@ int main(int argc, char *argv[]) {
     pub.publish("hello world last again");
     pub.waitForEmpty();
     rec4.waitForEmpty();
+
+    EXPECT_TRUE(rec4.m_notifiedList.size() == 3);
+    EXPECT_TRUE(rec4.m_notifiedList[2] == "hello world last again");
   }
 
   pub.publish("hello world last again again");
+  pub.waitForEmpty();
   rec2.waitForEmpty();
   rec3.waitForEmpty();
+  EXPECT_TRUE(rec2.m_notifiedList.size() == 7);
+  EXPECT_TRUE(rec3.m_notifiedList.size() == 5);
   std::this_thread::sleep_for(std::chrono::seconds(3));
 
   return RUN_ALL_TESTS();
