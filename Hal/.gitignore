@@ -3,3 +3,5 @@ _deps
 CTestTestfile.cmake
 Testing/
 CTestTestfile.cmake
+CMakeCache.txt
+CMakeFiles
