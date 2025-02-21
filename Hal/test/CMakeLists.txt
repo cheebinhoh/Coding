@@ -9,3 +9,8 @@ ADD_TEST_EXECUTABLE(hal
                     hal-test-timer
                     hal-test)
 
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/teepipe-test-data-1.txt
+       DESTINATION ${CMAKE_BINARY_DIR}/test)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/teepipe-test-data-2.txt
+       DESTINATION ${CMAKE_BINARY_DIR}/test)

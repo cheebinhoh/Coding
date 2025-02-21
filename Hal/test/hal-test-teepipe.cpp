@@ -18,13 +18,16 @@
 #include <vector>
 
 #include <fcntl.h>
+#include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
-  std::vector<std::string> files{"./teepipe-test-data-1.txt",
-                                 "./teepipe-test-data-2.txt"};
+  
+  char *dirpath = dirname(argv[0]);
+  std::vector<std::string> files{std::string(dirpath) + "/teepipe-test-data-1.txt",
+                                 std::string(dirpath) + "/teepipe-test-data-2.txt"};
   Hal_TeePipe<long> tpipe{
       "teepipe", [](long val) { std::cout << val << "\n"; },
       [](std::vector<long> list) { std::sort(list.begin(), list.end()); }};

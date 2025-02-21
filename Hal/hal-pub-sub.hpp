@@ -1,7 +1,7 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This class implements a limited form of publisher subscriber model
+ * This class implements a simple form of publisher subscriber model
  */
 
 #ifndef HAL_PUB_SUB_HPP_HAVE_SEEN
@@ -111,7 +111,12 @@ public:
   }
 
   /**
-   * @brief The method registers a subscriber and send out backtrace data items.
+   * @brief The method registers a subscriber and send out backdate data
+   *        item, The method is called immediately with m_subscribersLock
+   *        than executed in async thread, and that allows caller to be
+   *        sure that the Hal_Sub instance has been registered with the
+   *        publisher upon return of the method. The register and unregister
+   *        methods work in synchronization manner.
    *
    * @param sub The subscriber instance to be registered
    */
@@ -122,10 +127,6 @@ public:
 
     // resend backtrace data items that the registered subscriber
     // miss.
-    //
-    // FIXME: we might want to add a variable in subscriber to toggle
-    // this part or let subscriber instance instructs how many
-    // data items from past to be sent to it.
     if (m_next > m_first) {
       for (std::size_t n = m_first; n < m_next; n++) {
         sub->notifyInternal(m_buffer[n]);
@@ -142,7 +143,11 @@ public:
   }
 
   /**
-   * @brief The method de-registers a subscriber.
+   * @brief The method de-registers a subscriber. The method is called
+   *        immediately with m_subscribersLock than executed in async
+   *        thread, and that allows caller to be sure that the Hal_Sub
+   *        instance has been de-registered from the publisher upon
+   *        return of the method.
    *
    * @param sub The subscriber instance to be de-registered
    */
@@ -161,6 +166,11 @@ protected:
    * @param item The data item to be published
    */
   void publishInternal(T item) {
+    /* Though the Hal_Pipe async thread, we are guarantee that only
+     * one thread is executing the Internal method but unregister
+     * has to be run in caller thread and changes the core data
+     * upon return, so we need to have an extra m_subscribersLock
+     */
     std::lock_guard<std::mutex> lck(m_subscribersLock);
 
     /* Keep the published item in circular ring buffer for

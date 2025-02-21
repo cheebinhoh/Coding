@@ -19,10 +19,12 @@ Hal_Event_Manager::Hal_Event_Manager()
       m_mask{Hal_Event_Manager::s_mask} {
   // default and to be overridden if needed
   m_signalHandlers[SIGTERM] = [this](int signo) {
-    this->exitMainLoopPrivate();
+    this->exitMainLoopInternal();
   };
 
-  m_signalHandlers[SIGINT] = [this](int signo) { this->exitMainLoopPrivate(); };
+  m_signalHandlers[SIGINT] = [this](int signo) {
+    this->exitMainLoopInternal();
+  };
 
   m_signalWaitProc.exec([this]() {
     while (true) {
@@ -35,7 +37,7 @@ Hal_Event_Manager::Hal_Event_Manager()
                                  std::string(strerror(errno)));
       }
 
-      HAL_ASYNC_CALL_WITH_CAPTURE({ this->execSignalHandlerPrivate(signo); },
+      HAL_ASYNC_CALL_WITH_CAPTURE({ this->execSignalHandlerInternal(signo); },
                                   this, signo);
     }
   });
@@ -53,7 +55,7 @@ Hal_Event_Manager::~Hal_Event_Manager() noexcept try {
  *        (usually the mainthread) to the main() function to be continued.
  */
 void Hal_Event_Manager::exitMainLoop() {
-  HAL_ASYNC_CALL_WITH_REF_CAPTURE({ this->exitMainLoopPrivate(); });
+  HAL_ASYNC_CALL_WITH_REF_CAPTURE({ this->exitMainLoopInternal(); });
 }
 
 /**
@@ -62,7 +64,7 @@ void Hal_Event_Manager::exitMainLoop() {
  *        This is private method to be called in the Hal_Event_Manager instance
  *        asynchronous thread context.
  */
-void Hal_Event_Manager::exitMainLoopPrivate() { this->stopExec(); }
+void Hal_Event_Manager::exitMainLoopInternal() { this->stopExec(); }
 
 /**
  * @brief The method will enter the Hal_Event_Manager mainloop, and wait
@@ -79,7 +81,7 @@ void Hal_Event_Manager::enterMainLoop() {
  *
  * @param signo signal number that is raised
  */
-void Hal_Event_Manager::execSignalHandlerPrivate(int signo) {
+void Hal_Event_Manager::execSignalHandlerInternal(int signo) {
   auto extHandlers = m_extSignalHandlers.find(signo);
   if (m_extSignalHandlers.end() != extHandlers) {
     for (auto &handler : extHandlers->second) {
@@ -103,7 +105,7 @@ void Hal_Event_Manager::execSignalHandlerPrivate(int signo) {
 void Hal_Event_Manager::registerSignalHandler(int signo,
                                               SignalHandler handler) {
   HAL_ASYNC_CALL_WITH_CAPTURE(
-      { this->registerSignalHandlerPrivate(signo, handler); }, this, signo,
+      { this->registerSignalHandlerInternal(signo, handler); }, this, signo,
       handler);
 }
 
@@ -117,8 +119,8 @@ void Hal_Event_Manager::registerSignalHandler(int signo,
  * @param signo   The POSIX signal number
  * @param handler The signal handler to be called when the signal is raised.
  */
-void Hal_Event_Manager::registerSignalHandlerPrivate(int signo,
-                                                     SignalHandler handler) {
+void Hal_Event_Manager::registerSignalHandlerInternal(int signo,
+                                                      SignalHandler handler) {
   auto &extHandlers = m_extSignalHandlers[signo];
   extHandlers.push_back(handler);
 }

@@ -37,9 +37,9 @@ public:
   friend class Hal_Singleton;
 
 private:
-  void exitMainLoopPrivate();
-  void registerSignalHandlerPrivate(int signo, SignalHandler handler);
-  void execSignalHandlerPrivate(int signo);
+  void exitMainLoopInternal();
+  void registerSignalHandlerInternal(int signo, SignalHandler handler);
+  void execSignalHandlerInternal(int signo);
 
   template <class... U>
   static std::shared_ptr<Hal_Event_Manager> createInstanceInternal(U &&...u) {
