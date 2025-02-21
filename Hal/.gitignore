@@ -5,3 +5,5 @@ Testing/
 CTestTestfile.cmake
 CMakeCache.txt
 CMakeFiles
+lib
+options-pinned.h

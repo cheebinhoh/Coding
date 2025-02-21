@@ -22,15 +22,22 @@ public:
   }
 
   std::vector<std::string> m_notifiedList{};
-
-private:
   std::string m_name{};
 };
 
 int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
 
-  Hal_Pub<std::string> pub{"radio", 2};
+
+  Hal_Pub<std::string> pub{"radio", 2, [](const Hal_Pub<std::string>::Hal_Sub *const sub,
+                                          const std::string &data) -> bool 
+                                          {
+ 					    auto *msgReceiver = dynamic_cast<const Hal_Msg_Receiver * const>(sub);
+
+                                            return nullptr != msgReceiver
+                                                   && ("receiver 2" != msgReceiver->m_name ||
+                                                       "filter from 2" != data);
+                                          }};
   Hal_Msg_Receiver rec1{"receiver 1"};
   Hal_Msg_Receiver rec2{"receiver 2"};
   Hal_Msg_Receiver rec3{"receiver 3"};
@@ -99,6 +106,14 @@ int main(int argc, char *argv[]) {
   rec3.waitForEmpty();
   EXPECT_TRUE(rec2.m_notifiedList.size() == 7);
   EXPECT_TRUE(rec3.m_notifiedList.size() == 5);
+
+  pub.publish("filter from 2");
+  pub.waitForEmpty();
+  rec2.waitForEmpty();
+  rec3.waitForEmpty();
+  EXPECT_TRUE(rec2.m_notifiedList.size() == 7);
+  EXPECT_TRUE(rec3.m_notifiedList.size() == 6);
+
   std::this_thread::sleep_for(std::chrono::seconds(3));
 
   return RUN_ALL_TESTS();

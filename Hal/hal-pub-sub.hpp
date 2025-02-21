@@ -76,8 +76,13 @@ public:
   };
   // End of class Hal_Sub
 
-  Hal_Pub(std::string_view name, ssize_t capacity = 2)
-      : Hal_Async(name), m_name{name}, m_capacity{capacity} {
+  using Hal_Pub_Filter_Task =
+      std::function<bool(const Hal_Sub *const, const T &t)>;
+
+  Hal_Pub(std::string_view name, ssize_t capacity = 2,
+          Hal_Pub_Filter_Task filterFn = {})
+      : Hal_Async(name), m_name{name}, m_capacity{capacity},
+        m_filterFn{filterFn} {
     resize(capacity);
   }
 
@@ -187,7 +192,9 @@ protected:
     m_next++;
 
     for (auto &sub : m_subscribers) {
-      sub->notifyInternal(item);
+      if (!m_filterFn || m_filterFn(sub, item)) {
+        sub->notifyInternal(item);
+      }
     }
   }
 
@@ -204,6 +211,7 @@ private:
 
   std::string m_name{};
   ssize_t m_capacity{};
+  Hal_Pub_Filter_Task m_filterFn{};
   std::vector<T> m_buffer{};
   ssize_t m_first{};
   ssize_t m_next{};

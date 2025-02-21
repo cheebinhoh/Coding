@@ -22,13 +22,13 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-#FetchContent_Declare(
-#  protobuf
-#  GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
-#  GIT_TAG v30.0-rc1 # Replace with desired version
-#)
+FetchContent_Declare(
+  protobuf
+  GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
+  GIT_TAG v30.0-rc1 # Replace with desired version
+)
 
-#FetchContent_MakeAvailable(protobuf)
+FetchContent_MakeAvailable(protobuf)
 
 # build hardware abstraction layer library
 add_library(hal
