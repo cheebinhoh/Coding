@@ -38,9 +38,9 @@ add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.cpp
 
     # proto c++ sources
-    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg-body.pb.cc
-    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg-type.pb.cc
-    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg.pb.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.pb.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg.pb.cc
 )
 
 target_sources(hal
@@ -59,9 +59,9 @@ target_sources(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal.hpp
 
     # proto c++ sources
-    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg-body.pb.h
-    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg-type.pb.h
-    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg.pb.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.pb.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg.pb.h
 )
 
 target_include_directories(hal

@@ -7,3 +7,5 @@ CMakeCache.txt
 CMakeFiles
 lib
 options-pinned.h
+*.pb.cc
+*.pb.h
