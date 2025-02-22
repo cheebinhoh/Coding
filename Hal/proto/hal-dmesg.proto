@@ -9,6 +9,7 @@ message DMesg
 {
   string    identifier = 1;
   uint64    runningCounter = 2;
-  DMesgType type = 3;
-  DMesgBody body = 4;
+  string    source = 3;
+  DMesgType type = 4;
+  DMesgBody body = 5;
 }
