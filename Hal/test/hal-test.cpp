@@ -21,9 +21,9 @@
  * thread responsible to run api call that changes the object, this will
  * de-couple caller and callee and avoid mutex delay
  */
-class Hal_Event : public Hal_Async {
+class Hal_Event : public Hal::Hal_Async {
 public:
-  Hal_Event() : Hal_Async{"event manager"} {}
+  Hal_Event() : Hal::Hal_Async{"event manager"} {}
 
   void post(std::string event) {
     HAL_ASYNC_CALL_WITH_COPY_CAPTURE(std::cout << "Event: " << count++ << ": "
@@ -37,13 +37,13 @@ private:
 int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
 
-  Hal_TeePipe<int> sortPipe{
+  Hal::Hal_TeePipe<int> sortPipe{
       "sortPipe", [](int v) { std::cout << "val: " << v << "\n"; },
       [](std::vector<int> list) { std::sort(list.begin(), list.end()); }};
 
   std::vector<int> s1{1, 3, 5, 7, 9};
   auto p1 = sortPipe.addHal_TeePipeSource();
-  Hal_Proc proc1{"s1", [&p1, &s1]() {
+  Hal::Hal_Proc proc1{"s1", [&p1, &s1]() {
                    for (auto &v : s1) {
                      p1->write(v);
                    }
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 
   std::vector<int> s2{2, 4, 6, 8, 10};
   auto p2 = sortPipe.addHal_TeePipeSource();
-  Hal_Proc proc2{"s2", [&p2, &s2]() {
+  Hal::Hal_Proc proc2{"s2", [&p2, &s2]() {
                    for (auto &v : s2) {
                      p2->write(v);
                    }
@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 
   sortPipe.waitForEmpty();
 
-  Hal_Async ha{"Test"};
+  Hal::Hal_Async ha{"Test"};
   std::function<void()> functor{
       []() { std::cout << "Executing the functor\n"; }};
 
@@ -88,17 +88,17 @@ int main(int argc, char *argv[]) {
   std::cout << "End of Hal test\n";
 
   {
-    Hal_Proc nonestop{"none-stop", []() {
+    Hal::Hal_Proc nonestop{"none-stop", []() {
                         std::cout << "start none-stop\n";
                         while (true) {
-                          Hal_Proc::yield();
+                          Hal::Hal_Proc::yield();
                         }
                       }};
     nonestop.exec();
-    Hal_Proc::yield();
+    Hal::Hal_Proc::yield();
   }
 
-  Hal_Pipe<std::string> pipe{"string"};
+  Hal::Hal_Pipe<std::string> pipe{"string"};
   std::string valToPipe{"Hello Pipe"};
   std::string valFromPipe{};
 
@@ -113,14 +113,14 @@ int main(int argc, char *argv[]) {
   std::cout << "value from Pipe: " << (*optionalValFromPipe)
             << ", value to Pipe: " << valToPipe << "\n";
 
-  auto pipeBlock = std::make_unique<Hal_Pipe<std::string>>("pipeBlock");
-  Hal_Proc pipeBlockProc{"pipeBlockProc", [&pipeBlock]() {
+  auto pipeBlock = std::make_unique<Hal::Hal_Pipe<std::string>>("pipeBlock");
+  Hal::Hal_Proc pipeBlockProc{"pipeBlockProc", [&pipeBlock]() {
                            std::this_thread::sleep_for(std::chrono::seconds(5));
                            pipeBlock = {};
                          }};
 
   pipeBlockProc.exec();
-  Hal_Proc::yield();
+  Hal::Hal_Proc::yield();
   std::this_thread::sleep_for(std::chrono::seconds(2));
 
   std::cout << "before pipeBlock->read\n";

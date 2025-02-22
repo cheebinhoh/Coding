@@ -28,14 +28,14 @@ int main(int argc, char *argv[]) {
   char *dirpath = dirname(argv[0]);
   std::vector<std::string> files{std::string(dirpath) + "/teepipe-test-data-1.txt",
                                  std::string(dirpath) + "/teepipe-test-data-2.txt"};
-  Hal_TeePipe<long> tpipe{
+  Hal::Hal_TeePipe<long> tpipe{
       "teepipe", [](long val) { std::cout << val << "\n"; },
       [](std::vector<long> list) { std::sort(list.begin(), list.end()); }};
-  std::vector<std::unique_ptr<Hal_Proc>> proclist{};
+  std::vector<std::unique_ptr<Hal::Hal_Proc>> proclist{};
 
   for (auto &filename : files) {
     auto tpipeSource = tpipe.addHal_TeePipeSource();
-    auto proc = std::make_unique<Hal_Proc>(
+    auto proc = std::make_unique<Hal::Hal_Proc>(
         filename, [&tpipe, tpipeSource, filename, prog = argv[0]]() {
           int fd{};
           FILE *file{};
@@ -79,10 +79,10 @@ int main(int argc, char *argv[]) {
 
   for (auto &proc : proclist) {
     proc->exec();
-    Hal_Proc::yield();
+    Hal::Hal_Proc::yield();
   }
 
-  Hal_Proc::yield();
+  Hal::Hal_Proc::yield();
 
   for (auto &proc : proclist) {
     proc->wait();

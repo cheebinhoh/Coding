@@ -37,6 +37,8 @@
     this->write([__VA_ARGS__]() mutable { block; });                           \
   } while (false)
 
+namespace Hal {
+
 class Hal_Async : public Hal_Pipe<std::function<void()>> {
 public:
   Hal_Async(std::string_view name = "")
@@ -55,6 +57,8 @@ public:
   const Hal_Async &operator=(const Hal_Async &halAsync) = delete;
   Hal_Async(Hal_Async &&halAsync) = delete;
   Hal_Async &operator=(Hal_Async &&halAsync) = delete;
-};
+}; // class Hal_Async
+
+} // namespace Hal
 
 #endif /* HAL_ASYNC_HPP_HAVE_SEEN */

@@ -10,6 +10,8 @@
 #include <iostream>
 #include <memory>
 
+namespace Hal {
+
 std::once_flag Hal_Event_Manager::s_initOnce{};
 std::shared_ptr<Hal_Event_Manager> Hal_Event_Manager::s_instance{};
 sigset_t Hal_Event_Manager::s_mask{};
@@ -124,3 +126,5 @@ void Hal_Event_Manager::registerSignalHandlerInternal(int signo,
   auto &extHandlers = m_extSignalHandlers[signo];
   extHandlers.push_back(handler);
 }
+
+} // namespace Hal

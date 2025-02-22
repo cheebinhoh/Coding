@@ -15,6 +15,8 @@
 #include <functional>
 #include <thread>
 
+namespace Hal {
+
 template <typename T> class Hal_Timer : public Hal_Proc {
 public:
   Hal_Timer(const T &reltime, std::function<void()> fn)
@@ -69,5 +71,7 @@ private:
   std::function<void()> m_fn{};
   T m_reltime{};
 };
+
+} // namespace Hal
 
 #endif /* HAL_TIMER_HPP_HAVE_SEEN */

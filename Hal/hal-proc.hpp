@@ -18,6 +18,8 @@
 
 #include <pthread.h>
 
+namespace Hal {
+
 /**
  * Hal_Proc thread cancellation via (StopExec) is synchronous, so if the functor
  * runs infinitely without any pthread cancellation point, we should voluntarily
@@ -62,5 +64,7 @@ private:
   Hal_Proc::State m_state{};
   pthread_t m_th{};
 };
+
+} // namespace Hal
 
 #endif /* HAL_PROC_HPP_HAVE_SEEN */

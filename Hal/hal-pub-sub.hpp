@@ -20,6 +20,8 @@
 #include <string_view>
 #include <vector>
 
+namespace Hal {
+
 template <typename T> class Hal_Pub : public Hal_Async {
 public:
   /**
@@ -219,5 +221,7 @@ private:
   std::mutex m_subscribersLock{};
   std::vector<Hal_Sub *> m_subscribers{};
 };
+
+} // namespace Hal
 
 #endif /* HAL_PUB_SUB_HPP_HAVE_SEEN */

@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   long cnt{};
 
-  Hal_Pipe<long> pipe{"pipe", [&cnt](long val) {
+  Hal::Hal_Pipe<long> pipe{"pipe", [&cnt](long val) {
                         std::this_thread::sleep_for(std::chrono::seconds(1));
                         cnt++;
                         std::cout << "read\n";

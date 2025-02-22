@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-class Hal_A : public Hal_Singleton {
+class Hal_A : public Hal::Hal_Singleton {
 public:
   Hal_A(int int1, int int2) : m_int1{int1}, m_int2{int2} {}
 

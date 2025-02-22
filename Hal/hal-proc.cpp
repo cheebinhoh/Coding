@@ -11,6 +11,8 @@
 #include <pthread.h>
 #include <sched.h>
 
+namespace Hal {
+
 Hal_Proc::Hal_Proc(std::string_view name, Hal_Proc::Task fn) : m_name{name} {
   setState(State::New);
 
@@ -132,3 +134,5 @@ void *Hal_Proc::runFnInThreadHelper(void *context) {
 
   return NULL;
 }
+
+} // namespace Hal

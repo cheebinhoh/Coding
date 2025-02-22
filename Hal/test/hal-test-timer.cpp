@@ -10,7 +10,7 @@
 int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
   bool timerRun{};
-  Hal_Timer timer{std::chrono::seconds(5),
+  Hal::Hal_Timer timer{std::chrono::seconds(5),
                   [&timerRun]() {
                     timerRun = true; 
                     std::cout << "timer is run\n"; 

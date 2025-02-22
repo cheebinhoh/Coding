@@ -22,6 +22,8 @@
 
 #include <pthread.h>
 
+namespace Hal {
+
 template <typename T> class Hal_LimitBuffer : private Hal_Buffer<T> {
 public:
   Hal_LimitBuffer(size_t capacity = 1) : m_maxCapacity(capacity) {
@@ -213,5 +215,7 @@ private:
   pthread_cond_t m_popCond{};
   pthread_cond_t m_pushCond{};
 };
+
+} // namespace Hal
 
 #endif /* HAL_LIMITBUFFER_HPP_HAVE_SEEN */

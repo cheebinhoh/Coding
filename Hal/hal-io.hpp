@@ -14,6 +14,8 @@
 
 #include <optional>
 
+namespace Hal {
+
 template <typename T> class Hal_Io {
 public:
   virtual ~Hal_Io() = default;
@@ -21,5 +23,7 @@ public:
   virtual void write(T &item) = 0;
   virtual void write(T &&item) = 0;
 };
+
+} // namespace Hal
 
 #endif /* HAL_IO_HPP_HAVE_SEEN */

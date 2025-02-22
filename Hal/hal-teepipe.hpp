@@ -36,6 +36,8 @@
 #include <type_traits>
 #include <vector>
 
+namespace Hal {
+
 template <typename T> class Hal_TeePipe : private Hal_Pipe<T> {
   using Task = std::function<void(T)>;
   using PostProcessingTask = std::function<void(std::vector<T> &)>;
@@ -365,5 +367,7 @@ private:
   std::vector<std::shared_ptr<Hal_TeePipeSource>> m_buffers{};
   Hal_TeePipe::PostProcessingTask m_postProcessingTaskFn{};
 };
+
+} // namespace Hal
 
 #endif /* HAL_TEEPIPE_HPP_HAVE_SEEN */

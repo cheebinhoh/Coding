@@ -25,6 +25,8 @@
 #include <optional>
 #include <pthread.h>
 
+namespace Hal {
+
 template <typename T>
 class Hal_Pipe : public Hal_Buffer<T>, public Hal_Io<T>, public Hal_Proc {
   using Task = std::function<void(T &&)>;
@@ -184,6 +186,8 @@ private:
   pthread_mutex_t m_mutex{};
   pthread_cond_t m_emptyCond{};
   long long m_count{};
-};
+}; // class Hal_Pipe
+
+} // namespace Hal
 
 #endif /* HAL_PIPE_HPP_HAVE_SEEN */

@@ -12,10 +12,10 @@
 #include <thread>
 
 int main(int argc, char *argv[]) {
-  auto inst = Hal_Singleton::createInstance<Hal_Event_Manager>();
+  auto inst = Hal::Hal_Singleton::createInstance<Hal::Hal_Event_Manager>();
 
   // for TESTING
-  Hal_Proc proc{
+  Hal::Hal_Proc proc{
       "exitMainLoop", [&inst]() {
         std::cout << "sleep 10 seconds before setting handler for SIGTERM\n";
         std::this_thread::sleep_for(std::chrono::seconds(10));

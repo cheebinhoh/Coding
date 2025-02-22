@@ -13,6 +13,8 @@
 #include <memory>
 #include <utility>
 
+namespace Hal {
+
 class Hal_Singleton {
 public:
   template <typename T, class... U>
@@ -23,5 +25,7 @@ public:
     return new_instance;
   }
 };
+
+} // namespace Hal
 
 #endif /* HAL_SINGLETON_HPP_HAVE_SEEN */

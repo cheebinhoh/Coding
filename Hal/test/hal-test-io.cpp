@@ -33,10 +33,10 @@ int main(int argc, char *argv[]) {
   using std::chrono::system_clock;
 
   std::map<std::string, long long> input_cnt{};
-  Hal_Proc sensor_input{"sensor input"};
-  Hal_Proc gps_input{"gps input"};
-  Hal_Proc imu_input{"imu input"};
-  Hal_Proc ext_input{"ext input"};
+  Hal::Hal_Proc sensor_input{"sensor input"};
+  Hal::Hal_Proc gps_input{"gps input"};
+  Hal::Hal_Proc imu_input{"imu input"};
+  Hal::Hal_Proc ext_input{"ext input"};
 
   // parameters to tune
   bool input_to_sleep_use_ns = true; /* nano or milliseconds */
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
   int input_to_sleep_nanoseconds = 500000; /* 0.5 milliseconds */
   int input_to_run_seconds = 5;
 
-  Hal_Pipe<std::string> out_pipe{"out_pipe", [&input_cnt](std::string item) {
+  Hal::Hal_Pipe<std::string> out_pipe{"out_pipe", [&input_cnt](std::string item) {
                                    std::size_t found = item.find(": ");
                                    if (found != std::string::npos) {
                                      std::string source = item.substr(0, found);
@@ -53,13 +53,13 @@ int main(int argc, char *argv[]) {
                                    }
                                  }};
 
-  Hal_Pipe<std::string> cal_pipe{
+  Hal::Hal_Pipe<std::string> cal_pipe{
       "cal_input", [&out_pipe](std::string item) { out_pipe.write(item); }};
 
-  Hal_Pipe<std::string> filter_pipe{
+  Hal::Hal_Pipe<std::string> filter_pipe{
       "filter_input", [&cal_pipe](std::string item) { cal_pipe.write(item); }};
 
-  Hal_Pipe<std::string> staging_pipe{
+  Hal::Hal_Pipe<std::string> staging_pipe{
       "staging_input",
       [&filter_pipe](std::string item) { filter_pipe.write(item); }};
 

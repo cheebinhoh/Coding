@@ -9,7 +9,7 @@
 #include <string>
 #include <thread>
 
-class Hal_Msg_Receiver : public Hal_Pub<std::string>::Hal_Sub {
+class Hal_Msg_Receiver : public Hal::Hal_Pub<std::string>::Hal_Sub {
 public:
   Hal_Msg_Receiver(std::string_view name) : m_name{name} {}
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
 
 
-  Hal_Pub<std::string> pub{"radio", 2, [](const Hal_Pub<std::string>::Hal_Sub *const sub,
+  Hal::Hal_Pub<std::string> pub{"radio", 2, [](const Hal::Hal_Pub<std::string>::Hal_Sub *const sub,
                                           const std::string &data) -> bool 
                                           {
  					    auto *msgReceiver = dynamic_cast<const Hal_Msg_Receiver * const>(sub);

@@ -17,6 +17,8 @@
 #include <map>
 #include <mutex>
 
+namespace Hal {
+
 class Hal_Event_Manager : public Hal_Singleton, private Hal_Async {
   using SignalHandler = std::function<void(int signo)>;
 
@@ -88,6 +90,8 @@ private:
   static std::once_flag s_initOnce;
   static std::shared_ptr<Hal_Event_Manager> s_instance;
   static sigset_t s_mask;
-};
+}; // class Hal_Event_Manager
+
+} // namespace Hal
 
 #endif /* HAL_EVENT_HPP_HAVE_SEEN */

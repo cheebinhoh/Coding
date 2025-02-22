@@ -22,6 +22,8 @@
 
 #include <pthread.h>
 
+namespace Hal {
+
 template <typename T> class Hal_Buffer {
 public:
   Hal_Buffer() {
@@ -238,5 +240,7 @@ private:
   long long m_pushCount{};
   long long m_popCount{};
 };
+
+} // namespace Hal
 
 #endif /* HAL_BUFFER_HPP_HAVE_SEEN */
