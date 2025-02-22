@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "proto/hal-dmesg-type.proto";
+
+package Hal;
+
+message DMesg
+{
+  string    identifier = 1;
+  uint64    runningCounter = 2;
+  DMesgType type = 3;
+}

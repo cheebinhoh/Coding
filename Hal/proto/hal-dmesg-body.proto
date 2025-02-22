@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package Hal;
+
+enum DMesgType
+{
+  INVALID = 0;
+  Message = 1;
+}

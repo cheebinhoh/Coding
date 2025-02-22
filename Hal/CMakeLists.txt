@@ -30,6 +30,8 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(protobuf)
 
+find_package(protobuf REQUIRED)
+
 # build hardware abstraction layer library
 add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
@@ -55,6 +57,22 @@ target_sources(hal
 target_include_directories(hal
   INTERFACE
   ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+GENERATE_PROTOBUF(hal hal-dmesg-type.proto hal-dmesg.proto)
+
+#target_include_directories(hal PRIVATE
+#                           ${CMAKE_CURRENT_BINARY_DIR})
+
+#protobuf_generate(TARGET hal 
+#                  PROTOS ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.proto
+#                  LANGUAGE cpp
+#                  OUT_VAR PROTOBUF_GENERATED_FILES
+#                  PROTOC_OUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
+target_link_libraries(hal
+  PRIVATE
+  protobuf::libprotobuf
 )
 
 # run unit test

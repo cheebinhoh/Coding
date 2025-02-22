@@ -1,4 +1,4 @@
 .:*.c *.h
 C++:*.cpp *.hpp
 Linux:*.c
-Hal:*.cpp *.hpp
+Hal:*.cpp *.hpp *.proto
