@@ -4,11 +4,26 @@
 
 #include "proto/hal-dmesg.pb.h"
 
+#include <gtest/gtest.h>
 #include <iostream>
 
 int main(int argc, char *argv[])
 {
+  ::testing::InitGoogleTest(&argc, argv);
+ 
   Hal::DMesg dmesg{};
+  dmesg.set_identifier("id1");
+  dmesg.set_runningcounter(99);
+  dmesg.set_type(Hal::DMesgType::message);
 
-  return 0;
+  Hal::DMesgBody *dmsgbody = dmesg.mutable_body();
+  dmsgbody->set_message("message string");
+
+  EXPECT_TRUE(dmesg.identifier() == "id1");
+  EXPECT_TRUE(dmesg.runningcounter() == 99);
+  EXPECT_TRUE(dmesg.type() == Hal::DMesgType::message);
+  EXPECT_TRUE(dmesg.body().has_message());
+  EXPECT_TRUE(!dmesg.body().has_dummy());
+
+  return RUN_ALL_TESTS();
 }
