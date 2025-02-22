@@ -61,9 +61,9 @@ target_include_directories(hal
 add_subdirectory(test)
 
 # build executable that uses hal
-add_executable(hal-dm
-               hal-dm.cpp)
+add_executable(hal-dmesg
+               hal-dmesg.cpp)
 
-target_link_libraries(hal-dm
+target_link_libraries(hal-dmesg
                       PRIVATE
                       hal)
