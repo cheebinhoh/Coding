@@ -9,7 +9,9 @@ macro(ADD_TEST_EXECUTABLE ...)
                           PRIVATE
                           gtest_main
                           gtest
-                          hal)
+                          hal
+                          protobuf::libprotobuf
+                         )
 
     add_test(NAME ${arg} COMMAND ${arg})
   endforeach()
