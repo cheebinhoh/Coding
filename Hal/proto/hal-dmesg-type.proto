@@ -5,5 +5,5 @@ package Hal;
 enum DMesgType
 {
   INVALID = 0;
-  Message = 1;
+  message = 1;
 }

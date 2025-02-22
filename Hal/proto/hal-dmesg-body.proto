@@ -2,8 +2,16 @@ syntax = "proto3";
 
 package Hal;
 
-enum DMesgType
+message DMesgDummy
 {
-  INVALID = 0;
-  Message = 1;
 }
+
+message DMesgBody
+{
+  oneof Body
+  {
+    string     message = 1;   
+    DMesgDummy dummy   = 999;
+  }
+}
+

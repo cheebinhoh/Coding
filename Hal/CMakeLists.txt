@@ -59,7 +59,7 @@ target_include_directories(hal
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-GENERATE_PROTOBUF(hal hal-dmesg-type.proto hal-dmesg.proto)
+GENERATE_PROTOBUF(hal hal-dmesg-type.proto hal-dmesg-body.proto hal-dmesg.proto)
 
 #target_include_directories(hal PRIVATE
 #                           ${CMAKE_CURRENT_BINARY_DIR})

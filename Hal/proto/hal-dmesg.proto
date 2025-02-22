@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "proto/hal-dmesg-type.proto";
+import "proto/hal-dmesg-body.proto";
 
 package Hal;
 
@@ -9,4 +10,5 @@ message DMesg
   string    identifier = 1;
   uint64    runningCounter = 2;
   DMesgType type = 3;
+  DMesgBody body = 4;
 }
