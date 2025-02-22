@@ -36,6 +36,11 @@ find_package(protobuf REQUIRED)
 add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.cpp
+
+    # proto c++ sources
+    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg-body.pb.cc
+    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg-type.pb.cc
+    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg.pb.cc
 )
 
 target_sources(hal
@@ -52,6 +57,11 @@ target_sources(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-teepipe.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-timer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal.hpp
+
+    # proto c++ sources
+    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg-body.pb.h
+    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg-type.pb.h
+    ${CMAKE_CURRENT_BINARY_DIR}/proto/hal-dmesg.pb.h
 )
 
 target_include_directories(hal
@@ -59,16 +69,10 @@ target_include_directories(hal
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-GENERATE_PROTOBUF(hal hal-dmesg-type.proto hal-dmesg-body.proto hal-dmesg.proto)
-
-#target_include_directories(hal PRIVATE
-#                           ${CMAKE_CURRENT_BINARY_DIR})
-
-#protobuf_generate(TARGET hal 
-#                  PROTOS ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.proto
-#                  LANGUAGE cpp
-#                  OUT_VAR PROTOBUF_GENERATED_FILES
-#                  PROTOC_OUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
+GENERATE_PROTOBUF(hal 
+                    hal-dmesg-type.proto
+                    hal-dmesg-body.proto
+                    hal-dmesg.proto)
 
 target_link_libraries(hal
   PRIVATE
