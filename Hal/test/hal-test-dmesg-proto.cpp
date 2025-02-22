@@ -23,7 +23,9 @@ int main(int argc, char *argv[])
   EXPECT_TRUE(dmesg.runningcounter() == 99);
   EXPECT_TRUE(dmesg.type() == Hal::DMesgType::message);
   EXPECT_TRUE(dmesg.body().has_message());
-  EXPECT_TRUE(!dmesg.body().has_dummy());
+
+  Hal::DMesg dmesgDefault{};
+  EXPECT_TRUE(!dmesgDefault.body().has_message());
 
   return RUN_ALL_TESTS();
 }

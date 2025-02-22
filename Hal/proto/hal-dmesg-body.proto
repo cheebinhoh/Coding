@@ -2,16 +2,11 @@ syntax = "proto3";
 
 package Hal;
 
-message DMesgDummy
-{
-}
-
 message DMesgBody
 {
   oneof Body
   {
-    string     message = 1;   
-    DMesgDummy dummy   = 999; // so that new message is added after prior one and dummy.
+    string message = 1;   
   }
 }
 
