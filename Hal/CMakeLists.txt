@@ -83,9 +83,9 @@ target_link_libraries(hal
 add_subdirectory(test)
 
 # build executable that uses hal
-add_executable(hal-dmesg
-               hal-dmesg.cpp)
+add_executable(hal-dmesg-daemon
+               hal-dmesg-daemon.cpp)
 
-target_link_libraries(hal-dmesg
+target_link_libraries(hal-dmesg-daemon
                       PRIVATE
                       hal)
