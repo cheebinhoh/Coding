@@ -1,6 +1,14 @@
 /**
  * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
  *
+ * The Hal_DMesg stands for HAL Distributed Messaging framework that
+ * it inherits from Hal_Pub and Hal_Pub::Sub classes to implement
+ * distributed message synchronization mechanism using Google protobuf
+ * as a base message encoding/decoding.
+ *
+ * It is intentionally modelled to be behave like IO but not inherit
+ * the Hal_Io due to conflict of template type for Hal_Io in parent
+ * classes that also inherits Hal_Io.
  */
 
 #ifndef HAL_DMESG_HPP_HAVE_SEEN
