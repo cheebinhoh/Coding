@@ -11,6 +11,7 @@
 #include "proto/hal-dmesg.pb.h"
 
 #include <iostream>
+#include <map>
 #include <memory>
 #include <optional>
 #include <string_view>
@@ -46,6 +47,7 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     std::optional<Hal::DMesgPb> readDMesg() {
       try {
         Hal::DMesgPb mesgPb = m_buffers.pop();
+
         return mesgPb;
       } catch (...) {
       }
@@ -53,21 +55,60 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
       return {};
     }
 
+    void writeDMesg(Hal::DMesgPb &&item) {
+      Hal::DMesgPb movedItem = std::move_if_noexcept(item);
+
+      writeDMesg(movedItem, true);
+    }
+
+    void writeDMesg(Hal::DMesgPb &item) { writeDMesg(item, false); }
+
     friend class Hal_DMesg;
 
   protected:
-    void notify(Hal::DMesgPb dmesgPb) override { m_buffers.push(dmesgPb); }
+    void writeDMesg(Hal::DMesgPb &item, bool move) {
+      std::string id = item.identifier();
+      long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
+
+      item.set_source(m_name);
+      item.set_runningcounter(nextRunningCounter);
+
+      if (move) {
+        m_owner->publish(std::move_if_noexcept(item));
+      } else {
+        m_owner->publish(item);
+      }
+
+      m_identifierRunningCounter[id] = nextRunningCounter;
+    }
+
+    void notify(Hal::DMesgPb dmesgPb) override {
+      if (dmesgPb.source() != m_name) {
+        std::string id = dmesgPb.identifier();
+        long long runningCounter = m_identifierRunningCounter[id];
+
+        if (dmesgPb.runningcounter() > runningCounter) {
+          m_identifierRunningCounter[id] = dmesgPb.runningcounter();
+          m_buffers.push(dmesgPb);
+        }
+      }
+    }
 
   private:
     std::string m_name{};
     Hal_Buffer<Hal::DMesgPb> m_buffers{};
     Hal_DMesg *m_owner{};
+    std::map<std::string, long long> m_identifierRunningCounter{};
   }; /* Hal_DMesgHandler */
 
 public:
   Hal_DMesg(std::string_view name) : Hal_Pub{name, 10} {}
 
   virtual ~Hal_DMesg() noexcept try {
+    for (auto &handler : m_handlers) {
+      this->unregisterSubscriber(handler.get());
+      handler->m_owner = nullptr;
+    }
   } catch (...) {
     // explicit return to resolve exception as destructor must be noexcept
     return;
@@ -129,8 +170,29 @@ public:
   // or it returns the next Hal::DMesgPb, so it is blocking like Tcp socket.
 
 protected:
+  using Hal_Pub::publish;
+
+  /**
+   * @brief The method publishes data item to registered subscribers.
+   *
+   * @param item The data item to be published
+   */
+  void publishInternal(Hal::DMesgPb item) override {
+    std::string id = item.identifier();
+    long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
+
+    try {
+      item.set_runningcounter(nextRunningCounter);
+      Hal_Pub::publishInternal(item);
+      m_identifierRunningCounter[id] = nextRunningCounter;
+    } catch (...) {
+      throw;
+    }
+  }
+
 private:
   std::vector<std::shared_ptr<Hal_DMesgHandler>> m_handlers{};
+  std::map<std::string, long long> m_identifierRunningCounter{};
 };
 } /* namespace Hal */
 

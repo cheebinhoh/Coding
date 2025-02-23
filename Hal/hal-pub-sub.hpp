@@ -172,7 +172,7 @@ protected:
    *
    * @param item The data item to be published
    */
-  void publishInternal(T item) {
+  virtual void publishInternal(T item) {
     /* Though the Hal_Pipe async thread, we are guarantee that only
      * one thread is executing the Internal method but unregister
      * has to be run in caller thread and changes the core data
