@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package Hal;
 
-enum DMesgType
+enum DMesgTypePb
 {
   INVALID = 0;
   message = 1;

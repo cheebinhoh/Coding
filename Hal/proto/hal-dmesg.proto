@@ -5,11 +5,11 @@ import "proto/hal-dmesg-body.proto";
 
 package Hal;
 
-message DMesg
+message DMesgPb
 {
-  string    identifier = 1;
-  uint64    runningCounter = 2;
-  string    source = 3;
-  DMesgType type = 4;
-  DMesgBody body = 5;
+  string      identifier = 1;
+  uint64      runningCounter = 2;
+  string      source = 3;
+  DMesgTypePb type = 4;
+  DMesgBodyPb body = 5;
 }
