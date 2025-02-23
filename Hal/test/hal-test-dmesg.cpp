@@ -46,5 +46,7 @@ int main(int argc, char *argv[])
     EXPECT_TRUE(dmesgPbRead->body().message() == dmesgPb.body().message());
   }
 
+  dmesg.closeHandler(dmesgHandler);
+ 
   return RUN_ALL_TESTS();
 }
