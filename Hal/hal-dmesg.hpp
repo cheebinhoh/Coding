@@ -6,9 +6,12 @@
  * distributed message synchronization mechanism using Google protobuf
  * as a base message encoding/decoding.
  *
- * It is intentionally modelled to be behave like IO but not inherit
+ * It is intentionally modelled to behave like IO but not inherit
  * the Hal_Io due to conflict of template type for Hal_Io in parent
- * classes that also inherits Hal_Io.
+ * classes that also inherits Hal_Io but uses different template type,
+ * classic diamond-shape problem of C++ multiple inherittance. NOTE that
+ * one solution is to have Hal_DMesgHandler inheritted from Hal_Io but
+ * encomposes Hal::Hal_Pub<...> as object than inherit from it.
  */
 
 #ifndef HAL_DMESG_HPP_HAVE_SEEN
