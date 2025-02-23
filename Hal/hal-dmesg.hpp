@@ -55,33 +55,62 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
       return {};
     }
 
-    void writeDMesg(Hal::DMesgPb &&item) {
-      Hal::DMesgPb movedItem = std::move_if_noexcept(item);
+    /**
+     * @brief The method writes and publishes the DMesg protobuf through DMesg
+     * publisher queue to all subscribers. This method will move the DMesg data.
+     *
+     * @param dMesgPb The DMesg protobuf to be published
+     */
+    void writeDMesg(Hal::DMesgPb &&dmesgPb) {
+      Hal::DMesgPb movedDMesgPb = std::move_if_noexcept(dmesgPb);
 
-      writeDMesg(movedItem, true);
+      writeDMesgInternal(movedDMesgPb, true);
     }
 
-    void writeDMesg(Hal::DMesgPb &item) { writeDMesg(item, false); }
+    /**
+     * @brief The method writes and publishes the DMesg protobuf through DMesg
+     * publisher queue to all subscribers. This method will copy the DMesg data.
+     *
+     * @param dMesgPb The DMesg protobuf to be published
+     */
+    void writeDMesg(Hal::DMesgPb &dmesgPb) {
+      writeDMesgInternal(dmesgPb, false);
+    }
 
     friend class Hal_DMesg;
 
   protected:
-    void writeDMesg(Hal::DMesgPb &item, bool move) {
-      std::string id = item.identifier();
+    /**
+     * @brief The method writes and publishes the DMesg protobuf through DMesg
+     * publisher queue to all subscribers. This method will move the DMesg data
+     * if move argument is true, otherwise copy the data.
+     *
+     * @param dMesgPb The DMesg protobuf to be published
+     * @param move True to move than copy the data
+     */
+    void writeDMesgInternal(Hal::DMesgPb &dmesgPb, bool move) {
+      std::string id = dmesgPb.identifier();
       long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
 
-      item.set_source(m_name);
-      item.set_runningcounter(nextRunningCounter);
+      dmesgPb.set_source(m_name);
+      dmesgPb.set_runningcounter(nextRunningCounter);
 
       if (move) {
-        m_owner->publish(std::move_if_noexcept(item));
+        m_owner->publish(std::move_if_noexcept(dmesgPb));
       } else {
-        m_owner->publish(item);
+        m_owner->publish(dmesgPb);
       }
 
       m_identifierRunningCounter[id] = nextRunningCounter;
     }
 
+    /**
+     * @brief The method will be called by publisher object about new DMesg data
+     *        and insert the data into the buffer for subscriber to consume if
+     *        the data has NOT been notified before (based on running counter).
+     *
+     * @param dmesgPb The DMesg protobuf data notified by publisher object
+     */
     void notify(Hal::DMesgPb dmesgPb) override {
       if (dmesgPb.source() != m_name) {
         std::string id = dmesgPb.identifier();
@@ -162,28 +191,21 @@ public:
     handlerToClose = {};
   }
 
-  // open shared ptr of Hal_DMesgHandler which is subclass of
-  // Hal_Pub<Hal::DMesgPb>::Sub Hal_DMesgHandler maintains a list of
-  // Hal::DMesgPb read from Hal_Pub but yet to be read by client of the
-  // Hal_DMesgHandler So the Hal_DMesgHandler also inherit Hal::Hal_Io Each read
-  // of Hal_DMesgHandler will either blocking and waiting for data from Hal_Pub
-  // or it returns the next Hal::DMesgPb, so it is blocking like Tcp socket.
-
 protected:
   using Hal_Pub::publish;
 
   /**
-   * @brief The method publishes data item to registered subscribers.
+   * @brief The method publishes dmesgPb to registered subscribers.
    *
-   * @param item The data item to be published
+   * @param dmesgPb The dmesgPb to be published
    */
-  void publishInternal(Hal::DMesgPb item) override {
-    std::string id = item.identifier();
+  void publishInternal(Hal::DMesgPb dmesgPb) override {
+    std::string id = dmesgPb.identifier();
     long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
 
     try {
-      item.set_runningcounter(nextRunningCounter);
-      Hal_Pub::publishInternal(item);
+      dmesgPb.set_runningcounter(nextRunningCounter);
+      Hal_Pub::publishInternal(dmesgPb);
       m_identifierRunningCounter[id] = nextRunningCounter;
     } catch (...) {
       throw;
