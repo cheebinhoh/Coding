@@ -18,6 +18,7 @@
 #include <vector>
 
 namespace Hal {
+
 class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
   class Hal_DMesgHandler : public Hal::Hal_Pub<Hal::DMesgPb>::Hal_Sub {
@@ -216,6 +217,7 @@ private:
   std::vector<std::shared_ptr<Hal_DMesgHandler>> m_handlers{};
   std::map<std::string, long long> m_identifierRunningCounter{};
 };
+
 } /* namespace Hal */
 
 #endif /* HAL_DMESG_HPP_HAVE_SEEN */
