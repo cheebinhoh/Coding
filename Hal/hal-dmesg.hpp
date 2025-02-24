@@ -32,9 +32,51 @@ namespace Hal {
 
 class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
-  class Hal_DMesgHandler : public Hal::Hal_Pub<Hal::DMesgPb>::Hal_Sub {
+  using ConflictResolveTask = std::function<void(Hal::DMesgPb)>;
+
+  class Hal_DMesgHandler : public Hal_Io<Hal::DMesgPb> {
+    class Hal_DMesgHandlerSub : public Hal::Hal_Pub<Hal::DMesgPb>::Hal_Sub {
+    public:
+      Hal_DMesgHandlerSub() = default;
+
+      Hal_DMesgHandlerSub(const Hal_DMesgHandlerSub &halDMesgHandlerSub) =
+          delete;
+      const Hal_DMesgHandlerSub &
+      operator=(const Hal_DMesgHandlerSub &halDMesgHandlerSub) = delete;
+      Hal_DMesgHandlerSub(Hal_DMesgHandlerSub &&halDMesgHandlerSub) = delete;
+      Hal_DMesgHandlerSub &
+      operator=(Hal_DMesgHandlerSub &&halDMesgHandlerSub) = delete;
+
+      /**
+       * @brief The method will be called by publisher object about new DMesg
+       * data and insert the data into the buffer for subscriber to consume if
+       *        the data has NOT been notified before (based on running
+       * counter).
+       *
+       * @param dmesgPb The DMesg protobuf data notified by publisher object
+       */
+      void notify(Hal::DMesgPb dmesgPb) override {
+        if (dmesgPb.source() != m_owner->m_name) {
+          std::string id = dmesgPb.identifier();
+          long long runningCounter = m_owner->m_identifierRunningCounter[id];
+
+          if (dmesgPb.runningcounter() > runningCounter) {
+            m_owner->m_identifierRunningCounter[id] = dmesgPb.runningcounter();
+            m_owner->m_buffers.push(dmesgPb);
+          }
+        }
+      }
+
+      friend class Hal_DMesgHandler;
+
+    private:
+      Hal_DMesgHandler *m_owner{};
+    };
+
   public:
-    Hal_DMesgHandler(std::string_view name) : m_name{name} {}
+    Hal_DMesgHandler(std::string_view name) : m_name{name} {
+      m_sub.m_owner = this;
+    }
 
     ~Hal_DMesgHandler() noexcept try {
     } catch (...) {
@@ -56,7 +98,7 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
      *
      * @return DMesg protobuf or nullopt if exception is thrown.
      */
-    std::optional<Hal::DMesgPb> readDMesg() {
+    std::optional<Hal::DMesgPb> read() override {
       try {
         Hal::DMesgPb mesgPb = m_buffers.pop();
 
@@ -73,7 +115,7 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
      *
      * @param dMesgPb The DMesg protobuf to be published
      */
-    void writeDMesg(Hal::DMesgPb &&dmesgPb) {
+    void write(Hal::DMesgPb &&dmesgPb) override {
       Hal::DMesgPb movedDMesgPb = std::move_if_noexcept(dmesgPb);
 
       writeDMesgInternal(movedDMesgPb, true);
@@ -85,11 +127,14 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
      *
      * @param dMesgPb The DMesg protobuf to be published
      */
-    void writeDMesg(Hal::DMesgPb &dmesgPb) {
+    void write(Hal::DMesgPb &dmesgPb) override {
       writeDMesgInternal(dmesgPb, false);
     }
 
+    void waitForEmpty() { m_sub.waitForEmpty(); }
+
     friend class Hal_DMesg;
+    friend class Hal_DMesgHandlerSub;
 
   protected:
     /**
@@ -123,23 +168,26 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
      *
      * @param dmesgPb The DMesg protobuf data notified by publisher object
      */
-    void notify(Hal::DMesgPb dmesgPb) override {
-      if (dmesgPb.source() != m_name) {
-        std::string id = dmesgPb.identifier();
-        long long runningCounter = m_identifierRunningCounter[id];
+    /*
+        void notify(Hal::DMesgPb dmesgPb) override {
+          if (dmesgPb.source() != m_name) {
+            std::string id = dmesgPb.identifier();
+            long long runningCounter = m_identifierRunningCounter[id];
 
-        if (dmesgPb.runningcounter() > runningCounter) {
-          m_identifierRunningCounter[id] = dmesgPb.runningcounter();
-          m_buffers.push(dmesgPb);
+            if (dmesgPb.runningcounter() > runningCounter) {
+              m_identifierRunningCounter[id] = dmesgPb.runningcounter();
+              m_buffers.push(dmesgPb);
+            }
+          }
         }
-      }
-    }
+     */
 
   private:
     std::string m_name{};
     Hal_Buffer<Hal::DMesgPb> m_buffers{};
     Hal_DMesg *m_owner{};
     std::map<std::string, long long> m_identifierRunningCounter{};
+    Hal_DMesgHandlerSub m_sub{};
   }; /* Hal_DMesgHandler */
 
 public:
@@ -147,7 +195,7 @@ public:
 
   virtual ~Hal_DMesg() noexcept try {
     for (auto &handler : m_handlers) {
-      this->unregisterSubscriber(handler.get());
+      this->unregisterSubscriber(&(handler->m_sub));
       handler->m_owner = nullptr;
     }
   } catch (...) {
@@ -175,7 +223,7 @@ public:
 
     m_handlers.push_back(handler);
     handler->m_owner = this;
-    this->registerSubscriber(handler.get());
+    this->registerSubscriber(&(handler->m_sub));
 
     return handlerRet;
   }
@@ -188,7 +236,7 @@ public:
    * @param handlerToClose the handler to be closed
    */
   void closeHandler(std::shared_ptr<Hal_DMesgHandler> &handlerToClose) {
-    this->unregisterSubscriber(handlerToClose.get());
+    this->unregisterSubscriber(&(handlerToClose->m_sub));
 
     std::vector<std::shared_ptr<Hal_DMesgHandler>>::iterator it = std::find_if(
         m_handlers.begin(), m_handlers.end(), [handlerToClose](auto handler) {

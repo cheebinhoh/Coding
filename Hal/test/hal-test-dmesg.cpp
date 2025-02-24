@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
   Hal::Hal_Proc procRead1{"read1", [&dmesgReadHandler1, &dmesgPb]() {
     std::cout << "before read1\n";
-    auto dmesgPbRead = dmesgReadHandler1->readDMesg();
+    auto dmesgPbRead = dmesgReadHandler1->read();
     std::cout << "after read1, and proceed to validate read\n";
     EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb.identifier());
     EXPECT_TRUE(dmesgPbRead->source() == dmesgPb.source());
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
   Hal::Hal_Proc procRead2{"read2", [&dmesgReadHandler2, &dmesgPb]() {
     std::cout << "before read2\n";
-    auto dmesgPbRead = dmesgReadHandler2->readDMesg();
+    auto dmesgPbRead = dmesgReadHandler2->read();
     std::cout << "after read2, and proceed to validate read\n";
     EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb.identifier());
     EXPECT_TRUE(dmesgPbRead->source() == dmesgPb.source());
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
   std::this_thread::sleep_for(std::chrono::seconds(3));
   std::cout << "after sleep 3 seconds\n";
 
-  dmesgWriteHandler->writeDMesg(dmesgPb);
+  dmesgWriteHandler->write(dmesgPb);
   dmesg.waitForEmpty();
   dmesgReadHandler1->waitForEmpty();
   dmesgReadHandler2->waitForEmpty();
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
   proc.exec();
   Hal::Hal_Proc::yield();
 
-  auto dmesgPbRead = dmesgHandler->readDMesg();
+  auto dmesgPbRead = dmesgHandler->read();
   if (dmesgPbRead) {
     std::cout << "data read\n";
     EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb.identifier());
