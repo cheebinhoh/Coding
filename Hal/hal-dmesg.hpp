@@ -5,13 +5,6 @@
  * it inherits from Hal_Pub and Hal_Pub::Sub classes to implement
  * distributed message synchronization mechanism using Google protobuf
  * as a base message encoding/decoding.
- *
- * It is intentionally modelled to behave like IO but not inherit
- * the Hal_Io due to conflict of template type for Hal_Io in parent
- * classes that also inherits Hal_Io but uses different template type,
- * classic diamond-shape problem of C++ multiple inherittance. NOTE that
- * one solution is to have Hal_DMesgHandler inheritted from Hal_Io but
- * encomposes Hal::Hal_Pub<...> as object than inherit from it.
  */
 
 #ifndef HAL_DMESG_HPP_HAVE_SEEN
@@ -34,6 +27,16 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
   using ConflictResolveTask = std::function<void(Hal::DMesgPb)>;
 
+  /**
+   * @brief The Hal_DMesgHandler is intentionalled modolled to inherit from
+   *        Hal_Io that provides read/write IO interface across a range of
+   *        IO, like socket, file, etc, and the Hal_DMesgHandler is just
+   *        another IO, because of that we do NOT able to inherit from Hal_Pub
+   *        as Hal_Pub inherit Hal_Async which inherits from Hal_Pipe which
+   *        inherit Hal_Io with template type specialized to functor, this
+   *        is a diamond shape multiple inherittance where common parent
+   *        has to be same instantiated template type.
+   */
   class Hal_DMesgHandler : public Hal_Io<Hal::DMesgPb> {
     class Hal_DMesgHandlerSub : public Hal::Hal_Pub<Hal::DMesgPb>::Hal_Sub {
     public:
@@ -160,27 +163,6 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
       m_identifierRunningCounter[id] = nextRunningCounter;
     }
-
-    /**
-     * @brief The method will be called by publisher object about new DMesg data
-     *        and insert the data into the buffer for subscriber to consume if
-     *        the data has NOT been notified before (based on running counter).
-     *
-     * @param dmesgPb The DMesg protobuf data notified by publisher object
-     */
-    /*
-        void notify(Hal::DMesgPb dmesgPb) override {
-          if (dmesgPb.source() != m_name) {
-            std::string id = dmesgPb.identifier();
-            long long runningCounter = m_identifierRunningCounter[id];
-
-            if (dmesgPb.runningcounter() > runningCounter) {
-              m_identifierRunningCounter[id] = dmesgPb.runningcounter();
-              m_buffers.push(dmesgPb);
-            }
-          }
-        }
-     */
 
   private:
     std::string m_name{};
