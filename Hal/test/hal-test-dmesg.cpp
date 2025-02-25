@@ -18,37 +18,48 @@ int main(int argc, char *argv[])
   EXPECT_TRUE(dmesgWriteHandler);
 
   auto dmesgReadHandler1 = dmesg.openHandler("readHandler1");
-  auto dmesgReadHandler2 = dmesg.openHandler("readHandler2");
+  auto dmesgReadHandler2 = dmesg.openHandler("readHandler2", [](const Hal::DMesgPb &dmesgPb) -> bool {
+    return dmesgPb.body().message() != "message string 1";
+  });
 
-  Hal::DMesgPb dmesgPb{};
-  dmesgPb.set_identifier("id1");
-  dmesgPb.set_runningcounter(99);
-  dmesgPb.set_source("unknown");
-  dmesgPb.set_type(Hal::DMesgTypePb::message);
+  Hal::DMesgPb dmesgPb1{};
+  dmesgPb1.set_identifier("id1");
+  dmesgPb1.set_runningcounter(99);
+  dmesgPb1.set_source("unknown");
+  dmesgPb1.set_type(Hal::DMesgTypePb::message);
 
-  Hal::DMesgBodyPb *dmsgbodyPb = dmesgPb.mutable_body();
-  dmsgbodyPb->set_message("message string");
+  Hal::DMesgBodyPb *dmsgbodyPb1 = dmesgPb1.mutable_body();
+  dmsgbodyPb1->set_message("message string 1");
 
-  Hal::Hal_Proc procRead1{"read1", [&dmesgReadHandler1, &dmesgPb]() {
+  Hal::DMesgPb dmesgPb2{};
+  dmesgPb2.set_identifier("id1");
+  dmesgPb2.set_runningcounter(99);
+  dmesgPb2.set_source("unknown");
+  dmesgPb2.set_type(Hal::DMesgTypePb::message);
+
+  Hal::DMesgBodyPb *dmsgbodyPb2 = dmesgPb2.mutable_body();
+  dmsgbodyPb2->set_message("message string 2");
+
+  Hal::Hal_Proc procRead1{"read1", [&dmesgReadHandler1, &dmesgPb1]() {
     std::cout << "before read1\n";
     auto dmesgPbRead = dmesgReadHandler1->read();
     std::cout << "after read1, and proceed to validate read\n";
-    EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb.identifier());
-    EXPECT_TRUE(dmesgPbRead->source() == dmesgPb.source());
-    EXPECT_TRUE(dmesgPbRead->runningcounter() == dmesgPb.runningcounter());
-    EXPECT_TRUE(dmesgPbRead->type() == dmesgPb.type());
-    EXPECT_TRUE(dmesgPbRead->body().message() == dmesgPb.body().message());
+    EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb1.identifier());
+    EXPECT_TRUE(dmesgPbRead->source() == dmesgPb1.source());
+    EXPECT_TRUE(dmesgPbRead->runningcounter() == dmesgPb1.runningcounter());
+    EXPECT_TRUE(dmesgPbRead->type() == dmesgPb1.type());
+    EXPECT_TRUE(dmesgPbRead->body().message() == dmesgPb1.body().message());
   }};
 
-  Hal::Hal_Proc procRead2{"read2", [&dmesgReadHandler2, &dmesgPb]() {
+  Hal::Hal_Proc procRead2{"read2", [&dmesgReadHandler2, &dmesgPb2]() {
     std::cout << "before read2\n";
     auto dmesgPbRead = dmesgReadHandler2->read();
     std::cout << "after read2, and proceed to validate read\n";
-    EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb.identifier());
-    EXPECT_TRUE(dmesgPbRead->source() == dmesgPb.source());
-    EXPECT_TRUE(dmesgPbRead->runningcounter() == dmesgPb.runningcounter());
-    EXPECT_TRUE(dmesgPbRead->type() == dmesgPb.type());
-    EXPECT_TRUE(dmesgPbRead->body().message() == dmesgPb.body().message());
+    EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb2.identifier());
+    EXPECT_TRUE(dmesgPbRead->source() == dmesgPb2.source());
+    EXPECT_TRUE(dmesgPbRead->runningcounter() == dmesgPb2.runningcounter());
+    EXPECT_TRUE(dmesgPbRead->type() == dmesgPb2.type());
+    EXPECT_TRUE(dmesgPbRead->body().message() == dmesgPb2.body().message());
   }};
 
   procRead1.exec();
@@ -58,7 +69,9 @@ int main(int argc, char *argv[])
   std::this_thread::sleep_for(std::chrono::seconds(3));
   std::cout << "after sleep 3 seconds\n";
 
-  dmesgWriteHandler->write(dmesgPb);
+  dmesgWriteHandler->write(dmesgPb1);
+  dmesgWriteHandler->write(dmesgPb2);
+
   dmesg.waitForEmpty();
   dmesgReadHandler1->waitForEmpty();
   dmesgReadHandler2->waitForEmpty();

@@ -26,6 +26,7 @@ namespace Hal {
 class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
   using ConflictResolveTask = std::function<void(Hal::DMesgPb)>;
+  using FilterTask = std::function<bool(const Hal::DMesgPb &)>;
 
   /**
    * @brief The Hal_DMesgHandler is intentionalled modolled to inherit from
@@ -72,7 +73,10 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
           if (dmesgPb.runningcounter() > runningCounter) {
             m_owner->m_identifierRunningCounter[id] = dmesgPb.runningcounter();
-            m_owner->m_buffers.push(dmesgPb);
+
+            if (!m_owner->m_filterFn || m_owner->m_filterFn(dmesgPb)) {
+              m_owner->m_buffers.push(dmesgPb);
+            }
           }
         }
       }
@@ -84,7 +88,8 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     };
 
   public:
-    Hal_DMesgHandler(std::string_view name) : m_name{name} {
+    Hal_DMesgHandler(std::string_view name, FilterTask filter = nullptr)
+        : m_name{name}, m_filterFn{filter} {
       m_sub.m_owner = this;
     }
 
@@ -179,6 +184,7 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     Hal_DMesg *m_owner{};
     std::map<std::string, long long> m_identifierRunningCounter{};
     Hal_DMesgHandlerSub m_sub{};
+    FilterTask m_filterFn{};
   }; /* Hal_DMesgHandler */
 
 public:
@@ -207,9 +213,10 @@ public:
    *
    * @return newly created handler
    */
-  std::shared_ptr<Hal_DMesgHandler> openHandler(std::string_view name) {
+  std::shared_ptr<Hal_DMesgHandler> openHandler(std::string_view name,
+                                                FilterTask filterFn = nullptr) {
     std::shared_ptr<Hal_DMesgHandler> handler =
-        std::make_shared<Hal_DMesgHandler>(name);
+        std::make_shared<Hal_DMesgHandler>(name, filterFn);
     auto handlerRet = handler;
 
     m_handlers.push_back(handler);
