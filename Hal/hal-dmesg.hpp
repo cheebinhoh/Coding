@@ -35,12 +35,19 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
    *        as Hal_Pub inherit Hal_Async which inherits from Hal_Pipe which
    *        inherit Hal_Io with template type specialized to functor, this
    *        is a diamond shape multiple inherittance where common parent
-   *        has to be same instantiated template type.
+   *        has to have same instantiated template type. Object composition
+   *        helps resolve the problem.
    */
   class Hal_DMesgHandler : public Hal_Io<Hal::DMesgPb> {
     class Hal_DMesgHandlerSub : public Hal::Hal_Pub<Hal::DMesgPb>::Hal_Sub {
     public:
       Hal_DMesgHandlerSub() = default;
+
+      ~Hal_DMesgHandlerSub() noexcept try {
+      } catch (...) {
+        // explicit return to resolve exception as destructor must be noexcept
+        return;
+      }
 
       Hal_DMesgHandlerSub(const Hal_DMesgHandlerSub &halDMesgHandlerSub) =
           delete;
@@ -52,9 +59,9 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
       /**
        * @brief The method will be called by publisher object about new DMesg
-       * data and insert the data into the buffer for subscriber to consume if
-       *        the data has NOT been notified before (based on running
-       * counter).
+       *        data and insert the data into the buffer for subscriber to
+       *        consume if the data has NOT been notified before (based on
+       *        running counter).
        *
        * @param dmesgPb The DMesg protobuf data notified by publisher object
        */
@@ -94,7 +101,7 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     Hal_DMesgHandler &operator=(Hal_DMesgHandler &&halDMesgHandler) = delete;
 
     /**
-     * @brief The method read a DMesg protobuf message out of the handler
+     * @brief The method reads a DMesg protobuf message out of the handler
      *        opened with DMesg. This is a blocking call until a DMesg
      *        protobuf message is returned or exception is thrown, then
      *        nullopt is returned.
@@ -114,7 +121,8 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
     /**
      * @brief The method writes and publishes the DMesg protobuf through DMesg
-     * publisher queue to all subscribers. This method will move the DMesg data.
+     *        publisher queue to all subscribers. This method will move the
+     *        DMesg data.
      *
      * @param dMesgPb The DMesg protobuf to be published
      */
@@ -126,7 +134,8 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
     /**
      * @brief The method writes and publishes the DMesg protobuf through DMesg
-     * publisher queue to all subscribers. This method will copy the DMesg data.
+     *        publisher queue to all subscribers. This method will copy the
+     *        DMesg data.
      *
      * @param dMesgPb The DMesg protobuf to be published
      */
@@ -142,8 +151,8 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
   protected:
     /**
      * @brief The method writes and publishes the DMesg protobuf through DMesg
-     * publisher queue to all subscribers. This method will move the DMesg data
-     * if move argument is true, otherwise copy the data.
+     *        publisher queue to all subscribers. This method will move the
+     *        DMesg data if move argument is true, otherwise copy the data.
      *
      * @param dMesgPb The DMesg protobuf to be published
      * @param move True to move than copy the data
