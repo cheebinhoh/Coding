@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
  * The Hal_DMesg stands for HAL Distributed Messaging framework that
  * it inherits from Hal_Pub and Hal_Pub::Sub classes to implement
@@ -18,14 +18,13 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <stdexcept>
 #include <string_view>
 #include <vector>
 
 namespace Hal {
 
 class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
-
-  using ConflictResolveTask = std::function<void(Hal::DMesgPb)>;
   using FilterTask = std::function<bool(const Hal::DMesgPb &)>;
 
   /**
@@ -40,6 +39,9 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
    *        helps resolve the problem.
    */
   class Hal_DMesgHandler : public Hal_Io<Hal::DMesgPb> {
+    using ConflictCallbackTask =
+        std::function<void(Hal_DMesgHandler &handler, const Hal::DMesgPb &)>;
+
     class Hal_DMesgHandlerSub : public Hal::Hal_Pub<Hal::DMesgPb>::Hal_Sub {
     public:
       Hal_DMesgHandlerSub() = default;
@@ -105,6 +107,8 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     Hal_DMesgHandler(Hal_DMesgHandler &&halDMesgHandler) = delete;
     Hal_DMesgHandler &operator=(Hal_DMesgHandler &&halDMesgHandler) = delete;
 
+    bool isInConflict() const { return m_inConflict; }
+
     /**
      * @brief The method reads a DMesg protobuf message out of the handler
      *        opened with DMesg. This is a blocking call until a DMesg
@@ -122,6 +126,20 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
       }
 
       return {};
+    }
+
+    /**
+     * @brief The method marks the handler as conflict resolved.
+     */
+    void resolveConflict() { m_inConflict = false; }
+
+    /**
+     * @brief The method set the callback function for conflict.
+     *
+     * @param cb The conflict callback function
+     */
+    void setConflictCallbackTask(ConflictCallbackTask cb) {
+      m_conflictCallbackFn = cb;
     }
 
     /**
@@ -163,6 +181,10 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
      * @param move True to move than copy the data
      */
     void writeDMesgInternal(Hal::DMesgPb &dmesgPb, bool move) {
+      if (m_inConflict) {
+        throw std::runtime_error("last write results in conflicted");
+      }
+
       std::string id = dmesgPb.identifier();
       long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
 
@@ -179,12 +201,29 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     }
 
   private:
+    /**
+     * @brief The method marks the writer as in conflict state and executes the
+     *        conflict callback function in the caller async context.
+     *
+     * @param mesgPb The dmesgPb data that results in conflict state
+     */
+    void throwConflict(const Hal::DMesgPb dmesgPb) {
+      m_inConflict = true;
+
+      if (m_conflictCallbackFn) {
+        m_sub.write(
+            [this, dmesgPb]() { this->m_conflictCallbackFn(*this, dmesgPb); });
+      }
+    }
+
     std::string m_name{};
     Hal_Buffer<Hal::DMesgPb> m_buffers{};
     Hal_DMesg *m_owner{};
     std::map<std::string, long long> m_identifierRunningCounter{};
     Hal_DMesgHandlerSub m_sub{};
     FilterTask m_filterFn{};
+    bool m_inConflict{};
+    ConflictCallbackTask m_conflictCallbackFn{};
   }; /* Hal_DMesgHandler */
 
 public:
@@ -210,6 +249,8 @@ public:
    *        published message and returns he handler to the caller.
    *
    * @param name the name or unique identification to the handler
+   * @param filterFn the functor callback that returns false to filter out Dmesg
+   *        message, if no functor is provided, no filter is performed.
    *
    * @return newly created handler
    */
@@ -253,13 +294,34 @@ protected:
   using Hal_Pub::publish;
 
   /**
-   * @brief The method publishes dmesgPb to registered subscribers.
+   * @brief The method publishes dmesgPb to registered subscribers. If the to be
+   *        published dmesgPb has smaller runningcounter than what is in core,
+   *        it means that the writer is out of sync and in race condition that
+   *        it has not yet receive the last published data from core, but write
+   *        to publisher with backdate running counter, in this case, we set the
+   *        writer handler to be in conflict state, and throws exception for
+   *        future write until it manually mark it as conflict resolved. We do
+   * not put the whole core as in conflict, but the particular writer.
    *
    * @param dmesgPb The dmesgPb to be published
    */
   void publishInternal(Hal::DMesgPb dmesgPb) override {
     std::string id = dmesgPb.identifier();
     long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
+
+    if (dmesgPb.runningcounter() < nextRunningCounter) {
+      std::vector<std::shared_ptr<Hal_DMesgHandler>>::iterator it =
+          std::find_if(m_handlers.begin(), m_handlers.end(),
+                       [&dmesgPb](auto handler) {
+                         return handler->m_name == dmesgPb.source();
+                       });
+
+      if (it != m_handlers.end()) {
+        (*it)->throwConflict(dmesgPb);
+
+        return;
+      }
+    }
 
     try {
       dmesgPb.set_runningcounter(nextRunningCounter);
