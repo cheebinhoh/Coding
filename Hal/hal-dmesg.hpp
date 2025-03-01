@@ -227,7 +227,7 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
   }; /* Hal_DMesgHandler */
 
 public:
-  Hal_DMesg(std::string_view name) : Hal_Pub{name, 10} {}
+  Hal_DMesg(std::string_view name) : Hal_Pub{name, 10}, m_name{name} {}
 
   virtual ~Hal_DMesg() noexcept try {
     for (auto &handler : m_handlers) {
@@ -333,6 +333,7 @@ protected:
   }
 
 private:
+  std::string m_name{};
   std::vector<std::shared_ptr<Hal_DMesgHandler>> m_handlers{};
   std::map<std::string, long long> m_identifierRunningCounter{};
 };

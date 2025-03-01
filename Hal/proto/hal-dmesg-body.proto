@@ -1,12 +1,22 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package Hal;
+
+message DMesgSysPb
+{
+  string                    identifier  = 1;
+  google.protobuf.Timestamp timestamp   = 2;
+  bool                      initialized = 3; 
+}
 
 message DMesgBodyPb
 {
   oneof Body
   {
-    string message = 1;   
+    DMesgSysPb sys     = 1;
+    string     message = 2;   
   }
 }
 

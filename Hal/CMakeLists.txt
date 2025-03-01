@@ -30,8 +30,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(protobuf)
 
-find_package(protobuf REQUIRED)
-
 # build hardware abstraction layer library
 add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp

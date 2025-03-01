@@ -26,6 +26,7 @@ macro(GENERATE_PROTOBUF ...)
                       PROTOS ${CMAKE_CURRENT_SOURCE_DIR}/proto/${arg}
                       LANGUAGE cpp
                       OUT_VAR PROTOBUF_GENERATED_FILES
+                      PROTOC_OPTIONS "-I${protobuf_SOURCE_DIR}/src"
                       PROTOC_OUT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
   endforeach()
 endmacro()
