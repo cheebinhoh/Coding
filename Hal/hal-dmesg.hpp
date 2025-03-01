@@ -332,6 +332,11 @@ public:
 protected:
   using Hal_Pub::publish;
 
+  /**
+   * @brief The method publishes system message through async context queue.
+   *
+   * @param dmesgSysPb The system dmesg protobuf message
+   */
   void publishSysInternal(Hal::DMesgPb dmesgSysPb) {
     assert(dmesgSysPb.identifier() == DMesgSysIdentifier);
     assert(dmesgSysPb.type() == Hal::DMesgTypePb::sys);

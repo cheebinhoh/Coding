@@ -30,6 +30,13 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(protobuf)
 
+# options
+option(BUILD_NDEBUG "build without debug" OFF)
+
+if(BUILD_NDEBUG)
+add_compile_definitions(NDEBUG)
+endif()
+
 # build hardware abstraction layer library
 add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
