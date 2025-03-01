@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
  */
 
 #include "hal-dmesg.hpp"
@@ -83,28 +83,5 @@ int main(int argc, char *argv[])
   dmesg.closeHandler(dmesgReadHandler1);
   dmesg.closeHandler(dmesgReadHandler2);
  
-/*
-  Hal::Hal_Proc proc{"publish thread", [&dmesg, &dmesgPb]() {
-    std::cout << "sleep 5 seconds before publishing\n";
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    dmesg.publish(dmesgPb);
-    std::cout << "done published\n";
-  }};
-
-  proc.exec();
-  Hal::Hal_Proc::yield();
-
-  auto dmesgPbRead = dmesgHandler->read();
-  if (dmesgPbRead) {
-    std::cout << "data read\n";
-    EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb.identifier());
-    EXPECT_TRUE(dmesgPbRead->runningcounter() == dmesgPb.runningcounter());
-    EXPECT_TRUE(dmesgPbRead->source() == dmesgPb.source());
-    EXPECT_TRUE(dmesgPbRead->type() == dmesgPb.type());
-    EXPECT_TRUE(dmesgPbRead->body().message() == dmesgPb.body().message());
-  }
-*/
-
-
   return RUN_ALL_TESTS();
 }
