@@ -301,7 +301,7 @@ protected:
    *        to publisher with backdate running counter, in this case, we set the
    *        writer handler to be in conflict state, and throws exception for
    *        future write until it manually mark it as conflict resolved. We do
-   * not put the whole core as in conflict, but the particular writer.
+   *        not put the whole core as in conflict, but the particular writer.
    *
    * @param dmesgPb The dmesgPb to be published
    */
