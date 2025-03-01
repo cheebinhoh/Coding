@@ -1,7 +1,7 @@
 ADD_TEST_EXECUTABLE(hal
                     hal-test-async
                     hal-test-buffer
-                    hal-test-dmesg
+                    hal-test-dmesg-1
                     hal-test-dmesg-2
                     hal-test-dmesg-pb
                     hal-test-io
