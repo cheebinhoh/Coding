@@ -14,15 +14,18 @@
 #include "hal-pub-sub.hpp"
 #include "proto/hal-dmesg.pb.h"
 
+#include <cassert>
 #include <iostream>
 #include <map>
 #include <memory>
 #include <optional>
 #include <stdexcept>
 #include <string_view>
+#include <sys/time.h>
 #include <vector>
 
 namespace Hal {
+const std::string DMesgSysIdentifier = "sys.hal-dmesg";
 
 class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
   using FilterTask = std::function<bool(const Hal::DMesgPb &)>;
@@ -69,14 +72,28 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
        * @param dmesgPb The DMesg protobuf data notified by publisher object
        */
       void notify(Hal::DMesgPb dmesgPb) override {
-        if (dmesgPb.source() != m_owner->m_name) {
+        if (dmesgPb.source() != m_owner->m_name ||
+            dmesgPb.type() == Hal::DMesgTypePb::sys) {
           std::string id = dmesgPb.identifier();
           long long runningCounter = m_owner->m_identifierRunningCounter[id];
 
           if (dmesgPb.runningcounter() > runningCounter) {
             m_owner->m_identifierRunningCounter[id] = dmesgPb.runningcounter();
 
-            if (!m_owner->m_filterFn || m_owner->m_filterFn(dmesgPb)) {
+            if (dmesgPb.type() == Hal::DMesgTypePb::sys) {
+              m_owner->m_lastDMesgSysPb = dmesgPb;
+
+              if (dmesgPb.source() == m_owner->m_name) {
+                m_owner->m_initialized = true;
+              }
+
+              HAL_DEBUG_PRINT(std::cout << "who: " << m_owner->m_name
+                                        << ", initialized: " << std::boolalpha
+                                        << m_owner->m_initialized
+                                        << ", sys.source: " << dmesgPb.source()
+                                        << ", sys.runningcounter: "
+                                        << dmesgPb.runningcounter() << "\n");
+            } else if (!m_owner->m_filterFn || m_owner->m_filterFn(dmesgPb)) {
               m_owner->m_buffers.push(dmesgPb);
             }
           }
@@ -217,13 +234,15 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     }
 
     std::string m_name{};
+    FilterTask m_filterFn{};
     Hal_Buffer<Hal::DMesgPb> m_buffers{};
     Hal_DMesg *m_owner{};
     std::map<std::string, long long> m_identifierRunningCounter{};
     Hal_DMesgHandlerSub m_sub{};
-    FilterTask m_filterFn{};
-    bool m_inConflict{};
     ConflictCallbackTask m_conflictCallbackFn{};
+    bool m_inConflict{};
+    Hal::DMesgPb m_lastDMesgSysPb{};
+    bool m_initialized{};
   }; /* Hal_DMesgHandler */
 
 public:
@@ -264,6 +283,26 @@ public:
     handler->m_owner = this;
     this->registerSubscriber(&(handler->m_sub));
 
+    // generate a sys message on behalf of the opening handler as a sort
+    // of heartbeat.
+    Hal::DMesgPb hbSysPb{};
+    hbSysPb.set_identifier(DMesgSysIdentifier);
+    hbSysPb.set_source(name);
+    hbSysPb.set_type(Hal::DMesgTypePb::sys);
+
+    Hal::DMesgBodyPb *dmesgSysBodyPb = hbSysPb.mutable_body();
+    Hal::DMesgSysPb *dmesgSysBodySysPb = dmesgSysBodyPb->mutable_sys();
+    dmesgSysBodySysPb->set_identifier(m_name);
+    dmesgSysBodySysPb->set_initialized(true);
+
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    dmesgSysBodySysPb->mutable_timestamp()->set_seconds(tv.tv_sec);
+    dmesgSysBodySysPb->mutable_timestamp()->set_nanos(tv.tv_usec * 1000);
+
+    HAL_ASYNC_CALL_WITH_CAPTURE({ this->publishSysInternal(hbSysPb); }, this,
+                                hbSysPb);
+
     return handlerRet;
   }
 
@@ -292,6 +331,22 @@ public:
 
 protected:
   using Hal_Pub::publish;
+
+  void publishSysInternal(Hal::DMesgPb dmesgSysPb) {
+    assert(dmesgSysPb.identifier() == DMesgSysIdentifier);
+    assert(dmesgSysPb.type() == Hal::DMesgTypePb::sys);
+
+    std::string id = dmesgSysPb.identifier();
+    long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
+
+    try {
+      dmesgSysPb.set_runningcounter(nextRunningCounter);
+      Hal_Pub::publishInternal(dmesgSysPb);
+      m_identifierRunningCounter[id] = nextRunningCounter;
+    } catch (...) {
+      assert("unexpected expection" == nullptr);
+    }
+  }
 
   /**
    * @brief The method publishes dmesgPb to registered subscribers. If the to be

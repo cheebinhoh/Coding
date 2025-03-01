@@ -17,6 +17,7 @@
 #define HAL_PIPE_HPP_HAVE_SEEN
 
 #include "hal-buffer.hpp"
+#include "hal-debug.hpp"
 #include "hal-io.hpp"
 #include "hal-proc.hpp"
 

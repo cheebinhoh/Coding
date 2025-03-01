@@ -42,6 +42,11 @@ add_library(hal
 )
 
 target_sources(hal
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/hal-debug.hpp
+)
+
+target_sources(hal
     INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-async.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-buffer.hpp

@@ -81,7 +81,7 @@ public:
   using Hal_Pub_Filter_Task =
       std::function<bool(const Hal_Sub *const, const T &t)>;
 
-  Hal_Pub(std::string_view name, ssize_t capacity = 2,
+  Hal_Pub(std::string_view name, ssize_t capacity = 10,
           Hal_Pub_Filter_Task filterFn = {})
       : Hal_Async(name), m_name{name}, m_capacity{capacity},
         m_filterFn{filterFn} {
