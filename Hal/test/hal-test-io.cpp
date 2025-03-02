@@ -2,6 +2,9 @@
  * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
  */
 
+#include "hal-pipe.hpp"
+#include "hal-proc.hpp"
+
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
@@ -14,9 +17,6 @@
 #include <pthread.h>
 #include <thread>
 #include <unistd.h>
-
-#include "hal-pipe.hpp"
-#include "hal-proc.hpp"
 
 std::mutex log_mutex{};
 

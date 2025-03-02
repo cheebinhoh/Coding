@@ -41,6 +41,7 @@ endif()
 add_library(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hal-socket.cpp
 
     # proto c++ sources
     ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.cc
@@ -65,6 +66,7 @@ target_sources(hal
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-pub-sub.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-singleton.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hal-socket.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-teepipe.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal-timer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hal.hpp

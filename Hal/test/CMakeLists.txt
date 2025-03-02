@@ -8,6 +8,7 @@ ADD_TEST_EXECUTABLE(hal
                     hal-test-pipe
                     hal-test-pub-sub
                     hal-test-singleton
+                    hal-test-socket
                     hal-test-teepipe
                     hal-test-timer
                     hal-test)
