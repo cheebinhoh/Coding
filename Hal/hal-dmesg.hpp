@@ -242,6 +242,8 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
 
     std::string m_name{};
     FilterTask m_filterFn{};
+    AsyncProcessTask m_asyncProcessFn{};
+
     Hal_Buffer<Hal::DMesgPb> m_buffers{};
     Hal_DMesg *m_owner{};
     std::map<std::string, long long> m_identifierRunningCounter{};
@@ -250,7 +252,6 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     bool m_inConflict{};
     Hal::DMesgPb m_lastDMesgSysPb{};
     bool m_initialized{};
-    AsyncProcessTask m_asyncProcessFn{};
   }; /* Hal_DMesgHandler */
 
 public:
@@ -405,6 +406,7 @@ protected:
 
 private:
   std::string m_name{};
+
   std::vector<std::shared_ptr<Hal_DMesgHandler>> m_handlers{};
   std::map<std::string, long long> m_identifierRunningCounter{};
 };

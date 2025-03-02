@@ -212,6 +212,7 @@ private:
   }
 
   std::string m_name{};
+
   ssize_t m_capacity{};
   Hal_Pub_Filter_Task m_filterFn{};
   std::vector<T> m_buffer{};

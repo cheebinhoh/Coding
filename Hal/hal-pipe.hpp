@@ -184,6 +184,7 @@ private:
   using Hal_Buffer<T>::pop;
   using Hal_Buffer<T>::popNoWait;
   using Hal_Buffer<T>::push;
+
   pthread_mutex_t m_mutex{};
   pthread_cond_t m_emptyCond{};
   long long m_count{};

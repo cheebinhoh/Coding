@@ -60,6 +60,7 @@ private:
   static void *runFnInThreadHelper(void *context);
 
   const std::string m_name{};
+
   Hal_Proc::Task m_fn{};
   Hal_Proc::State m_state{};
   pthread_t m_th{};

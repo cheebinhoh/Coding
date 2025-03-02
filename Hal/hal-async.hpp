@@ -65,7 +65,9 @@ public:
    *        elapsed, but might not be guaranteed that it is executed in
    *        moment that the duration is elapsed.
    *
-   * @param duration that must be elapsed before task is executed
+   * @param duration time in duraton that must be elapsed before task
+   *                 is executed
+   * @param fn       asynchronous task to be executed
    */
   template <class Rep, class Period>
   void execAfter(const std::chrono::duration<Rep, Period> &duration,
@@ -86,7 +88,9 @@ private:
    *        elapsed, but might not be guaranteed that it is executed in
    *        moment that the duration is elapsed.
    *
-   * @param duration that must be elapsed before task is executed
+   * @param timeInFuture nanoseconds that must be elapsed before the
+   *                     task is executed
+   * @param fn           asynchronous task to be executed
    */
   void execAfterInternal(long long timeInFuture, std::function<void()> fn) {
     this->write([this, timeInFuture, fn]() {

@@ -210,6 +210,7 @@ private:
 
 private:
   size_t m_maxCapacity{1};
+
   size_t m_size{0};
   pthread_mutex_t m_mutex{};
   pthread_cond_t m_popCond{};

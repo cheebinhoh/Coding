@@ -26,6 +26,7 @@ private:
   std::string m_ip4{};
   int m_portno{};
   bool m_writeOnly{};
+
   int m_fd{-1};
 };
 
