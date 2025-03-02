@@ -5,6 +5,7 @@
 #include "hal-async.hpp"
 #include "hal-proc.hpp"
 
+#include <chrono>
 #include <gtest/gtest.h>
 #include <iostream>
 #include <thread>
@@ -46,6 +47,17 @@ int main(int argc, char *argv[]) {
   std::this_thread::sleep_for(std::chrono::seconds(5));
 
   EXPECT_TRUE(static_cast<long long>(cnt) == 200);
+
+  Hal::Hal_Async async{"timer"};
+  int val = 1;
+  async.execAfter(std::chrono::seconds(5), [&val]() {
+                    val = 2;
+                  });
+  std::this_thread::sleep_for(std::chrono::seconds(3));
+  EXPECT_TRUE(1 == val);
+
+  std::this_thread::sleep_for(std::chrono::seconds(3));
+  EXPECT_TRUE(2 == val);
 
   return RUN_ALL_TESTS();
 }

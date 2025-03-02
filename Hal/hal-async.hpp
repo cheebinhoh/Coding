@@ -19,6 +19,7 @@
 
 #include "hal-pipe.hpp"
 
+#include <chrono>
 #include <functional>
 #include <string_view>
 
@@ -57,6 +58,35 @@ public:
   const Hal_Async &operator=(const Hal_Async &halAsync) = delete;
   Hal_Async(Hal_Async &&halAsync) = delete;
   Hal_Async &operator=(Hal_Async &&halAsync) = delete;
+
+  template <class Rep, class Period>
+  void execAfter(const std::chrono::duration<Rep, Period> &duration,
+                 std::function<void()> fn) {
+    long long timeInFuture =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(
+            std::chrono::system_clock::now().time_since_epoch())
+            .count() +
+        std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
+
+    this->execAfter(timeInFuture, fn);
+  }
+
+private:
+  void execAfter(long long timeInFuture, std::function<void()> fn) {
+    this->write([this, timeInFuture, fn]() {
+      long long now = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                          std::chrono::system_clock::now().time_since_epoch())
+                          .count();
+
+      if (now >= timeInFuture) {
+        if (fn) {
+          fn();
+        }
+      } else {
+        this->execAfter(timeInFuture, fn);
+      }
+    });
+  }
 }; // class Hal_Async
 
 } // namespace Hal
