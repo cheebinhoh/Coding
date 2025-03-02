@@ -24,6 +24,7 @@
 #include <cstring>
 #include <functional>
 #include <optional>
+
 #include <pthread.h>
 
 namespace Hal {

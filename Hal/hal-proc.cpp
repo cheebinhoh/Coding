@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ */
+
 #include "hal-proc.hpp"
 
 #include <cassert>

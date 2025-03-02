@@ -17,9 +17,12 @@ int main(int argc, char *argv[]) {
   // for TESTING
   Hal::Hal_Proc proc{
       "exitMainLoop", [&inst]() {
-        std::cout << "sleep 10 seconds before setting handler for SIGTERM\n";
+        HAL_DEBUG_PRINT(
+            std::cout
+            << "sleep 10 seconds before setting handler for SIGTERM\n");
         std::this_thread::sleep_for(std::chrono::seconds(10));
-        std::cout << "set signal handler to respond to " << SIGTERM << "\n";
+        HAL_DEBUG_PRINT(std::cout << "set signal handler to respond to "
+                                  << SIGTERM << "\n");
 
         inst->registerSignalHandler(
             SIGTERM, [&inst](int signo) { std::cout << "handling SIGTERM\n"; });

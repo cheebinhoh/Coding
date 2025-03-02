@@ -14,18 +14,16 @@ include(FetchContent)
 
 enable_testing()
 
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        v1.14.0
+FetchContent_Declare(googletest
+                       GIT_REPOSITORY https://github.com/google/googletest.git
+                       GIT_TAG        v1.14.0
 )
 
 FetchContent_MakeAvailable(googletest)
 
-FetchContent_Declare(
-  protobuf
-  GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
-  GIT_TAG v30.0-rc1 # Replace with desired version
+FetchContent_Declare(protobuf
+                       GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
+                       GIT_TAG        v30.0-rc1
 )
 
 FetchContent_MakeAvailable(protobuf)
@@ -34,62 +32,64 @@ FetchContent_MakeAvailable(protobuf)
 option(BUILD_NDEBUG "build without debug" OFF)
 
 if(BUILD_NDEBUG)
-add_compile_definitions(NDEBUG)
+  add_compile_definitions(NDEBUG)
 endif()
 
 # build hardware abstraction layer library
 add_library(hal
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-socket.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/hal-socket.cpp
 
-    # proto c++ sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.pb.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg.pb.cc
+              # proto c++ sources
+              ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.cc
+              ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.pb.cc
+              ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg.pb.cc
 )
 
 target_sources(hal
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-debug.hpp
+                 PRIVATE
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-debug.hpp
 )
 
 target_sources(hal
-    INTERFACE
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-async.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-buffer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-io.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-limit-buffer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesg.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-pipe.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-pub-sub.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-singleton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-socket.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-teepipe.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal-timer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hal.hpp
+                 INTERFACE
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-async.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-buffer.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-io.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-limit-buffer.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesg.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-pipe.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-pub-sub.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-singleton.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-socket.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-teepipe.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-timer.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal.hpp
 
-    # proto c++ sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.pb.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg.pb.h
+                 # proto c++ sources
+                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.h
+                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.pb.h
+                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg.pb.h
 )
 
 target_include_directories(hal
-  INTERFACE
-  ${CMAKE_CURRENT_SOURCE_DIR}
+                             INTERFACE
+                             ${CMAKE_CURRENT_SOURCE_DIR}
+                             ${protobuf_SOURCE_DIR}/src
+                             ${absl_SOURCE_DIR}
 )
 
-GENERATE_PROTOBUF(hal 
+GENERATE_PROTOBUF(hal
                     hal-dmesg-type.proto
                     hal-dmesg-body.proto
                     hal-dmesg.proto)
 
 target_link_libraries(hal
-  PRIVATE
-  protobuf::libprotobuf
+                        PRIVATE
+                        protobuf::libprotobuf
 )
 
 # run unit test
@@ -97,8 +97,8 @@ add_subdirectory(test)
 
 # build executable that uses hal
 add_executable(hal-dmesg-daemon
-               hal-dmesg-daemon.cpp)
+                 hal-dmesg-daemon.cpp)
 
 target_link_libraries(hal-dmesg-daemon
-                      PRIVATE
-                      hal)
+                        PRIVATE
+                        hal)

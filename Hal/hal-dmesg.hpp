@@ -21,8 +21,9 @@
 #include <optional>
 #include <stdexcept>
 #include <string_view>
-#include <sys/time.h>
 #include <vector>
+
+#include <sys/time.h>
 
 namespace Hal {
 const std::string DMesgSysIdentifier = "sys.hal-dmesg";
