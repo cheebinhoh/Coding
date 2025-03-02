@@ -59,6 +59,14 @@ public:
   Hal_Async(Hal_Async &&halAsync) = delete;
   Hal_Async &operator=(Hal_Async &&halAsync) = delete;
 
+  /**
+   * @brief The method will execute the asynchronous task after duration
+   *        is elapsed, the task will NOT be executed before duration is
+   *        elapsed, but might not be guaranteed that it is executed in
+   *        moment that the duration is elapsed.
+   *
+   * @param duration that must be elapsed before task is executed
+   */
   template <class Rep, class Period>
   void execAfter(const std::chrono::duration<Rep, Period> &duration,
                  std::function<void()> fn) {
@@ -68,11 +76,19 @@ public:
             .count() +
         std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
 
-    this->execAfter(timeInFuture, fn);
+    this->execAfterInternal(timeInFuture, fn);
   }
 
 private:
-  void execAfter(long long timeInFuture, std::function<void()> fn) {
+  /**
+   * @brief The method will execute the asynchronous task after duration
+   *        is elapsed, the task will NOT be executed before duration is
+   *        elapsed, but might not be guaranteed that it is executed in
+   *        moment that the duration is elapsed.
+   *
+   * @param duration that must be elapsed before task is executed
+   */
+  void execAfterInternal(long long timeInFuture, std::function<void()> fn) {
     this->write([this, timeInFuture, fn]() {
       long long now = std::chrono::duration_cast<std::chrono::nanoseconds>(
                           std::chrono::system_clock::now().time_since_epoch())
@@ -83,7 +99,7 @@ private:
           fn();
         }
       } else {
-        this->execAfter(timeInFuture, fn);
+        this->execAfterInternal(timeInFuture, fn);
       }
     });
   }
