@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ */
+
 syntax = "proto3";
 
 import "proto/hal-dmesg-type.proto";

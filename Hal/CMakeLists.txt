@@ -64,6 +64,7 @@ target_sources(hal
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-io.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-limit-buffer.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesg.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesgnet.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-pipe.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-pub-sub.hpp
