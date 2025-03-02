@@ -11,6 +11,7 @@
 
 #define HAL_DMESG_HPP_HAVE_SEEN
 
+#include "hal-debug.hpp"
 #include "hal-pub-sub.hpp"
 #include "proto/hal-dmesg.pb.h"
 
@@ -32,6 +33,7 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
   using FilterTask = std::function<bool(const Hal::DMesgPb &)>;
   using AsyncProcessTask = std::function<void(Hal::DMesgPb)>;
 
+public:
   /**
    * @brief The Hal_DMesgHandler is intentionalled modolled to inherit from
    *        Hal_Io that provides read/write IO interface across a range of
@@ -255,7 +257,6 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     bool m_initialized{};
   }; /* Hal_DMesgHandler */
 
-public:
   Hal_DMesg(std::string_view name) : Hal_Pub{name, 10}, m_name{name} {}
 
   virtual ~Hal_DMesg() noexcept try {

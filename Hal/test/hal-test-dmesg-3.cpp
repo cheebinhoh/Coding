@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
  
   EXPECT_TRUE(dmesgHandler2);
 
-  auto dmesgHandler3 = dmesg.openHandler("handlerr3", nullptr, nullptr);
+  auto dmesgHandler3 = dmesg.openHandler("handler3", nullptr, nullptr);
   EXPECT_TRUE(dmesgHandler3);
  
   Hal::DMesgPb dmesgPb{};
