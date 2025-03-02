@@ -29,6 +29,7 @@ const std::string DMesgSysIdentifier = "sys.hal-dmesg";
 
 class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
   using FilterTask = std::function<bool(const Hal::DMesgPb &)>;
+  using AsyncProcessTask = std::function<void(Hal::DMesgPb)>;
 
   /**
    * @brief The Hal_DMesgHandler is intentionalled modolled to inherit from
@@ -94,7 +95,12 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
                                         << ", sys.runningcounter: "
                                         << dmesgPb.runningcounter() << "\n");
             } else if (!m_owner->m_filterFn || m_owner->m_filterFn(dmesgPb)) {
-              m_owner->m_buffers.push(dmesgPb);
+
+              if (m_owner->m_asyncProcessFn) {
+                m_owner->m_asyncProcessFn(std::move_if_noexcept(dmesgPb));
+              } else {
+                m_owner->m_buffers.push(dmesgPb);
+              }
             }
           }
         }
@@ -107,10 +113,25 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     };
 
   public:
-    Hal_DMesgHandler(std::string_view name, FilterTask filter = nullptr)
-        : m_name{name}, m_filterFn{filter} {
+    Hal_DMesgHandler(std::string_view name, FilterTask filterFn = nullptr,
+                     AsyncProcessTask asyncProcessFn = nullptr)
+        : m_name{name}, m_filterFn{filterFn}, m_asyncProcessFn{asyncProcessFn} {
       m_sub.m_owner = this;
     }
+
+    /*
+        Hal_DMesgHandler(std::string_view name)
+            : Hal_DMesgHandler(name, nullptr, nullptr) {
+        }
+
+        Hal_DMesgHandler(std::string_view name, FilterTask filterFn)
+            : Hal_DMesgHandler(name, filterFn, nullptr) {
+        }
+
+        Hal_DMesgHandler(std::string_view name, AsyncProcessTask asyncProcessFn)
+            : Hal_DMesgHandler(name, nullptr, asyncProcessFn) {
+        }
+    */
 
     ~Hal_DMesgHandler() noexcept try {
     } catch (...) {
@@ -243,6 +264,7 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
     bool m_inConflict{};
     Hal::DMesgPb m_lastDMesgSysPb{};
     bool m_initialized{};
+    AsyncProcessTask m_asyncProcessFn{};
   }; /* Hal_DMesgHandler */
 
 public:
@@ -269,14 +291,17 @@ public:
    *
    * @param name the name or unique identification to the handler
    * @param filterFn the functor callback that returns false to filter out Dmesg
-   *        message, if no functor is provided, no filter is performed.
+   *                 message, if no functor is provided, no filter is performed.
+   * @param asyncProcess the functor callback to process each notified Dmesg
+   *                 message
    *
    * @return newly created handler
    */
-  std::shared_ptr<Hal_DMesgHandler> openHandler(std::string_view name,
-                                                FilterTask filterFn = nullptr) {
+  std::shared_ptr<Hal_DMesgHandler>
+  openHandler(std::string_view name, FilterTask filterFn = nullptr,
+              AsyncProcessTask asyncProcessFn = nullptr) {
     std::shared_ptr<Hal_DMesgHandler> handler =
-        std::make_shared<Hal_DMesgHandler>(name, filterFn);
+        std::make_shared<Hal_DMesgHandler>(name, filterFn, asyncProcessFn);
     auto handlerRet = handler;
 
     m_handlers.push_back(handler);

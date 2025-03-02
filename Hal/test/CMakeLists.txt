@@ -3,6 +3,7 @@ ADD_TEST_EXECUTABLE(hal
                     hal-test-buffer
                     hal-test-dmesg-1
                     hal-test-dmesg-2
+                    hal-test-dmesg-3
                     hal-test-dmesg-pb
                     hal-test-io
                     hal-test-pipe
