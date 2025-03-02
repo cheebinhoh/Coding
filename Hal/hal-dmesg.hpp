@@ -119,20 +119,6 @@ class Hal_DMesg : public Hal_Pub<Hal::DMesgPb> {
       m_sub.m_owner = this;
     }
 
-    /*
-        Hal_DMesgHandler(std::string_view name)
-            : Hal_DMesgHandler(name, nullptr, nullptr) {
-        }
-
-        Hal_DMesgHandler(std::string_view name, FilterTask filterFn)
-            : Hal_DMesgHandler(name, filterFn, nullptr) {
-        }
-
-        Hal_DMesgHandler(std::string_view name, AsyncProcessTask asyncProcessFn)
-            : Hal_DMesgHandler(name, nullptr, asyncProcessFn) {
-        }
-    */
-
     ~Hal_DMesgHandler() noexcept try {
     } catch (...) {
       // explicit return to resolve exception as destructor must be noexcept
