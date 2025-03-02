@@ -11,6 +11,7 @@
 #include "hal-teepipe.hpp"
 
 #include <gtest/gtest.h>
+
 #include <chrono>
 #include <iostream>
 #include <memory>

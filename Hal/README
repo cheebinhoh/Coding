@@ -14,8 +14,3 @@ when we can use it between IPC process).
 The library is implemeneted in C++ and hopefully it is doing it
 right way through delegation design pattern and fully extensible
 and customizable without proliferation of Classes.
-
-Why do this? The answer is that I love programming, and like any
-art or one who love music, you do it even when no one appreciate
-that and it does not bring any tangible result beyond the joke
-of the process of doing it.

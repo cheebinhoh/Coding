@@ -6,6 +6,7 @@
 #include "hal-proc.hpp"
 
 #include <gtest/gtest.h>
+
 #include <iostream>
 #include <memory>
 #include <thread>

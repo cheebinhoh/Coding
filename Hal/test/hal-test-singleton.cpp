@@ -5,6 +5,7 @@
 #include "hal-singleton.hpp"
 
 #include <gtest/gtest.h>
+
 #include <iostream>
 
 class Hal_A : public Hal::Hal_Singleton {

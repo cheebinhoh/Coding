@@ -1,3 +1,5 @@
+# Copyright © 2025 Chee Bin HOH. All rights reserved.
+
 cmake_minimum_required(VERSION 3.31)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -8,6 +10,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(hal)
+
+# set options
+option(BUILD_NDEBUG "build without debug" OFF)
+
+set(ABSL_PROPAGATE_CXX_STD ON)
 
 include(CMakeMacro.cmake)
 include(FetchContent)
@@ -27,9 +34,6 @@ FetchContent_Declare(protobuf
 )
 
 FetchContent_MakeAvailable(protobuf)
-
-# options
-option(BUILD_NDEBUG "build without debug" OFF)
 
 if(BUILD_NDEBUG)
   add_compile_definitions(NDEBUG)

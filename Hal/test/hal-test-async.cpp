@@ -5,8 +5,9 @@
 #include "hal-async.hpp"
 #include "hal-proc.hpp"
 
-#include <chrono>
 #include <gtest/gtest.h>
+
+#include <chrono>
 #include <iostream>
 #include <thread>
 

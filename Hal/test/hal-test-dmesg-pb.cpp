@@ -5,6 +5,7 @@
 #include "proto/hal-dmesg.pb.h"
 
 #include <gtest/gtest.h>
+
 #include <iostream>
 #include <sys/time.h>
 

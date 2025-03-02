@@ -5,6 +5,8 @@
 #include "hal-pipe.hpp"
 #include "hal-proc.hpp"
 
+#include <gtest/gtest.h>
+
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
@@ -12,10 +14,9 @@
 #include <iostream>
 #include <map>
 #include <mutex>
-
-#include <gtest/gtest.h>
-#include <pthread.h>
 #include <thread>
+
+#include <pthread.h>
 #include <unistd.h>
 
 std::mutex log_mutex{};

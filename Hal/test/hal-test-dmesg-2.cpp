@@ -5,6 +5,7 @@
 #include "hal-dmesg.hpp"
 
 #include <gtest/gtest.h>
+
 #include <iostream>
 #include <sstream>
 #include <thread>
