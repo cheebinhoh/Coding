@@ -1,11 +1,21 @@
 This repository contains a small hardware abstraction layer
-in c++/c.
+in c/c++ with a distributed messaging and synchronization protocol.
 
-The ultimate goal is to implement a cross-platform distributed
-messaging protocol that layered on top of tcp, ip or multicast
-message for application service discovery, message exchanging
-between nodes in a distributed manner, and provide synchronization
-mechanism to sync message across nodes, processes and thread.
+The ultimate goal is to implement a simple distributed messaging
+and synchronization protocol that can be integrated with Application
+and free the application from leading with networking, messaging 
+format, synchronization of multiple read/write beyond a simple
+update conflict notification and retry resolution.
 
-In a way that done correctly in c++ with good design (more delegation),
-asynchronous execution for low latency and clean code.
+It is similar to MQTT, Kafla or IBM MQ in purpose, but simple, 
+lightweight, network agnostics (why limit it to networked processes?
+when we can use it between IPC process).
+
+The library is implemeneted in C++ and hopefully it is doing it
+right way through delegation design pattern and fully extensible
+and customizable without proliferation of Classes.
+
+Why do this? The answer is that I love programming, and like any
+art or one who love music, you do it even when no one appreciate
+that and it does not bring any tangible result beyond the joke
+of the process of doing it.

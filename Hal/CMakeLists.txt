@@ -92,8 +92,10 @@ target_link_libraries(hal
                         protobuf::libprotobuf
 )
 
-# run unit test
+
+# run unit test for HAL
 add_subdirectory(test)
+
 
 # build executable that uses hal
 add_executable(hal-dmesg-daemon
