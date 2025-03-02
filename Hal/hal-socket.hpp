@@ -18,9 +18,9 @@ class Hal_Socket : public Hal_Io<std::string> {
 public:
   Hal_Socket(std::string_view ip4, int portno, bool writeOnly = false);
   ~Hal_Socket();
-  std::optional<std::string> read();
-  void write(std::string &item);
-  void write(std::string &&item);
+  std::optional<std::string> read() override;
+  void write(std::string &item) override;
+  void write(std::string &&item) override;
 
 private:
   std::string m_ip4{};
