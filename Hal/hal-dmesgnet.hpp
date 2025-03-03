@@ -37,21 +37,30 @@ public:
    *
    * If there are 3 nodes, A, B and C. And it boots up in the following orders:
    *
-   * T1: A boot up, and send heartbeat [A, , ,]
-   * T2: B boot up, and send heartbeat [B, , ,]
-   * T3: A receives [B, , ], and add B to its neighbor list, but B is not
-   * master, so A remains in initialized T4: B receives [A, , ], and add A to
-   * its neighbor list, and then A is not master. T5: A timeout at initialized
-   * state, and self-proclaim itself as master, and send out [A, A, [B]]. T6: B
-   * timeout at initialized state, and self-proclaim itself as master, and send
-   * out [B, B, [A]]. T7: both A and B receives each other heartbeat, and then
-   * both agree that A is master as A has early timestamp on created, and so
-   * both will remain in ready state, and declare A as master, and send out
-   * heartbeat A = [A, A, [A, B]] B = [B, A, [A, B]] T8: when C boots up, it is
-   * in initialized state, and send out C = [C, , ,] T9: A and B receives C
-   * heartbeat and both send out A = [A, A, [A, B, C]] and B = [B, A, [A, B,
-   * C]], and C receives either of the message will declare A as master and move
-   * into ready state.
+   * T1: A boot up, and send heartbeat [A, , []]
+   * T2: B boot up, and send heartbeat [B, , []]
+   * T3: A receives [B, , []], and add B to its neighbor list, but B is
+   *     not master, so A remains in initialized (as not yet timeout),
+   *     and its next pending heartbeat is [A, , [A, B]]
+   * T4: B receives [A, , []], and add A to its neighbor list, but A is
+   *     not master, so B remains in initialized (as not yet timeout),
+   *     and its next pending heartbeat is [B, , [A, B]]
+   * T5: A timeout at initialized state, and self-proclaim itself as
+   *     master based on its list of neighbor nodes [A, B] as A
+   *     has earliest timestamp at created.
+   * T6: B timeout at initialized state, and select A as the master based
+   *     on its list of neighbor nodes [A, B] and A has earliest timestamp
+   *     at created.
+   * T7: both A and B receives each other heartbeat, and then
+   *     both agree that A is master as A has early timestamp on created,
+   *     and so both will remain in ready state.
+   *     heartbeat A = [A, A, [A, B]] B = [B, A, [A, B]].
+   * T8: when C boots up, it is in initialized state, and send out
+   *     heartbeat C = [C, , ,]
+   * T9: A and B receives C heartbeat and both send out heartbeat
+   *     A = [A, A, [A, B, C]] and B = [B, A, [A, B, C]], and C receives
+   *     either of the message will declare A as master and into ready
+   *     state, also keep a list of neighbor nodes [A, B, C].
    *
    * The node will maintain its list of neighbor nodes, but if there is no
    * heartbeat from one of the neighbor for N seconds, it will remove it from
