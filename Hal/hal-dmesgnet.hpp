@@ -28,7 +28,7 @@ public:
    * 0. Created - [heartbeat sent] -> Initialized
    * 1. Initialized - [heartbeat master received] -> ready
    * 2. Initialized - [timeout] -> ready & become master
-   * 3. Ready - [last heartbeat from master, elect new master] -> ready
+   * 3. Ready - [last heartbeat from master, elect new master] -> Destroyed
    *
    * for each heartbeat broadcast message from the node, it includes the
    * following information:
@@ -65,7 +65,7 @@ public:
    *
    * Tn: A is shutting down, and manage to send its last heartbeat,
    *     [A, ,[B, C]] to B and C, and both will notice that the message
-   *     is from A but it relinquish master position, and remove itself
+   *     is from A but it relinquishes master position, and remove itself
    *     from the neighbor list, and B and C will elect new master
    *     which is B as it has earliest timestamp.
    *
