@@ -28,6 +28,7 @@ public:
    * 0. Created - [heartbeat sent] -> Initialized
    * 1. Initialized - [heartbeat master received] -> ready
    * 2. Initialized - [timeout] -> ready & become master
+   * 3. Ready - [last heartbeat from master, elect new master] -> ready
    *
    * for each heartbeat broadcast message from the node, it includes the
    * following information:
@@ -61,6 +62,12 @@ public:
    *     A = [A, A, [A, B, C]] and B = [B, A, [A, B, C]], and C receives
    *     either of the message will declare A as master and into ready
    *     state, also keep a list of neighbor nodes [A, B, C].
+   *
+   * Tn: A is shutting down, and manage to send its last heartbeat,
+   *     [A, ,[B, C]] to B and C, and both will notice that the message
+   *     is from A but it relinquish master position, and remove itself
+   *     from the neighbor list, and B and C will elect new master
+   *     which is B as it has earliest timestamp.
    *
    * The node will maintain its list of neighbor nodes, but if there is no
    * heartbeat from one of the neighbor for N seconds, it will remove it from
