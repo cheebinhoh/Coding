@@ -25,15 +25,30 @@ namespace Hal {
 class Hal_DMesgNet : public Hal_DMesg {
 public:
   /**
-   * 0.   Created - [send heartbeat] -> Initialized
-   * 1.a. Initialized - [receive master heartbeat] -> Ready
-   * 1.b. Initialized - [timeout w/o receive heartbeat, act as master] -> Ready
-   * 2.   Ready - [send last heartbeat, relinquish master] -> Destroyed
-   * 3.   Destroyed [cache last state in file?]
+   * 1.    Initialized - [send heartbeat] -> MasterElectionPending
+   * 2[1]. MasterElectionPending - [receive master heartbeat] -> Ready
+   * 2[2]. MasterElectionPending - [timeout w/o master heartbeat, act as master]
+   *       -> Ready
+   * 3[1]. Ready - [receive master last heartbeat] -> MasterElectionPending
+   * 3[2]. Ready - [send last heartbeat, optionally relinquish master role]
+   *       -> Destroyed
+   * 4.    Destroyed [cache last state in file?]
+   *
+   * When a master is about to be destroyed, its last heartbeat message will
+   * relinquish its master role, that will trigger 3[1] for all other nodes,
+   * and instead of moving all other nodes into passive master election 2[1]
+   * or 2[2], all other nodes can do co-election of master by:
+   * - each node selects the earliest created timestamp node from the list of
+   *   neighbor nodes (including itself).
+   * - if all remaining nodes have same list of neighbor nodes, they will all
+   *   elect the same master, and all are in sync.
+   * - otherwise, different master will be elected by different nodes, but as
+   *   those nodes are syncing their heartbeat, they will all agree on node
+   *   with earliest created timestamp.
    *
    * for each heartbeat broadcast message from the node, it includes the
    * following information:
-   * - the node identifier [timestamp_at_created.process_id.ip]
+   * - the node identifier [timestamp_at_initialized.process_id.ip]
    * - the node's master identifier which
    * - the node's known list of networked node identifiers (include itself)
    *
@@ -84,7 +99,7 @@ public:
    * one selected by its neighbor heartbeat message.
    */
 
-  enum State { Created, Initialized, Ready, Destroyed };
+  enum State { Initialized, MasterElectionPending, Ready, Destroyed };
 
   Hal_DMesgNet(std::string_view name,
                std::shared_ptr<Hal_Io<std::string>> outputHandler = nullptr,
@@ -171,7 +186,7 @@ private:
   std::shared_ptr<Hal_Io<std::string>> m_outputHandler{};
   std::shared_ptr<Hal_Io<std::string>> m_inputHandler{};
 
-  State m_state{Created};
+  State m_state{Initialized};
   std::unique_ptr<Hal::Hal_Proc> m_inputProc{};
   std::shared_ptr<Hal_DMesgHandler> m_subscriptHandler{};
 };
