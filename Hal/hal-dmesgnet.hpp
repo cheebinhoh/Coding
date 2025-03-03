@@ -24,6 +24,51 @@ namespace Hal {
 
 class Hal_DMesgNet : public Hal_DMesg {
 public:
+  /**
+   * 0. Created - [heartbeat sent] -> Initialized
+   * 1. Initialized - [heartbeat master received] -> ready
+   * 2. Initialized - [timeout] -> ready & become master
+   *
+   * for each heartbeat broadcast message from the node, it includes the
+   * following information:
+   * - the node identifier [timestamp_at_created.process_id.ip]
+   * - the node's master identifier which
+   * - the node's known list of networked node identifiers (include itself)
+   *
+   * If there are 3 nodes, A, B and C. And it boots up in the following orders:
+   *
+   * T1: A boot up, and send heartbeat [A, , ,]
+   * T2: B boot up, and send heartbeat [B, , ,]
+   * T3: A receives [B, , ], and add B to its neighbor list, but B is not
+   * master, so A remains in initialized T4: B receives [A, , ], and add A to
+   * its neighbor list, and then A is not master. T5: A timeout at initialized
+   * state, and self-proclaim itself as master, and send out [A, A, [B]]. T6: B
+   * timeout at initialized state, and self-proclaim itself as master, and send
+   * out [B, B, [A]]. T7: both A and B receives each other heartbeat, and then
+   * both agree that A is master as A has early timestamp on created, and so
+   * both will remain in ready state, and declare A as master, and send out
+   * heartbeat A = [A, A, [A, B]] B = [B, A, [A, B]] T8: when C boots up, it is
+   * in initialized state, and send out C = [C, , ,] T9: A and B receives C
+   * heartbeat and both send out A = [A, A, [A, B, C]] and B = [B, A, [A, B,
+   * C]], and C receives either of the message will declare A as master and move
+   * into ready state.
+   *
+   * The node will maintain its list of neighbor nodes, but if there is no
+   * heartbeat from one of the neighbor for N seconds, it will remove it from
+   * the list, if the master is not sending heartbeat, then all nodes will
+   * participate in master selection by using it last known list of networed
+   * nodes (include itself) and elect one with early timestamp as master, and
+   * send out the next heartbeat, in good case, all active nodes will agree on
+   * the same new master right away.
+   *
+   * In very race case, two nodes elect different master as one node does not
+   * see one or few other nodes that are better candidate for master (early
+   * timestamp), then it will surrender its master election result and agree on
+   * one selected by its neighbor heartbeat message.
+   */
+
+  enum State { Created, Initialized, Ready };
+
   Hal_DMesgNet(std::string_view name,
                std::shared_ptr<Hal_Io<std::string>> outputHandler = nullptr,
                std::shared_ptr<Hal_Io<std::string>> inputHandler = nullptr)
@@ -109,6 +154,7 @@ private:
   std::shared_ptr<Hal_Io<std::string>> m_outputHandler{};
   std::shared_ptr<Hal_Io<std::string>> m_inputHandler{};
 
+  State m_state{Created};
   std::unique_ptr<Hal::Hal_Proc> m_inputProc{};
   std::shared_ptr<Hal_DMesgHandler> m_subscriptHandler{};
 };
