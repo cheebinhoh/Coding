@@ -1,9 +1,11 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * The Hal_DMesgNet stands for HAL Distributed Messaging over network,
- * it acts as short of agent to integrating the Hal_DMesg within a
- * host over Hal_Io with another Hal_DMesg across network or IPC.
+ * The Hal_DMesgNet stands for HAL Distributed Messaging over Network,
+ * it acts an extension to the Hal_DMesg with support of serializing
+ * the DMesgPb message and send over the output Hal_Io and deserialize
+ * the data read from input Hal_Io and then publish to the local
+ * subscripted handlers.
  */
 
 #ifndef HAL_DMESGNET_HPP_HAVE_SEEN
@@ -23,10 +25,10 @@ namespace Hal {
 class Hal_DMesgNet : public Hal_DMesg {
 public:
   Hal_DMesgNet(std::string_view name,
-               std::shared_ptr<Hal_Io<std::string>> output = nullptr,
-               std::shared_ptr<Hal_Io<std::string>> input = nullptr)
-      : Hal_DMesg{name}, m_name{name}, m_outputHandler{output},
-        m_inputHandler{input} {
+               std::shared_ptr<Hal_Io<std::string>> outputHandler = nullptr,
+               std::shared_ptr<Hal_Io<std::string>> inputHandler = nullptr)
+      : Hal_DMesg{name}, m_name{name}, m_outputHandler{outputHandler},
+        m_inputHandler{inputHandler} {
     m_subscriptHandler = Hal_DMesg::openHandler(
         m_name,
         [this](const Hal::DMesgPb &dmesgPb) {
@@ -36,8 +38,12 @@ public:
           if (m_outputHandler) {
             std::string serialized_string{};
 
-            dmesgPb.set_source(this->m_name); // so that we can skip it
-                                              // if we read it back too.
+            // set the source, so that we can skip it if the
+            // data is read back over the input Hal_Io.
+            //
+            // FIXME: to be really network and allow ad-hoc
+            // we should generate internal UUID.
+            dmesgPb.set_source(this->m_name);
             dmesgPb.SerializeToString(&serialized_string);
 
             m_outputHandler->write(serialized_string);
@@ -92,8 +98,8 @@ private:
   std::string m_name{};
   std::shared_ptr<Hal_Io<std::string>> m_outputHandler{};
   std::shared_ptr<Hal_Io<std::string>> m_inputHandler{};
-  std::unique_ptr<Hal::Hal_Proc> m_inputProc{};
 
+  std::unique_ptr<Hal::Hal_Proc> m_inputProc{};
   std::shared_ptr<Hal_DMesgHandler> m_subscriptHandler{};
 };
 
