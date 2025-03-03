@@ -16,18 +16,21 @@ int main(int argc, char *argv[])
 {
   ::testing::InitGoogleTest(&argc, argv);
 
-  std::shared_ptr<Hal::Hal_Io<std::string>> readSocket1 = std::make_shared<Hal::Hal_Socket>("127.0.0.1", 5000);
   std::shared_ptr<Hal::Hal_Io<std::string>> writeSocket1 = std::make_shared<Hal::Hal_Socket>("127.0.0.1",
                                                                                             5000,
                                                                                             true);
+  std::shared_ptr<Hal::Hal_Io<std::string>> readSocket2 = std::make_shared<Hal::Hal_Socket>("127.0.0.1", 5000);
 
   Hal::Hal_DMesgNet dmesgnet1{"dmesg1", writeSocket1};
+  Hal::Hal_DMesgNet dmesgnet2{"dmesg2", nullptr, readSocket2};
+
+  auto readHandler2 = dmesgnet2.openHandler("dmesg2.readHandler");
 
   Hal::DMesgPb dmesgPbRead{};
-  Hal::Hal_Proc proc2{"dmesg2", [readSocket1, &dmesgPbRead](){
-    auto data = readSocket1->read();
+  Hal::Hal_Proc proc2{"dmesg2", [readHandler2, &dmesgPbRead](){
+    auto data = readHandler2->read();
     if (data) {
-      dmesgPbRead.ParseFromString(*data);
+      dmesgPbRead = *data;
     }
   }};
 
@@ -52,7 +55,7 @@ int main(int argc, char *argv[])
 
   std::string source = dmesgPbRead.source();
   EXPECT_TRUE(dmesgPbRead.type() == dmesgPb.type());
-  EXPECT_TRUE(dmesgPbRead.source() == "dmesg1");
+  EXPECT_TRUE(dmesgPbRead.source() == "dmesg2"); // the source is the local DmesgNet agent that read
   EXPECT_TRUE(dmesgPbRead.body().message() == dmesgPb.body().message());
  
   return RUN_ALL_TESTS();
