@@ -25,10 +25,11 @@ namespace Hal {
 class Hal_DMesgNet : public Hal_DMesg {
 public:
   /**
-   * 0. Created - [heartbeat sent] -> Initialized
-   * 1. Initialized - [heartbeat master received] -> ready
-   * 2. Initialized - [timeout] -> ready & become master
-   * 3. Ready - [last heartbeat from master, elect new master] -> Destroyed
+   * 0.   Created - [send heartbeat] -> Initialized
+   * 1.a. Initialized - [receive master heartbeat] -> Ready
+   * 1.b. Initialized - [timeout w/o receive heartbeat, act as master] -> Ready
+   * 2.   Ready - [send last heartbeat, relinquish master] -> Destroyed
+   * 3.   Destroyed [cache last state in file?]
    *
    * for each heartbeat broadcast message from the node, it includes the
    * following information:
@@ -83,7 +84,7 @@ public:
    * one selected by its neighbor heartbeat message.
    */
 
-  enum State { Created, Initialized, Ready };
+  enum State { Created, Initialized, Ready, Destroyed };
 
   Hal_DMesgNet(std::string_view name,
                std::shared_ptr<Hal_Io<std::string>> outputHandler = nullptr,
