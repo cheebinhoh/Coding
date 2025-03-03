@@ -29,6 +29,8 @@ public:
                std::shared_ptr<Hal_Io<std::string>> inputHandler = nullptr)
       : Hal_DMesg{name}, m_name{name}, m_outputHandler{outputHandler},
         m_inputHandler{inputHandler} {
+
+    // subscriptHandler to read and write with local DMesg
     m_subscriptHandler = Hal_DMesg::openHandler(
         m_name,
         [this](const Hal::DMesgPb &dmesgPb) {
@@ -41,8 +43,11 @@ public:
             // set the source, so that we can skip it if the
             // data is read back over the input Hal_Io.
             //
-            // FIXME: to be really network and allow ad-hoc
-            // we should generate internal UUID.
+            // FIXME: shall we generate UUID internally to guarantee
+            // uniqueness across networked nodes or global Internet?
+            //
+            // This is point we check if outgoing is in conflict
+            // for the message stream with the identifier.
             dmesgPb.set_source(this->m_name);
             dmesgPb.SerializeToString(&serialized_string);
 
@@ -75,6 +80,11 @@ public:
 
               this->m_subscriptHandler->write(dmesgPbRead);
             }
+          } else {
+            // no data, quit the thread.
+            // FIXME: in what case will it has no data? inputHandler being
+            // release and the chain of objects in DMesg are destroyed?
+            break;
           }
         }
       });
