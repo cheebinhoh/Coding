@@ -40,4 +40,19 @@
   ((pb).mutable_body()->mutable_sys()->mutable_timestamp()->set_seconds(pb##sys_tv.tv_sec);       \
   ((pb).mutable_body()->mutable_sys()->mutable_timestamp()->set_nanos(pb##sys_tv.tv_usec * 1000)
 
+#define DMESG_PB_SYS_NODE_SET_IDENTIFIER(node, val) (node)->set_identifier(val)
+
+#define DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(node, val)                      \
+  (node)->set_masteridentifier(val)
+
+#define DMESG_PB_SYS_NODE_SET_STATE(node, val) (node)->set_state(val)
+
+#define DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(node, tv)                       \
+  (node)->mutable_updatedtimestamp()->set_seconds((tv).tv_sec);                \
+  (node)->mutable_updatedtimestamp()->set_nanos((tv).tv_usec * 1000)
+
+#define DMESG_PB_SYS_NODE_SET_INITIALIZEDTIMESTAMP(node, tv)                   \
+  (node)->mutable_initializedtimestamp()->set_seconds((tv).tv_sec);            \
+  (node)->mutable_initializedtimestamp()->set_nanos((tv).tv_usec * 1000)
+
 #endif /* HAL_DMESG_PB_UTIL_HPP_HAVE_SEEN */
