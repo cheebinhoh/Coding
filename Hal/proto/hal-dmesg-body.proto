@@ -29,7 +29,7 @@ message DMesgSysNodePb
 message DMesgSysPb
 {
   google.protobuf.Timestamp timestamp  = 1;
-  DMesgSysNodePb            self       = 3;
+  DMesgSysNodePb            self       = 2;
   repeated DMesgSysNodePb   nodeList   = 5;
 }
 
