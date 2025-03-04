@@ -22,13 +22,13 @@ message DMesgSysNodePb
   google.protobuf.Timestamp initializedTimestamp = 1;
   string                    identifier           = 2;
   DMesgStatePb              state                = 3;
+  string                    masterIdentifier     = 4;
 }
 
 message DMesgSysPb
 {
   google.protobuf.Timestamp timestamp  = 1;
   DMesgSysNodePb            self       = 3;
-  DMesgSysNodePb            master     = 4;
   repeated DMesgSysNodePb   nodeList   = 5;
 }
 
