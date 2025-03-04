@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
   Hal::DMesgPb dmesgPb{};
   dmesgPb.set_identifier("id1");
   dmesgPb.set_runningcounter(99);
-  dmesgPb.set_source("cheebin th");
+  dmesgPb.set_sourceidentifier("cheebin th");
   dmesgPb.set_type(Hal::DMesgTypePb::message);
 
   Hal::DMesgBodyPb *dmsgbodyPb = dmesgPb.mutable_body();
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
   EXPECT_TRUE(dmesgPb.identifier() == "id1");
   EXPECT_TRUE(dmesgPb.runningcounter() == 99);
-  EXPECT_TRUE(dmesgPb.source() == "cheebin th");
+  EXPECT_TRUE(dmesgPb.sourceidentifier() == "cheebin th");
   EXPECT_TRUE(dmesgPb.type() == Hal::DMesgTypePb::message);
   EXPECT_TRUE(dmesgPb.body().has_message());
 

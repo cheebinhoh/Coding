@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
   Hal::DMesgPb dmesgPb1{};
   dmesgPb1.set_identifier("id1");
   dmesgPb1.set_runningcounter(99);
-  dmesgPb1.set_source("unknown");
+  dmesgPb1.set_sourceidentifier("unknown");
   dmesgPb1.set_type(Hal::DMesgTypePb::message);
 
   Hal::DMesgBodyPb *dmsgbodyPb1 = dmesgPb1.mutable_body();
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
   Hal::DMesgPb dmesgPb2{};
   dmesgPb2.set_identifier("id1");
   dmesgPb2.set_runningcounter(99);
-  dmesgPb2.set_source("unknown");
+  dmesgPb2.set_sourceidentifier("unknown");
   dmesgPb2.set_type(Hal::DMesgTypePb::message);
 
   Hal::DMesgBodyPb *dmsgbodyPb2 = dmesgPb2.mutable_body();
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     auto dmesgPbRead = dmesgReadHandler1->read();
     std::cout << "after read1, and proceed to validate read\n";
     EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb1.identifier());
-    EXPECT_TRUE(dmesgPbRead->source() == dmesgPb1.source());
+    EXPECT_TRUE(dmesgPbRead->sourceidentifier() == dmesgPb1.sourceidentifier());
     EXPECT_TRUE(dmesgPbRead->runningcounter() == dmesgPb1.runningcounter());
     EXPECT_TRUE(dmesgPbRead->type() == dmesgPb1.type());
     EXPECT_TRUE(dmesgPbRead->body().message() == dmesgPb1.body().message());
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     auto dmesgPbRead = dmesgReadHandler2->read();
     std::cout << "after read2, and proceed to validate read\n";
     EXPECT_TRUE(dmesgPbRead->identifier() == dmesgPb2.identifier());
-    EXPECT_TRUE(dmesgPbRead->source() == dmesgPb2.source());
+    EXPECT_TRUE(dmesgPbRead->sourceidentifier() == dmesgPb2.sourceidentifier());
     EXPECT_TRUE(dmesgPbRead->runningcounter() == dmesgPb2.runningcounter());
     EXPECT_TRUE(dmesgPbRead->type() == dmesgPb2.type());
     EXPECT_TRUE(dmesgPbRead->body().message() == dmesgPb2.body().message());

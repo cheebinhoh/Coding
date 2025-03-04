@@ -76,7 +76,7 @@ public:
        * @param dmesgPb The DMesg protobuf data notified by publisher object
        */
       void notify(Hal::DMesgPb dmesgPb) override {
-        if (dmesgPb.source() != m_owner->m_name ||
+        if (dmesgPb.sourceidentifier() != m_owner->m_name ||
             dmesgPb.type() == Hal::DMesgTypePb::sys) {
           std::string id = dmesgPb.identifier();
           long long runningCounter = m_owner->m_identifierRunningCounter[id];
@@ -87,16 +87,16 @@ public:
             if (dmesgPb.type() == Hal::DMesgTypePb::sys) {
               m_owner->m_lastDMesgSysPb = dmesgPb;
 
-              if (dmesgPb.source() == m_owner->m_name) {
+              if (dmesgPb.sourceidentifier() == m_owner->m_name) {
                 m_owner->m_initialized = true;
               }
 
-              HAL_DEBUG_PRINT(std::cout << "who: " << m_owner->m_name
-                                        << ", initialized: " << std::boolalpha
-                                        << m_owner->m_initialized
-                                        << ", sys.source: " << dmesgPb.source()
-                                        << ", sys.runningcounter: "
-                                        << dmesgPb.runningcounter() << "\n");
+              HAL_DEBUG_PRINT(std::cout
+                              << "who: " << m_owner->m_name << ", initialized: "
+                              << std::boolalpha << m_owner->m_initialized
+                              << ", sys.source: " << dmesgPb.sourceidentifier()
+                              << ", sys.runningcounter: "
+                              << dmesgPb.runningcounter() << "\n");
             } else if (!m_owner->m_filterFn || m_owner->m_filterFn(dmesgPb)) {
 
               if (m_owner->m_asyncProcessFn) {
@@ -215,7 +215,7 @@ public:
       std::string id = dmesgPb.identifier();
       long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
 
-      dmesgPb.set_source(m_name);
+      dmesgPb.set_sourceidentifier(m_name);
       dmesgPb.set_runningcounter(nextRunningCounter);
 
       if (move) {
@@ -301,7 +301,7 @@ public:
     // of heartbeat.
     Hal::DMesgPb hbSysPb{};
     hbSysPb.set_identifier(DMesgSysIdentifier);
-    hbSysPb.set_source(name);
+    hbSysPb.set_sourceidentifier(name);
     hbSysPb.set_type(Hal::DMesgTypePb::sys);
 
     Hal::DMesgBodyPb *dmesgSysBodyPb = hbSysPb.mutable_body();
@@ -385,7 +385,7 @@ protected:
       std::vector<std::shared_ptr<Hal_DMesgHandler>>::iterator it =
           std::find_if(m_handlers.begin(), m_handlers.end(),
                        [&dmesgPb](auto handler) {
-                         return handler->m_name == dmesgPb.source();
+                         return handler->m_name == dmesgPb.sourceidentifier();
                        });
 
       if (it != m_handlers.end()) {

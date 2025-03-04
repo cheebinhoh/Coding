@@ -7,13 +7,16 @@ syntax = "proto3";
 import "proto/hal-dmesg-type.proto";
 import "proto/hal-dmesg-body.proto";
 
+import "google/protobuf/timestamp.proto";
+
 package Hal;
 
 message DMesgPb
 {
-  string      identifier     = 1;
-  uint64      runningCounter = 2;
-  string      source         = 3;
-  DMesgTypePb type           = 4;
-  DMesgBodyPb body           = 5;
+  google.protobuf.Timestamp timestamp        = 1;
+  string                    identifier       = 2;
+  uint64                    runningCounter   = 3;
+  string                    sourceIdentifier = 4;
+  DMesgTypePb               type             = 5;
+  DMesgBodyPb               body             = 6;
 }

@@ -1,0 +1,33 @@
+/**
+ * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ *
+ * This is wrapper for DMesg protobuf message.
+ */
+
+#ifndef HAL_DMESG_PB_UTIL_HPP_HAVE_SEEN
+
+#define HAL_DMESG_PB_UTIL_HPP_HAVE_SEEN
+
+#include "proto/hal-dmesg.pb.h"
+
+#include <cassert>
+#include <sys/time.h>
+
+#define DMESG_PB_INIT(pb)                                                      \
+  Hal::DMesgPb(pb){};                                                          \
+  struct timeval pb##_tv;                                                      \
+  gettimeofday(&(pb##_tv), NULL);                                              \
+  (pb).mutable_timestamp()->set_seconds(pb##_tv.tv_sec);                       \
+  (pb).mutable_timestamp()->set_nanos(pb##_tv.tv_usec * 1000);
+
+#define DMESG_PB_SET_IDENTIFIER(pb, val) ((pb).set_identifier((val)))
+#define DMESG_PB_SET_RUNNINGCOUNTER(pb, val) ((pb).set_runningcounter((val)))
+#define DMESG_PB_SET_SOURCEIDENTIFIER(pb, val)                                 \
+  ((pb).set_sourceidentifier((val)))
+#define DMESG_PB_SET_TYPE(pb, val) ((pb).set_type((val)))
+
+#define DMESG_PB_MSG_SET_MESSAGE(pb, val)                                      \
+  assert((pb).type() == Hal::DMesgTypePb::message);                            \
+  ((pb).mutable_body()->set_message((val)))
+
+#endif /* HAL_DMESG_PB_UTIL_HPP_HAVE_SEEN */

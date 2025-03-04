@@ -14,6 +14,7 @@ ADD_TEST_EXECUTABLE(hal
                       hal-test-dmesg-3
                       hal-test-dmesgnet
                       hal-test-dmesg-pb
+                      hal-test-dmesg-pb-util
                       hal-test-io
                       hal-test-pipe
                       hal-test-pub-sub

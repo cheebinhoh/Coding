@@ -111,7 +111,7 @@ public:
     m_subscriptHandler = Hal_DMesg::openHandler(
         m_name,
         [this](const Hal::DMesgPb &dmesgPb) {
-          return dmesgPb.source() != this->m_name;
+          return dmesgPb.sourceidentifier() != this->m_name;
         },
         [this](Hal::DMesgPb dmesgPb) mutable {
           if (m_outputHandler) {
@@ -125,7 +125,7 @@ public:
             //
             // This is point we check if outgoing is in conflict
             // for the message stream with the identifier.
-            dmesgPb.set_source(this->m_name);
+            dmesgPb.set_sourceidentifier(this->m_name);
             dmesgPb.SerializeToString(&serialized_string);
 
             m_outputHandler->write(serialized_string);
@@ -141,7 +141,7 @@ public:
           if (data) {
             dmesgPbRead.ParseFromString(*data);
 
-            if (dmesgPbRead.source() != this->m_name) {
+            if (dmesgPbRead.sourceidentifier() != this->m_name) {
               // this is important to prevent that the
               // m_subscriptHandler of this DMesgNet from
               // reading this message again and send out.
@@ -153,7 +153,7 @@ public:
               // FIXME: the source is now used by both application
               // and the DMesg protocol level, maybe we should
               // separate the namespace of source.
-              dmesgPbRead.set_source(this->m_name);
+              dmesgPbRead.set_sourceidentifier(this->m_name);
 
               this->m_subscriptHandler->write(dmesgPbRead);
             }

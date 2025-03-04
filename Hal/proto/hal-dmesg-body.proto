@@ -20,9 +20,10 @@ enum DMesgStatePb
 message DMesgSysNodePb
 {
   google.protobuf.Timestamp initializedTimestamp = 1;
-  string                    identifier           = 2;
-  DMesgStatePb              state                = 3;
-  string                    masterIdentifier     = 4;
+  google.protobuf.Timestamp updatedTimestamp     = 2;
+  string                    identifier           = 3;
+  DMesgStatePb              state                = 4;
+  string                    masterIdentifier     = 5;
 }
 
 message DMesgSysPb

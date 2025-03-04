@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
 
   std::this_thread::sleep_for(std::chrono::seconds(5));
 
-  std::string source = dmesgPbRead.source();
+  std::string source = dmesgPbRead.sourceidentifier();
   EXPECT_TRUE(dmesgPbRead.type() == dmesgPb.type());
-  EXPECT_TRUE(dmesgPbRead.source() == "dmesg2"); // the source is the local DmesgNet agent that read
+  EXPECT_TRUE(dmesgPbRead.sourceidentifier() == "dmesg2"); // the source is the local DmesgNet agent that read
   EXPECT_TRUE(dmesgPbRead.body().message() == dmesgPb.body().message());
  
   return RUN_ALL_TESTS();
