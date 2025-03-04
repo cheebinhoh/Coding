@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 
 package Hal;
 
-enum DMesgState
+enum DMesgStatePb
 {
   Invalid       = 0;
   Initialized   = 1;
@@ -17,19 +17,19 @@ enum DMesgState
   Destroyed     = 4;
 }
 
-message DMesgSysNode
+message DMesgSysNodePb
 {
-  google.protobuf.Timestamp timestamp  = 1;
-  string                    identifier = 2;
-  DMesgState                state      = 3;
+  google.protobuf.Timestamp initializedTimestamp = 1;
+  string                    identifier           = 2;
+  DMesgStatePb              state                = 3;
 }
 
 message DMesgSysPb
 {
   google.protobuf.Timestamp timestamp  = 1;
-  string                    identifier = 2;
-  DMesgSysNode              self       = 3;
-  repeated DMesgSysNode     nodeList   = 4;
+  DMesgSysNodePb            self       = 3;
+  DMesgSysNodePb            master     = 4;
+  repeated DMesgSysNodePb   nodeList   = 5;
 }
 
 message DMesgBodyPb

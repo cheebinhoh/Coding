@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
   dmesgSysPb.set_type(Hal::DMesgTypePb::sys);
   Hal::DMesgBodyPb *dmesgSysBodyPb = dmesgSysPb.mutable_body();
   Hal::DMesgSysPb *dmesgSysBodySysPb = dmesgSysBodyPb->mutable_sys();
-  dmesgSysBodySysPb->set_identifier("1.dmesgNetworked");
 
   struct timeval tv;
   gettimeofday(&tv, NULL);
@@ -45,7 +44,6 @@ int main(int argc, char *argv[])
   EXPECT_TRUE(dmesgSysPb.type() == Hal::DMesgTypePb::sys);
   EXPECT_TRUE(dmesgSysPb.body().has_sys());
   EXPECT_TRUE(!dmesgSysPb.body().has_message());
-  EXPECT_TRUE(dmesgSysPb.body().sys().identifier() == "1.dmesgNetworked");
 
   return RUN_ALL_TESTS();
 }

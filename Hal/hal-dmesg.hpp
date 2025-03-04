@@ -306,7 +306,6 @@ public:
 
     Hal::DMesgBodyPb *dmesgSysBodyPb = hbSysPb.mutable_body();
     Hal::DMesgSysPb *dmesgSysBodySysPb = dmesgSysBodyPb->mutable_sys();
-    dmesgSysBodySysPb->set_identifier(m_name);
 
     struct timeval tv;
     gettimeofday(&tv, NULL);
