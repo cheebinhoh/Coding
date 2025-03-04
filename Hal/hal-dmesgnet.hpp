@@ -168,6 +168,12 @@ public:
 
       m_inputProc->exec();
     }
+
+    if (m_inputHandler && m_outputHandler) {
+      // into MasterElectionPending
+    } else {
+      m_state = Ready;
+    }
   }
 
   virtual ~Hal_DMesgNet() noexcept try {
