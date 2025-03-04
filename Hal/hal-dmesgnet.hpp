@@ -12,6 +12,7 @@
 
 #define HAL_DMESGNET_HPP_HAVE_SEEN
 
+#include "hal-dmesg-pb-util.hpp"
 #include "hal-dmesg.hpp"
 #include "hal-io.hpp"
 

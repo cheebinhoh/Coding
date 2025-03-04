@@ -65,6 +65,7 @@ target_sources(hal
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-limit-buffer.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesg.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesgnet.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesg-pb-util.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-pipe.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/hal-pub-sub.hpp
@@ -90,7 +91,8 @@ target_include_directories(hal
 GENERATE_PROTOBUF(hal
                     hal-dmesg-type.proto
                     hal-dmesg-body.proto
-                    hal-dmesg.proto)
+                    hal-dmesg.proto
+)
 
 target_link_libraries(hal
                         PRIVATE
@@ -104,8 +106,10 @@ add_subdirectory(test)
 
 # build executable that uses hal
 add_executable(hal-dmesg-daemon
-                 hal-dmesg-daemon.cpp)
+                 hal-dmesg-daemon.cpp
+)
 
 target_link_libraries(hal-dmesg-daemon
                         PRIVATE
-                        hal)
+                        hal
+)

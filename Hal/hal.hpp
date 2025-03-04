@@ -9,6 +9,7 @@
 #include "hal-async.hpp"
 #include "hal-buffer.hpp"
 #include "hal-debug.hpp"
+#include "hal-dmesg-pb-util.hpp"
 #include "hal-dmesg.hpp"
 #include "hal-event.hpp"
 #include "hal-io.hpp"
