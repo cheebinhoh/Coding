@@ -13,12 +13,9 @@
 #include <cassert>
 #include <sys/time.h>
 
-#define DMESG_PB_INIT(pb)                                                      \
-  Hal::DMesgPb(pb){};                                                          \
-  struct timeval pb##_tv;                                                      \
-  gettimeofday(&(pb##_tv), NULL);                                              \
-  (pb).mutable_timestamp()->set_seconds(pb##_tv.tv_sec);                       \
-  (pb).mutable_timestamp()->set_nanos(pb##_tv.tv_usec * 1000)
+#define DMESG_PB_SET_TIMESTAMP(pb, tv)                                         \
+  (pb).mutable_timestamp()->set_seconds((tv).tv_sec);                          \
+  (pb).mutable_timestamp()->set_nanos((tv).tv_usec * 1000)
 
 #define DMESG_PB_SET_IDENTIFIER(pb, val) ((pb).set_identifier((val)))
 
@@ -33,12 +30,12 @@
   assert((pb).type() == Hal::DMesgTypePb::message);                            \
   ((pb).mutable_body()->set_message((val)))
 
-#define DMESG_PB_SYS_INIT_TIMESTAMP(pb)                                                     \
-  assert((pb).type() == Hal::DMesgTypePb::sys);                                             \
-  struct timeval pb##sys_tv;                                                                \
-  gettimeofday(&(pb##sys_tv), NULL);                                                        \
-  ((pb).mutable_body()->mutable_sys()->mutable_timestamp()->set_seconds(pb##sys_tv.tv_sec);       \
-  ((pb).mutable_body()->mutable_sys()->mutable_timestamp()->set_nanos(pb##sys_tv.tv_usec * 1000)
+#define DMESG_PB_SYS_SET_TIMESTAMP(pb, tv)                                     \
+  assert((pb).type() == Hal::DMesgTypePb::sys);                                \
+  ((pb).mutable_body()->mutable_sys()->mutable_timestamp()->set_seconds(       \
+      (tv).tv_sec));                                                           \
+  ((pb).mutable_body()->mutable_sys()->mutable_timestamp()->set_nanos(         \
+      (tv).tv_usec * 1000))
 
 #define DMESG_PB_SYS_NODE_SET_IDENTIFIER(node, val) (node)->set_identifier(val)
 

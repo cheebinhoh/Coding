@@ -86,19 +86,11 @@ public:
 
             if (dmesgPb.type() == Hal::DMesgTypePb::sys) {
               m_owner->m_lastDMesgSysPb = dmesgPb;
+            }
 
-              if (dmesgPb.sourceidentifier() == m_owner->m_name) {
-                m_owner->m_initialized = true;
-              }
-
-              HAL_DEBUG_PRINT(std::cout
-                              << "who: " << m_owner->m_name << ", initialized: "
-                              << std::boolalpha << m_owner->m_initialized
-                              << ", sys.source: " << dmesgPb.sourceidentifier()
-                              << ", sys.runningcounter: "
-                              << dmesgPb.runningcounter() << "\n");
-            } else if (!m_owner->m_filterFn || m_owner->m_filterFn(dmesgPb)) {
-
+            if ((Hal::DMesgTypePb::sys != dmesgPb.type() ||
+                 m_owner->m_includeDMesgSys) &&
+                (!m_owner->m_filterFn || m_owner->m_filterFn(dmesgPb))) {
               if (m_owner->m_asyncProcessFn) {
                 m_owner->m_asyncProcessFn(std::move_if_noexcept(dmesgPb));
               } else {
@@ -118,7 +110,12 @@ public:
   public:
     Hal_DMesgHandler(std::string_view name, FilterTask filterFn = nullptr,
                      AsyncProcessTask asyncProcessFn = nullptr)
-        : m_name{name}, m_filterFn{filterFn}, m_asyncProcessFn{asyncProcessFn} {
+        : Hal_DMesgHandler{name, false, filterFn, asyncProcessFn} {}
+
+    Hal_DMesgHandler(std::string_view name, bool includeDMesgSys,
+                     FilterTask filterFn, AsyncProcessTask asyncProcessFn)
+        : m_name{name}, m_includeDMesgSys{includeDMesgSys},
+          m_filterFn{filterFn}, m_asyncProcessFn{asyncProcessFn} {
       m_sub.m_owner = this;
     }
 
@@ -244,6 +241,7 @@ public:
     }
 
     std::string m_name{};
+    bool m_includeDMesgSys{};
     FilterTask m_filterFn{};
     AsyncProcessTask m_asyncProcessFn{};
 
@@ -254,7 +252,6 @@ public:
     ConflictCallbackTask m_conflictCallbackFn{};
     bool m_inConflict{};
     Hal::DMesgPb m_lastDMesgSysPb{};
-    bool m_initialized{};
   }; /* Hal_DMesgHandler */
 
   Hal_DMesg(std::string_view name) : Hal_Pub{name, 10}, m_name{name} {}
@@ -276,7 +273,8 @@ public:
 
   /**
    * @brief The method creates a new handler, registers the handler to receive
-   *        published message and returns he handler to the caller.
+   *        published message and returns he handler to the caller. It takes
+   *        forward arguments as in Hal_DMesgHandler::openHandler(...).
    *
    * @param name the name or unique identification to the handler
    * @param filterFn the functor callback that returns false to filter out Dmesg
@@ -286,34 +284,15 @@ public:
    *
    * @return newly created handler
    */
-  std::shared_ptr<Hal_DMesgHandler>
-  openHandler(std::string_view name, FilterTask filterFn = nullptr,
-              AsyncProcessTask asyncProcessFn = nullptr) {
+  template <class... U>
+  std::shared_ptr<Hal_DMesgHandler> openHandler(U &&...arg) {
     std::shared_ptr<Hal_DMesgHandler> handler =
-        std::make_shared<Hal_DMesgHandler>(name, filterFn, asyncProcessFn);
+        std::make_shared<Hal_DMesgHandler>(std::forward<U>(arg)...);
     auto handlerRet = handler;
 
     m_handlers.push_back(handler);
     handler->m_owner = this;
     this->registerSubscriber(&(handler->m_sub));
-
-    // generate a sys message on behalf of the opening handler as a sort
-    // of heartbeat.
-    Hal::DMesgPb hbSysPb{};
-    hbSysPb.set_identifier(DMesgSysIdentifier);
-    hbSysPb.set_sourceidentifier(name);
-    hbSysPb.set_type(Hal::DMesgTypePb::sys);
-
-    Hal::DMesgBodyPb *dmesgSysBodyPb = hbSysPb.mutable_body();
-    Hal::DMesgSysPb *dmesgSysBodySysPb = dmesgSysBodyPb->mutable_sys();
-
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    dmesgSysBodySysPb->mutable_timestamp()->set_seconds(tv.tv_sec);
-    dmesgSysBodySysPb->mutable_timestamp()->set_nanos(tv.tv_usec * 1000);
-
-    HAL_ASYNC_CALL_WITH_CAPTURE({ this->publishSysInternal(hbSysPb); }, this,
-                                hbSysPb);
 
     return handlerRet;
   }

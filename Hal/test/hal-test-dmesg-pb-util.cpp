@@ -12,8 +12,12 @@
 int main(int argc, char *argv[])
 {
   ::testing::InitGoogleTest(&argc, argv);
- 
-  DMESG_PB_INIT(dmesgPb);
+  struct timeval tv;                                                                
+  gettimeofday(&tv, NULL);     
+
+  Hal::DMesgPb dmesgPb{};
+
+  DMESG_PB_SET_TIMESTAMP(dmesgPb, tv);
   DMESG_PB_SET_IDENTIFIER(dmesgPb, "id1");
   DMESG_PB_SET_RUNNINGCOUNTER(dmesgPb, 99);
   DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPb, "node1");
@@ -28,14 +32,12 @@ int main(int argc, char *argv[])
   EXPECT_TRUE(dmesgPb.type() == Hal::DMesgTypePb::message);
   EXPECT_TRUE(dmesgPb.body().message() == "hello dmesg");
 
-  DMESG_PB_INIT(dmesgPb2);
+  Hal::DMesgPb dmesgPb2{};
+  DMESG_PB_SET_TIMESTAMP(dmesgPb2, tv);
   DMESG_PB_SET_IDENTIFIER(dmesgPb2, "id2");
   DMESG_PB_SET_RUNNINGCOUNTER(dmesgPb2, 100);
   DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPb2, "node2");
   DMESG_PB_SET_TYPE(dmesgPb2, Hal::DMesgTypePb::sys);
-
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
 
   EXPECT_TRUE(dmesgPb2.timestamp().seconds() != 0);
   EXPECT_TRUE(dmesgPb2.timestamp().nanos() != 0);

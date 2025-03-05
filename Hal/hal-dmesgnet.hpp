@@ -20,6 +20,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <sys/time.h>
 
 namespace Hal {
 
@@ -108,9 +109,29 @@ public:
       : Hal_DMesg{name}, m_name{name}, m_outputHandler{outputHandler},
         m_inputHandler{inputHandler} {
 
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    this->m_runningCounter++;
+
+    DMESG_PB_SET_TIMESTAMP(this->m_sys, tv);
+    DMESG_PB_SET_IDENTIFIER(this->m_sys, DMesgSysIdentifier);
+    DMESG_PB_SET_SOURCEIDENTIFIER(this->m_sys, DMesgSysIdentifier);
+    DMESG_PB_SET_RUNNINGCOUNTER(this->m_sys, this->m_runningCounter);
+    DMESG_PB_SET_TYPE(this->m_sys, Hal::DMesgTypePb::sys);
+    DMESG_PB_SYS_SET_TIMESTAMP(this->m_sys, tv);
+
+    auto *self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
+    DMESG_PB_SYS_NODE_SET_INITIALIZEDTIMESTAMP(self, tv);
+    DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+    DMESG_PB_SYS_NODE_SET_IDENTIFIER(self, this->m_name);
+    DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Initialized);
+    DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
+
     // subscriptHandler to read and write with local DMesg
     m_subscriptHandler = Hal_DMesg::openHandler(
         m_name,
+        true, // include DMesgSys
         [this](const Hal::DMesgPb &dmesgPb) {
           return dmesgPb.sourceidentifier() != this->m_name;
         },
@@ -168,6 +189,12 @@ public:
       });
 
       m_inputProc->exec();
+
+      m_sysHandler = Hal_DMesg::openHandler(
+          m_name + "_sys",
+          [this](const Hal::DMesgPb &dmesgPb) { return false; }, nullptr);
+
+      m_sysHandler->write(this->m_sys);
     }
 
     if (m_inputHandler && m_outputHandler) {
@@ -196,6 +223,10 @@ private:
   State m_state{Initialized};
   std::unique_ptr<Hal::Hal_Proc> m_inputProc{};
   std::shared_ptr<Hal_DMesgHandler> m_subscriptHandler{};
+  std::shared_ptr<Hal_DMesgHandler> m_sysHandler{};
+
+  Hal::DMesgPb m_sys{};
+  long long m_runningCounter{};
 };
 
 } /* namespace Hal */
