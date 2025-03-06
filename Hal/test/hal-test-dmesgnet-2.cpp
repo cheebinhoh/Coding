@@ -18,12 +18,16 @@ int main(int argc, char *argv[])
 
   std::shared_ptr<Hal::Hal_Io<std::string>> readSocket2 = std::make_shared<Hal::Hal_Socket>("127.0.0.1", 5000);
   Hal::Hal_Proc readProc{"readSocket2", [&readSocket2]() {
-    auto data = readSocket2->read();
-    if (data) {
-      Hal::DMesgPb dmesgPbRead{};
+    while (true) {
+      auto data = readSocket2->read();
+      if (data) {
+        Hal::DMesgPb dmesgPbRead{};
       
-      dmesgPbRead.ParseFromString(*data);
-      std::cout << "DMesgPb: " << dmesgPbRead.ShortDebugString() << "\n";
+        dmesgPbRead.ParseFromString(*data);
+        std::cout << "DMesgPb: " << dmesgPbRead.ShortDebugString() << "\n";
+      } else {
+        break;
+      }
     }
   }};
 

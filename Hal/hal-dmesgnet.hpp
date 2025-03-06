@@ -15,6 +15,7 @@
 #include "hal-dmesg-pb-util.hpp"
 #include "hal-dmesg.hpp"
 #include "hal-io.hpp"
+#include "hal-timer.hpp"
 
 #include <iostream>
 #include <memory>
@@ -24,14 +25,17 @@
 
 namespace Hal {
 
+#define HAL_DMESGNET_HEARTBEAT_IN_NS (1000000000)
+#define HAL_DMESGNET_MASTERPENDING_MAX_COUNTER (3)
+
 class Hal_DMesgNet : public Hal_DMesg {
 public:
   /**
    * 1.    Initialized - [send heartbeat] -> MasterElectionPending
-   * 2[1]. MasterElectionPending - [receive master heartbeat] -> Ready
-   * 2[2]. MasterElectionPending - [timeout w/o master heartbeat, act as master]
+   * 2[1]. MasterPending - [receive master heartbeat] -> Ready
+   * 2[2]. MasterPending - [timeout w/o master heartbeat, act as master]
    *       -> Ready
-   * 3[1]. Ready - [receive master last heartbeat] -> MasterElectionPending
+   * 3[1]. Ready - [receive master last heartbeat] -> MasterPending
    * 3[2]. Ready - [send last heartbeat, optionally relinquish master role]
    *       -> Destroyed
    * 4.    Destroyed [cache last state in file?]
@@ -101,8 +105,6 @@ public:
    * one selected by its neighbor heartbeat message.
    */
 
-  enum State { Initialized, MasterElectionPending, Ready, Destroyed };
-
   Hal_DMesgNet(std::string_view name,
                std::shared_ptr<Hal_Io<std::string>> outputHandler = nullptr,
                std::shared_ptr<Hal_Io<std::string>> inputHandler = nullptr)
@@ -125,7 +127,7 @@ public:
     DMESG_PB_SYS_NODE_SET_INITIALIZEDTIMESTAMP(self, tv);
     DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
     DMESG_PB_SYS_NODE_SET_IDENTIFIER(self, this->m_name);
-    DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Initialized);
+    DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::MasterPending);
     DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
 
     // subscriptHandler to read and write with local DMesg
@@ -193,15 +195,36 @@ public:
       m_sysHandler = Hal_DMesg::openHandler(
           m_name + "_sys",
           [this](const Hal::DMesgPb &dmesgPb) { return false; }, nullptr);
-
-      m_sysHandler->write(this->m_sys);
     }
 
     if (m_inputHandler && m_outputHandler) {
-      // into MasterElectionPending
+      // into MasterPending
+      m_timerProc = std::make_unique<Hal::Hal_Timer<std::chrono::nanoseconds>>(
+          std::chrono::nanoseconds(HAL_DMESGNET_HEARTBEAT_IN_NS), [this]() {
+            this->write([this]() {
+              if (this->m_sys.body().sys().self().state() ==
+                  Hal::DMesgStatePb::MasterPending) {
+                this->m_masterPendingCounter++;
+
+                if (this->m_masterPendingCounter >=
+                    HAL_DMESGNET_MASTERPENDING_MAX_COUNTER) {
+                  this->m_masterPendingCounter++;
+
+                  auto *self =
+                      this->m_sys.mutable_body()->mutable_sys()->mutable_self();
+                  DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Ready);
+                }
+              }
+
+              this->m_sysHandler->write(this->m_sys);
+            });
+          });
     } else {
-      m_state = Ready;
+      auto *self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
+      DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Ready);
     }
+
+    m_sysHandler->write(this->m_sys);
   }
 
   virtual ~Hal_DMesgNet() noexcept try {
@@ -220,13 +243,14 @@ private:
   std::shared_ptr<Hal_Io<std::string>> m_outputHandler{};
   std::shared_ptr<Hal_Io<std::string>> m_inputHandler{};
 
-  State m_state{Initialized};
   std::unique_ptr<Hal::Hal_Proc> m_inputProc{};
   std::shared_ptr<Hal_DMesgHandler> m_subscriptHandler{};
   std::shared_ptr<Hal_DMesgHandler> m_sysHandler{};
+  std::unique_ptr<Hal::Hal_Timer<std::chrono::nanoseconds>> m_timerProc{};
 
   Hal::DMesgPb m_sys{};
   long long m_runningCounter{};
+  long long m_masterPendingCounter{};
 };
 
 } /* namespace Hal */
