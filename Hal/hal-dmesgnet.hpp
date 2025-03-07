@@ -12,6 +12,7 @@
 
 #define HAL_DMESGNET_HPP_HAVE_SEEN
 
+#include "hal-debug.hpp"
 #include "hal-dmesg-pb-util.hpp"
 #include "hal-dmesg.hpp"
 #include "hal-io.hpp"
@@ -133,7 +134,7 @@ public:
     // subscriptHandler to read and write with local DMesg
     m_subscriptHandler = Hal_DMesg::openHandler(
         m_name,
-        true, // include DMesgSys
+        true, // include DMesgSys!
         [this](const Hal::DMesgPb &dmesgPb) {
           return dmesgPb.sourceidentifier() != this->m_name;
         },
@@ -177,9 +178,37 @@ public:
               // FIXME: the source is now used by both application
               // and the DMesg protocol level, maybe we should
               // separate the namespace of source.
-              dmesgPbRead.set_sourceidentifier(this->m_name);
 
-              this->m_subscriptHandler->write(dmesgPbRead);
+              if (dmesgPbRead.type() == Hal::DMesgTypePb::sys) {
+                this->write([this, dmesgPbRead]() mutable {
+                  auto other = dmesgPbRead.body().sys().self();
+                  auto self =
+                      this->m_sys.mutable_body()->mutable_sys()->mutable_self();
+                  std::string masterIdentifier{};
+
+                  if (other.masteridentifier() != "") {
+                    assert(other.state() == Hal::DMesgStatePb::Ready);
+                    masterIdentifier = other.masteridentifier();
+                  }
+
+                  if (self->state() == Hal::DMesgStatePb::MasterPending &&
+                      self->masteridentifier() != masterIdentifier) {
+                    DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Ready);
+                    DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self,
+                                                           masterIdentifier);
+
+                    struct timeval tv;
+                    gettimeofday(&tv, NULL);
+
+                    DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+                    this->m_sysHandler->write(this->m_sys);
+                  }
+                });
+              } else {
+                dmesgPbRead.set_sourceidentifier(this->m_name);
+
+                this->m_subscriptHandler->write(dmesgPbRead);
+              }
             }
           } else {
             // no data, quit the thread.
@@ -201,7 +230,7 @@ public:
       // into MasterPending
       m_timerProc = std::make_unique<Hal::Hal_Timer<std::chrono::nanoseconds>>(
           std::chrono::nanoseconds(HAL_DMESGNET_HEARTBEAT_IN_NS), [this]() {
-            this->write([this]() {
+            this->write([this]() mutable {
               if (this->m_sys.body().sys().self().state() ==
                   Hal::DMesgStatePb::MasterPending) {
                 this->m_masterPendingCounter++;
@@ -213,18 +242,33 @@ public:
                   auto *self =
                       this->m_sys.mutable_body()->mutable_sys()->mutable_self();
                   DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Ready);
+                  DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, this->m_name);
+
+                  struct timeval tv;
+                  gettimeofday(&tv, NULL);
+
+                  DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
                 }
               }
 
+              HAL_DEBUG_PRINT(
+                  std::cout
+                  << "self: " << this->m_sys.body().sys().self().identifier()
+                  << ", master: "
+                  << this->m_sys.body().sys().self().masteridentifier()
+                  << "\n");
               this->m_sysHandler->write(this->m_sys);
             });
           });
     } else {
       auto *self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
       DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Ready);
+      DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, this->m_name);
     }
 
-    m_sysHandler->write(this->m_sys);
+    if (m_sysHandler) {
+      m_sysHandler->write(this->m_sys);
+    }
   }
 
   virtual ~Hal_DMesgNet() noexcept try {
