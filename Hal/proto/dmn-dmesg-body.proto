@@ -1,0 +1,44 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ */
+
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package Dmn;
+
+enum DMesgStatePb
+{
+  Invalid       = 0;
+  Initialized   = 1;
+  MasterPending = 2;
+  Ready         = 3;
+  Destroyed     = 4;
+}
+
+message DMesgSysNodePb
+{
+  google.protobuf.Timestamp initializedTimestamp = 1;
+  google.protobuf.Timestamp updatedTimestamp     = 2;
+  string                    identifier           = 3;
+  DMesgStatePb              state                = 4;
+  string                    masterIdentifier     = 5;
+}
+
+message DMesgSysPb
+{
+  google.protobuf.Timestamp timestamp  = 1;
+  DMesgSysNodePb            self       = 2;
+  repeated DMesgSysNodePb   nodeList   = 5;
+}
+
+message DMesgBodyPb
+{
+  oneof Body
+  {
+    DMesgSysPb sys     = 1;
+    string     message = 2;   
+  }
+}
+

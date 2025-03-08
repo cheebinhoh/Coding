@@ -1,0 +1,14 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ */
+
+syntax = "proto3";
+
+package Dmn;
+
+enum DMesgTypePb
+{
+  INVALID = 0;
+  sys     = 1;
+  message = 2;
+}

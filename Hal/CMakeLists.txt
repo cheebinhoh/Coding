@@ -9,7 +9,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(hal)
+project(dmn)
 
 # set options
 option(BUILD_NDEBUG "build without debug" OFF)
@@ -40,76 +40,76 @@ if(BUILD_NDEBUG)
 endif()
 
 # build hardware abstraction layer library
-add_library(hal
-              ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.cpp
-              ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.cpp
-              ${CMAKE_CURRENT_SOURCE_DIR}/hal-socket.cpp
+add_library(dmn
+              ${CMAKE_CURRENT_SOURCE_DIR}/dmn-event.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/dmn-proc.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/dmn-socket.cpp
 
               # proto c++ sources
-              ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.cc
-              ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.pb.cc
-              ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg.pb.cc
+              ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-body.pb.cc
+              ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-type.pb.cc
+              ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg.pb.cc
 )
 
-target_sources(hal
+target_sources(dmn
                  PRIVATE
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-debug.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-debug.hpp
 )
 
-target_sources(hal
+target_sources(dmn
                  INTERFACE
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-async.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-buffer.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-event.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-io.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-limit-buffer.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesg.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesgnet.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-dmesg-pb-util.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-pipe.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-proc.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-pub-sub.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-singleton.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-socket.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-teepipe.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal-timer.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/hal.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-async.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-buffer.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-event.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-io.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-limit-buffer.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-dmesg.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-dmesgnet.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-dmesg-pb-util.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-pipe.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-proc.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-pub-sub.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-singleton.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-socket.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-teepipe.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-timer.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn.hpp
 
                  # proto c++ sources
-                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-body.pb.h
-                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg-type.pb.h
-                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/hal-dmesg.pb.h
+                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-body.pb.h
+                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-type.pb.h
+                 ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg.pb.h
 )
 
-target_include_directories(hal
+target_include_directories(dmn
                              INTERFACE
                              ${CMAKE_CURRENT_SOURCE_DIR}
                              ${protobuf_SOURCE_DIR}/src
                              ${absl_SOURCE_DIR}
 )
 
-GENERATE_PROTOBUF(hal
-                    hal-dmesg-type.proto
-                    hal-dmesg-body.proto
-                    hal-dmesg.proto
+GENERATE_PROTOBUF(dmn
+                    dmn-dmesg-type.proto
+                    dmn-dmesg-body.proto
+                    dmn-dmesg.proto
 )
 
-target_link_libraries(hal
+target_link_libraries(dmn
                         PRIVATE
                         protobuf::libprotobuf
 )
 
 
-# run unit test for HAL
+# run unit test for DMN 
 add_subdirectory(test)
 
 
-# build executable that uses hal
-add_executable(hal-dmesg-daemon
-                 hal-dmesg-daemon.cpp
+# build executable that uses dmn 
+add_executable(dmn-dmesg-daemon
+                 dmn-dmesg-daemon.cpp
 )
 
-target_link_libraries(hal-dmesg-daemon
+target_link_libraries(dmn-dmesg-daemon
                         PRIVATE
-                        hal
+                        dmn 
 )

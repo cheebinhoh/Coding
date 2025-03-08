@@ -1,0 +1,22 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ */
+
+syntax = "proto3";
+
+import "proto/dmn-dmesg-type.proto";
+import "proto/dmn-dmesg-body.proto";
+
+import "google/protobuf/timestamp.proto";
+
+package Dmn;
+
+message DMesgPb
+{
+  google.protobuf.Timestamp timestamp        = 1; // set by Dmn_DMesgHandler
+  string                    topic            = 2;
+  uint64                    runningCounter   = 3; // set by Dmn_DMesgHandler
+  string                    sourceIdentifier = 4; // set by Dmn_DMesgHandler
+  DMesgTypePb               type             = 5;
+  DMesgBodyPb               body             = 6;
+}
