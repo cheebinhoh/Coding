@@ -17,7 +17,7 @@
   (pb).mutable_timestamp()->set_seconds((tv).tv_sec);                          \
   (pb).mutable_timestamp()->set_nanos((tv).tv_usec * 1000)
 
-#define DMESG_PB_SET_IDENTIFIER(pb, val) ((pb).set_identifier((val)))
+#define DMESG_PB_SET_TOPIC(pb, val) ((pb).set_topic((val)))
 
 #define DMESG_PB_SET_RUNNINGCOUNTER(pb, val) ((pb).set_runningcounter((val)))
 

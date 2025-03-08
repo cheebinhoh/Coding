@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
   EXPECT_TRUE(dmesgHandler3);
  
   Hal::DMesgPb dmesgPb{};
-  dmesgPb.set_identifier("counter sync");
+  dmesgPb.set_topic("counter sync");
   dmesgPb.set_type(Hal::DMesgTypePb::message);
 
   std::string data{"Hello dmesg async"};

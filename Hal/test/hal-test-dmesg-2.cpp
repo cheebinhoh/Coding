@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
       os << val;
 
       Hal::DMesgPb dmesgPbRet{};
-      dmesgPbRet.set_identifier("counter sync");
+      dmesgPbRet.set_topic("counter sync");
       dmesgPbRet.set_type(Hal::DMesgTypePb::message);
 
       Hal::DMesgBodyPb *dmsgbodyPbRet = dmesgPbRet.mutable_body();
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
       }
 
       Hal::DMesgPb dmesgPb{};
-      dmesgPb.set_identifier("counter sync");
+      dmesgPb.set_topic("counter sync");
       dmesgPb.set_type(Hal::DMesgTypePb::message);
 
       Hal::DMesgBodyPb *dmsgbodyPb = dmesgPb.mutable_body();

@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
   Hal::DMesgPb dmesgPb{};
 
   DMESG_PB_SET_TIMESTAMP(dmesgPb, tv);
-  DMESG_PB_SET_IDENTIFIER(dmesgPb, "id1");
+  DMESG_PB_SET_TOPIC(dmesgPb, "id1");
   DMESG_PB_SET_RUNNINGCOUNTER(dmesgPb, 99);
   DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPb, "node1");
   DMESG_PB_SET_TYPE(dmesgPb, Hal::DMesgTypePb::message);
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
   EXPECT_TRUE(dmesgPb.timestamp().seconds() != 0);
   EXPECT_TRUE(dmesgPb.timestamp().nanos() != 0);
-  EXPECT_TRUE(dmesgPb.identifier() == "id1");
+  EXPECT_TRUE(dmesgPb.topic() == "id1");
   EXPECT_TRUE(dmesgPb.runningcounter() == 99);
   EXPECT_TRUE(dmesgPb.sourceidentifier() == "node1");
   EXPECT_TRUE(dmesgPb.type() == Hal::DMesgTypePb::message);
@@ -34,14 +34,14 @@ int main(int argc, char *argv[])
 
   Hal::DMesgPb dmesgPb2{};
   DMESG_PB_SET_TIMESTAMP(dmesgPb2, tv);
-  DMESG_PB_SET_IDENTIFIER(dmesgPb2, "id2");
+  DMESG_PB_SET_TOPIC(dmesgPb2, "id2");
   DMESG_PB_SET_RUNNINGCOUNTER(dmesgPb2, 100);
   DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPb2, "node2");
   DMESG_PB_SET_TYPE(dmesgPb2, Hal::DMesgTypePb::sys);
 
   EXPECT_TRUE(dmesgPb2.timestamp().seconds() != 0);
   EXPECT_TRUE(dmesgPb2.timestamp().nanos() != 0);
-  EXPECT_TRUE(dmesgPb2.identifier() == "id2");
+  EXPECT_TRUE(dmesgPb2.topic() == "id2");
   EXPECT_TRUE(dmesgPb2.runningcounter() == 100);
   EXPECT_TRUE(dmesgPb2.sourceidentifier() == "node2");
   EXPECT_TRUE(dmesgPb2.type() == Hal::DMesgTypePb::sys);

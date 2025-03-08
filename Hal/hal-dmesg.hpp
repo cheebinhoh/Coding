@@ -12,6 +12,7 @@
 #define HAL_DMESG_HPP_HAVE_SEEN
 
 #include "hal-debug.hpp"
+#include "hal-dmesg-pb-util.hpp"
 #include "hal-pub-sub.hpp"
 #include "proto/hal-dmesg.pb.h"
 
@@ -78,11 +79,11 @@ public:
       void notify(Hal::DMesgPb dmesgPb) override {
         if (dmesgPb.sourceidentifier() != m_owner->m_name ||
             dmesgPb.type() == Hal::DMesgTypePb::sys) {
-          std::string id = dmesgPb.identifier();
-          long long runningCounter = m_owner->m_identifierRunningCounter[id];
+          std::string id = dmesgPb.topic();
+          long long runningCounter = m_owner->m_topicRunningCounter[id];
 
           if (dmesgPb.runningcounter() > runningCounter) {
-            m_owner->m_identifierRunningCounter[id] = dmesgPb.runningcounter();
+            m_owner->m_topicRunningCounter[id] = dmesgPb.runningcounter();
 
             if (dmesgPb.type() == Hal::DMesgTypePb::sys) {
               m_owner->m_lastDMesgSysPb = dmesgPb;
@@ -209,11 +210,15 @@ public:
         throw std::runtime_error("last write results in conflicted");
       }
 
-      std::string id = dmesgPb.identifier();
-      long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
+      struct timeval tv;
+      gettimeofday(&tv, NULL);
 
-      dmesgPb.set_sourceidentifier(m_name);
-      dmesgPb.set_runningcounter(nextRunningCounter);
+      std::string id = dmesgPb.topic();
+      long long nextRunningCounter = m_topicRunningCounter[id] + 1;
+
+      DMESG_PB_SET_TIMESTAMP(dmesgPb, tv);
+      DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPb, m_name);
+      DMESG_PB_SET_RUNNINGCOUNTER(dmesgPb, nextRunningCounter);
 
       if (move) {
         m_owner->publish(std::move_if_noexcept(dmesgPb));
@@ -221,7 +226,7 @@ public:
         m_owner->publish(dmesgPb);
       }
 
-      m_identifierRunningCounter[id] = nextRunningCounter;
+      m_topicRunningCounter[id] = nextRunningCounter;
     }
 
   private:
@@ -247,7 +252,7 @@ public:
 
     Hal_Buffer<Hal::DMesgPb> m_buffers{};
     Hal_DMesg *m_owner{};
-    std::map<std::string, long long> m_identifierRunningCounter{};
+    std::map<std::string, long long> m_topicRunningCounter{};
     Hal_DMesgHandlerSub m_sub{};
     ConflictCallbackTask m_conflictCallbackFn{};
     bool m_inConflict{};
@@ -329,16 +334,16 @@ protected:
    * @param dmesgSysPb The system dmesg protobuf message
    */
   void publishSysInternal(Hal::DMesgPb dmesgSysPb) {
-    assert(dmesgSysPb.identifier() == DMesgSysIdentifier);
+    assert(dmesgSysPb.topic() == DMesgSysIdentifier);
     assert(dmesgSysPb.type() == Hal::DMesgTypePb::sys);
 
-    std::string id = dmesgSysPb.identifier();
-    long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
+    std::string id = dmesgSysPb.topic();
+    long long nextRunningCounter = m_topicRunningCounter[id] + 1;
 
     try {
-      dmesgSysPb.set_runningcounter(nextRunningCounter);
+      DMESG_PB_SET_RUNNINGCOUNTER(dmesgSysPb, nextRunningCounter);
       Hal_Pub::publishInternal(dmesgSysPb);
-      m_identifierRunningCounter[id] = nextRunningCounter;
+      m_topicRunningCounter[id] = nextRunningCounter;
     } catch (...) {
       assert("unexpected expection" == nullptr);
     }
@@ -357,8 +362,8 @@ protected:
    * @param dmesgPb The dmesgPb to be published
    */
   void publishInternal(Hal::DMesgPb dmesgPb) override {
-    std::string id = dmesgPb.identifier();
-    long long nextRunningCounter = m_identifierRunningCounter[id] + 1;
+    std::string id = dmesgPb.topic();
+    long long nextRunningCounter = m_topicRunningCounter[id] + 1;
 
     if (dmesgPb.runningcounter() < nextRunningCounter) {
       std::vector<std::shared_ptr<Hal_DMesgHandler>>::iterator it =
@@ -375,9 +380,9 @@ protected:
     }
 
     try {
-      dmesgPb.set_runningcounter(nextRunningCounter);
+      DMESG_PB_SET_RUNNINGCOUNTER(dmesgPb, nextRunningCounter);
       Hal_Pub::publishInternal(dmesgPb);
-      m_identifierRunningCounter[id] = nextRunningCounter;
+      m_topicRunningCounter[id] = nextRunningCounter;
     } catch (...) {
       throw;
     }
@@ -387,7 +392,7 @@ private:
   std::string m_name{};
 
   std::vector<std::shared_ptr<Hal_DMesgHandler>> m_handlers{};
-  std::map<std::string, long long> m_identifierRunningCounter{};
+  std::map<std::string, long long> m_topicRunningCounter{};
 };
 
 } /* namespace Hal */

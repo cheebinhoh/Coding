@@ -13,10 +13,10 @@ package Hal;
 
 message DMesgPb
 {
-  google.protobuf.Timestamp timestamp        = 1;
-  string                    identifier       = 2;
-  uint64                    runningCounter   = 3;
-  string                    sourceIdentifier = 4;
+  google.protobuf.Timestamp timestamp        = 1; // set by Hal_DMesgHandler
+  string                    topic            = 2;
+  uint64                    runningCounter   = 3; // set by Hal_DMesgHandler
+  string                    sourceIdentifier = 4; // set by Hal_DMesgHandler
   DMesgTypePb               type             = 5;
   DMesgBodyPb               body             = 6;
 }

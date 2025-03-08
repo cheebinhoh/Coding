@@ -115,13 +115,9 @@ public:
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
-    this->m_runningCounter++;
-
-    DMESG_PB_SET_TIMESTAMP(this->m_sys, tv);
-    DMESG_PB_SET_IDENTIFIER(this->m_sys, DMesgSysIdentifier);
-    DMESG_PB_SET_SOURCEIDENTIFIER(this->m_sys, DMesgSysIdentifier);
-    DMESG_PB_SET_RUNNINGCOUNTER(this->m_sys, this->m_runningCounter);
+    DMESG_PB_SET_TOPIC(this->m_sys, DMesgSysIdentifier);
     DMESG_PB_SET_TYPE(this->m_sys, Hal::DMesgTypePb::sys);
+
     DMESG_PB_SYS_SET_TIMESTAMP(this->m_sys, tv);
 
     auto *self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
@@ -184,23 +180,21 @@ public:
                   auto other = dmesgPbRead.body().sys().self();
                   auto self =
                       this->m_sys.mutable_body()->mutable_sys()->mutable_self();
-                  std::string masterIdentifier{};
-
-                  if (other.masteridentifier() != "") {
-                    assert(other.state() == Hal::DMesgStatePb::Ready);
-                    masterIdentifier = other.masteridentifier();
-                  }
 
                   if (self->state() == Hal::DMesgStatePb::MasterPending &&
-                      self->masteridentifier() != masterIdentifier) {
+                      other.state() == Hal::DMesgStatePb::Ready) {
+                    assert(self->masteridentifier() == "");
+                    assert(other.masteridentifier() != "");
+
                     DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Ready);
-                    DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self,
-                                                           masterIdentifier);
+                    DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(
+                        self, other.masteridentifier());
 
                     struct timeval tv;
                     gettimeofday(&tv, NULL);
 
                     DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+
                     this->m_sysHandler->write(this->m_sys);
                   }
                 });
@@ -272,6 +266,30 @@ public:
   }
 
   virtual ~Hal_DMesgNet() noexcept try {
+    if (m_sysHandler && m_outputHandler) {
+      // it is about to destroy the Hal_DMesgNet and free everything
+      // it will send last heartbeat and reliquinsh itself as master (if
+      // itself is master).
+      //
+      // we avoid use of m_sysHandler as we are to destroy it, so we
+      // do not want to hold the object life up and have to wait for
+      // asynchrononous action to send last heartbeat messge.
+      struct timeval tv;
+      gettimeofday(&tv, NULL);
+
+      DMESG_PB_SET_SOURCEIDENTIFIER(this->m_sys, this->m_name);
+
+      auto *self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
+
+      DMESG_PB_SYS_NODE_SET_STATE(self, Hal::DMesgStatePb::Destroyed);
+      DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
+      DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+
+      std::string serialized_string{};
+      this->m_sys.SerializeToString(&serialized_string);
+
+      m_outputHandler->write(serialized_string);
+    }
   } catch (...) {
     // explicit return to resolve exception as destructor must be noexcept
     return;
@@ -293,7 +311,6 @@ private:
   std::unique_ptr<Hal::Hal_Timer<std::chrono::nanoseconds>> m_timerProc{};
 
   Hal::DMesgPb m_sys{};
-  long long m_runningCounter{};
   long long m_masterPendingCounter{};
 };
 
