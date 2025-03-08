@@ -1,5 +1,5 @@
-This repository contains a small hardware abstraction layer
-in c/c++ with a distributed messaging and synchronization protocol.
+This repository contains a distributed messaging and synchronization
+protocol in c/c++.
 
 The ultimate goal is to implement a simple distributed messaging
 and synchronization protocol that can be integrated with Application
