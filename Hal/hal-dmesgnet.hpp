@@ -195,6 +195,25 @@ public:
 
                     DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
 
+                    this->m_masterPendingCounter = 0;
+                    this->m_sysHandler->write(this->m_sys);
+                  } else if (self->state() == Hal::DMesgStatePb::Ready &&
+                             other.state() != Hal::DMesgStatePb::Ready &&
+                             other.identifier() == self->masteridentifier()) {
+
+                    assert(self->masteridentifier() != "");
+                    assert(other.masteridentifier() == "");
+
+                    DMESG_PB_SYS_NODE_SET_STATE(
+                        self, Hal::DMesgStatePb::MasterPending);
+                    DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
+
+                    struct timeval tv;
+                    gettimeofday(&tv, NULL);
+
+                    DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+
+                    this->m_masterPendingCounter = 0;
                     this->m_sysHandler->write(this->m_sys);
                   }
                 });
@@ -231,7 +250,7 @@ public:
 
                 if (this->m_masterPendingCounter >=
                     HAL_DMESGNET_MASTERPENDING_MAX_COUNTER) {
-                  this->m_masterPendingCounter++;
+                  this->m_masterPendingCounter = 0;
 
                   auto *self =
                       this->m_sys.mutable_body()->mutable_sys()->mutable_self();
@@ -245,12 +264,6 @@ public:
                 }
               }
 
-              HAL_DEBUG_PRINT(
-                  std::cout
-                  << "self: " << this->m_sys.body().sys().self().identifier()
-                  << ", master: "
-                  << this->m_sys.body().sys().self().masteridentifier()
-                  << "\n");
               this->m_sysHandler->write(this->m_sys);
             });
           });
