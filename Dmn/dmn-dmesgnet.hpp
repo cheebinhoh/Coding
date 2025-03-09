@@ -28,6 +28,7 @@ namespace Dmn {
 
 #define DMN_DMESGNET_HEARTBEAT_IN_NS (1000000000)
 #define DMN_DMESGNET_MASTERPENDING_MAX_COUNTER (3)
+#define DMN_DMESGNET_MASTERSYNC_MAX_COUNTER (5)
 
 class Dmn_DMesgNet : public Dmn_DMesg {
 public:
@@ -224,6 +225,26 @@ public:
 
                   DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
                 }
+              } else if (this->m_sys.body().sys().self().state() ==
+                         Dmn::DMesgStatePb::Ready) {
+                if (this->m_sys.body().sys().self().masteridentifier() !=
+                    this->m_sys.body().sys().self().identifier()) {
+                  this->m_masterSyncPendingCounter++;
+
+                  if (this->m_masterSyncPendingCounter >=
+                      DMN_DMESGNET_MASTERSYNC_MAX_COUNTER) {
+                    this->m_masterSyncPendingCounter = 0;
+                    this->m_lastRemoteMasterTimestamp = {};
+
+                    auto *self = this->m_sys.mutable_body()
+                                     ->mutable_sys()
+                                     ->mutable_self();
+
+                    DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
+                    DMESG_PB_SYS_NODE_SET_STATE(
+                        self, Dmn::DMesgStatePb::MasterPending);
+                  }
+                }
               }
 
               this->m_sysHandler->write(this->m_sys);
@@ -293,25 +314,29 @@ protected:
 
       DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
 
-      this->m_lastMasterSync = tv;
+      this->m_lastRemoteMasterTimestamp = tv;
       this->m_masterPendingCounter = 0;
+      this->m_masterSyncPendingCounter = 0;
       this->m_sysHandler->write(this->m_sys);
-    } else if (self->state() == Dmn::DMesgStatePb::Ready &&
-               other.identifier() == self->masteridentifier()) {
-      if (other.state() == Dmn::DMesgStatePb::Ready) {
-        this->m_lastMasterSync = {};
-      } else {
-        assert(self->masteridentifier() != "");
-        assert(other.masteridentifier() == "");
+    } else if (self->state() == Dmn::DMesgStatePb::Ready) {
+      if (other.identifier() == self->masteridentifier()) {
+        if (other.state() == Dmn::DMesgStatePb::Ready) {
+          this->m_masterSyncPendingCounter = 0;
+          this->m_lastRemoteMasterTimestamp = tv;
+        } else {
+          assert(self->masteridentifier() != "");
+          assert(other.masteridentifier() == "");
 
-        DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::MasterPending);
-        DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
+          DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::MasterPending);
+          DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
 
-        DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+          DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
 
-        this->m_lastMasterSync = {};
-        this->m_masterPendingCounter = 0;
-        this->m_sysHandler->write(this->m_sys);
+          this->m_lastRemoteMasterTimestamp = tv;
+          this->m_masterPendingCounter = 0;
+          this->m_masterSyncPendingCounter = 0;
+          this->m_sysHandler->write(this->m_sys);
+        }
       }
     }
 
@@ -387,7 +412,8 @@ private:
 
   Dmn::DMesgPb m_sys{};
   long long m_masterPendingCounter{};
-  struct timeval m_lastMasterSync {};
+  long long m_masterSyncPendingCounter{};
+  struct timeval m_lastRemoteMasterTimestamp {};
 };
 
 } /* namespace Dmn */
