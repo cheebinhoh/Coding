@@ -177,45 +177,7 @@ public:
 
               if (dmesgPbRead.type() == Dmn::DMesgTypePb::sys) {
                 this->write([this, dmesgPbRead]() mutable {
-                  auto other = dmesgPbRead.body().sys().self();
-                  auto self =
-                      this->m_sys.mutable_body()->mutable_sys()->mutable_self();
-
-                  if (self->state() == Dmn::DMesgStatePb::MasterPending &&
-                      other.state() == Dmn::DMesgStatePb::Ready) {
-                    assert(self->masteridentifier() == "");
-                    assert(other.masteridentifier() != "");
-
-                    DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::Ready);
-                    DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(
-                        self, other.masteridentifier());
-
-                    struct timeval tv;
-                    gettimeofday(&tv, NULL);
-
-                    DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
-
-                    this->m_masterPendingCounter = 0;
-                    this->m_sysHandler->write(this->m_sys);
-                  } else if (self->state() == Dmn::DMesgStatePb::Ready &&
-                             other.state() != Dmn::DMesgStatePb::Ready &&
-                             other.identifier() == self->masteridentifier()) {
-
-                    assert(self->masteridentifier() != "");
-                    assert(other.masteridentifier() == "");
-
-                    DMESG_PB_SYS_NODE_SET_STATE(
-                        self, Dmn::DMesgStatePb::MasterPending);
-                    DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
-
-                    struct timeval tv;
-                    gettimeofday(&tv, NULL);
-
-                    DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
-
-                    this->m_masterPendingCounter = 0;
-                    this->m_sysHandler->write(this->m_sys);
-                  }
+                  this->reconciliateDmesgPbSys(dmesgPbRead);
                 });
               } else {
                 dmesgPbRead.set_sourceidentifier(this->m_name);
@@ -313,6 +275,106 @@ public:
   Dmn_DMesgNet(Dmn_DMesgNet &&dmnDMesgNet) = delete;
   Dmn_DMesgNet &operator=(Dmn_DMesgNet &&dmnDMesgNet) = delete;
 
+protected:
+  void reconciliateDmesgPbSys(Dmn::DMesgPb dmesgPbOther) {
+    auto other = dmesgPbOther.body().sys().self();
+    auto self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
+
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    if (self->state() == Dmn::DMesgStatePb::MasterPending &&
+        other.state() == Dmn::DMesgStatePb::Ready) {
+      assert(self->masteridentifier() == "");
+      assert(other.masteridentifier() != "");
+
+      DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::Ready);
+      DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, other.masteridentifier());
+
+      DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+
+      this->m_lastMasterSync = tv;
+      this->m_masterPendingCounter = 0;
+      this->m_sysHandler->write(this->m_sys);
+    } else if (self->state() == Dmn::DMesgStatePb::Ready &&
+               other.identifier() == self->masteridentifier()) {
+      if (other.state() == Dmn::DMesgStatePb::Ready) {
+        this->m_lastMasterSync = {};
+      } else {
+        assert(self->masteridentifier() != "");
+        assert(other.masteridentifier() == "");
+
+        DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::MasterPending);
+        DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
+
+        DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+
+        this->m_lastMasterSync = {};
+        this->m_masterPendingCounter = 0;
+        this->m_sysHandler->write(this->m_sys);
+      }
+    }
+
+    int i = 0;
+    while (i < this->m_sys.mutable_body()->mutable_sys()->nodelist().size()) {
+      if (other.identifier() == this->m_sys.mutable_body()
+                                    ->mutable_sys()
+                                    ->nodelist()
+                                    .Get(i)
+                                    .identifier()) {
+        break;
+      }
+
+      i++;
+    }
+
+    if (other.state() == Dmn::DMesgStatePb::Destroyed) {
+      if (i >= this->m_sys.mutable_body()->mutable_sys()->nodelist().size()) {
+        // do nothing
+      } else {
+        this->m_sys.mutable_body()
+            ->mutable_sys()
+            ->mutable_nodelist()
+            ->DeleteSubrange(i, 1);
+      }
+    } else {
+      if (i >= this->m_sys.mutable_body()->mutable_sys()->nodelist().size()) {
+        this->m_sys.mutable_body()->mutable_sys()->add_nodelist();
+      }
+
+      this->m_sys.mutable_body()
+          ->mutable_sys()
+          ->mutable_nodelist(i)
+          ->set_identifier(other.identifier());
+      this->m_sys.mutable_body()
+          ->mutable_sys()
+          ->mutable_nodelist(i)
+          ->set_masteridentifier(other.masteridentifier());
+      this->m_sys.mutable_body()->mutable_sys()->mutable_nodelist(i)->set_state(
+          other.state());
+      this->m_sys.mutable_body()
+          ->mutable_sys()
+          ->mutable_nodelist(i)
+          ->mutable_initializedtimestamp()
+          ->set_seconds(other.initializedtimestamp().seconds());
+      this->m_sys.mutable_body()
+          ->mutable_sys()
+          ->mutable_nodelist(i)
+          ->mutable_initializedtimestamp()
+          ->set_nanos(other.initializedtimestamp().nanos());
+      this->m_sys.mutable_body()
+          ->mutable_sys()
+          ->mutable_nodelist(i)
+          ->mutable_updatedtimestamp()
+          ->set_seconds(other.updatedtimestamp().seconds());
+      this->m_sys.mutable_body()
+          ->mutable_sys()
+          ->mutable_nodelist(i)
+          ->mutable_initializedtimestamp()
+          ->set_nanos(other.updatedtimestamp().nanos());
+    }
+  }
+
 private:
   std::string m_name{};
   std::shared_ptr<Dmn_Io<std::string>> m_outputHandler{};
@@ -325,6 +387,7 @@ private:
 
   Dmn::DMesgPb m_sys{};
   long long m_masterPendingCounter{};
+  struct timeval m_lastMasterSync {};
 };
 
 } /* namespace Dmn */
