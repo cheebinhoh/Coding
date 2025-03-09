@@ -147,7 +147,7 @@ public:
             //
             // This is point we check if outgoing is in conflict
             // for the message stream with the identifier.
-            dmesgPb.set_sourceidentifier(this->m_name);
+            DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPb, this->m_name);
             dmesgPb.SerializeToString(&serialized_string);
 
             m_outputHandler->write(serialized_string);
