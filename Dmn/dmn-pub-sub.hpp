@@ -132,7 +132,7 @@ public:
     m_subscribers.push_back(sub);
     sub->pub = this;
 
-    // resend backtrace data items that the registered subscriber
+    // resend backdate data items that the registered subscriber
     // miss.
     if (m_next > m_first) {
       for (std::size_t n = m_first; n < m_next; n++) {

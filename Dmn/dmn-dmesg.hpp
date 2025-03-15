@@ -154,9 +154,12 @@ public:
     }
 
     /**
-     * @brief The method marks the handler as conflict resolved.
+     * @brief The method marks the handler as conflict resolved by posting an
+     *        asynchronous action on publisher async thread which is one
+     *        responsible for putting the handler in conflict state, hence one
+     *        responsible to reset it and get it out of the conflict state.
      */
-    void resolveConflict() { m_inConflict = false; }
+    void resolveConflict() { m_owner->resetHandlerConflictState(this->m_name); }
 
     /**
      * @brief The method set the callback function for conflict.
@@ -230,6 +233,12 @@ public:
     }
 
   private:
+    /**
+     * @brief The method marks the handler as conflict resolved, and to be
+     * executed by the publisher's asynchronous thread context.
+     */
+    void resolveConflictInternal() { m_inConflict = false; }
+
     /**
      * @brief The method marks the writer as in conflict state and executes the
      *        conflict callback function in the caller async context.
@@ -364,14 +373,15 @@ protected:
   void publishInternal(Dmn::DMesgPb dmesgPb) override {
     std::string id = dmesgPb.topic();
     long long nextRunningCounter = m_topicRunningCounter[id] + 1;
+    std::vector<std::shared_ptr<Dmn_DMesgHandler>>::iterator it = std::find_if(
+        m_handlers.begin(), m_handlers.end(), [&dmesgPb](auto handler) {
+          return handler->m_name == dmesgPb.sourceidentifier();
+        });
 
-    if (dmesgPb.runningcounter() < nextRunningCounter) {
-      std::vector<std::shared_ptr<Dmn_DMesgHandler>>::iterator it =
-          std::find_if(m_handlers.begin(), m_handlers.end(),
-                       [&dmesgPb](auto handler) {
-                         return handler->m_name == dmesgPb.sourceidentifier();
-                       });
-
+    if (it != m_handlers.end() && (*it)->isInConflict()) {
+      // avoid throw conflict multiple times
+      return;
+    } else if (dmesgPb.runningcounter() < nextRunningCounter) {
       if (it != m_handlers.end()) {
         (*it)->throwConflict(dmesgPb);
 
@@ -388,7 +398,36 @@ protected:
     }
   }
 
+  /**
+   * @brief The method posts an asynchronous action in the async thread context
+   *        to reset the handler's conflict state.
+   *
+   * @param handlerName the identification string for the open handler
+   */
+  void resetHandlerConflictState(std::string_view handlerName) {
+    DMN_ASYNC_CALL_WITH_CAPTURE(
+        { this->resetHandlerConflictStateInternal(handlerName); }, this,
+        handlerName);
+  }
+
 private:
+  /**
+   * @brief The method resets the handler conflict state, it must be called
+   * within the publisher asynchronous thread as it is the thread which puts the
+   *        handler in conflict state at first place.
+   *
+   * @param handlerName the identification string for the open handler
+   */
+  void resetHandlerConflictStateInternal(std::string_view handlerName) {
+    std::vector<std::shared_ptr<Dmn_DMesgHandler>>::iterator it = std::find_if(
+        m_handlers.begin(), m_handlers.end(),
+        [handlerName](auto handler) { return handler->m_name == handlerName; });
+
+    if (it != m_handlers.end()) {
+      (*it)->resolveConflictInternal();
+    }
+  }
+
   std::string m_name{};
 
   std::vector<std::shared_ptr<Dmn_DMesgHandler>> m_handlers{};
