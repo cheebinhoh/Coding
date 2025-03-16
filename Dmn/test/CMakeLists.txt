@@ -12,6 +12,7 @@ ADD_TEST_EXECUTABLE(dmn
                       dmn-test-dmesg-1
                       dmn-test-dmesg-2
                       dmn-test-dmesg-3
+                      dmn-test-dmesg-4
                       dmn-test-dmesgnet-1
                       dmn-test-dmesgnet-2
                       dmn-test-dmesgnet-3
