@@ -16,20 +16,23 @@ int main(int argc, char *argv[])
 
   Dmn::Dmn_DMesg dmesg{"dmesg"};
 
+  int cnt{1};
+
   std::shared_ptr<Dmn::Dmn_DMesg::Dmn_DMesgHandler> dmesgHandler = dmesg.openHandler("handler", false,
                                                                                      [](const Dmn::DMesgPb &msg) {
                                                                                        return true;
                                                                                      },
-                                                                                     [&dmesgHandler](const Dmn::DMesgPb &msg) {
-                                                                                       static int cnt{};
+                                                                                     [&dmesgHandler, &cnt](const Dmn::DMesgPb &msg) mutable {
                                                                                        std::cout << msg.ShortDebugString() << "\n";
 
-                                                                                      Dmn::DMesgPb ret{msg};
-                                                                                      try {
-                                                                                        dmesgHandler->write(ret);
-                                                                                      } catch (...) {
-                                                                                        dmesgHandler->resolveConflict();
-                                                                                      }
+                                                                                       Dmn::DMesgPb ret{msg};
+                                                                                       try {
+                                                                                         dmesgHandler->write(ret);
+                                                                                         cnt++;
+                                                                                       } catch (...) {
+                                                                                         std::cout << "except cnt: " << cnt << "\n";
+                                                                                         dmesgHandler->resolveConflict();
+                                                                                       }
                                                                                      });
   EXPECT_TRUE(dmesgHandler);
 
@@ -54,6 +57,7 @@ int main(int argc, char *argv[])
 
   dmesg.closeHandler(dmesgWriteHandler);
   dmesg.closeHandler(dmesgHandler);
+  EXPECT_TRUE(2 == cnt);
 
   return RUN_ALL_TESTS();
 }
