@@ -183,7 +183,26 @@ public:
               } else {
                 dmesgPbRead.set_sourceidentifier(this->m_name);
 
-                this->m_subscriptHandler->write(dmesgPbRead);
+                try {
+                  this->m_subscriptHandler->write(dmesgPbRead);
+                } catch (...) {
+                  // The data from network is out of sync with data
+                  // in the Dmn_DMesg, and a few should happen:
+                  // - mark the topic as in conflict for local Dmn_DMesg
+                  // - the local Dmn_DMesg will mark all openHandler in
+                  //   conflict but waiting for resolution with Dmn_DMesgNet
+                  //   master, so they will not allow any message on the same
+                  //   topic band.
+                  // - the local Dmn_DMesgNet will broadcast a sys conflict
+                  //   message.
+                  // - all networked DMesgNet(s) receives the sys conflict
+                  //   message will then put its local Dmn_DMesg in conflict
+                  //   state for the same topic.
+                  // - master node will then send its last message for the
+                  //   to all nodes, and all nodes receives the message will
+                  //   use new message as its last valid message for the
+                  //   topic and clear it conflict state.
+                }
               }
             }
           } else {
