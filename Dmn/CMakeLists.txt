@@ -35,6 +35,15 @@ FetchContent_Declare(protobuf
 
 FetchContent_MakeAvailable(protobuf)
 
+FetchContent_Declare(rdkafka
+                       GIT_REPOSITORY https://github.com/confluentinc/librdkafka.git
+                       GIT_TAG        v2.8.0
+)
+
+FetchContent_MakeAvailable(rdkafka)
+
+string(REPLACE "-src" "-build" rdkafka_BUILD_DIR "${rdkafka_SOURCE_DIR}")
+
 if(BUILD_NDEBUG)
   add_compile_definitions(NDEBUG)
 endif()
@@ -100,16 +109,46 @@ target_link_libraries(dmn
 )
 
 
-# run unit test for DMN 
+# run unit test for DMN
 add_subdirectory(test)
 
 
-# build executable that uses dmn 
+# build executable that uses dmn
 add_executable(dmn-dmesg-daemon
                  dmn-dmesg-daemon.cpp
 )
 
 target_link_libraries(dmn-dmesg-daemon
                         PRIVATE
-                        dmn 
+                        dmn
 )
+
+# Kafka
+add_executable(Dmn-consumer
+                 Dmn-consumer.cpp
+)
+
+target_include_directories(Dmn-consumer
+                             PRIVATE
+                             ${rdkafka_SOURCE_DIR}/src
+)
+
+target_link_libraries(Dmn-consumer
+                        PRIVATE
+                        ${rdkafka_BUILD_DIR}/src/librdkafka.dylib
+)
+
+add_executable(Dmn-producer
+                 Dmn-producer.cpp
+)
+
+target_include_directories(Dmn-producer
+                             PRIVATE
+                             ${rdkafka_SOURCE_DIR}/src
+)
+
+target_link_libraries(Dmn-producer
+                        PRIVATE
+                        ${rdkafka_BUILD_DIR}/src/librdkafka.dylib
+)
+
