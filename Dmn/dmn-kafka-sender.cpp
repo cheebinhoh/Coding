@@ -96,13 +96,14 @@ int main(int argc, char **argv) {
   // Produce data by selecting random values from these lists.
   int message_count = 10;
   const char *topic = "timer_counter";
+  const key *key = "tick";
+  const size_t key_len = strlen(key);
   const char *user_ids[6] = {"eabara",   "jsmith",  "sgarcia",
                              "jbernard", "htanaka", "awalther"};
   const char *products[5] = {"book", "alarm clock", "t-shirts", "gift card",
                              "batteries"};
 
   for (int i = 0; i < message_count; i++) {
-    const char *key = user_ids[random() % ARR_SIZE(user_ids)];
     const char *value = products[random() % ARR_SIZE(products)];
     size_t key_len = strlen(key);
     size_t value_len = strlen(value);

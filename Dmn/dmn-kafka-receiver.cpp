@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
 
     consumer_message = rd_kafka_consumer_poll(consumer, 500);
     if (!consumer_message) {
-      std::cout << "Waiting... ";
+      std::cout << "Waiting... \n";
       continue;
     }
 
@@ -133,10 +133,10 @@ int main(int argc, char **argv) {
         return 1;
       }
     } else {
-      printf("Consumed event from topic %s: key = %.*s value = %s\n",
+      printf("Consumed event from topic %s: key = %.*s value = %.*s\n",
              rd_kafka_topic_name(consumer_message->rkt),
              (int)consumer_message->key_len, (char *)consumer_message->key,
-             (char *)consumer_message->payload);
+             (int)consumer_message->len, (char *)consumer_message->payload);
     }
 
     // Free the message when we're done.
