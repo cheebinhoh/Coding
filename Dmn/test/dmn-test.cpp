@@ -26,8 +26,8 @@ public:
   Dmn_Event() : Dmn::Dmn_Async{"event manager"} {}
 
   void post(std::string event) {
-    DMN_ASYNC_CALL_WITH_COPY_CAPTURE(std::cout << "Event: " << count++ << ": "
-                                               << event << "\n");
+    DMN_ASYNC_CALL_WITH_CAPTURE(std::cout << "Event: " << count++ << ": "
+                                          << event << "\n", this, event);
   }
 
 private:

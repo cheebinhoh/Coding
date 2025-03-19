@@ -6,7 +6,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(dmn)
@@ -124,30 +124,34 @@ target_link_libraries(dmn-dmesg-daemon
 )
 
 # Kafka
-add_executable(Dmn-consumer
-                 Dmn-consumer.cpp
+add_executable(dmn-kafka-receiver
+                 dmn-kafka-receiver.cpp
+                 kafka/dmn-kafka-util.cpp
 )
 
-target_include_directories(Dmn-consumer
+target_include_directories(dmn-kafka-receiver
                              PRIVATE
+                             ${CMAKE_CURRENT_SOURCE_DIR}/kafka
                              ${rdkafka_SOURCE_DIR}/src
 )
 
-target_link_libraries(Dmn-consumer
+target_link_libraries(dmn-kafka-receiver
                         PRIVATE
                         ${rdkafka_BUILD_DIR}/src/librdkafka.dylib
 )
 
-add_executable(Dmn-producer
-                 Dmn-producer.cpp
+add_executable(dmn-kafka-sender
+                 dmn-kafka-sender.cpp
+                 kafka/dmn-kafka-util.cpp
 )
 
-target_include_directories(Dmn-producer
+target_include_directories(dmn-kafka-sender
                              PRIVATE
+                             ${CMAKE_CURRENT_SOURCE_DIR}/kafka
                              ${rdkafka_SOURCE_DIR}/src
 )
 
-target_link_libraries(Dmn-producer
+target_link_libraries(dmn-kafka-sender
                         PRIVATE
                         ${rdkafka_BUILD_DIR}/src/librdkafka.dylib
 )

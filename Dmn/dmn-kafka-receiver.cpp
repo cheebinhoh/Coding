@@ -1,31 +1,17 @@
 // For study purpose, and copy from
 // https://developer.confluent.io/get-started/c/
 
+#include "dmn-kafka-util.hpp"
+#include "rdkafka.h"
+
+#include <cassert>
+#include <iostream>
+
 #include "rdkafka.h"
 #include <signal.h>
 #include <stdlib.h>
 
 static volatile sig_atomic_t run = 1;
-
-#define g_error(...) fprintf(stderr, "error\n")
-#define g_message(...)                                                         \
-  do {                                                                         \
-    fprintf(stdout, __VA_ARGS__);                                              \
-    fflush(stdout);                                                            \
-  } while (0)
-
-/* Wrapper to set config values and error out if needed.
- */
-static void set_config(rd_kafka_conf_t *conf, char *key, char *value) {
-  char errstr[512];
-  rd_kafka_conf_res_t res;
-
-  res = rd_kafka_conf_set(conf, key, value, errstr, sizeof(errstr));
-  if (res != RD_KAFKA_CONF_OK) {
-    g_error("Unable to set config: %s", errstr);
-    exit(1);
-  }
-}
 
 /**
  * @brief Signal termination of program
@@ -43,25 +29,63 @@ int main(int argc, char **argv) {
 
   // User-specific properties that you must set
   // User-specific properties that you must set
-  set_config(conf, "bootstrap.servers",
-             "pkc-619z3.us-east1.gcp.confluent.cloud:9092");
-  set_config(conf, "sasl.username", "C3T2TGVAQYYF7H6T");
-  set_config(
+  auto res = Dmn::set_config(conf, "bootstrap.servers",
+                             "pkc-619z3.us-east1.gcp.confluent.cloud:9092");
+  if (!res.has_value()) {
+    std::cerr << "Error in set_config: bootstrap.servers: " << res.error()
+              << "\n";
+    exit(1);
+  }
+
+  res = Dmn::set_config(conf, "sasl.username", "C3T2TGVAQYYF7H6T");
+  if (!res.has_value()) {
+    std::cerr << "Error in set_config: sasl.username: " << res.error() << "\n";
+    exit(1);
+  }
+
+  res = Dmn::set_config(
       conf, "sasl.password",
       "4JNbCdwNsK6HSgj65AHdZT5d9VsyWPX+lQysSPca70ehKN7uHsCuIyPlHw32gmNr");
+  if (!res.has_value()) {
+    std::cerr << "Error in set_config: sasl.password: " << res.error() << "\n";
+    exit(1);
+  }
 
   // Fixed properties
-  set_config(conf, "security.protocol", "SASL_SSL");
-  set_config(conf, "sasl.mechanisms", "PLAIN");
-  set_config(conf, "group.id", "kafka-c-getting-started");
-  set_config(conf, "auto.offset.reset", "earliest");
+  res = Dmn::set_config(conf, "security.protocol", "SASL_SSL");
+  if (!res.has_value()) {
+    std::cerr << "Error in set_config: security.protocol: " << res.error()
+              << "\n";
+    exit(1);
+  }
+
+  res = Dmn::set_config(conf, "sasl.mechanisms", "PLAIN");
+  if (!res.has_value()) {
+    std::cerr << "Error in set_config: sasl.mechanisms: " << res.error()
+              << "\n";
+    exit(1);
+  }
+
+  res = Dmn::set_config(conf, "group.id", "dmn-kafka-receiver");
+  if (!res.has_value()) {
+    std::cerr << "Error in set_config: group.id: " << res.error() << "\n";
+    exit(1);
+  }
+
+  res = Dmn::set_config(conf, "auto.offset.reset", "earliest");
+  if (!res.has_value()) {
+    std::cerr << "Error in set_config: auto.offset.reset: " << res.error()
+              << "\n";
+    exit(1);
+  }
 
   // Create the Consumer instance.
   consumer = rd_kafka_new(RD_KAFKA_CONSUMER, conf, errstr, sizeof(errstr));
   if (!consumer) {
-    g_error("Failed to create new consumer: %s", errstr);
-    return 1;
+    std::cerr << "Failed to create new consumer: " << errstr << "\n";
+    exit(1);
   }
+
   rd_kafka_poll_set_consumer(consumer);
 
   // Configuration object is now owned, and freed, by the rd_kafka_t instance.
@@ -76,8 +100,8 @@ int main(int argc, char **argv) {
   // Subscribe to the list of topics.
   err = rd_kafka_subscribe(consumer, subscription);
   if (err) {
-    g_error("Failed to subscribe to %d topics: %s", subscription->cnt,
-            rd_kafka_err2str(err));
+    std::cerr << "Failed to subscribe to " << subscription->cnt
+              << " topics, error: " << rd_kafka_err2str(err) << "\n";
     rd_kafka_topic_partition_list_destroy(subscription);
     rd_kafka_destroy(consumer);
     return 1;
@@ -94,7 +118,7 @@ int main(int argc, char **argv) {
 
     consumer_message = rd_kafka_consumer_poll(consumer, 500);
     if (!consumer_message) {
-      g_message("Waiting...");
+      std::cout << "Waiting... ";
       continue;
     }
 
@@ -104,15 +128,15 @@ int main(int argc, char **argv) {
          * everything and are waiting for more data.
          */
       } else {
-        g_message("Consumer error: %s",
-                  rd_kafka_message_errstr(consumer_message));
+        std::cerr << "Consumer error: "
+                  << rd_kafka_message_errstr(consumer_message) << "\n";
         return 1;
       }
     } else {
-      g_message("Consumed event from topic %s: key = %.*s value = %s",
-                rd_kafka_topic_name(consumer_message->rkt),
-                (int)consumer_message->key_len, (char *)consumer_message->key,
-                (char *)consumer_message->payload);
+      printf("Consumed event from topic %s: key = %.*s value = %s\n",
+             rd_kafka_topic_name(consumer_message->rkt),
+             (int)consumer_message->key_len, (char *)consumer_message->key,
+             (char *)consumer_message->payload);
     }
 
     // Free the message when we're done.
@@ -120,7 +144,7 @@ int main(int argc, char **argv) {
   }
 
   // Close the consumer: commit final offsets and leave the group.
-  g_message("Closing consumer");
+  std::cout << "Closing consumer\n";
   rd_kafka_consumer_close(consumer);
 
   // Destroy the consumer.
