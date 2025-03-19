@@ -6,6 +6,8 @@
 
 #include <cassert>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -96,24 +98,23 @@ int main(int argc, char **argv) {
   // Produce data by selecting random values from these lists.
   int message_count = 10;
   const char *topic = "timer_counter";
-  const key *key = "tick";
+  const char *key = "tick";
   const size_t key_len = strlen(key);
-  const char *user_ids[6] = {"eabara",   "jsmith",  "sgarcia",
-                             "jbernard", "htanaka", "awalther"};
-  const char *products[5] = {"book", "alarm clock", "t-shirts", "gift card",
-                             "batteries"};
 
   for (int i = 0; i < message_count; i++) {
-    const char *value = products[random() % ARR_SIZE(products)];
-    size_t key_len = strlen(key);
-    size_t value_len = strlen(value);
+    std::stringstream os{};
 
+    os << "heartbaet: " << i;
     rd_kafka_resp_err_t err;
+
+    std::string value{os.str()};
+    size_t valueLen = value.size();
+    const char *valuePtr = value.c_str();
 
     err = rd_kafka_producev(producer, RD_KAFKA_V_TOPIC(topic),
                             RD_KAFKA_V_MSGFLAGS(RD_KAFKA_MSG_F_COPY),
                             RD_KAFKA_V_KEY((void *)key, key_len),
-                            RD_KAFKA_V_VALUE((void *)value, value_len),
+                            RD_KAFKA_V_VALUE((void *)valuePtr, valueLen),
                             RD_KAFKA_V_OPAQUE(NULL), RD_KAFKA_V_END);
 
     if (err) {
@@ -122,7 +123,7 @@ int main(int argc, char **argv) {
       return 1;
     } else {
       std::cout << "Produced event to topic: " << topic << ", key: " << key
-                << ", value: " << value << "\n";
+                << ", value: " << os.str() << "\n";
     }
 
     rd_kafka_poll(producer, 0);
