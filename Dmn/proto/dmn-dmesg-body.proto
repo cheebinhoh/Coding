@@ -14,7 +14,16 @@ enum DMesgStatePb
   Initialized   = 1;
   MasterPending = 2;
   Ready         = 3;
-  Destroyed     = 4;
+
+  /* All state transition systems has a single beginning point
+   * and a single terminating point, a gap is purposely
+   * inserted that so a end of live software can always assert
+   * that no system state from another peer can exceed the
+   * Destroyed point, even if it does not receive a software
+   * update
+   */
+
+  Destroyed     = 15;
 }
 
 message DMesgSysNodePb
@@ -38,7 +47,13 @@ message DMesgBodyPb
   oneof Body
   {
     DMesgSysPb sys     = 1;
-    string     message = 2;   
+
+    /* Application specific data is started at 5
+     * or after, so that we have gap to add more library
+     * specific data before 5.
+     */
+
+    string     message = 5;
   }
 }
 

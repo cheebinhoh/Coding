@@ -18,5 +18,10 @@ message DMesgPb
   uint64                    runningCounter   = 3; // set by Dmn_DMesgHandler
   string                    sourceIdentifier = 4; // set by Dmn_DMesgHandler
   DMesgTypePb               type             = 5;
-  DMesgBodyPb               body             = 6;
+
+  /* The payload body is started at 10, so that we have room reserved
+   * to add extra data member that are attributes specific to the library
+   */
+
+  DMesgBodyPb               body             = 10;
 }

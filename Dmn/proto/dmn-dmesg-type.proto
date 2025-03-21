@@ -10,5 +10,11 @@ enum DMesgTypePb
 {
   INVALID = 0;
   sys     = 1;
-  message = 2;
+
+  /* Application specific message type is started at 5
+   * or after, so that we have gap to add more library
+   * specific message type before 5.
+   */ 
+
+  message = 5; 
 }
