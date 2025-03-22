@@ -1,7 +1,8 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This class implements a simple form of publisher subscriber model
+ * This class implements a simple publisher subscriber model, the class
+ * templatize the data to be published and subscribed of.
  */
 
 #ifndef DMN_PUB_SUB_HPP_HAVE_SEEN
@@ -28,9 +29,8 @@ public:
    * The Subscriber class implements the Interface of Subscriber to be
    * working with Publisher.
    *
-   * Subscriber should inherit from the Dmn_Sub to be notified of any
-   * data item from Dmn_Pub (publisher), the Dmn_Sub interface methods are
-   * called in the Dmn_Sub own async thread context.
+   * Subscriber will be notified of published data item via Dmn_Pub
+   * (publisher).
    *
    * Subscriber subclass can override notify() method to have specific
    * functionality.
@@ -40,8 +40,8 @@ public:
     Dmn_Sub() = default;
 
     virtual ~Dmn_Sub() noexcept try {
-      if (pub) {
-        pub->unregisterSubscriber(this);
+      if (m_pub) {
+        m_pub->unregisterSubscriber(this);
       }
     } catch (...) {
       // explicit return to resolve exception as destructor must be noexcept
@@ -55,7 +55,8 @@ public:
 
     /**
      * @brief The method notifies the subscriber of the data item from
-     * publisher, it is called within the subscriber's own async thread context.
+     *        publisher, it is called within the subscriber's own singleton
+     *        asynchronous thread context.
      *
      * @param item The data item notified by publisher
      */
@@ -65,8 +66,10 @@ public:
 
   private:
     /**
-     * @brief The method is supposed to be called by publisher (a friend class)
-     *        to async notify the subscriber of the item published by publisher.
+     * @brief The method is supposed to be called by publisher (the friend
+     *        class) to notify the subscriber of the data item published
+     *        by publisher in the subscriber' singleton asynchronous thread
+     *        context.
      *
      * @param item The data item notified by publisher
      */
@@ -74,9 +77,8 @@ public:
       DMN_ASYNC_CALL_WITH_CAPTURE({ this->notify(item); }, this, item);
     }
 
-    Dmn_Pub *pub{};
-  };
-  // End of class Dmn_Sub
+    Dmn_Pub *m_pub{};
+  }; // End of class Dmn_Sub
 
   using Dmn_Pub_Filter_Task =
       std::function<bool(const Dmn_Sub *const, const T &t)>;
@@ -92,7 +94,7 @@ public:
     std::lock_guard<std::mutex> lck(m_subscribersLock);
 
     for (auto &sub : m_subscribers) {
-      sub->pub = nullptr;
+      sub->m_pub = nullptr;
     }
   } catch (...) {
     // explicit return to resolve exception as destructor must be noexcept
@@ -107,9 +109,9 @@ public:
   /**
    * @brief The method copies the item and publish it to all subscribers. The
    *        method does not publish message directly but execute it in
-   *        Publisher's async thread context, this allows the method & caller
-   *        remains low-latency regardless of the number of subscribers and
-   *        amount of publishing data item.
+   *        Publisher's singleton asynchronous thread context, this allows the
+   *        method execution & caller remains low-latency regardless of the
+   *        number of subscribers and amount of publishing data item.
    *
    * @param item The data item to be published to subscribers
    */
@@ -118,21 +120,28 @@ public:
   }
 
   /**
-   * @brief The method registers a subscriber and send out backdate data
+   * @brief The method registers a subscriber and send out prior published data
    *        item, The method is called immediately with m_subscribersLock
-   *        than executed in async thread, and that allows caller to be
-   *        sure that the Dmn_Sub instance has been registered with the
-   *        publisher upon return of the method. The register and unregister
-   *        methods work in synchronization manner.
+   *        than executed in the singleton asynchronous context, and that
+   *        allows caller to be sure that the Dmn_Sub instance has been
+   *        registered with the publisher upon return of the method. The
+   *        register and unregister methods work in synchronization manner.
    *
    * @param sub The subscriber instance to be registered
    */
   void registerSubscriber(Dmn_Sub *sub) {
+    if (this == sub->m_pub) {
+      return;
+    }
+
+    assert(nullptr == sub->m_pub ||
+           "The subscriber has been registered with another publisher");
+
     std::lock_guard<std::mutex> lck(m_subscribersLock);
     m_subscribers.push_back(sub);
-    sub->pub = this;
+    sub->m_pub = this;
 
-    // resend backdate data items that the registered subscriber
+    // resend the data items that the registered subscriber
     // miss.
     if (m_next > m_first) {
       for (std::size_t n = m_first; n < m_next; n++) {
@@ -151,16 +160,23 @@ public:
 
   /**
    * @brief The method de-registers a subscriber. The method is called
-   *        immediately with m_subscribersLock than executed in async
-   *        thread, and that allows caller to be sure that the Dmn_Sub
-   *        instance has been de-registered from the publisher upon
-   *        return of the method.
+   *        immediately with m_subscribersLock than executed in the
+   *        singleton asynchronous thread context, and that allows caller to
+   *        be sure that the Dmn_Sub instance has been de-registered
+   *        from the publisher upon return of the method.
    *
    * @param sub The subscriber instance to be de-registered
    */
   void unregisterSubscriber(Dmn_Sub *sub) {
+    if (nullptr == sub->m_pub) {
+      return;
+    }
+
+    assert(this == sub->m_pub ||
+           "The subscriber' registered publisher is NOT this" == nullptr);
+
     std::lock_guard<std::mutex> lck(m_subscribersLock);
-    sub->pub = nullptr;
+    sub->m_pub = nullptr;
     m_subscribers.erase(
         std::remove(m_subscribers.begin(), m_subscribers.end(), sub),
         m_subscribers.end());
@@ -173,15 +189,25 @@ protected:
    * @param item The data item to be published
    */
   virtual void publishInternal(T item) {
-    /* Though the Dmn_Pipe async thread, we are guarantee that only
-     * one thread is executing the Internal method but unregister
-     * has to be run in caller thread and changes the core data
-     * upon return, so we need to have an extra m_subscribersLock
+    /* Though through Dmn_Async (parent class), we have a mean to
+     * guarantee that only one thread is executing the core logic
+     * and manipulate the m_subscribers state in a singleton asynchronous
+     * thread context and without the use of mutex to protect the m_subscribers,
+     * but that also requires both registerSubscriber() and
+     * unregisterSubscriber() API methods to have it side effects executed
+     * in the singleton asynchronous thread context, and which means that upon
+     * returning from both API methods, the client is not guaranteed that
+     * it has registered or unregistered successfully.
+     *
+     * A simple mutex will guarantee that and the penalty of mutex is small
+     * as most clients are registered upon application brought up, and only
+     * deregister upon application shutdown.
      */
     std::lock_guard<std::mutex> lck(m_subscribersLock);
 
     /* Keep the published item in circular ring buffer for
-     * efficient access to playback!
+     * efficient access to playback to new subscribers whose misses the
+     * data.
      */
     if (m_next >= m_capacity) {
       m_next = 0;
@@ -211,18 +237,24 @@ private:
     m_buffer.reserve(m_capacity);
   }
 
+  /**
+   * data member for constructor to instantiate the object.
+   */
   std::string m_name{};
   ssize_t m_capacity{};
   Dmn_Pub_Filter_Task m_filterFn{};
 
+  /**
+   * data members for internal logic
+   */
   std::vector<T> m_buffer{};
   ssize_t m_first{};
   ssize_t m_next{};
 
   std::mutex m_subscribersLock{};
   std::vector<Dmn_Sub *> m_subscribers{};
-};
+}; // End of class Dmn_Pub
 
-} // namespace Dmn
+} // End of namespace Dmn
 
-#endif /* DMN_PUB_SUB_HPP_HAVE_SEEN */
+#endif /* End of DMN_PUB_SUB_HPP_HAVE_SEEN */
