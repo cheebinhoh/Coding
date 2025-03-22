@@ -102,9 +102,6 @@ public:
         }
       }
 
-      friend class Dmn_DMesgHandler;
-
-    private:
       Dmn_DMesgHandler *m_owner{};
     };
 
@@ -266,9 +263,27 @@ public:
     ConflictCallbackTask m_conflictCallbackFn{};
     bool m_inConflict{};
     Dmn::DMesgPb m_lastDMesgSysPb{};
+    std::vector<std::string> m_subscribedTopics{};
   }; /* Dmn_DMesgHandler */
 
-  Dmn_DMesg(std::string_view name) : Dmn_Pub{name, 10}, m_name{name} {}
+  Dmn_DMesg(std::string_view name)
+      : Dmn_Pub{name, 10,
+                [this](const Dmn_Sub *const sub, const Dmn::DMesgPb &msg) {
+                  const Dmn_DMesgHandler::Dmn_DMesgHandlerSub
+                      *const handlerSub = dynamic_cast<
+                          const Dmn_DMesgHandler::Dmn_DMesgHandlerSub *const>(
+                          sub);
+                  assert(handlerSub != nullptr);
+
+                  Dmn_DMesgHandler *handler = handlerSub->m_owner;
+
+                  return handler->m_subscribedTopics.size() == 0 ||
+                         std::find(handler->m_subscribedTopics.begin(),
+                                   handler->m_subscribedTopics.end(),
+                                   msg.topic()) !=
+                             handler->m_subscribedTopics.end();
+                }},
+        m_name{name} {}
 
   virtual ~Dmn_DMesg() noexcept try {
     for (auto &handler : m_handlers) {
@@ -307,6 +322,16 @@ public:
     m_handlers.push_back(handler);
     handler->m_owner = this;
     this->registerSubscriber(&(handler->m_sub));
+
+    return handlerRet;
+  }
+
+  template <class... U>
+  std::shared_ptr<Dmn_DMesgHandler> openHandler(std::vector<std::string> topics,
+                                                U &&...arg) {
+    auto handlerRet = this->openHandler(std::forward<U>(arg)...);
+
+    handlerRet->m_subscribedTopics = topics;
 
     return handlerRet;
   }

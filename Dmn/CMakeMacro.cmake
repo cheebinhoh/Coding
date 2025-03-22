@@ -14,6 +14,7 @@ macro(ADD_TEST_EXECUTABLE ...)
                          )
 
     add_test(NAME ${arg} COMMAND ${arg})
+    set_tests_properties(${arg} PROPERTIES LABELS "dmn")
   endforeach()
 endmacro()
 
