@@ -192,7 +192,7 @@ public:
 
               if (dmesgPbRead.type() == Dmn::DMesgTypePb::sys) {
                 DMN_ASYNC_CALL_WITH_CAPTURE(
-                    { this->reconciliateDmesgPbSys(dmesgPbRead); }, this,
+                    { this->reconciliateDMesgPbSys(dmesgPbRead); }, this,
                     dmesgPbRead);
               } else {
                 DMN_ASYNC_CALL_WITH_CAPTURE(
@@ -335,7 +335,14 @@ public:
   Dmn_DMesgNet &operator=(Dmn_DMesgNet &&dmnDMesgNet) = delete;
 
 protected:
-  void reconciliateDmesgPbSys(Dmn::DMesgPb dmesgPbOther) {
+  /**
+   * @brief The method reconciliate other node's DMesgPb with local node
+   *        DMesgPb in regard about sys state, like master and list of neighbor
+   *        nodes.
+   *
+   * @param dmesgPbOther The other node DMesgPb
+   */
+  void reconciliateDMesgPbSys(Dmn::DMesgPb dmesgPbOther) {
     auto other = dmesgPbOther.body().sys().self();
     auto self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
 
@@ -357,12 +364,16 @@ protected:
       this->m_masterSyncPendingCounter = 0;
       this->m_sysHandler->write(this->m_sys);
     } else if (self->state() == Dmn::DMesgStatePb::Ready) {
+      assert("" != self->masteridentifier());
+
       if (other.identifier() == self->masteridentifier()) {
         if (other.state() == Dmn::DMesgStatePb::Ready) {
           this->m_masterSyncPendingCounter = 0;
           this->m_lastRemoteMasterTimestamp = tv;
         } else {
-          assert(self->masteridentifier() != "");
+          /* other node relinquish its self-proclaim master state
+           * so local node also reset the master state
+           */
           assert(other.masteridentifier() == "");
 
           DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::MasterPending);
@@ -375,8 +386,31 @@ protected:
           this->m_masterSyncPendingCounter = 0;
           this->m_sysHandler->write(this->m_sys);
         }
+      } else if (other.state() == Dmn::DMesgStatePb::Ready &&
+                 other.masteridentifier() != self->masteridentifier()) {
+        assert("" != self->masteridentifier());
+        assert("" != other.masteridentifier());
+
+        if (other.initializedtimestamp().seconds() <
+                self->initializedtimestamp().seconds() ||
+            (other.initializedtimestamp().seconds() ==
+                 self->initializedtimestamp().seconds() &&
+             other.initializedtimestamp().nanos() <
+                 self->initializedtimestamp().nanos())) {
+          // follow other node's masteridentifier() as other node has higher
+          // seniority than local node.
+
+          DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self,
+                                                 other.masteridentifier());
+          DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP_FROM_TV(self, tv);
+
+          this->m_lastRemoteMasterTimestamp = tv;
+          this->m_masterPendingCounter = 0;
+          this->m_masterSyncPendingCounter = 0;
+          this->m_sysHandler->write(this->m_sys);
+        }
       }
-    }
+    } /* End of condition: self->state() == Dmn::DMesgStatePb::Ready */
 
     int i = 0;
     while (i < this->m_sys.mutable_body()->mutable_sys()->nodelist().size()) {
