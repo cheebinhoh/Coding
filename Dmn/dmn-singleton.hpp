@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
  * This class implements a singleton class that subclass can inherit
  * from and used to create a singleton instance with arguments specific

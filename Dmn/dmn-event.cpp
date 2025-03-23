@@ -113,7 +113,7 @@ void Dmn_Event_Manager::registerSignalHandler(int signo,
 
 /**
  * @brief The method registers external signal handler for the signal number.
- * The external signal handlers are executed before default handler from
+ *        The external signal handlers are executed before default handler from
  *        Dmn_Event_Manager. Note that SIGKILL and SIGSTOP can NOT be handled.
  *        This is private method to be called in the Dmn_Event_Manager instance
  *        asynchronous thread context.

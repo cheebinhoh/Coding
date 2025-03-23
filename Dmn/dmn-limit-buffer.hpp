@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
  * This class implements a fifo queue with a limited capacity that:
  * - push is blocking if the limit of the capacity is reach
