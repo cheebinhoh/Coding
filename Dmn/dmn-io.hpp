@@ -3,7 +3,8 @@
  *
  * This class implements an IO interface that
  * - read is blocking call if no data available or std::nullopt_t if
- *   end of data stream is read (example when pipe is removed).
+ *   end of data stream is read (example when pipe is removed) or read
+ *   error occurs.
  * - write (with rvalue) will move data if it is possible
  * - write (with lvalue) will not move but copy data
  */
@@ -24,6 +25,6 @@ public:
   virtual void write(T &&item) = 0;
 };
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_IO_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_IO_HPP_HAVE_SEEN */

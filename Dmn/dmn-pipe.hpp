@@ -189,8 +189,8 @@ private:
   pthread_mutex_t m_mutex{};
   pthread_cond_t m_emptyCond{};
   long long m_count{};
-}; // class Dmn_Pipe
+}; /* End of class Dmn_Pipe */
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_PIPE_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_PIPE_HPP_HAVE_SEEN */

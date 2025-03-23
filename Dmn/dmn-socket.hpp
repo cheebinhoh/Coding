@@ -23,13 +23,19 @@ public:
   void write(std::string &&item) override;
 
 private:
+  /**
+   * data members for constructor to instantiate the object.
+   */
   std::string m_ip4{};
   int m_portno{};
   bool m_writeOnly{};
 
+  /**
+   * data members for internal logic.
+   */
   int m_fd{-1};
 };
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_SOCKET_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_SOCKET_HPP_HAVE_SEEN */

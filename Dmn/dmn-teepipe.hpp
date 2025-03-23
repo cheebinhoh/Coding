@@ -359,15 +359,22 @@ private:
     });
   }
 
+  /**
+   * data members for constructor to instantiate the object.
+   */
   std::unique_ptr<Dmn_Proc> m_conveyor{};
+  Dmn_TeePipe::PostProcessingTask m_postProcessingTaskFn{};
+
+  /**
+   * data members for internal logic.
+   */
   pthread_mutex_t m_mutex{};
   pthread_cond_t m_cond{};
   pthread_cond_t m_emptyCond{};
   size_t m_fillBufferCount{};
   std::vector<std::shared_ptr<Dmn_TeePipeSource>> m_buffers{};
-  Dmn_TeePipe::PostProcessingTask m_postProcessingTaskFn{};
-};
+}; /* End of class Dmn_TeePipe */
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_TEEPIPE_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_TEEPIPE_HPP_HAVE_SEEN */

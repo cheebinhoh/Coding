@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
  * This class implements an fifo queue that:
  * - push is not blocking
@@ -230,7 +230,7 @@ protected:
     }
 
     return std::move_if_noexcept(val);
-  }
+  } /* End of method popOptional() */
 
 private:
   std::deque<T> m_queue{};
@@ -239,8 +239,8 @@ private:
   pthread_cond_t m_emptyCond{};
   long long m_pushCount{};
   long long m_popCount{};
-};
+}; /* End of class Dmn_Buffer */
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_BUFFER_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_BUFFER_HPP_HAVE_SEEN */

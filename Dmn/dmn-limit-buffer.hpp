@@ -209,14 +209,20 @@ private:
   }
 
 private:
+  /**
+   * data members for constructor to instantiate the object.
+   */
   size_t m_maxCapacity{1};
 
+  /**
+   * data members for internal logic.
+   */
   size_t m_size{0};
   pthread_mutex_t m_mutex{};
   pthread_cond_t m_popCond{};
   pthread_cond_t m_pushCond{};
-};
+}; /* End of class Dmn_LimitBuffer */
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_LIMITBUFFER_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_LIMITBUFFER_HPP_HAVE_SEEN */

@@ -23,4 +23,4 @@
 #include "dmn-timer.hpp"
 #include "dmn-util.hpp"
 
-#endif /* DMN_H_HAVE_SEEN */
+#endif /* End of macro DMN_H_HAVE_SEEN */

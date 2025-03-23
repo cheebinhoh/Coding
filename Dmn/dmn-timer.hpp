@@ -2,7 +2,10 @@
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
  * This module a watchdog or timer that executes a callback function
- * repeatedly after certain duration.
+ * repeatedly after certain duration has elapsed. Note that it is
+ * guaranteed that the callback function will not be executed before
+ * the specific duration is elapsed, but it is not guaranteed that it
+ * will be executed at the first moment that the duration is elapsed.
  */
 
 #ifndef DMN_TIMER_HPP_HAVE_SEEN
@@ -68,10 +71,13 @@ public:
   }
 
 private:
+  /**
+   * data members for constructor to instantiate the object.
+   */
   std::function<void()> m_fn{};
   T m_reltime{};
-};
+}; /* End of class Dmn_Timer */
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_TIMER_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_TIMER_HPP_HAVE_SEEN */

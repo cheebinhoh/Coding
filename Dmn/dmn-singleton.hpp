@@ -1,7 +1,7 @@
 /**
  * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
  *
- * This class implements a singleton class that subclass can inheritted
+ * This class implements a singleton class that subclass can inherit
  * from and used to create a singleton instance with arguments specific
  * to the subclass constructor.
  */
@@ -17,15 +17,25 @@ namespace Dmn {
 
 class Dmn_Singleton {
 public:
+  /**
+   * @brief The static method called to create singleton instance of the
+   *        template type, and the concrete type specific singleton instance
+   *        creation is done by template type (T) which implements static
+   *        createInstanceInternal() that creates and always return same
+   *        instance.
+   *
+   * @param arg The varying forwarded arguments that depends on the template
+   *            type' createInstanceInternal() method arguments
+   */
   template <typename T, class... U>
-  static std::shared_ptr<T> createInstance(U &&...u) {
+  static std : $ : shared_ptr<T> createInstance(U &&...arg) {
     std::shared_ptr<T> new_instance =
-        T::createInstanceInternal(std::forward<U>(u)...);
+        T::createInstanceInternal(std::forward<U>(arg)...);
 
     return new_instance;
   }
 };
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_SINGLETON_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_SINGLETON_HPP_HAVE_SEEN */

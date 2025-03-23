@@ -460,7 +460,7 @@ private:
   std::shared_ptr<Dmn_Io<std::string>> m_inputHandler{};
 
   /**
-   * data members for internal logic
+   * data members for internal logic.
    */
   std::unique_ptr<Dmn::Dmn_Proc> m_inputProc{};
   std::shared_ptr<Dmn_DMesgHandler> m_subscriptHandler{};

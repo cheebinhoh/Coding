@@ -59,13 +59,19 @@ protected:
 private:
   static void *runFnInThreadHelper(void *context);
 
+  /**
+   * data members for constructor to instantiate the object.
+   */
   const std::string m_name{};
 
+  /**
+   * data members for internal logic.
+   */
   Dmn_Proc::Task m_fn{};
   Dmn_Proc::State m_state{};
   pthread_t m_th{};
-};
+}; /* End of class Dmn_Proc */
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_PROC_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_PROC_HPP_HAVE_SEEN */

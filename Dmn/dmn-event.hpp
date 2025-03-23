@@ -79,19 +79,24 @@ private:
     }
 
     return Dmn_Event_Manager::s_instance;
-  }
+  } /* End of static method createInstanceInternal() */
 
+  /**
+   * data members for internal logic.
+   */
   Dmn_Proc m_signalWaitProc{"DmnEventManager_SignalWait"};
   sigset_t m_mask{};
   std::map<int, SignalHandler> m_signalHandlers{};
   std::map<int, std::vector<SignalHandler>> m_extSignalHandlers{};
 
-  // static variables for the global singleton instance
+  /**
+   * static variables for the global singleton instance
+   */
   static std::once_flag s_initOnce;
   static std::shared_ptr<Dmn_Event_Manager> s_instance;
   static sigset_t s_mask;
-}; // class Dmn_Event_Manager
+}; /* End of class Dmn_Event_Manager */
 
-} // namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* DMN_EVENT_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_EVENT_HPP_HAVE_SEEN */

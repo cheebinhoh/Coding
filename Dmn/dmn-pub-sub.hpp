@@ -245,7 +245,7 @@ private:
   Dmn_Pub_Filter_Task m_filterFn{};
 
   /**
-   * data members for internal logic
+   * data members for internal logic.
    */
   std::vector<T> m_buffer{};
   ssize_t m_first{};
@@ -253,8 +253,8 @@ private:
 
   std::mutex m_subscribersLock{};
   std::vector<Dmn_Sub *> m_subscribers{};
-}; // End of class Dmn_Pub
+}; /* End of class Dmn_Pub */
 
-} // End of namespace Dmn
+} /* End of namespace Dmn */
 
-#endif /* End of DMN_PUB_SUB_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_PUB_SUB_HPP_HAVE_SEEN */
