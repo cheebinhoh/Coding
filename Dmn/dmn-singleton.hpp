@@ -28,7 +28,7 @@ public:
    *            type' createInstanceInternal() method arguments
    */
   template <typename T, class... U>
-  static std : $ : shared_ptr<T> createInstance(U &&...arg) {
+  static std::shared_ptr<T> createInstance(U &&...arg) {
     std::shared_ptr<T> new_instance =
         T::createInstanceInternal(std::forward<U>(arg)...);
 
