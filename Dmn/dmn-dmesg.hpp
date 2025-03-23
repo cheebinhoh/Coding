@@ -28,6 +28,7 @@
 #include "dmn-debug.hpp"
 #include "dmn-dmesg-pb-util.hpp"
 #include "dmn-pub-sub.hpp"
+#include "dmn-util.hpp"
 #include "proto/dmn-dmesg.pb.h"
 
 #include <cassert>
@@ -266,11 +267,12 @@ public:
       gettimeofday(&tv, NULL);
 
       std::string topic = dmesgPb.topic();
-      long long nextRunningCounter = m_topicRunningCounter[topic] + 1;
+      long long nextRunningCounter =
+          incrementByOne(m_topicRunningCounter[topic]);
 
-      DMESG_PB_SET_TIMESTAMP(dmesgPb, tv);
-      DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPb, m_name);
-      DMESG_PB_SET_RUNNINGCOUNTER(dmesgPb, nextRunningCounter);
+      DMESG_PB_SET_MSG_TIMESTAMP_FROM_TV(dmesgPb, tv);
+      DMESG_PB_SET_MSG_SOURCEIDENTIFIER(dmesgPb, m_name);
+      DMESG_PB_SET_MSG_RUNNINGCOUNTER(dmesgPb, nextRunningCounter);
 
       if (move) {
         m_owner->publish(std::move_if_noexcept(dmesgPb));
@@ -467,9 +469,9 @@ protected:
     assert(dmesgSysPb.type() == Dmn::DMesgTypePb::sys);
 
     std::string id = dmesgSysPb.topic();
-    long long nextRunningCounter = m_topicRunningCounter[id] + 1;
+    long long nextRunningCounter = incrementByOne(m_topicRunningCounter[id]);
 
-    DMESG_PB_SET_RUNNINGCOUNTER(dmesgSysPb, nextRunningCounter);
+    DMESG_PB_SET_MSG_RUNNINGCOUNTER(dmesgSysPb, nextRunningCounter);
     Dmn_Pub::publishInternal(dmesgSysPb);
     m_topicRunningCounter[id] = nextRunningCounter;
   }
@@ -491,7 +493,7 @@ protected:
   void publishInternal(Dmn::DMesgPb dmesgPb) override {
     std::string id = dmesgPb.topic();
 
-    long long nextRunningCounter = m_topicRunningCounter[id] + 1;
+    long long nextRunningCounter = incrementByOne(m_topicRunningCounter[id]);
 
     std::vector<std::shared_ptr<Dmn_DMesgHandler>>::iterator it = std::find_if(
         m_handlers.begin(), m_handlers.end(), [&dmesgPb](auto handler) {
@@ -509,7 +511,7 @@ protected:
       }
     }
 
-    DMESG_PB_SET_RUNNINGCOUNTER(dmesgPb, nextRunningCounter);
+    DMESG_PB_SET_MSG_RUNNINGCOUNTER(dmesgPb, nextRunningCounter);
     Dmn_Pub::publishInternal(dmesgPb);
     m_topicRunningCounter[id] = nextRunningCounter;
   }

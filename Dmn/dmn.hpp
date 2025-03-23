@@ -21,5 +21,6 @@
 #include "dmn-socket.hpp"
 #include "dmn-teepipe.hpp"
 #include "dmn-timer.hpp"
+#include "dmn-util.hpp"
 
 #endif /* DMN_H_HAVE_SEEN */

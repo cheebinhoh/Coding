@@ -67,6 +67,7 @@ target_sources(dmn
 
 target_sources(dmn
                  INTERFACE
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-async.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-buffer.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-event.hpp
@@ -82,7 +83,7 @@ target_sources(dmn
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-socket.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-teepipe.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-timer.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-util.hpp
 
                  # proto c++ sources
                  ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-body.pb.h

@@ -126,14 +126,14 @@ public:
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
-    DMESG_PB_SET_TOPIC(this->m_sys, DMesgSysIdentifier);
-    DMESG_PB_SET_TYPE(this->m_sys, Dmn::DMesgTypePb::sys);
+    DMESG_PB_SET_MSG_TOPIC(this->m_sys, DMesgSysIdentifier);
+    DMESG_PB_SET_MSG_TYPE(this->m_sys, Dmn::DMesgTypePb::sys);
 
-    DMESG_PB_SYS_SET_TIMESTAMP(this->m_sys, tv);
+    DMESG_PB_SYS_SET_TIMESTAMP_FROM_TV(this->m_sys, tv);
 
     auto *self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
-    DMESG_PB_SYS_NODE_SET_INITIALIZEDTIMESTAMP(self, tv);
-    DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+    DMESG_PB_SYS_NODE_SET_INITIALIZEDTIMESTAMP_FROM_TV(self, tv);
+    DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP_FROM_TV(self, tv);
     DMESG_PB_SYS_NODE_SET_IDENTIFIER(self, this->m_name);
     DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::MasterPending);
     DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
@@ -159,7 +159,7 @@ public:
                   //
                   // This is point we check if outgoing is in conflict
                   // for the message stream with the identifier.
-                  DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPbWrite, this->m_name);
+                  DMESG_PB_SET_MSG_SOURCEIDENTIFIER(dmesgPbWrite, this->m_name);
                   dmesgPbWrite.SerializeToString(&serialized_string);
 
                   m_outputHandler->write(serialized_string);
@@ -261,7 +261,7 @@ public:
                   struct timeval tv;
                   gettimeofday(&tv, NULL);
 
-                  DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+                  DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP_FROM_TV(self, tv);
                 }
               } else if (this->m_sys.body().sys().self().state() ==
                          Dmn::DMesgStatePb::Ready) {
@@ -311,13 +311,13 @@ public:
       struct timeval tv;
       gettimeofday(&tv, NULL);
 
-      DMESG_PB_SET_SOURCEIDENTIFIER(this->m_sys, this->m_name);
+      DMESG_PB_SET_MSG_SOURCEIDENTIFIER(this->m_sys, this->m_name);
 
       auto *self = this->m_sys.mutable_body()->mutable_sys()->mutable_self();
 
       DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::Destroyed);
       DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
-      DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+      DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP_FROM_TV(self, tv);
 
       std::string serialized_string{};
       this->m_sys.SerializeToString(&serialized_string);
@@ -350,7 +350,7 @@ protected:
       DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::Ready);
       DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, other.masteridentifier());
 
-      DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+      DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP_FROM_TV(self, tv);
 
       this->m_lastRemoteMasterTimestamp = tv;
       this->m_masterPendingCounter = 0;
@@ -368,7 +368,7 @@ protected:
           DMESG_PB_SYS_NODE_SET_STATE(self, Dmn::DMesgStatePb::MasterPending);
           DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(self, "");
 
-          DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(self, tv);
+          DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP_FROM_TV(self, tv);
 
           this->m_lastRemoteMasterTimestamp = tv;
           this->m_masterPendingCounter = 0;

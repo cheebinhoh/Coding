@@ -1,7 +1,7 @@
 /**
  * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
  *
- * This is wrapper for DMesg protobuf message.
+ * This is wrapper API to access DMesgPb protobuf message.
  */
 
 #ifndef DMN_DMESG_PB_UTIL_HPP_HAVE_SEEN
@@ -23,25 +23,35 @@
     DMESG_PB_SET_TIMESTAMP_NANOS(ts, (tv).tv_usec * 1000);                     \
   } while (false)
 
-#define DMESG_PB_SET_TIMESTAMP(pb, tv)                                         \
+/**
+ * DMesgPb Message setters
+ */
+#define DMESG_PB_SET_MSG_TIMESTAMP_FROM_TV(pb, tv)                             \
   DMESG_PB_SET_TIMESTAMP_FROM_TV((pb).mutable_timestamp(), tv)
 
-#define DMESG_PB_SET_TOPIC(pb, val) ((pb).set_topic((val)))
+#define DMESG_PB_SET_MSG_TOPIC(pb, val) ((pb).set_topic((val)))
 
-#define DMESG_PB_SET_RUNNINGCOUNTER(pb, val) ((pb).set_runningcounter((val)))
+#define DMESG_PB_SET_MSG_RUNNINGCOUNTER(pb, val)                               \
+  ((pb).set_runningcounter((val)))
 
-#define DMESG_PB_SET_SOURCEIDENTIFIER(pb, val)                                 \
+#define DMESG_PB_SET_MSG_SOURCEIDENTIFIER(pb, val)                             \
   ((pb).set_sourceidentifier((val)))
 
-#define DMESG_PB_SET_TYPE(pb, val) ((pb).set_type((val)))
+#define DMESG_PB_SET_MSG_TYPE(pb, val) ((pb).set_type((val)))
 
+/**
+ * DMesgPb message body message setters
+ */
 #define DMESG_PB_MSG_SET_MESSAGE(pb, val)                                      \
   do {                                                                         \
     assert((pb).type() == Dmn::DMesgTypePb::message);                          \
     ((pb).mutable_body()->set_message((val)));                                 \
   } while (false)
 
-#define DMESG_PB_SYS_SET_TIMESTAMP(pb, tv)                                     \
+/**
+ * DMesgPb message body sys setters
+ */
+#define DMESG_PB_SYS_SET_TIMESTAMP_FROM_TV(pb, tv)                             \
   DMESG_PB_SET_TIMESTAMP_FROM_TV(                                              \
       (pb).mutable_body()->mutable_sys()->mutable_timestamp(), tv)
 
@@ -52,10 +62,10 @@
 
 #define DMESG_PB_SYS_NODE_SET_STATE(node, val) (node)->set_state(val)
 
-#define DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(node, tv)                       \
+#define DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP_FROM_TV(node, tv)               \
   DMESG_PB_SET_TIMESTAMP_FROM_TV((node)->mutable_updatedtimestamp(), tv)
 
-#define DMESG_PB_SYS_NODE_SET_INITIALIZEDTIMESTAMP(node, tv)                   \
+#define DMESG_PB_SYS_NODE_SET_INITIALIZEDTIMESTAMP_FROM_TV(node, tv)           \
   DMESG_PB_SET_TIMESTAMP_FROM_TV((node)->mutable_initializedtimestamp(), tv)
 
 #define DMESG_PB_SYS_SET_NODELIST_ELEM_IDENTIFIER(sys, index, val)             \
