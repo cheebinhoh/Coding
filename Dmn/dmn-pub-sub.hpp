@@ -224,7 +224,7 @@ protected:
         sub->notifyInternal(item);
       }
     }
-  }
+  } /* End of method publishInternal */
 
 private:
   /**
@@ -238,7 +238,7 @@ private:
   }
 
   /**
-   * data member for constructor to instantiate the object.
+   * data members for constructor to instantiate the object.
    */
   std::string m_name{};
   ssize_t m_capacity{};

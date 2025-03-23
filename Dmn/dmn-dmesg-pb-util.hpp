@@ -13,9 +13,18 @@
 #include <cassert>
 #include <sys/time.h>
 
+#define DMESG_PB_SET_TIMESTAMP_SECONDS(ts, val) (ts)->set_seconds(val)
+
+#define DMESG_PB_SET_TIMESTAMP_NANOS(ts, val) (ts)->set_nanos(val)
+
+#define DMESG_PB_SET_TIMESTAMP_FROM_TV(ts, tv)                                 \
+  do {                                                                         \
+    DMESG_PB_SET_TIMESTAMP_SECONDS(ts, (tv).tv_sec);                           \
+    DMESG_PB_SET_TIMESTAMP_NANOS(ts, (tv).tv_usec * 1000);                     \
+  } while (false)
+
 #define DMESG_PB_SET_TIMESTAMP(pb, tv)                                         \
-  (pb).mutable_timestamp()->set_seconds((tv).tv_sec);                          \
-  (pb).mutable_timestamp()->set_nanos((tv).tv_usec * 1000)
+  DMESG_PB_SET_TIMESTAMP_FROM_TV((pb).mutable_timestamp(), tv)
 
 #define DMESG_PB_SET_TOPIC(pb, val) ((pb).set_topic((val)))
 
@@ -27,15 +36,14 @@
 #define DMESG_PB_SET_TYPE(pb, val) ((pb).set_type((val)))
 
 #define DMESG_PB_MSG_SET_MESSAGE(pb, val)                                      \
-  assert((pb).type() == Dmn::DMesgTypePb::message);                            \
-  ((pb).mutable_body()->set_message((val)))
+  do {                                                                         \
+    assert((pb).type() == Dmn::DMesgTypePb::message);                          \
+    ((pb).mutable_body()->set_message((val)));                                 \
+  } while (false)
 
 #define DMESG_PB_SYS_SET_TIMESTAMP(pb, tv)                                     \
-  assert((pb).type() == Dmn::DMesgTypePb::sys);                                \
-  ((pb).mutable_body()->mutable_sys()->mutable_timestamp()->set_seconds(       \
-      (tv).tv_sec));                                                           \
-  ((pb).mutable_body()->mutable_sys()->mutable_timestamp()->set_nanos(         \
-      (tv).tv_usec * 1000))
+  DMESG_PB_SET_TIMESTAMP_FROM_TV(                                              \
+      (pb).mutable_body()->mutable_sys()->mutable_timestamp(), tv)
 
 #define DMESG_PB_SYS_NODE_SET_IDENTIFIER(node, val) (node)->set_identifier(val)
 
@@ -45,11 +53,53 @@
 #define DMESG_PB_SYS_NODE_SET_STATE(node, val) (node)->set_state(val)
 
 #define DMESG_PB_SYS_NODE_SET_UPDATEDTIMESTAMP(node, tv)                       \
-  (node)->mutable_updatedtimestamp()->set_seconds((tv).tv_sec);                \
-  (node)->mutable_updatedtimestamp()->set_nanos((tv).tv_usec * 1000)
+  DMESG_PB_SET_TIMESTAMP_FROM_TV((node)->mutable_updatedtimestamp(), tv)
 
 #define DMESG_PB_SYS_NODE_SET_INITIALIZEDTIMESTAMP(node, tv)                   \
-  (node)->mutable_initializedtimestamp()->set_seconds((tv).tv_sec);            \
-  (node)->mutable_initializedtimestamp()->set_nanos((tv).tv_usec * 1000)
+  DMESG_PB_SET_TIMESTAMP_FROM_TV((node)->mutable_initializedtimestamp(), tv)
+
+#define DMESG_PB_SYS_SET_NODELIST_ELEM_IDENTIFIER(sys, index, val)             \
+  DMESG_PB_SYS_NODE_SET_IDENTIFIER(                                            \
+      ((sys).mutable_body()->mutable_sys()->mutable_nodelist((index))), val)
+
+#define DMESG_PB_SYS_SET_NODELIST_ELEM_MASTERIDENTIFIER(sys, index, val)       \
+  DMESG_PB_SYS_NODE_SET_MASTERIDENTIFIER(                                      \
+      ((sys).mutable_body()->mutable_sys()->mutable_nodelist((index))), val)
+
+#define DMESG_PB_SYS_SET_NODELIST_ELEM_STATE(sys, index, val)                  \
+  DMESG_PB_SYS_NODE_SET_STATE(                                                 \
+      ((sys).mutable_body()->mutable_sys()->mutable_nodelist((index))), val)
+
+#define DMESG_PB_SYS_SET_NODELIST_ELEM_INITIALIZEDTIMESTAMP(sys, index, val)   \
+  do {                                                                         \
+    DMESG_PB_SET_TIMESTAMP_SECONDS(((sys)                                      \
+                                        .mutable_body()                        \
+                                        ->mutable_sys()                        \
+                                        ->mutable_nodelist((index))            \
+                                        ->mutable_initializedtimestamp()),     \
+                                   (val).seconds());                           \
+    DMESG_PB_SET_TIMESTAMP_NANOS(((sys)                                        \
+                                      .mutable_body()                          \
+                                      ->mutable_sys()                          \
+                                      ->mutable_nodelist((index))              \
+                                      ->mutable_initializedtimestamp()),       \
+                                 (val).nanos());                               \
+  } while (false)
+
+#define DMESG_PB_SYS_SET_NODELIST_ELEM_UPDATEDTIMESTAMP(sys, index, val)       \
+  do {                                                                         \
+    DMESG_PB_SET_TIMESTAMP_SECONDS(((sys)                                      \
+                                        .mutable_body()                        \
+                                        ->mutable_sys()                        \
+                                        ->mutable_nodelist((index))            \
+                                        ->mutable_updatedtimestamp()),         \
+                                   (val).seconds());                           \
+    DMESG_PB_SET_TIMESTAMP_NANOS(((sys)                                        \
+                                      .mutable_body()                          \
+                                      ->mutable_sys()                          \
+                                      ->mutable_nodelist((index))              \
+                                      ->mutable_updatedtimestamp()),           \
+                                 (val).nanos());                               \
+  } while (false)
 
 #endif /* DMN_DMESG_PB_UTIL_HPP_HAVE_SEEN */

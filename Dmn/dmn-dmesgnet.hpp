@@ -1,11 +1,11 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * The Dmn_DMesgNet stands for Distributed Messaging network Network,
- * it acts an extension to the Dmn_DMesg with support of serializing
- * the DMesgPb message and send over the output Dmn_Io and deserialize
- * the data read from input Dmn_Io and then publish to the local
- * subscripted handlers.
+ * The Dmn_DMesgNet stands for Distributed Messaging Network, it is an
+ * extension to the Dmn_DMesg with support of serializing the DMesgPb
+ * message and send to the output Dmn_Io and deserialize the data read
+ * from input Dmn_Io and then publish it to the local Dmn_DMesg
+ * subscribed handlers.
  */
 
 #ifndef DMN_DMESGNET_HPP_HAVE_SEEN
@@ -107,12 +107,22 @@ public:
    * one selected by its neighbor heartbeat message.
    */
 
+  /**
+   * @brief The constructor method for DMesgNet.
+   *
+   * @param name          The identification name for the DMesgNet object
+   * @param outputHandler The Dmn::Hal_Io object to send outbound stringified
+   *                      DMesgPb message
+   * @param inputHandler  The Dmn::Hal_Io object to receive inbound stringified
+   *                      DMesgPb message
+   */
   Dmn_DMesgNet(std::string_view name,
                std::shared_ptr<Dmn_Io<std::string>> outputHandler = nullptr,
                std::shared_ptr<Dmn_Io<std::string>> inputHandler = nullptr)
       : Dmn_DMesg{name}, m_name{name}, m_outputHandler{outputHandler},
         m_inputHandler{inputHandler} {
 
+    // Initialize the DMesgNet state
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
@@ -135,22 +145,26 @@ public:
         [this](const Dmn::DMesgPb &dmesgPb) {
           return dmesgPb.sourceidentifier() != this->m_name;
         },
-        [this](Dmn::DMesgPb dmesgPb) mutable {
+        [this](Dmn::DMesgPb dmesgPbWrite) mutable {
           if (m_outputHandler) {
-            std::string serialized_string{};
+            DMN_ASYNC_CALL_WITH_CAPTURE(
+                {
+                  std::string serialized_string{};
 
-            // set the source, so that we can skip it if the
-            // data is read back over the input Dmn_Io.
-            //
-            // FIXME: shall we generate UUID internally to guarantee
-            // uniqueness across networked nodes or global Internet?
-            //
-            // This is point we check if outgoing is in conflict
-            // for the message stream with the identifier.
-            DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPb, this->m_name);
-            dmesgPb.SerializeToString(&serialized_string);
+                  // set the source, so that we can skip it if the
+                  // data is read back over the input Dmn_Io.
+                  //
+                  // FIXME: shall we generate UUID internally to guarantee
+                  // uniqueness across networked nodes or global Internet?
+                  //
+                  // This is point we check if outgoing is in conflict
+                  // for the message stream with the identifier.
+                  DMESG_PB_SET_SOURCEIDENTIFIER(dmesgPbWrite, this->m_name);
+                  dmesgPbWrite.SerializeToString(&serialized_string);
 
-            m_outputHandler->write(serialized_string);
+                  m_outputHandler->write(serialized_string);
+                },
+                this, dmesgPbWrite);
           }
         });
 
@@ -177,32 +191,37 @@ public:
               // separate the namespace of source.
 
               if (dmesgPbRead.type() == Dmn::DMesgTypePb::sys) {
-                this->write([this, dmesgPbRead]() mutable {
-                  this->reconciliateDmesgPbSys(dmesgPbRead);
-                });
+                DMN_ASYNC_CALL_WITH_CAPTURE(
+                    { this->reconciliateDmesgPbSys(dmesgPbRead); }, this,
+                    dmesgPbRead);
               } else {
-                dmesgPbRead.set_sourceidentifier(this->m_name);
+                DMN_ASYNC_CALL_WITH_CAPTURE(
+                    {
+                      dmesgPbRead.set_sourceidentifier(this->m_name);
 
-                try {
-                  this->m_subscriptHandler->write(dmesgPbRead);
-                } catch (...) {
-                  // The data from network is out of sync with data
-                  // in the Dmn_DMesg, and a few should happen:
-                  // - mark the topic as in conflict for local Dmn_DMesg
-                  // - the local Dmn_DMesg will mark all openHandler in
-                  //   conflict but waiting for resolution with Dmn_DMesgNet
-                  //   master, so they will not allow any message on the same
-                  //   topic band.
-                  // - the local Dmn_DMesgNet will broadcast a sys conflict
-                  //   message.
-                  // - all networked DMesgNet(s) receives the sys conflict
-                  //   message will then put its local Dmn_DMesg in conflict
-                  //   state for the same topic.
-                  // - master node will then send its last message for the
-                  //   to all nodes, and all nodes receives the message will
-                  //   use new message as its last valid message for the
-                  //   topic and clear it conflict state.
-                }
+                      try {
+                        this->m_subscriptHandler->write(dmesgPbRead);
+                      } catch (...) {
+                        // The data from network is out of sync with data
+                        // in the Dmn_DMesg, and a few should happen:
+                        // - mark the topic as in conflict for local Dmn_DMesg
+                        // - the local Dmn_DMesg will mark all openHandler in
+                        //   conflict but waiting for resolution with
+                        //   Dmn_DMesgNet master, so they will not allow any
+                        //   message on the same topic band.
+                        // - the local Dmn_DMesgNet will broadcast a sys
+                        // conflict
+                        //   message.
+                        // - all networked DMesgNet(s) receives the sys conflict
+                        //   message will then put its local Dmn_DMesg in
+                        //   conflict state for the same topic.
+                        // - master node will then send its last message for the
+                        //   to all nodes, and all nodes receives the message
+                        //   will use new message as its last valid message for
+                        //   the topic and clear it conflict state.
+                      }
+                    },
+                    this, dmesgPbRead);
               }
             }
           } else {
@@ -386,44 +405,29 @@ protected:
         this->m_sys.mutable_body()->mutable_sys()->add_nodelist();
       }
 
-      this->m_sys.mutable_body()
-          ->mutable_sys()
-          ->mutable_nodelist(i)
-          ->set_identifier(other.identifier());
-      this->m_sys.mutable_body()
-          ->mutable_sys()
-          ->mutable_nodelist(i)
-          ->set_masteridentifier(other.masteridentifier());
-      this->m_sys.mutable_body()->mutable_sys()->mutable_nodelist(i)->set_state(
-          other.state());
-      this->m_sys.mutable_body()
-          ->mutable_sys()
-          ->mutable_nodelist(i)
-          ->mutable_initializedtimestamp()
-          ->set_seconds(other.initializedtimestamp().seconds());
-      this->m_sys.mutable_body()
-          ->mutable_sys()
-          ->mutable_nodelist(i)
-          ->mutable_initializedtimestamp()
-          ->set_nanos(other.initializedtimestamp().nanos());
-      this->m_sys.mutable_body()
-          ->mutable_sys()
-          ->mutable_nodelist(i)
-          ->mutable_updatedtimestamp()
-          ->set_seconds(other.updatedtimestamp().seconds());
-      this->m_sys.mutable_body()
-          ->mutable_sys()
-          ->mutable_nodelist(i)
-          ->mutable_initializedtimestamp()
-          ->set_nanos(other.updatedtimestamp().nanos());
+      DMESG_PB_SYS_SET_NODELIST_ELEM_IDENTIFIER(this->m_sys, i,
+                                                other.identifier());
+      DMESG_PB_SYS_SET_NODELIST_ELEM_MASTERIDENTIFIER(this->m_sys, i,
+                                                      other.masteridentifier());
+      DMESG_PB_SYS_SET_NODELIST_ELEM_STATE(this->m_sys, i, other.state());
+      DMESG_PB_SYS_SET_NODELIST_ELEM_INITIALIZEDTIMESTAMP(
+          this->m_sys, i, other.initializedtimestamp());
+      DMESG_PB_SYS_SET_NODELIST_ELEM_UPDATEDTIMESTAMP(this->m_sys, i,
+                                                      other.updatedtimestamp());
     }
-  }
+  } /* End of method reconciliateDmesgPbSys */
 
 private:
+  /**
+   * data members for constructor to instantiate the object.
+   */
   std::string m_name{};
   std::shared_ptr<Dmn_Io<std::string>> m_outputHandler{};
   std::shared_ptr<Dmn_Io<std::string>> m_inputHandler{};
 
+  /**
+   * data members for internal logic
+   */
   std::unique_ptr<Dmn::Dmn_Proc> m_inputProc{};
   std::shared_ptr<Dmn_DMesgHandler> m_subscriptHandler{};
   std::shared_ptr<Dmn_DMesgHandler> m_sysHandler{};
@@ -433,8 +437,8 @@ private:
   long long m_masterPendingCounter{};
   long long m_masterSyncPendingCounter{};
   struct timeval m_lastRemoteMasterTimestamp {};
-};
+}; /* End of class Dmn_DMesgNet */
 
-} /* namespace Dmn */
+} /* End of namespace Dmn */
 
 #endif /* DMN_DMESGNET_HPP_HAVE_SEEN */

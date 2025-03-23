@@ -131,7 +131,7 @@ public:
       // Dmn_Pub::Dmn_sub, so marking m_owner as public does not violate
       // data encapsulation.
       Dmn_DMesgHandler *m_owner{};
-    };
+    }; /* End of class Dmn_DMesgHandlerSub */
 
   public:
     /**
@@ -334,7 +334,7 @@ public:
 
     ConflictCallbackTask m_conflictCallbackFn{};
     bool m_inConflict{};
-  }; /* End of Dmn_DMesgHandler */
+  }; /* End of class Dmn_DMesgHandler */
 
   /**
    * @brief The constructor for Dmn_DMesg.
@@ -546,7 +546,7 @@ private:
   }
 
   /**
-   * data member for constructor to instantiate the object.
+   * data members for constructor to instantiate the object.
    */
   std::string m_name{};
 
