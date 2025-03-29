@@ -25,6 +25,8 @@ static void dr_msg_cb(rd_kafka_t *kafka_handle,
   if (rkmessage->err) {
     std::cerr << "Message delivery failed: " << rd_kafka_err2str(rkmessage->err)
               << "\n";
+  } else {
+    std::cerr << "Message delivery success\n";
   }
 }
 

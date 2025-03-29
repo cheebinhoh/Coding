@@ -5,4 +5,4 @@
 # A shell script to pull and fetch from master
 
 git fetch .
-git pull origin ${1:-"master"}
+git pull origin `git branch  | grep '^*'  | sed -e 's/\*//g'`
