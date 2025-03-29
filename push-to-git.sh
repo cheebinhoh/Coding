@@ -104,7 +104,7 @@ echo
 
 git add .
 git commit -m "${1:-"no comment"}"
-git push origin master --force
+git push origin `git branch  | grep '^*'  | sed -e 's/\*//g'` --force
 
 
 if [ $rootdir != "" ]; then

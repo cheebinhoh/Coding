@@ -23,6 +23,7 @@ ADD_TEST_EXECUTABLE(dmn
                       dmn-test-dmesg-pb
                       dmn-test-dmesg-pb-util
                       dmn-test-io
+                      dmn-test-kafka
                       dmn-test-pipe
                       dmn-test-pub-sub
                       dmn-test-singleton

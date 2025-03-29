@@ -56,6 +56,10 @@ add_library(dmn
               ${CMAKE_CURRENT_SOURCE_DIR}/dmn-proc.cpp
               ${CMAKE_CURRENT_SOURCE_DIR}/dmn-socket.cpp
 
+              # kafka
+              ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-kafka-util.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-kafka.cpp
+
               # proto c++ sources
               ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-body.pb.cc
               ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-type.pb.cc
@@ -86,8 +90,10 @@ target_sources(dmn
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-singleton.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-socket.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-teepipe.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-timer.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-util.hpp
+
+                 # kafka
+                 ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-kafka-util.hpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-kafka.hpp
 
                  # proto c++ sources
                  ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-body.pb.h
@@ -105,6 +111,7 @@ target_include_directories(dmn
 
 target_include_directories(dmn
                              PRIVATE
+                             ${rdkafka_INCLUDE}
 )
 
 GENERATE_PROTOBUF(dmn
