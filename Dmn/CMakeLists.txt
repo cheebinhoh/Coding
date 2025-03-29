@@ -43,6 +43,9 @@ FetchContent_Declare(rdkafka
 FetchContent_MakeAvailable(rdkafka)
 
 string(REPLACE "-src" "-build" rdkafka_BUILD_DIR "${rdkafka_SOURCE_DIR}")
+set(rdkafka_INCLUDE ${rdkafka_BUILD_DIR}/src)
+set(rdkafka_LIB ${rdkafka_BUILD_DIR}/src/librdkafka.dylib)
+
 
 if(BUILD_NDEBUG)
   add_compile_definitions(NDEBUG)
@@ -59,6 +62,8 @@ add_library(dmn
               ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg-type.pb.cc
               ${CMAKE_CURRENT_SOURCE_DIR}/proto/dmn-dmesg.pb.cc
 )
+
+add_dependencies(dmn rdkafka)
 
 target_sources(dmn
                  PRIVATE
@@ -93,9 +98,14 @@ target_sources(dmn
 
 target_include_directories(dmn
                              INTERFACE
-                             ${CMAKE_CURRENT_SOURCE_DIR}
                              ${protobuf_SOURCE_DIR}/src
                              ${absl_SOURCE_DIR}
+                             ${CMAKE_CURRENT_SOURCE_DIR}
+                             ${rdkafka_INCLUDE}
+)
+
+target_include_directories(dmn
+                             PRIVATE
 )
 
 GENERATE_PROTOBUF(dmn
@@ -107,6 +117,7 @@ GENERATE_PROTOBUF(dmn
 target_link_libraries(dmn
                         PRIVATE
                         protobuf::libprotobuf
+                        ${rdkafka_LIB}
 )
 
 
@@ -132,13 +143,14 @@ add_executable(dmn-kafka-receiver
 
 target_include_directories(dmn-kafka-receiver
                              PRIVATE
+                             dmn
                              ${CMAKE_CURRENT_SOURCE_DIR}/kafka
-                             ${rdkafka_SOURCE_DIR}/src
+                             ${rdkafka_INCLUDE}
 )
 
 target_link_libraries(dmn-kafka-receiver
                         PRIVATE
-                        ${rdkafka_BUILD_DIR}/src/librdkafka.dylib
+                        ${rdkafka_LIB}
 )
 
 add_executable(dmn-kafka-sender
@@ -149,11 +161,12 @@ add_executable(dmn-kafka-sender
 target_include_directories(dmn-kafka-sender
                              PRIVATE
                              ${CMAKE_CURRENT_SOURCE_DIR}/kafka
-                             ${rdkafka_SOURCE_DIR}/src
+                             ${rdkafka_INCLUDE}
 )
 
 target_link_libraries(dmn-kafka-sender
                         PRIVATE
-                        ${rdkafka_BUILD_DIR}/src/librdkafka.dylib
+                        dmn
+                        ${rdkafka_LIB}
 )
 
