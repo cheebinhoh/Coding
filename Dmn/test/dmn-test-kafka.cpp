@@ -25,9 +25,7 @@ int main(int argc, char *argv[]) {
   writeConfigs[Dmn::Dmn_Kafka::Key] = "tick";
 
   Dmn::Dmn_Kafka producer{Dmn::Dmn_Kafka::Role::Producer, writeConfigs};
-  producer.write("heartbeat : test 1");
- 
- 
+
   // reader
   Dmn::Dmn_Kafka::ConfigType readConfigs{};
   readConfigs["bootstrap.servers"] = "pkc-619z3.us-east1.gcp.confluent.cloud:9092";
@@ -41,9 +39,27 @@ int main(int argc, char *argv[]) {
 
   Dmn::Dmn_Kafka consumer{Dmn::Dmn_Kafka::Role::Consumer, readConfigs};
 
-  auto data = consumer.read();
-  EXPECT_TRUE(data);
-  EXPECT_TRUE((*data) == "heartbeat : test 1");
+  std::vector<std::string> data{"heartbeat : test 1", "heartbeat : test 2"};
+  for (auto &d : data) {
+    producer.write(d);
+  }
  
+  // sleep and wait for data to sync to reader
+  std::this_thread::sleep_for(std::chrono::seconds(7));
+  int index = 0;
+
+  while (true) {
+    auto dataRead = consumer.read();
+    if (!dataRead) {
+      break; // no data
+    }
+
+    EXPECT_TRUE((*dataRead) == data[index]);
+
+    index++;
+  }
+
+  EXPECT_TRUE(data.size() == index);
+
   return RUN_ALL_TESTS();
 }
