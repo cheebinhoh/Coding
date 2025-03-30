@@ -25,9 +25,10 @@ public:
    * @brief The configuration key specific to the Dmn_Kafka module (not directly
    *        to rdkafka).
    */
-  const static std::string Topic;          // topic to read from or write to
-  const static std::string Key;            // the key that the topic is writen to
-  const static std::string PollTimeoutMs;  // timeout in ms before poll is break out
+  const static std::string Topic; // topic to read from or write to
+  const static std::string Key;   // the key that the topic is writen to
+  const static std::string
+      PollTimeoutMs; // timeout in ms before poll is break out
 
   using ConfigType = std::map<std::string, std::string>;
 
@@ -37,8 +38,8 @@ public:
   };
 
   /**
-   * @brief The constructor method that creates kafka consumer or producer with the
-   *        set of configurations passed in.
+   * @brief The constructor method that creates kafka consumer or producer with
+   * the set of configurations passed in.
    *
    * @param role    The object created acts as a kafka consumer or producer
    * @param configs The set of key value configurations to kafka or Dmn_Kafka
@@ -48,9 +49,9 @@ public:
   ~Dmn_Kafka() noexcept;
 
   Dmn_Kafka(const Dmn_Kafka &dmnDMesgHandlerSub) = delete;
-  const Dmn_Kafka & operator=(const Dmn_Kafka &dmnDMesgHandlerSub) = delete;
+  const Dmn_Kafka &operator=(const Dmn_Kafka &dmnDMesgHandlerSub) = delete;
   Dmn_Kafka(Dmn_Kafka &&dmnDMesgHandlerSub) = delete;
-  Dmn_Kafka & operator=(Dmn_Kafka &&dmnDMesgHandlerSub) = delete;
+  Dmn_Kafka &operator=(Dmn_Kafka &&dmnDMesgHandlerSub) = delete;
 
   /**
    * @brief The method returns next topic' message that kafka consumer fetches
@@ -87,7 +88,7 @@ private:
   /**
    * data members for constructor to instantiate the object.
    */
-  Role       m_role{};
+  Role m_role{};
   ConfigType m_configs{};
 
   /**
@@ -95,7 +96,7 @@ private:
    */
   std::string m_key{};
   std::string m_topic{};
-  long long   m_pollTimeoutMs{};
+  long long m_pollTimeoutMs{};
 
   rd_kafka_t *m_kafka{};
   rd_kafka_conf_t *m_kafkaConf{};
@@ -107,6 +108,3 @@ private:
 } /* namespace Dmn */
 
 #endif /* DMN_KAFKA_HPP_HAVE_SEEN */
-
-
-
