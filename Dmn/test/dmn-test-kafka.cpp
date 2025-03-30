@@ -9,6 +9,7 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <sys/time.h>
 
 int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
@@ -43,7 +44,7 @@ int main(int argc, char *argv[]) {
   for (auto &d : data) {
     producer.write(d);
   }
- 
+
   // sleep and wait for data to sync to reader
   std::this_thread::sleep_for(std::chrono::seconds(7));
   int index = 0;
@@ -60,6 +61,19 @@ int main(int argc, char *argv[]) {
   }
 
   EXPECT_TRUE(data.size() == index);
+
+  readConfigs[Dmn::Dmn_Kafka::PollTimeoutMs] = "7000";
+  Dmn::Dmn_Kafka consumer2{Dmn::Dmn_Kafka::Role::Consumer, readConfigs};
+
+  std::cout << "read without data\n";
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+
+  auto dataRead = consumer2.read();
+  struct timeval tvAfter;
+  gettimeofday(&tvAfter, NULL);
+
+  EXPECT_TRUE((tvAfter.tv_sec - tv.tv_sec) >= 5);
 
   return RUN_ALL_TESTS();
 }
