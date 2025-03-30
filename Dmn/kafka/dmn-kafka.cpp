@@ -33,8 +33,9 @@ void Dmn_Kafka::producerCallback(rd_kafka_t *kafka_handle,
 
 Dmn_Kafka::Dmn_Kafka(Dmn_Kafka::Role role, Dmn_Kafka::ConfigType configs)
     : m_role{role}, m_configs{configs} {
-  // create kafka configuration
-  m_kafkaConf = rd_kafka_conf_new();
+  rd_kafka_conf_t *kafkaConf{};
+
+  kafkaConf = rd_kafka_conf_new();
 
   for (auto &c : m_configs) {
     if (Dmn_Kafka::Topic == c.first) {
@@ -44,10 +45,10 @@ Dmn_Kafka::Dmn_Kafka(Dmn_Kafka::Role role, Dmn_Kafka::ConfigType configs)
     } else if (Dmn_Kafka::PollTimeoutMs == c.first) {
       m_pollTimeoutMs = std::strtoll(c.second.c_str(), nullptr, 0);
     } else {
-      auto res =
-          Dmn::set_config(m_kafkaConf, c.first.c_str(), c.second.c_str());
+      auto res = Dmn::set_config(kafkaConf, c.first.c_str(), c.second.c_str());
       if (!res.has_value()) {
-        rd_kafka_conf_destroy(m_kafkaConf);
+        rd_kafka_conf_destroy(kafkaConf);
+
         throw std::runtime_error("Error in setting kafka configuration: " +
                                  c.first + " to value: " + c.second);
       }
@@ -56,37 +57,37 @@ Dmn_Kafka::Dmn_Kafka(Dmn_Kafka::Role role, Dmn_Kafka::ConfigType configs)
     }
   }
 
-  char errstr[512];
+  char errstr[512]{};
 
   if (Role::Producer == m_role) {
-    rd_kafka_conf_set_dr_msg_cb(m_kafkaConf, Dmn_Kafka::producerCallback);
-    rd_kafka_conf_set_opaque(m_kafkaConf, (void *)this);
+    rd_kafka_conf_set_dr_msg_cb(kafkaConf, Dmn_Kafka::producerCallback);
+    rd_kafka_conf_set_opaque(kafkaConf, (void *)this);
 
     m_kafka =
-        rd_kafka_new(RD_KAFKA_PRODUCER, m_kafkaConf, errstr, sizeof(errstr));
+        rd_kafka_new(RD_KAFKA_PRODUCER, kafkaConf, errstr, sizeof(errstr));
     if (!m_kafka) {
-      rd_kafka_conf_destroy(m_kafkaConf);
+      rd_kafka_conf_destroy(kafkaConf);
 
       throw std::runtime_error("Failed to create new producer: " +
                                std::string(errstr));
     }
 
     // Configuration object is now owned, and freed, by the rd_kafka_t instance.
-    m_kafkaConf = NULL;
+    kafkaConf = NULL;
   } else {
     assert(Role::Consumer == m_role);
 
     m_kafka =
-        rd_kafka_new(RD_KAFKA_CONSUMER, m_kafkaConf, errstr, sizeof(errstr));
+        rd_kafka_new(RD_KAFKA_CONSUMER, kafkaConf, errstr, sizeof(errstr));
     if (!m_kafka) {
-      rd_kafka_conf_destroy(m_kafkaConf);
+      rd_kafka_conf_destroy(kafkaConf);
 
       throw std::runtime_error("Failed to create new consumer: " +
                                std::string(errstr));
     }
 
     // Configuration object is now owned, and freed, by the rd_kafka_t instance.
-    m_kafkaConf = NULL;
+    kafkaConf = NULL;
 
     rd_kafka_poll_set_consumer(m_kafka);
 
@@ -113,12 +114,9 @@ Dmn_Kafka::Dmn_Kafka(Dmn_Kafka::Role role, Dmn_Kafka::ConfigType configs)
 }
 
 Dmn_Kafka::~Dmn_Kafka() noexcept try {
-  assert(!m_kafkaConf);
   assert(m_kafka);
 
-  if (Role::Producer == m_role) {
-    rd_kafka_flush(m_kafka, 10 * 1000);
-  } else {
+  if (Role::Consumer == m_role) {
     rd_kafka_consumer_close(m_kafka);
   }
 
@@ -129,13 +127,14 @@ Dmn_Kafka::~Dmn_Kafka() noexcept try {
 }
 
 std::optional<std::string> Dmn_Kafka::read() {
-  std::optional<std::string> ret{};
   rd_kafka_message_t *consumer_message{};
 
   consumer_message = rd_kafka_consumer_poll(m_kafka, m_pollTimeoutMs);
   if (!consumer_message) {
     return {};
   }
+
+  std::optional<std::string> ret{};
 
   // after this point, we need to free consumer_message
   if (consumer_message->err) {
@@ -187,7 +186,7 @@ void Dmn_Kafka::write(std::string &item, bool move) {
   }
 
   rd_kafka_poll(m_kafka, 0);
-  rd_kafka_flush(m_kafka, 10 * 1000);
+  rd_kafka_flush(m_kafka, 10 * 1000); // FIXME: maybe configurable?
 
   m_atomicFlag.wait(true);
 

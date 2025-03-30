@@ -99,7 +99,6 @@ private:
   long long m_pollTimeoutMs{};
 
   rd_kafka_t *m_kafka{};
-  rd_kafka_conf_t *m_kafkaConf{};
   rd_kafka_resp_err_t m_kafkaErr{};
 
   std::atomic_flag m_atomicFlag{};
