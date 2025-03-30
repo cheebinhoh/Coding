@@ -162,8 +162,14 @@ void Dmn_Kafka::write(std::string &item) { write(item, false); }
 void Dmn_Kafka::write(std::string &&item) { write(item, true); }
 
 void Dmn_Kafka::write(std::string &item, bool move) {
-  while (m_atomicFlag.test_and_set(std::memory_order_acquire))
+  // this make sure only one thread is accessing the Dmn_Kafka write,
+  // it is used to wait for message to be delivered to kafka broker and
+  // the producerCallback() to be called, so we can return from this
+  // method and assert that the message is delivered successfully or
+  // fail affirmatively.
+  while (m_atomicFlag.test_and_set(std::memory_order_acquire)) {
     m_atomicFlag.wait(true, std::memory_order_relaxed);
+  }
 
   const char *topic = m_topic.c_str();
   const char *key = m_key.c_str();
@@ -186,7 +192,9 @@ void Dmn_Kafka::write(std::string &item, bool move) {
   }
 
   rd_kafka_poll(m_kafka, 0);
-  rd_kafka_flush(m_kafka, 10 * 1000); // FIXME: maybe configurable?
+  rd_kafka_flush(m_kafka, 1000); // this is not configurable, and 1000ms shall
+                                 // be good enough for a single message to be
+                                 // flushed to the kafka broker.
 
   m_atomicFlag.wait(true);
 

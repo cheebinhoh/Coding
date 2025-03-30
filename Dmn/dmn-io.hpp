@@ -3,8 +3,9 @@
  *
  * This class implements an IO interface that
  * - read is blocking call if no data available or std::nullopt_t if
- *   end of data stream is read (example when pipe is removed) or read
- *   error occurs.
+ *   end of data stream is read (example when pipe is removed) or
+ *   end of file, or no udp packet for next read, no data of specific
+ *   topic in kafka broker for next read.
  * - write (with rvalue) will move data if it is possible
  * - write (with lvalue) will not move but copy data
  */
