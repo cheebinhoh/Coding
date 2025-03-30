@@ -64,7 +64,7 @@ public:
    * @brief The method will execute the asynchronous task after duration
    *        is elapsed, the task will NOT be executed before duration is
    *        elapsed, but might not be guaranteed that it is executed in
-   *        moment that the duration is elapsed.
+   *        exact moment that the duration is elapsed.
    *
    * @param duration time in duraton that must be elapsed before task
    *                 is executed
@@ -87,7 +87,7 @@ private:
    * @brief The method will execute the asynchronous task after duration
    *        is elapsed, the task will NOT be executed before duration is
    *        elapsed, but might not be guaranteed that it is executed in
-   *        moment that the duration is elapsed.
+   *        exact moment that the duration is elapsed.
    *
    * @param timeInFuture nanoseconds that must be elapsed before the
    *                     task is executed

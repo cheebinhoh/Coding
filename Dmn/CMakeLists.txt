@@ -145,7 +145,6 @@ target_link_libraries(dmn-dmesg-daemon
 # Kafka
 add_executable(dmn-kafka-receiver
                  dmn-kafka-receiver.cpp
-                 kafka/dmn-kafka-util.cpp
 )
 
 target_include_directories(dmn-kafka-receiver
@@ -157,12 +156,12 @@ target_include_directories(dmn-kafka-receiver
 
 target_link_libraries(dmn-kafka-receiver
                         PRIVATE
+                        dmn
                         ${rdkafka_LIB}
 )
 
 add_executable(dmn-kafka-sender
                  dmn-kafka-sender.cpp
-                 kafka/dmn-kafka-util.cpp
 )
 
 target_include_directories(dmn-kafka-sender
