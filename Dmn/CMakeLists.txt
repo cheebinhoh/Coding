@@ -45,6 +45,7 @@ FetchContent_MakeAvailable(rdkafka)
 string(REPLACE "-src" "-build" rdkafka_BUILD_DIR "${rdkafka_SOURCE_DIR}")
 set(rdkafka_INCLUDE ${rdkafka_SOURCE_DIR}/src)
 set(rdkafka_LIB ${rdkafka_BUILD_DIR}/src/librdkafka.dylib)
+set(CMAKE_BUILD_RPATH "${rdkafka_BUILD_DIR}/src")
 
 if(BUILD_NDEBUG)
   add_compile_definitions(NDEBUG)
