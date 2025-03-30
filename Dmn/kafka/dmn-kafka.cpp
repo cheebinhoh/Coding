@@ -16,6 +16,7 @@
 #include <string>
 
 namespace Dmn {
+
 const std::string Dmn_Kafka::Topic = "Dmn_Kafka.Topic";
 const std::string Dmn_Kafka::Key = "Dmn_Kafka.Key";
 const std::string Dmn_Kafka::PollTimeoutMs = "Dmn_Kafka.PollTimeoutMs";
@@ -25,10 +26,7 @@ void Dmn_Kafka::producerCallback(rd_kafka_t *kafka_handle,
                                  void *opaque) {
   Dmn_Kafka *obj = (Dmn_Kafka *)opaque;
 
-  if (rkmessage->err) {
-    obj->m_kafkaErr = rkmessage->err;
-  }
-
+  obj->m_kafkaErr = rkmessage->err;
   obj->m_atomicFlag.clear();
   obj->m_atomicFlag.notify_all();
 }
@@ -68,6 +66,7 @@ Dmn_Kafka::Dmn_Kafka(Dmn_Kafka::Role role, Dmn_Kafka::ConfigType configs)
         rd_kafka_new(RD_KAFKA_PRODUCER, m_kafkaConf, errstr, sizeof(errstr));
     if (!m_kafka) {
       rd_kafka_conf_destroy(m_kafkaConf);
+
       throw std::runtime_error("Failed to create new producer: " +
                                std::string(errstr));
     }
@@ -115,20 +114,15 @@ Dmn_Kafka::Dmn_Kafka(Dmn_Kafka::Role role, Dmn_Kafka::ConfigType configs)
 
 Dmn_Kafka::~Dmn_Kafka() noexcept try {
   assert(!m_kafkaConf);
+  assert(m_kafka);
 
-  if (m_kafkaConf) {
-    rd_kafka_conf_destroy(m_kafkaConf);
+  if (Role::Producer == m_role) {
+    rd_kafka_flush(m_kafka, 10 * 1000);
+  } else {
+    rd_kafka_consumer_close(m_kafka);
   }
 
-  if (m_kafka) {
-    if (Role::Producer == m_role) {
-      rd_kafka_flush(m_kafka, 10 * 1000);
-    } else {
-      rd_kafka_consumer_close(m_kafka);
-    }
-
-    rd_kafka_destroy(m_kafka);
-  }
+  rd_kafka_destroy(m_kafka);
 } catch (...) {
   // explicit return to resolve exception as destructor must be noexcept
   return;
@@ -136,7 +130,7 @@ Dmn_Kafka::~Dmn_Kafka() noexcept try {
 
 std::optional<std::string> Dmn_Kafka::read() {
   std::optional<std::string> ret{};
-  rd_kafka_message_t *consumer_message = nullptr;
+  rd_kafka_message_t *consumer_message{};
 
   consumer_message = rd_kafka_consumer_poll(m_kafka, m_pollTimeoutMs);
   if (!consumer_message) {
@@ -178,14 +172,16 @@ void Dmn_Kafka::write(std::string &item, bool move) {
   const char *value = item.c_str();
   const size_t valueLen = item.size();
 
-  rd_kafka_resp_err_t err =
-      rd_kafka_producev(m_kafka, RD_KAFKA_V_TOPIC(topic),
-                        RD_KAFKA_V_MSGFLAGS(RD_KAFKA_MSG_F_COPY),
-                        RD_KAFKA_V_KEY((void *)key, keyLen),
-                        RD_KAFKA_V_VALUE((void *)value, valueLen),
-                        RD_KAFKA_V_OPAQUE(NULL), RD_KAFKA_V_END);
+  rd_kafka_resp_err_t err = rd_kafka_producev(
+      m_kafka, RD_KAFKA_V_TOPIC(topic),
+      RD_KAFKA_V_MSGFLAGS(RD_KAFKA_MSG_F_COPY), // maybe RD_KAFKA_MSG_F_FREE?
+      RD_KAFKA_V_KEY((void *)key, keyLen),
+      RD_KAFKA_V_VALUE((void *)value, valueLen), RD_KAFKA_V_OPAQUE(NULL),
+      RD_KAFKA_V_END);
 
   if (err) {
+    m_atomicFlag.clear();
+
     throw std::runtime_error("Failed to produce to topic: " + m_topic +
                              ", error: " + std::string(rd_kafka_err2str(err)));
   }
@@ -194,10 +190,14 @@ void Dmn_Kafka::write(std::string &item, bool move) {
   rd_kafka_flush(m_kafka, 10 * 1000);
 
   m_atomicFlag.wait(true);
+
+  // the producerCallback is returned, if an error from delivery the message,
+  // we want to return it to the caller of the write api.
   if (m_kafkaErr) {
     throw std::runtime_error(
         "Failed to delivered to topic: " + m_topic +
         ", error: " + std::string(rd_kafka_err2str(m_kafkaErr)));
   }
 }
+
 } // namespace Dmn

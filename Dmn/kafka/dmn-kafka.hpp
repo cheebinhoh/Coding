@@ -105,6 +105,6 @@ private:
   std::atomic_flag m_atomicFlag{};
 };
 
-} /* namespace Dmn */
+} /* End of namespace Dmn */
 
-#endif /* DMN_KAFKA_HPP_HAVE_SEEN */
+#endif /* End of macro DMN_KAFKA_HPP_HAVE_SEEN */
