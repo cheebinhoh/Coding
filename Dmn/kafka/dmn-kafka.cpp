@@ -49,6 +49,7 @@ namespace Dmn {
 
        auto res = Dmn::set_config(m_kafkaConf, c.first.c_str(), c.second.c_str());
        if (!res.has_value()) {
+         rd_kafka_conf_destroy(m_kafkaConf);
          throw std::runtime_error("Error in setting kafka configuration: "
                                   + c.first + " to value: " + c.second);
        }
@@ -56,18 +57,53 @@ namespace Dmn {
        assert(res.value() == RD_KAFKA_CONF_OK);
     }
 
-    rd_kafka_conf_set_dr_msg_cb(m_kafkaConf, Dmn_Kafka::kafkaCallback);
-    rd_kafka_conf_set_opaque(m_kafkaConf, (void *)this);
-
-    // Create the Producer instance.
     char errstr[512];
-    m_kafka = rd_kafka_new(RD_KAFKA_PRODUCER, m_kafkaConf, errstr, sizeof(errstr));
-    if (!m_kafka) {
-       throw std::runtime_error("Failed to create new producer: " + std::string(errstr));
+
+    if (Role::Producer == m_role) {
+      rd_kafka_conf_set_dr_msg_cb(m_kafkaConf, Dmn_Kafka::kafkaCallback);
+      rd_kafka_conf_set_opaque(m_kafkaConf, (void *)this);
+
+      m_kafka = rd_kafka_new(RD_KAFKA_PRODUCER, m_kafkaConf, errstr, sizeof(errstr));
+      if (!m_kafka) {
+        rd_kafka_conf_destroy(m_kafkaConf);
+        throw std::runtime_error("Failed to create new producer: " + std::string(errstr));
+      } 
+
+      // Configuration object is now owned, and freed, by the rd_kafka_t instance.
+      m_kafkaConf = NULL;
+    } else {
+      assert(Role::Consumer == m_role);
+
+      m_kafka = rd_kafka_new(RD_KAFKA_CONSUMER, m_kafkaConf, errstr, sizeof(errstr));
+      if (!m_kafka) {
+        rd_kafka_conf_destroy(m_kafkaConf);
+
+        throw std::runtime_error("Failed to create new consumer: " + std::string(errstr));
+      }
+
+      // Configuration object is now owned, and freed, by the rd_kafka_t instance.
+      m_kafkaConf = NULL;
+
+      rd_kafka_poll_set_consumer(m_kafka);
+
+      // Convert the list of topics to a format suitable for librdkafka.
+      const char *topic = m_topic.c_str();
+      rd_kafka_topic_partition_list_t *subscription = rd_kafka_topic_partition_list_new(1);
+      rd_kafka_topic_partition_list_add(subscription, topic, RD_KAFKA_PARTITION_UA);
+
+      // Subscribe to the list of topics.
+      rd_kafka_resp_err_t err = rd_kafka_subscribe(m_kafka, subscription);
+      if (err) {
+        rd_kafka_topic_partition_list_destroy(subscription);
+        rd_kafka_destroy(m_kafka);
+
+        throw std::runtime_error("Failed to subscribe to " + std::to_string(subscription->cnt) +
+                                 +" topics, error: " + std::string(rd_kafka_err2str(err)));
+      }
+
+      rd_kafka_topic_partition_list_destroy(subscription);
     }
 
-    // Configuration object is now owned, and freed, by the rd_kafka_t instance.
-    m_kafkaConf = NULL;
   }
 
   Dmn_Kafka::~Dmn_Kafka() noexcept try {
@@ -77,7 +113,11 @@ namespace Dmn {
     }
 
     if (m_kafka) {
-      rd_kafka_flush(m_kafka, 10 * 1000);
+      if (Role::Producer == m_role) {
+        rd_kafka_flush(m_kafka, 10 * 1000);
+      } else {
+        rd_kafka_consumer_close(m_kafka);
+      }
 
       rd_kafka_destroy(m_kafka);
     }
@@ -87,7 +127,33 @@ namespace Dmn {
   }
 
   std::optional<std::string> Dmn_Kafka::read() {
-    return {};
+    std::optional<std::string> ret{};
+    rd_kafka_message_t *consumer_message = nullptr;
+
+    while (!ret) {
+      consumer_message = rd_kafka_consumer_poll(m_kafka, 500);
+      if (!consumer_message) {
+        continue;
+      }
+
+      if (consumer_message->err) {
+        if (consumer_message->err == RD_KAFKA_RESP_ERR__PARTITION_EOF) {
+          /* We can ignore this error - it just means we've read
+           * everything and are waiting for more data.
+           */
+        } else {
+          std::cerr << "Consumer error: "
+                    << rd_kafka_message_errstr(consumer_message) << "\n";
+          return {};
+        }
+      } else {
+         ret = std::string((char *)consumer_message->payload, (int)consumer_message->len);
+      } 
+
+      rd_kafka_message_destroy(consumer_message);
+    }
+
+    return ret;
   }
 
   void Dmn_Kafka::write(std::string &item) {

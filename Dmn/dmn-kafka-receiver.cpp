@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
       } else {
         std::cerr << "Consumer error: "
                   << rd_kafka_message_errstr(consumer_message) << "\n";
-        return 1;
+        return {};
       }
     } else {
       printf("Consumed event from topic %s: key = %.*s value = %.*s\n",

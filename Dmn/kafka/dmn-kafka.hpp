@@ -27,8 +27,8 @@ public:
   using ConfigType = std::map<std::string, std::string>;
 
   enum class Role {
-    Consumer = 0,
-    Producer = 0
+    Consumer,
+    Producer,
   };
 
   Dmn_Kafka(Role role, ConfigType configs = {});
