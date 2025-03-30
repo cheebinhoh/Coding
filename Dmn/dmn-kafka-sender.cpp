@@ -1,7 +1,7 @@
 // For study purpose, and copy from
 // https://developer.confluent.io/get-started/c/
 
-#include "dmn-kafka.hpp"
+#include "kafka/dmn-kafka.hpp"
 
 #include <iostream>
 #include <sstream>

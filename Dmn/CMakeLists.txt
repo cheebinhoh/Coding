@@ -51,7 +51,8 @@ if(BUILD_NDEBUG)
   add_compile_definitions(NDEBUG)
 endif()
 
-# build hardware abstraction layer library
+
+# build the dmn library
 add_library(dmn
               ${CMAKE_CURRENT_SOURCE_DIR}/dmn-event.cpp
               ${CMAKE_CURRENT_SOURCE_DIR}/dmn-proc.cpp
@@ -142,7 +143,8 @@ target_link_libraries(dmn-dmesg-daemon
                         dmn
 )
 
-# Kafka
+
+# build executable that uses dmn kafka
 add_executable(dmn-kafka-receiver
                  dmn-kafka-receiver.cpp
 )
@@ -150,14 +152,11 @@ add_executable(dmn-kafka-receiver
 target_include_directories(dmn-kafka-receiver
                              PRIVATE
                              dmn
-                             ${CMAKE_CURRENT_SOURCE_DIR}/kafka
-                             ${rdkafka_INCLUDE}
 )
 
 target_link_libraries(dmn-kafka-receiver
                         PRIVATE
                         dmn
-                        ${rdkafka_LIB}
 )
 
 add_executable(dmn-kafka-sender
@@ -166,13 +165,11 @@ add_executable(dmn-kafka-sender
 
 target_include_directories(dmn-kafka-sender
                              PRIVATE
-                             ${CMAKE_CURRENT_SOURCE_DIR}/kafka
-                             ${rdkafka_INCLUDE}
+                             dmn
 )
 
 target_link_libraries(dmn-kafka-sender
                         PRIVATE
                         dmn
-                        ${rdkafka_LIB}
 )
 
