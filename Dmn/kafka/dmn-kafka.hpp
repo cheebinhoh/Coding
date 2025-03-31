@@ -15,6 +15,7 @@
 #include <expected>
 #include <functional>
 #include <map>
+#include <optional>
 #include <string>
 
 namespace Dmn {
@@ -82,6 +83,9 @@ private:
   static void producerCallback(rd_kafka_t *kafka_handle,
                                const rd_kafka_message_t *rkmessage,
                                void *opaque);
+
+  static void errorCallback(rd_kafka_t *kafka_handle, int err,
+                            const char *reason, void *opaque);
 
   void write(std::string &item, bool move);
 

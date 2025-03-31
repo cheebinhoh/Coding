@@ -13,6 +13,8 @@
 #include <expected>
 #include <functional>
 #include <iostream>
+#include <map>
+#include <optional>
 #include <string>
 
 namespace Dmn {
@@ -27,6 +29,15 @@ void Dmn_Kafka::producerCallback(rd_kafka_t *kafka_handle,
   Dmn_Kafka *obj = (Dmn_Kafka *)opaque;
 
   obj->m_kafkaErr = rkmessage->err;
+  obj->m_atomicFlag.clear();
+  obj->m_atomicFlag.notify_all();
+}
+
+void Dmn_Kafka::errorCallback(rd_kafka_t *kafka_handle, int err,
+                              const char *reason, void *opaque) {
+  Dmn_Kafka *obj = (Dmn_Kafka *)opaque;
+
+  obj->m_kafkaErr = static_cast<rd_kafka_resp_err_t>(err);
   obj->m_atomicFlag.clear();
   obj->m_atomicFlag.notify_all();
 }
@@ -59,9 +70,11 @@ Dmn_Kafka::Dmn_Kafka(Dmn_Kafka::Role role, Dmn_Kafka::ConfigType configs)
 
   char errstr[512]{};
 
+  rd_kafka_conf_set_opaque(kafkaConf, (void *)this);
+  rd_kafka_conf_set_error_cb(kafkaConf, Dmn_Kafka::errorCallback);
+
   if (Role::Producer == m_role) {
     rd_kafka_conf_set_dr_msg_cb(kafkaConf, Dmn_Kafka::producerCallback);
-    rd_kafka_conf_set_opaque(kafkaConf, (void *)this);
 
     m_kafka =
         rd_kafka_new(RD_KAFKA_PRODUCER, kafkaConf, errstr, sizeof(errstr));
@@ -171,6 +184,8 @@ void Dmn_Kafka::write(std::string &item, bool move) {
     m_atomicFlag.wait(true, std::memory_order_relaxed);
   }
 
+  m_kafkaErr = static_cast<rd_kafka_resp_err_t>(0);
+
   const char *topic = m_topic.c_str();
   const char *key = m_key.c_str();
   const size_t keyLen = m_key.size();
@@ -191,12 +206,12 @@ void Dmn_Kafka::write(std::string &item, bool move) {
                              ", error: " + std::string(rd_kafka_err2str(err)));
   }
 
-  rd_kafka_poll(m_kafka, 0);
-  rd_kafka_flush(m_kafka, 1000); // this is not configurable, and 1000ms shall
-                                 // be good enough for a single message to be
-                                 // flushed to the kafka broker.
-
-  m_atomicFlag.wait(true);
+  while (m_atomicFlag.test()) {
+    rd_kafka_poll(m_kafka, 100);
+    rd_kafka_flush(m_kafka, 1000); // this is not configurable, and 1000ms shall
+                                   // be good enough for a single message to be
+                                   // flushed to the kafka broker.
+  }
 
   // the producerCallback is returned, if an error from delivery the message,
   // we want to return it to the caller of the write api.
