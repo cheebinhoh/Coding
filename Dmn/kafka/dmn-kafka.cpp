@@ -206,6 +206,8 @@ void Dmn_Kafka::write(std::string &item, bool move) {
                              ", error: " + std::string(rd_kafka_err2str(err)));
   }
 
+  // we loop until message is delivered or declared fail, and the poll is needed
+  // to poll generic error like network not reachable.
   while (m_atomicFlag.test()) {
     rd_kafka_poll(m_kafka, 100);
     rd_kafka_flush(m_kafka, 1000); // this is not configurable, and 1000ms shall
