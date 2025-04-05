@@ -14,10 +14,4 @@ Dmn_DMesgNet_Kafka::Dmn_DMesgNet_Kafka(std::string_view name) : m_name{name} {}
 
 Dmn_DMesgNet_Kafka::~Dmn_DMesgNet_Kafka() {}
 
-std::optional<Dmn::DMesgPb> Dmn_DMesgNet_Kafka::read() { return {}; }
-
-void Dmn_DMesgNet_Kafka::write(Dmn::DMesgPb &item) {}
-
-void Dmn_DMesgNet_Kafka::write(Dmn::DMesgPb &&item) {}
-
 } /* End of namespace Dmn */
