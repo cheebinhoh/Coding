@@ -21,10 +21,10 @@
 namespace Dmn {
 
 class Dmn_DMesgNet_Kafka {
-  Dmn_DMesgNet_Kafka(std::string_view name);
+public:
+  Dmn_DMesgNet_Kafka(std::string_view name, Dmn_Kafka::ConfigType kafkaConfigs);
   ~Dmn_DMesgNet_Kafka();
 
-public:
   Dmn_DMesgNet_Kafka(const Dmn_DMesgNet_Kafka &dmnDMesgNetKafka) = delete;
   const Dmn_DMesgNet_Kafka &
   operator=(const Dmn_DMesgNet_Kafka &dmnDMesgNetKafka) = delete;
@@ -32,7 +32,17 @@ public:
   Dmn_DMesgNet_Kafka &operator=(Dmn_DMesgNet_Kafka &&dmnDMesgNetKafka) = delete;
 
 protected:
+  /**
+   * data members for constructor to instantiate the object.
+   */
   std::string m_name{};
+  Dmn_Kafka::ConfigType m_kafkaConfigs{};
+
+  /**
+   * data members for internal logic.
+   */
+  std::unique_ptr<Dmn_Kafka> m_consumer{};
+  std::unique_ptr<Dmn_Kafka> m_producer{};
   std::unique_ptr<Dmn_DMesgNet> m_dmesgNet{};
 }; /* End of class Dmn_DMesgNet_Kafka */
 

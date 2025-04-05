@@ -10,7 +10,11 @@
 
 namespace Dmn {
 
-Dmn_DMesgNet_Kafka::Dmn_DMesgNet_Kafka(std::string_view name) : m_name{name} {}
+Dmn_DMesgNet_Kafka::Dmn_DMesgNet_Kafka(std::string_view name,
+                                       Dmn_Kafka::ConfigType kafkaConfigs)
+    : m_name{name}, m_kafkaConfigs{kafkaConfigs} {
+  m_kafkaConfigs["group.id"] = name;
+}
 
 Dmn_DMesgNet_Kafka::~Dmn_DMesgNet_Kafka() {}
 
