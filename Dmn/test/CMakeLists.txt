@@ -25,6 +25,7 @@ ADD_TEST_EXECUTABLE(dmn
                       dmn-test-dmesg-pb-util
                       dmn-test-io
                       dmn-test-kafka
+                      dmn-test-kafka-protobuf
                       dmn-test-pipe
                       dmn-test-pub-sub
                       dmn-test-singleton
