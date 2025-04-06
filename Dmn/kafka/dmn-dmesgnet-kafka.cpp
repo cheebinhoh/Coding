@@ -5,6 +5,7 @@
 #include "dmn-dmesgnet-kafka.hpp"
 
 #include "dmn-dmesg.hpp"
+#include "dmn-kafka-util.hpp"
 #include "dmn-kafka.hpp"
 
 #include <memory>
@@ -13,7 +14,8 @@
 namespace Dmn {
 
 Dmn_DMesgNet_Kafka::Dmn_DMesgNet_Kafka(std::string_view name,
-                                       Dmn_Kafka::ConfigType configs) {
+                                       Dmn_Kafka::ConfigType configs)
+    : m_name{name} {
   // reader for DMesgNet
   Dmn::Dmn_Kafka::ConfigType readConfigs{configs};
   readConfigs["group.id"] = name;
@@ -33,7 +35,7 @@ Dmn_DMesgNet_Kafka::Dmn_DMesgNet_Kafka(std::string_view name,
   std::shared_ptr<Dmn::Dmn_Kafka> producer = std::make_shared<Dmn::Dmn_Kafka>(
       Dmn::Dmn_Kafka::Role::Producer, writeConfigs);
 
-  m_dmesgNet = std::make_shared<Dmn::Dmn_DMesgNet>(name, producer, consumer);
+  m_dmesgNet = std::make_shared<Dmn::Dmn_DMesgNet>(name, consumer, producer);
 }
 
 Dmn_DMesgNet_Kafka::~Dmn_DMesgNet_Kafka() noexcept try {

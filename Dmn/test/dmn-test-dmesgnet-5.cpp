@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
 
   Dmn::DMesgPb sysPb_3{};
   std::unique_ptr<Dmn::Dmn_DMesgNet> dmesgnet1 = std::make_unique<Dmn::Dmn_DMesgNet>("dmesg-3",
-                                                                                     writeSocket1,
-                                                                                     readSocket1);
+                                                                                     readSocket1,
+                                                                                     writeSocket1);
 
   auto listenHandler3 = dmesgnet1->openHandler("dmesg-3-listen", true,
                                                nullptr,
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
                                                                    5001,
                                                                    true);
 
-                               Dmn::Dmn_DMesgNet dmesgnet1{"dmesg-4", writeSocket1, readSocket1};
+                               Dmn::Dmn_DMesgNet dmesgnet1{"dmesg-4", readSocket1, writeSocket1};
                                auto listenHandler4 = dmesgnet1.openHandler("dmesg-4-listen", true,
                                                                            nullptr,
                                                                            [&sysPb_4](Dmn::DMesgPb data) mutable {

@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 
   std::shared_ptr<Dmn::Dmn_Kafka> consumer = std::make_shared<Dmn::Dmn_Kafka>(Dmn::Dmn_Kafka::Role::Consumer, readConfigs);
 
-  Dmn::Dmn_DMesgNet dmesgnet1{"dmesg1", producer, consumer};
+  Dmn::Dmn_DMesgNet dmesgnet1{"dmesg1", consumer, producer};
   std::this_thread::sleep_for(std::chrono::seconds(3));
   producer = {};
   consumer = {};

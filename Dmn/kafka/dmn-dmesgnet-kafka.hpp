@@ -23,8 +23,8 @@ public:
    *        for the Dmn_DMesgNet object.
    *
    *        The user of the api must provide most of the kafka configuration
-   * besides the following "group.id", "auto.offset.reset", "acks",
-   * Dmn::Dmn_Kafka::Topic and Dmn::Dmn_Kafka::Key.
+   *        besides the following "group.id", "auto.offset.reset", "acks",
+   *        Dmn::Dmn_Kafka::Topic and Dmn::Dmn_Kafka::Key.
    *
    * @param name The name for Dmn_DMesgNet and kafka group id for consumer
    * @param configs The Dmn_Kafka configuration

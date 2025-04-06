@@ -111,14 +111,14 @@ public:
    * @brief The constructor method for DMesgNet.
    *
    * @param name          The identification name for the DMesgNet object
-   * @param outputHandler The Dmn::Hal_Io object to send outbound stringified
-   *                      DMesgPb message
    * @param inputHandler  The Dmn::Hal_Io object to receive inbound stringified
+   *                      DMesgPb message
+   * @param outputHandler The Dmn::Hal_Io object to send outbound stringified
    *                      DMesgPb message
    */
   Dmn_DMesgNet(std::string_view name,
-               std::shared_ptr<Dmn_Io<std::string>> outputHandler = nullptr,
-               std::shared_ptr<Dmn_Io<std::string>> inputHandler = nullptr)
+               std::shared_ptr<Dmn_Io<std::string>> inputHandler = nullptr,
+               std::shared_ptr<Dmn_Io<std::string>> outputHandler = nullptr)
       : Dmn_DMesg{name}, m_name{name}, m_outputHandler{outputHandler},
         m_inputHandler{inputHandler} {
 
@@ -461,8 +461,8 @@ private:
    * data members for constructor to instantiate the object.
    */
   std::string m_name{};
-  std::shared_ptr<Dmn_Io<std::string>> m_outputHandler{};
   std::shared_ptr<Dmn_Io<std::string>> m_inputHandler{};
+  std::shared_ptr<Dmn_Io<std::string>> m_outputHandler{};
 
   /**
    * data members for internal logic.

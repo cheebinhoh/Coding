@@ -91,12 +91,12 @@ int main(int argc, char *argv[]) {
 
 
   // dmesgnet1
-  Dmn::Dmn_DMesgNet dmesgnet1{"dmesg1", producer1, consumer1};
+  Dmn::Dmn_DMesgNet dmesgnet1{"dmesg1", consumer1, producer1};
   producer1 = {};
   consumer1 = {};
 
   // dmesgnet2
-  Dmn::Dmn_DMesgNet dmesgnet2{"dmesg2", producer2, consumer2};
+  Dmn::Dmn_DMesgNet dmesgnet2{"dmesg2", consumer2, producer2};
   producer2 = {};
   consumer2 = {};
 

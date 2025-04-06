@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
                                                                                             true);
   std::shared_ptr<Dmn::Dmn_Io<std::string>> readSocket2 = std::make_shared<Dmn::Dmn_Socket>("127.0.0.1", 5000);
 
-  Dmn::Dmn_DMesgNet dmesgnet1{"dmesg1", writeSocket1};
-  Dmn::Dmn_DMesgNet dmesgnet2{"dmesg2", nullptr, readSocket2};
+  Dmn::Dmn_DMesgNet dmesgnet1{"dmesg1", nullptr, writeSocket1};
+  Dmn::Dmn_DMesgNet dmesgnet2{"dmesg2", readSocket2};
 
   auto readHandler2 = dmesgnet2.openHandler("dmesg2.readHandler");
 
