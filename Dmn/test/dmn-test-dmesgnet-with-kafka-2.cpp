@@ -65,17 +65,19 @@ int main(int argc, char *argv[]) {
   consumer = {};
 
   // consume prior messages from topic.
+  Dmn::DMesgPb dmesgPbRead{};
   while (true) {
     auto dataRead = consumer_other.read();
     if (dataRead) {
-      Dmn::DMesgPb dmesgPbRead{};
-
       dmesgPbRead.ParseFromString(*dataRead);
-      std::cout << "DebugPrint: " << dmesgPbRead.ShortDebugString() << "\n";
-
-      break;
+ 
+      if (dmesgPbRead.body().sys().self().state() == Dmn::DMesgStatePb::Ready) {
+        break;
+      }
     }
   }
+
+  std::cout << "DebugPrint: " << dmesgPbRead.ShortDebugString() << "\n";
 
   return RUN_ALL_TESTS();
 }
