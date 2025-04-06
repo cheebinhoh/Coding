@@ -23,6 +23,7 @@ ADD_TEST_EXECUTABLE(dmn
                       dmn-test-dmesgnet-with-kafka-1
                       dmn-test-dmesgnet-with-kafka-2
                       dmn-test-dmesgnet-with-kafka-3
+                      dmn-test-dmesgnet-with-kafka-4
                       dmn-test-dmesg-pb
                       dmn-test-dmesg-pb-util
                       dmn-test-io
