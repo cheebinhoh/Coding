@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
   readConfigs["group.id"] = "dmesg1";
   readConfigs[Dmn::Dmn_Kafka::Topic] = "Dmn_dmesgnet";
   readConfigs["auto.offset.reset"] =  "latest";
+  readConfigs[Dmn::Dmn_Kafka::PollTimeoutMs] = "7000";
 
   std::shared_ptr<Dmn::Dmn_Kafka> consumer = std::make_shared<Dmn::Dmn_Kafka>(Dmn::Dmn_Kafka::Role::Consumer, readConfigs);
 

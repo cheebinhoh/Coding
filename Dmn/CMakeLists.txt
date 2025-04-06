@@ -59,6 +59,7 @@ add_library(dmn
               ${CMAKE_CURRENT_SOURCE_DIR}/dmn-socket.cpp
 
               # kafka
+              ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-dmesgnet-kafka.cpp
               ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-kafka-util.cpp
               ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-kafka.cpp
 
@@ -94,6 +95,7 @@ target_sources(dmn
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-teepipe.hpp
 
                  # kafka
+                 ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-dmesgnet-kafka.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-kafka-util.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/kafka/dmn-kafka.hpp
 

@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
   readConfigs_other["security.protocol"] = "SASL_SSL";
   readConfigs_other["sasl.mechanisms"] = "PLAIN";
   readConfigs_other["group.id"] = "dmesg_other";
-  readConfigs_other["auto.offset.reset"] =  "earliest";
+  readConfigs_other["auto.offset.reset"] =  "latest";
   readConfigs_other[Dmn::Dmn_Kafka::Topic] = "Dmn_dmesgnet";
   readConfigs_other[Dmn::Dmn_Kafka::PollTimeoutMs] = "7000";
 
@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
   readConfigs["group.id"] = "dmesg1";
   readConfigs[Dmn::Dmn_Kafka::Topic] = "Dmn_dmesgnet";
   readConfigs["auto.offset.reset"] =  "latest";
+  readConfigs[Dmn::Dmn_Kafka::PollTimeoutMs] = "7000";
 
   std::shared_ptr<Dmn::Dmn_Kafka> consumer = std::make_shared<Dmn::Dmn_Kafka>(Dmn::Dmn_Kafka::Role::Consumer, readConfigs);
 
