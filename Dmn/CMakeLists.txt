@@ -55,7 +55,6 @@ endif()
 # build the dmn library
 add_library(dmn
               ${CMAKE_CURRENT_SOURCE_DIR}/dmn-event.cpp
-              ${CMAKE_CURRENT_SOURCE_DIR}/dmn-dmesgnet-kafka.cpp
               ${CMAKE_CURRENT_SOURCE_DIR}/dmn-proc.cpp
               ${CMAKE_CURRENT_SOURCE_DIR}/dmn-socket.cpp
 
@@ -86,7 +85,6 @@ target_sources(dmn
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-limit-buffer.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-dmesg.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-dmesgnet.hpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/dmn-dmesgnet-kafka.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-dmesg-pb-util.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-pipe.hpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/dmn-proc.hpp

@@ -37,8 +37,9 @@ int main(int argc, char *argv[]) {
   readConfigs["security.protocol"] = "SASL_SSL";
   readConfigs["sasl.mechanisms"] = "PLAIN";
   readConfigs["group.id"] = "dmesg1";
+  readConfigs["auto.offset.reset"] =  "latest";
   readConfigs[Dmn::Dmn_Kafka::Topic] = "Dmn_dmesgnet";
-  readConfigs["auto.offset.reset"] =  "earliest";
+  readConfigs[Dmn::Dmn_Kafka::PollTimeoutMs] = "7000";
 
   Dmn::Dmn_Kafka consumer{Dmn::Dmn_Kafka::Role::Consumer, readConfigs};
 
@@ -48,8 +49,9 @@ int main(int argc, char *argv[]) {
     if (!dataRead) {
       break; // no data
     }
+  
+    std::cout << "skip data\n";
   }
-
 
   std::vector<std::string> data{"heartbeat : test 1", "heartbeat : test 2"};
   for (auto &d : data) {

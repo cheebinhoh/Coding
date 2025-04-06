@@ -131,6 +131,9 @@ Dmn_Kafka::~Dmn_Kafka() noexcept try {
 
   if (Role::Consumer == m_role) {
     rd_kafka_consumer_close(m_kafka);
+  } else {
+    rd_kafka_poll(m_kafka, 100);
+    rd_kafka_flush(m_kafka, 1000); // this is not configurable, and 1000ms shall
   }
 
   rd_kafka_destroy(m_kafka);

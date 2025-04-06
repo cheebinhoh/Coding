@@ -176,7 +176,6 @@ public:
           auto data = this->m_inputHandler->read();
           if (data) {
             dmesgPbRead.ParseFromString(*data);
-
             if (dmesgPbRead.sourceidentifier() != this->m_name) {
               // this is important to prevent that the
               // m_subscriptHandler of this DMesgNet from
@@ -225,10 +224,8 @@ public:
               }
             }
           } else {
-            // no data, quit the thread.
-            // FIXME: in what case will it has no data? inputHandler being
-            // release and the chain of objects in DMesg are destroyed?
-            break;
+            // do nothing
+            Dmn_Proc::yield();
           }
         }
       });
