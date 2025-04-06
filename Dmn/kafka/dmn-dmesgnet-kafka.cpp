@@ -19,12 +19,7 @@ Dmn_DMesgNet_Kafka::Dmn_DMesgNet_Kafka(std::string_view name,
   readConfigs["group.id"] = name;
   readConfigs[Dmn::Dmn_Kafka::Topic] = "Dmn_dmesgnet";
   readConfigs["auto.offset.reset"] = "earliest";
-
-  // FIXME: for som reason if polltimeout is not less than 3000, we have a
-  // segmentation upon tear down of consumer, I suspect that it is because a
-  // thread is spending more time waiting on a data in rdkafka software stack at
-  // a particular cancellation upon a tear down happens.
-  readConfigs[Dmn::Dmn_Kafka::PollTimeoutMs] = "3000";
+  readConfigs[Dmn::Dmn_Kafka::PollTimeoutMs] = "500";
 
   std::shared_ptr<Dmn::Dmn_Kafka> consumer = std::make_shared<Dmn::Dmn_Kafka>(
       Dmn::Dmn_Kafka::Role::Consumer, readConfigs);

@@ -4,6 +4,7 @@
 
 #include "dmn-kafka.hpp"
 #include "dmn-kafka-util.hpp"
+#include "dmn-proc.hpp"
 
 #include "rdkafka.h"
 
@@ -149,6 +150,8 @@ std::optional<std::string> Dmn_Kafka::read() {
   if (!consumer_message) {
     return {};
   }
+
+  Dmn_Proc::yield();
 
   std::optional<std::string> ret{};
 
