@@ -1,12 +1,1 @@
-This repository contains a distributed messaging and synchronization
-protocol in c/c++.
-
-The ultimate goal is to implement a simple distributed messaging
-and synchronization protocol that can be integrated with Application
-and free the application from deading with networking, messaging 
-format, synchronization of concurrent read & write and deal with
-conflict in multiple writers. 
-
-The library is implemeneted in C++ and hopefully it is doing it
-right way through delegation design pattern and fully extensible
-and customizable without proliferation of Classes.
+The Dmn has been relocated to https://github.com/cheebinhoh/Dmn

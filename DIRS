@@ -1,5 +1,3 @@
 .:*.c *.h
 C++:*.cpp *.hpp
 Linux:*.c
-Dmn:*.cpp *.hpp
-Dmn/kafka:*.cpp *.hpp
