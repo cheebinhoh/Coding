@@ -1,0 +1,29 @@
+/**
+ * Copyright © 2025 Chee Bin HOH. All rights reserved.
+ */
+
+syntax = "proto3";
+
+import "proto/dmn-dmesg-type.proto";
+import "proto/dmn-dmesg-body.proto";
+
+import "google/protobuf/timestamp.proto";
+
+package dmn;
+
+message DMesgPb
+{
+  google.protobuf.Timestamp timestamp                    = 1; // set by Dmn_DMesgHandler
+  string                    topic                        = 2;
+  uint64                    runningCounter               = 3; // set by Dmn_DMesgHandler
+  string                    sourceIdentifier             = 4;
+  string                    sourceWriteHandlerIdentifier = 5; // set by Dmn_DMesgHandler
+  DMesgTypePb               type                         = 6;
+  bool                      playback                     = 7; // set by Dmn_DMesg for playback
+
+  /* The payload body is started at 10, so that we have room reserved
+   * to add extra data member that are attributes specific to the library
+   */
+
+  DMesgBodyPb               body             = 10;
+}
