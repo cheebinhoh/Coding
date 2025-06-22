@@ -21,7 +21,7 @@ enable_testing()
 
 # set build options
 option(BUILD_NDEBUG "build without debug" OFF)
-option(BUILD_KAFKA_TEST "build with kafka test" ON)
+option(BUILD_KAFKA_TEST "build with kafka test" OFF)
 
 
 # include cmake macro and fetch dependent modules
