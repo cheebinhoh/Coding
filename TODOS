@@ -1,0 +1,3 @@
+- Add conflict detection between Dmn_DMesgNet nodes
+- Add conflict resolution protocol between Dmn_DMesgNet level
+- Add Dmn_MessageQueue (of Dmn_Io) to support multiple Dmn_DMesgNet nodes

@@ -1,0 +1,13 @@
+a.out
+*.out
+*.o 
+.*.swp
+*.pb.cc
+*.pb.h
+lib*.a
+lib*.so
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+compile_commands.json
+Build
