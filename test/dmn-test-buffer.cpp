@@ -1,5 +1,8 @@
 /**
  * Copyright © 2024 - 2025 Chee Bin HOH. All rights reserved.
+ *
+ * @file dmn-test-buffer.cpp
+ * @brief The unit test for dmn-buffer module.
  */
 
 #include <gtest/gtest.h>

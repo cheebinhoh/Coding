@@ -1,8 +1,9 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This test program asserts that the Dmn_DMesg handles messages
- * left in the handles without reading properly.
+ * @file dmn-test-dmesg-7.cpp
+ * @brief The unit test that asserts that the dmn-dmesg with messages left in
+ *        the handler will be closed properly.
  */
 
 #include <gtest/gtest.h>

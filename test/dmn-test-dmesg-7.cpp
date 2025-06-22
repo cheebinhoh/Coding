@@ -1,9 +1,10 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This test program asserts that two subscribers of the same
- * Dmn_DMesg object will receive different message filtered by
- * topic.
+ * @file dmn-test-dmesg-7.cpp
+ * @brief The unit test that asserts that the dmn-dmesg with two subscribers of
+ *        the same Dmn_DMesg object will receive different message filtered by
+ *        topic.
  */
 
 #include <gtest/gtest.h>

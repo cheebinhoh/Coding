@@ -1,9 +1,10 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This test program asserts that the Dmn_DMesg class support
- * that one publisher and one subscriber are able to continuing
- * read and write multiple messages between them.
+ * @file dmn-test-dmesg-2.cpp
+ * @brief The unit test that asserts that the dmn-dmesg with one publisher and
+ *        one subscriber are able to continuing read and write multiple messages
+ *        between them.
  */
 
 #include <gtest/gtest.h>

@@ -1,8 +1,9 @@
 /**
  * Copyright © 2025 Chee Bin HOH. All rights reserved.
  *
- * This test program asserts that the Dmn_DMesg class support
- * that one publisher and two subscribers work.
+ * @file dmn-test-dmesg-1.cpp
+ * @brief The unit test that asserts that the dmn-dmesg with one publisher and
+ *        two subscribers work.
  */
 
 #include <gtest/gtest.h>
