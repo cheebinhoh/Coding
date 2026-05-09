@@ -1,3 +1,5 @@
+# Copyright © 2025 Chee Bin HOH. All rights reserved.
+
 cmake_minimum_required(VERSION 3.16)
 
 project(Coding C CXX)
@@ -12,10 +14,10 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 enable_testing()
 
-# ------------------------------------------------------------------------------
-# Libraries
-# ------------------------------------------------------------------------------
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GLIB REQUIRED glib-2.0)
 
+# C Coding Library
 add_library(btree SHARED
     btree.c
     avlbstree.c
@@ -50,10 +52,7 @@ target_include_directories(search-sort PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# ------------------------------------------------------------------------------
-# Executables
-# ------------------------------------------------------------------------------
-
+# C Coding Executables
 add_executable(bigo-sample.out bigo-sample.c)
 
 add_executable(btreebltraverse.out btreebltraverse.c)
@@ -164,10 +163,7 @@ target_link_libraries(tree2btreebuild.out PRIVATE btree)
 
 add_executable(trim-space.out trim-space.c)
 
-# ------------------------------------------------------------------------------
-# Optional subdirectories matching old Makefile behavior
-# ------------------------------------------------------------------------------
-
+# Other Coding Subdirectories
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/C++/CMakeLists.txt")
     add_subdirectory("C++")
 endif()
@@ -176,10 +172,14 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Linux/CMakeLists.txt")
     add_subdirectory("Linux")
 endif()
 
-# ------------------------------------------------------------------------------
-# Tests
-# ------------------------------------------------------------------------------
+if (PkgConfig_FOUND AND GLIB_FOUND)
+    add_subdirectory("gnome")
+else()
+    message(STATUS "PkgConfig or glib-2.0 not found; skipping subdirectory 'gnome'")
+endif()
 
+
+# C Coding Test
 add_test(
     NAME transformStr2Str_test
     COMMAND sh -c "./transformStr2Str.out -d | diff - ${CMAKE_CURRENT_SOURCE_DIR}/transformStr2Str_result.txt"
