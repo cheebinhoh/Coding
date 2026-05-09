@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
       buffer[bufferUsed++] = c;
       buffer[bufferUsed] = '\0';
     } /* if ( bufferUsed < maxline ) ... else */
-  }   /* while ( ( c = getchar() ) != EOF ) */
+  } /* while ( ( c = getchar() ) != EOF ) */
 
   if (bufferUsed > 0) {
     int i = 0;

@@ -82,5 +82,5 @@ int main(int argc, char *argv[]) {
         putchar(c);
       }
     } // if ( isInComment ) ... else
-  }   // while ( ( c = getchar() ) != EOF )
+  } // while ( ( c = getchar() ) != EOF )
 }

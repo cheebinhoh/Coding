@@ -15,8 +15,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 enable_testing()
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(GLIB REQUIRED glib-2.0)
-pkg_check_modules(GTK4 REQUIRED gtk4)
+pkg_check_modules(GLIB IMPORTED_TARGET glib-2.0)
+pkg_check_modules(GIO IMPORTED_TARGET gio-2.0)
+pkg_check_modules(GTK4 IMPORTED_TARGET gtk4)
 
 # C Coding Library
 add_library(btree SHARED
@@ -173,16 +174,22 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Linux/CMakeLists.txt")
     add_subdirectory("Linux")
 endif()
 
-if (PkgConfig_FOUND AND GLIB_FOUND)
+if (GLIB_FOUND)
     add_subdirectory("gnome/glib")
 else()
-    message(STATUS "PkgConfig or glib-2.0 is not found; skipping subdirectory 'gnome/glib'")
+    message(STATUS "glib-2.0 is not found; skipping subdirectory 'gnome/glib'")
 endif()
 
-if (PkgConfig_FOUND AND GTK4_FOUND)
+if (GTK4_FOUND)
     add_subdirectory("gnome/gtk")
 else()
-    message(STATUS "PkgConfig or gtk4 is not found; skipping subdirectory 'gnome/gtk'")
+    message(STATUS "gtk4 is not found; skipping subdirectory 'gnome/gtk'")
+endif()
+
+if (GIO_FOUND) 
+    add_subdirectory("gnome/gio")
+else()
+    message(STATUS "Gio is not found; skipping subdirectory 'gnome/gio'")
 endif()
 
 # C Coding Test
