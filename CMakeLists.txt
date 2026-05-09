@@ -1,4 +1,4 @@
-# Copyright © 2025 Chee Bin HOH. All rights reserved.
+# Copyright © 2026 Chee Bin HOH. All rights reserved.
 
 cmake_minimum_required(VERSION 3.16)
 
@@ -16,6 +16,7 @@ enable_testing()
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLIB REQUIRED glib-2.0)
+pkg_check_modules(GTK4 REQUIRED gtk4)
 
 # C Coding Library
 add_library(btree SHARED
@@ -173,11 +174,16 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Linux/CMakeLists.txt")
 endif()
 
 if (PkgConfig_FOUND AND GLIB_FOUND)
-    add_subdirectory("gnome")
+    add_subdirectory("gnome/glib")
 else()
-    message(STATUS "PkgConfig or glib-2.0 not found; skipping subdirectory 'gnome'")
+    message(STATUS "PkgConfig or glib-2.0 is not found; skipping subdirectory 'gnome/glib'")
 endif()
 
+if (PkgConfig_FOUND AND GTK4_FOUND)
+    add_subdirectory("gnome/gtk")
+else()
+    message(STATUS "PkgConfig or gtk4 is not found; skipping subdirectory 'gnome/gtk'")
+endif()
 
 # C Coding Test
 add_test(
