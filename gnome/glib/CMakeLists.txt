@@ -1,4 +1,4 @@
-# Copyright © 2025 Chee Bin HOH. All rights reserved.
+# Copyright © 2026 Chee Bin HOH. All rights reserved.
 
 add_executable(hello-glib hello-glib.c)
 
