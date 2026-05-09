@@ -711,8 +711,8 @@ Demand *scanDemand(char *cptr, Demand *dptr) {
 
         break;
       } // switch
-    }   // else not yet reach ','
-  }     // while not end of line
+    } // else not yet reach ','
+  } // while not end of line
 
   *dptr = d;
 
