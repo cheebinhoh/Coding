@@ -15,4 +15,8 @@ programming language, like C++ smart pointer.
 If you found a bug or have a better idea about some improvement, please ping me, so I can
 learn and be better on it.
 
-To compile it, just type "make all" at any GNU/Linux command prompt or macOS command line.
+To compile it:
+
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build
