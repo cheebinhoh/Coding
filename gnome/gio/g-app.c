@@ -2,7 +2,7 @@
  * Copyright © 2026 Chee Bin HOH. All rights reserved.
  *
  * @file g-app.c
- * @brief g-application without GUI.
+ * @brief g-application without GUI but timer count down from 5 to 0.
  */
 
 #include <gio/gio.h>

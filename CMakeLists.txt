@@ -180,16 +180,16 @@ else()
     message(STATUS "glib-2.0 is not found; skipping subdirectory 'gnome/glib'")
 endif()
 
-if (GTK4_FOUND)
-    add_subdirectory("gnome/gtk")
-else()
-    message(STATUS "gtk4 is not found; skipping subdirectory 'gnome/gtk'")
-endif()
-
 if (GIO_FOUND) 
     add_subdirectory("gnome/gio")
 else()
     message(STATUS "Gio is not found; skipping subdirectory 'gnome/gio'")
+endif()
+
+if (GTK4_FOUND)
+    add_subdirectory("gnome/gtk")
+else()
+    message(STATUS "gtk4 is not found; skipping subdirectory 'gnome/gtk'")
 endif()
 
 # C Coding Test
