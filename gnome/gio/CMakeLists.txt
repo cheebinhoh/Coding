@@ -3,3 +3,8 @@
 add_executable(g-app g-app.c)
 
 target_link_libraries(g-app PRIVATE PkgConfig::GIO)
+
+add_test(
+    NAME g-mainloop-app
+    COMMAND g-mainloop-app
+)

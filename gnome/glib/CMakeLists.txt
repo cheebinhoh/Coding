@@ -10,3 +10,8 @@ add_test(
 
 add_executable(g-mainloop-app g-mainloop-app.c)
 target_link_libraries(g-mainloop-app PRIVATE PkgConfig::GLIB)
+
+add_test(
+    NAME g-mainloop-app
+    COMMAND g-mainloop-app
+)

@@ -9,8 +9,4 @@ add_test(
 )
 
 add_executable(hello-gtk hello-gtk.c)
-
-target_include_directories(hello-gtk PRIVATE ${GTK4_INCLUDE_DIRS})
-target_link_directories(hello-gtk PRIVATE ${GTK4_LIBRARY_DIRS})
-target_link_libraries(hello-gtk PRIVATE ${GTK4_LIBRARIES})
-target_compile_options(hello-gtk PRIVATE ${GTK4_CFLAGS_OTHER})
+target_link_libraries(hello-gtk PRIVATE PkgConfig::GTK4)

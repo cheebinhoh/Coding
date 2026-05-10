@@ -2,7 +2,7 @@
  * Copyright © 2026 Chee Bin HOH. All rights reserved.
  *
  * @file g-mainloop-app.c
- * @brief glib mainloop app with timer.
+ * @brief glib mainloop app with timer count down from 5 to 1.
  */
 
 #include <glib.h>
