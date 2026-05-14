@@ -14,6 +14,11 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 enable_testing()
 
+include(CheckIncludeFile)
+include(CheckSymbolExists)
+
+check_include_file("unistd.h" HAVE_UNISTD_H)
+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLIB IMPORTED_TARGET glib-2.0)
 pkg_check_modules(GIO IMPORTED_TARGET gio-2.0)
@@ -190,6 +195,10 @@ if (GTK4_FOUND)
     add_subdirectory("gnome/gtk")
 else()
     message(STATUS "gtk4 is not found; skipping subdirectory 'gnome/gtk'")
+endif()
+
+if (HAVE_UNISTD_H)
+    add_subdirectory("linux")
 endif()
 
 # C Coding Test
