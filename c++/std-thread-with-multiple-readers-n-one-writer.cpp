@@ -10,6 +10,7 @@
 #include <chrono>
 #include <condition_variable>
 #include <ctime>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <memory>

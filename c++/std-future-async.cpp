@@ -1,14 +1,13 @@
 /**
  * Copyright © 2023 Chee Bin HOH. All rights reserved.
  *
- * This program demonstrates std::future and std::packaged_task:
- * - a asynchronous thread is explicitly created to do expensive
- *   sorting and then synchronize its completion through the
- *   std::packaged_task and std::future.
+ * This program demonstrates std::future and std::async:
+ * - a asynchronous thread (std::async) is doing expensive
+ *   sorting in background, and synchronous its sorting through
+ *   std::future object.
  *
  * - the main thread will wait for the sorting to be done and
- *   periodically wake up and print "." to indicate the progress
- *   through std::future object.
+ *   periodically wake up and print "." to indicate the progress.
  *
  * the relationship between various key parts of std::future can
  * be viewed as following:
@@ -16,6 +15,7 @@
  * std::promise -> std::packaged_task -> std::async
  */
 
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <cstdlib>
@@ -23,7 +23,6 @@
 #include <future>
 #include <iomanip>
 #include <iostream>
-#include <thread>
 
 template <typename T, std::size_t size>
 void printArray(std::array<T, size> &arr, int upto = size) {
@@ -87,10 +86,23 @@ int main(int argc, char *argv[]) {
   std::cout << "Current time before run sorting is " << std::put_time(ptm, "%X")
             << "\n";
 
-  std::packaged_task<bool(int *, int)> tsk(doSortIntArray);
-  std::future<bool> sort_process = tsk.get_future();
-  std::thread sort_process_th =
-      std::thread(std::move(tsk), array.data(), array.size());
+  // if we use launch::deferred, the doSortIntArray will not be executed
+  // asynchronously and its execution will be deferred until we access the
+  // future object which in our case is future::wait_for() method, note that
+  // if deferred fn starts execution when we access future via
+  // future::wait_for() method, the method will not be returned until the fn is
+  // completed, hence it is deferred and not asynchronously.
+  std::future<bool> sort_process = std::async(
+      //               std::launch::deferred,
+      std::launch::async, doSortIntArray, array.data(), array.size());
+
+  //  std::this_thread::sleep_for(std::chrono::seconds(10));
+
+  //  tt = system_clock::to_time_t(system_clock::now());
+  //  ptm = std::localtime(&tt);
+  //  std::cout << "Current time after main thread pauses for 10s and before
+  //  kick off sorting task is " << std::put_time(ptm, "%X") << "\n"; std::cout
+  //  << "\n";
 
   std::cout << "sorting, please wait ";
   std::chrono::milliseconds span(100);
@@ -116,8 +128,6 @@ int main(int argc, char *argv[]) {
             << "sorted\n";
 
   std::cout << "\n";
-
-  sort_process_th.join();
 
   return 0;
 }

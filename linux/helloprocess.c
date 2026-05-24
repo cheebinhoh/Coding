@@ -1,4 +1,5 @@
-/* Copyright © 2021 Chee Bin HOH. All rights reserved.
+/**
+ * Copyright © 2021 Chee Bin HOH. All rights reserved.
  *
  * Copy standard input to output or files in argument.
  */
