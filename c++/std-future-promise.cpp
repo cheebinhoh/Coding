@@ -16,6 +16,7 @@
  * std::promise -> std::packaged_task -> std::async
  */
 
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <cstdlib>

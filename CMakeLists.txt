@@ -171,12 +171,8 @@ target_link_libraries(tree2btreebuild.out PRIVATE btree)
 add_executable(trim-space.out trim-space.c)
 
 # Other Coding Subdirectories
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/C++/CMakeLists.txt")
-    add_subdirectory("C++")
-endif()
-
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Linux/CMakeLists.txt")
-    add_subdirectory("Linux")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/c++/CMakeLists.txt")
+    add_subdirectory("c++")
 endif()
 
 if (GLIB_FOUND)

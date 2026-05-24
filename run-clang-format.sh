@@ -3,7 +3,7 @@
 # Copyright © 2023 Chee Bin HOH. All rights reserved.
 #
 
-DIRS=". gnome/glib gnome/gio gnome/gtk linux"
+DIRS=". gnome/glib gnome/gio gnome/gtk linux c++"
 FILE_PATTERN='*.c *.h *.cpp *.hpp'
 
 # extra space following newline is never intended to be checked in, so we trim it.
