@@ -1,7 +1,8 @@
 /* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * It splits a long lines into multiple line according to max limit per line,
- * the split happens on space (\n, space or tab).
+ * It splits a long lines into multiple line according by max limit of character
+ * per line the split happens on space (\n, space or tab), note that \n in input
+ * is observed.
  */
 
 #include <ctype.h>
@@ -50,18 +51,28 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  int skipLeadingSpace = 0;
   while (1) {
     if ((c = getchar()) == EOF) {
-      int index = 0;
-      while (index < count) {
-        putchar(buffer[index++]);
+      // if it is end of input, print everything not yet print
+      for (int index = 0; index < count; index++) {
+        putchar(buffer[index]);
       }
 
       break;
     } else if (count < maxline) {
-      buffer[count++] = c;
+      // accummulate characters for split when reach max number of characters
+      // but skip leading space if indicated by split in prior line.
+      if (skipLeadingSpace && isspace(c)) {
+        ;
+      } else {
+        buffer[count++] = c;
+        skipLeadingSpace = 0;
+      }
     } else {
-      int hasSpace = 1;
+      // print everything up to last space
+      // shift characters after last space
+      // insert new character
       int lastSpaceIndex = count - 1;
       if (!isspace(c)) {
         while (lastSpaceIndex >= 0 && !isspace(buffer[lastSpaceIndex])) {
@@ -69,7 +80,6 @@ int main(int argc, char *argv[]) {
         }
 
         if (lastSpaceIndex < 0) {
-          hasSpace = 0;
           lastSpaceIndex = count - 1;
         }
       }
@@ -77,6 +87,12 @@ int main(int argc, char *argv[]) {
       int index = 0;
       while (index <= lastSpaceIndex) {
         putchar(buffer[index++]);
+      }
+
+      if (isspace(c) ||
+          (lastSpaceIndex < count && isspace(buffer[index - 1]))) {
+        putchar('\n');
+        skipLeadingSpace = isspace(c);
       }
 
       index = 0;
@@ -90,12 +106,6 @@ int main(int argc, char *argv[]) {
       } else {
         buffer[index++] = c;
         count = index;
-      }
-
-      // if we do not found space to split, we do not want to newline, as next
-      // character will join with data in buffer we just print
-      if (hasSpace) {
-        putchar('\n');
       }
     }
   } /* while ((c = getchar()) != EOF) */
