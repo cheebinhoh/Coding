@@ -5,7 +5,7 @@
  * @brief Hello program for GLib.
  */
 
-#include <glib.h>
+#include <glib/gprintf.h>
 
 int main(int argc, char *argv[]) {
   g_print("Hello from GLib!\n");
