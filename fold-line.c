@@ -92,6 +92,8 @@ int main(int argc, char *argv[]) {
         count = index;
       }
 
+      // if we do not found space to split, we do not want to newline, as next
+      // character will join with data in buffer we just print
       if (hasSpace) {
         putchar('\n');
       }
