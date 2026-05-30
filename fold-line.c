@@ -1,8 +1,9 @@
-/* Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
+/**
+ * Copyright © 2021-2023 Chee Bin HOH. All rights reserved.
  *
- * It splits a long lines into multiple line according by max limit of character
- * per line the split happens on space (\n, space or tab), note that \n in input
- * is observed.
+ * It splits a long line into multiple lines by splitting it at space and keep it to
+ * certain maximum characters per line with exception that if the whole line has no
+ * space, then it will not be split and will exceed the max number specified.
  */
 
 #include <ctype.h>
@@ -27,9 +28,8 @@ void printHelp(void) {
 
 int main(int argc, char *argv[]) {
   int c;
+  char buffer[BUFSIZ];
   int maxline = MAXLINE;
-  char buffer[BUFSIZ] = {'\0'};
-  int count = 0;
 
   programName = basename(argv[0]);
 
@@ -51,7 +51,9 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  int count = 0;
   int skipLeadingSpace = 0;
+
   while (1) {
     if ((c = getchar()) == EOF) {
       // if it is end of input, print everything not yet print
