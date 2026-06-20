@@ -5,10 +5,10 @@
  */
 
 #include <errno.h>
-#include <unistd.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[]) {
   bool islseekable = lseek(STDIN_FILENO, 0, SEEK_CUR) == 0;

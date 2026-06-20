@@ -24,8 +24,8 @@ fi
 
 cd "$ROOT_DIR" || exit 2
 
-DIRS=". include src include/kafka src/kafka test"
-FILE_PATTERN='*.cpp *.hpp'
+DIRS=". c++ linux gnome gnome/gtk gnome/glib gnome/gio"
+FILE_PATTERN='*.cpp *.hpp *.c *.h'
 
 # Extra space following newline is never intended to be checked in, so we trim it.
 #
