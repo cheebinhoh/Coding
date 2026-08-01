@@ -9,10 +9,9 @@
 #include <string.h>
 #include <sys/stat.h>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   struct stat st;
-  
+
   for (int i = 1; i < argc; i++) {
     printf("%s: ", argv[i]);
 
@@ -39,6 +38,6 @@ int main(int argc, char *argv[])
       printf("Error: unknown\n");
     }
   }
-  
+
   return 0;
 }
