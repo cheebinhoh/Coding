@@ -22,10 +22,10 @@ static void doSearchServ(void);
 
 int main(int argc, char *argv[]) {
   struct option long_options[] = {{"help", no_argument, 0, 'h'},
-				  {"proto", no_argument, 0, 'p'},
-				  {"serv", no_argument, 0, 's'},
-				  {0, 0, 0, 0}};
-  
+                                  {"proto", no_argument, 0, 'p'},
+                                  {"serv", no_argument, 0, 's'},
+                                  {0, 0, 0, 0}};
+
   progName = basename(argv[0]);
 
   int c;
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     case 's':
       searchServ = true;
       break;
-      
+
     case '?':
       doPrintUsage(stderr);
       exit(1);
@@ -73,9 +73,8 @@ void doSearchProto(void) {
 
   ent = getprotoent();
   while (NULL != ent) {
-    printf("name = %s, proto = %d",
-	   ent->p_name, ent->p_proto);
-	   
+    printf("name = %s, proto = %d", ent->p_name, ent->p_proto);
+
     if (NULL != ent->p_aliases && NULL != ent->p_aliases[0]) {
       printf(", alias = ");
 
@@ -83,11 +82,11 @@ void doSearchProto(void) {
       do {
         printf("%s", ent->p_aliases[index++]);
 
-	if (NULL == ent->p_aliases[index]) {
+        if (NULL == ent->p_aliases[index]) {
           break;
-	} else {
+        } else {
           printf(", ");
-	}
+        }
       } while (true);
     }
 
@@ -95,7 +94,7 @@ void doSearchProto(void) {
 
     ent = getprotoent();
   }
-	 
+
   endprotoent();
 }
 
@@ -106,9 +105,9 @@ void doSearchServ(void) {
 
   ent = getservent();
   while (NULL != ent) {
-    printf("name = %s, port = %d, proto = %s",
-	   ent->s_name, ent->s_port, ent->s_proto);
-	   
+    printf("name = %s, port = %d, proto = %s", ent->s_name, ent->s_port,
+           ent->s_proto);
+
     if (NULL != ent->s_aliases && NULL != ent->s_aliases[0]) {
       printf(", alias = ");
 
@@ -116,11 +115,11 @@ void doSearchServ(void) {
       do {
         printf("%s", ent->s_aliases[index++]);
 
-	if (NULL == ent->s_aliases[index]) {
+        if (NULL == ent->s_aliases[index]) {
           break;
-	} else {
+        } else {
           printf(", ");
-	}
+        }
       } while (true);
     }
 
@@ -128,6 +127,6 @@ void doSearchServ(void) {
 
     ent = getservent();
   }
-	 
+
   endservent();
 }
